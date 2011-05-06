@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2011 In Cité Solution <technique@in-cite.net>
+*  (c) 2009-2011 In CitÃ© Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
 require_once(PATH_tslib . 'class.tslib_fe.php');
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/class.tx_icsopendataapi_factory.php');

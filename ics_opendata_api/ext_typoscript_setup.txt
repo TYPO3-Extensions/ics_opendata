@@ -1,4 +1,4 @@
-
+# $Id$
 
 # Show list
 plugin.tx_icsopendataapi_pi1.pidmodif =  {$plugin.ics_opendata_api.edit}

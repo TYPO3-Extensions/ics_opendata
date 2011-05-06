@@ -1,4 +1,7 @@
 <?php
+/*
+ * $Id$
+ */
 $doc = new DOMDocument();
 $xsl = new XSLTProcessor();
 $doc->load('documentationapi.xsl');

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- $Id$ -->
 <command name="Get datasets" cmd="datastore_getdatasets" brief="Retrieves datasets for a datasets id list.">
 	<description>
 		Retrieves datasets.&#13;

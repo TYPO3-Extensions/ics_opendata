@@ -1,4 +1,7 @@
 <?php
+/*
+ * $Id$
+ */
 if (!defined('TYPO3_MOD_PATH'))
 	define('TYPO3_MOD_PATH', '../typo3conf/ext/ics_opendata_store/mod1/');
 if (!isset($BACK_PATH))

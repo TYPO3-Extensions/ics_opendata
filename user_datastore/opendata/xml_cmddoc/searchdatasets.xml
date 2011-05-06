@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- $Id$ -->
 <command name="Search datasets" cmd="datastore_searchdatasets" brief="Retrieves datasets.">
 	<description>Retrieves datasets from a select filter.</description>
 	<parameters>

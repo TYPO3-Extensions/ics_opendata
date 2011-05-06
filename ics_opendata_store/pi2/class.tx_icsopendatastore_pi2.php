@@ -21,12 +21,15 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 /**
  * 'pp_rsslatestcontent' extension.
  *
  * @author	Popy <popy.dev@gmail.com>
  *
- * Adapted by In Cité Solutions <technique@in-cite.net> for plugin 'Datastore RSS' for the 'ics_opendata_store' extension.
+ * Adapted by In CitÃ© Solutions <technique@in-cite.net> for plugin 'Datastore RSS' for the 'ics_opendata_store' extension.
  *
  */
  

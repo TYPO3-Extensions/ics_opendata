@@ -1,3 +1,5 @@
+# $Id$
+
 plugin.tx_icsopendatastore_pi1{
 	templateFile = EXT:ics_opendata_store/res/template.html
 	excludeCategory = 

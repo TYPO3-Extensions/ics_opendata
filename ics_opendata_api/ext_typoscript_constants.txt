@@ -1,3 +1,5 @@
+# $Id$
+
 plugin.ics_opendata_api {
 	# cat=plugin.ics_opendata_api//; type=int; label= pidStorage : Storage folder for api's key
 	pid =

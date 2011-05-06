@@ -1,3 +1,5 @@
+# $Id$
+
 # cat=Basic//a; type=boolean; label=Maintenance Mode: Activate the maintenance mode. The API is disabled with error code 99.
 maintenance=0
 

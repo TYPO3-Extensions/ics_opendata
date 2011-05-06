@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In-Cite Solution <technique@in-cite.net>
+*  (c) 2010 In Cit√© Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
 /**
  * Form : choose inputs and outputs type for each selected fields
@@ -415,7 +418,7 @@ EOJS;
 	}
 	
 	private function cleanStr($in) {
-		$search = array ('@[ÈËÍÎ À]@i','@[‡‚‰¬ƒ]@i','@[ÓÔŒœ]@i','@[˚˘¸€‹]@i','@[Ùˆ‘÷]@i','@[Á]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
+		$search = array ('@[√©√®√™√´√ä√ã]@i','@[√†√¢√§√Ç√Ñ]@i','@[√Æ√Ø√é√è]@i','@[√ª√π√º√õ√ú]@i','@[√¥√∂√î√ñ]@i','@[√ß]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
 		$replace = array ('e','a','i','u','o','c','_','');
 		return Preg_replace($search, $replace, htmlspecialchars($in));
 	}

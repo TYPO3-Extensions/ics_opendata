@@ -1,3 +1,5 @@
+# $Id$
+
 includeLibs.tx_icsopendatastore_pi2=EXT:ics_opendata_store/pi2/class.tx_icsopendatastore_pi2.php
 
 datastore_rss=PAGE

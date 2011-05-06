@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In-Cite Solution <technique@in-cite.net>
+*  (c) 2010 In CitÃ© Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
 /**
  * Form : list of command filter and command parameter
@@ -524,7 +527,7 @@ class tx_icsopendata_FormCommandProfile
 	}
 	
 	private function cleanStr($in) {
-		$search = array ('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
+		$search = array ('@[Ã©Ã¨ÃªÃ«ÃŠÃ‹]@i','@[Ã Ã¢Ã¤Ã‚Ã„]@i','@[Ã®Ã¯ÃÃ]@i','@[Ã»Ã¹Ã¼Ã›Ãœ]@i','@[Ã´Ã¶Ã”Ã–]@i','@[Ã§]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
 		$replace = array ('e','a','i','u','o','c','_','');
 		return preg_replace($search, $replace, $in);
 	}

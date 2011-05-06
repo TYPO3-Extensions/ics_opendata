@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
 /**
  * @file class.tx_userdatastore_datastore_getcategories_command.php

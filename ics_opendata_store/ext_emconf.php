@@ -15,8 +15,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Store opendata files.
 Files can be uploaded.',
 	'category' => 'be',
-	'author' => 'YANG Tsi',
-	'author_email' => 'tsi@in-cite.net',
+	'author' => 'In Cite Solution',
+	'author_email' => 'technique@in-cite.net',
 	'shy' => '',
 	'dependencies' => '',
 	'conflicts' => '',

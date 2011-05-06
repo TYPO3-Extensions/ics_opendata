@@ -1,3 +1,5 @@
-plugin.tx_icsopendatastore_pi1{
+# $Id$
+
+plugin.tx_icsopendatastore_pi1 {
 
 }

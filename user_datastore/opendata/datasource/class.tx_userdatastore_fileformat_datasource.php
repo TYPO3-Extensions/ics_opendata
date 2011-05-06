@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011 In Cité Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
 require_once(t3lib_extMgm::extPath('user_datastore') . 'opendata/datasource/tx_userdatastore_sourceconnexion.php');
 

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  In-Cite Solutions <technique@in-cite.net>
+*  (c) 2010 In Cité Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -28,7 +31,7 @@
  */
 /*
  * Remarque : certaines parties du code proviennent du DAM. Notemment la fonction init(), main() et printContent() avec quelques modifications.
- * Le norme de codage n'est donc pas consistante pour indiquer les parties rajout�es.
+ * Le norme de codage n'est donc pas consistante pour indiquer les parties rajoutées.
  */
 
 unset($MCONF);
