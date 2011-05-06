@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Get file formats" cmd="datastore_getfileformats" brief="Retrieves file formats.">
+	<description>Retrieves datastore serachable files formats.</description>
+</command>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Get licences" cmd="datastore_getlicencies" brief="Retrieves licences.">
+	<description>Retrieves datastore licences.</description>
+</command>
