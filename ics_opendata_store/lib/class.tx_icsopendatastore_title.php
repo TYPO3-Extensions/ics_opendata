@@ -45,5 +45,4 @@ class tx_icsopendatastore_title	{
 		}
 	}
 }
-
-
+?>

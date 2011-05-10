@@ -160,3 +160,4 @@ class tx_icsopendatastore_filecontrol extends t3lib_TCEforms {
 		return $item;
 	}
 }
+?>

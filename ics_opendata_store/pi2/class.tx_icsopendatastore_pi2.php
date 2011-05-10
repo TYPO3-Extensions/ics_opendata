@@ -29,7 +29,7 @@
  *
  * @author	Popy <popy.dev@gmail.com>
  *
- * Adapted by In Cité Solutions <technique@in-cite.net> for plugin 'Datastore RSS' for the 'ics_opendata_store' extension.
+ * Adapted by In Cité Solution <technique@in-cite.net> for plugin 'Datastore RSS' for the 'ics_opendata_store' extension.
  *
  */
  

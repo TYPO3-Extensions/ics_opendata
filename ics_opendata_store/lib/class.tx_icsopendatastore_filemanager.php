@@ -239,3 +239,4 @@ class tx_icsopendatastore_filemanager {
 		}
 	}
 }
+?>
