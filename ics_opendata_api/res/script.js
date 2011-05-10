@@ -1,3 +1,6 @@
+/*
+ * $Id$ 
+ */
 /**
  * Control of entry form
  * @return true/false
@@ -7,7 +10,7 @@ function valid_form(){
 	var regex = new RegExp(/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+([A-Z]{2,4})$/i);
 	if(document.getElementById('email').value == ""
 		|| !regex.test(document.getElementById('email').value)){
-		alert('Veuillez vérifier votre email.');
+		alert('Veuillez vÃ©rifier votre email.');
 		return false;
 	}
 	// Valid pseudo
@@ -19,7 +22,7 @@ function valid_form(){
 	if( (document.getElementById('password').value == "")
 		|| ((document.getElementById('password').value).length < 8)
 		|| (document.getElementById('password').value != document.getElementById('password_confirm').value) ){
-		alert('Veuillez vérifier votre mot de passe');
+		alert('Veuillez vÃ©rifier votre mot de passe');
 		return false;
 	}
 	// Valid CGU

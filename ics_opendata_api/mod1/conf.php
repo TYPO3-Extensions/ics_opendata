@@ -1,4 +1,7 @@
 <?php
+/*
+ * $Id$
+ */
 
 	// DO NOT REMOVE OR CHANGE THESE 2 LINES:
 $MCONF['name'] = 'tools_txicsopendataapiM1';

@@ -1,4 +1,7 @@
 <?php
+/*
+ * $Id$
+ */
 /**
  * Generates a random password
  *

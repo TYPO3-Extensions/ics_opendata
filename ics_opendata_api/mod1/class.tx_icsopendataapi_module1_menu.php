@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Tsi <tsi@in-cite.net>
+*  (c) 2010 In Cité Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 
-
+ 
 
 /**
  * Class 'Commands documentation menu' for the 'ics_opendata_api' extension.

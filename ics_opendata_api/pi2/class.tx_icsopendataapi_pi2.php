@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In Cite Solution <technique@in-cite.net>
+*  (c) 2010 In Cit√© Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/*
+ * $Id$
+ */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -525,14 +528,14 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 	}
 	
 	/**
-	 * Transforme une valeur pour base de donnÈes
+	 * Transforme une valeur pour base de donn√©es
 	 *
 	 * @param string $fieldname Le nom du champ
 	 * @param mixed $value La valeur du champ
 	 * @param array $errors
 	 * @param array $succes
 	 * 
-	 * @return string La valeur transformÈe
+	 * @return string La valeur transform√©e
 	 */
 	function valueToDB($fieldname, $value, &$errors, &$succes) {
 		global $TCA;
@@ -547,9 +550,9 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 	}
 	
 	/**
-	 * RÈcupËre les marqueurs du formulaire
+	 * R√©cup√®re les marqueurs du formulaire
 	 *
-	 * @param boolean $edit "true" si Èdition, sinon "false"
+	 * @param boolean $edit "true" si √©dition, sinon "false"
 	 *
 	 * @return mixed Les marqueurs
 	 */

@@ -1,3 +1,6 @@
+/*
+ * $Id$ 
+ */
 
 function newForm(elementPath){
 	var element = elementPath;	
