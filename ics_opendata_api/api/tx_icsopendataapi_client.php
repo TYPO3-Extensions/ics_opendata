@@ -31,7 +31,7 @@
  * The API's client
  * Uses a service to manage a call of API.
  * Gets an output, then print it.
- * 
+ *
  * @author    Tsi Yang <tsi@in-cite.net>
  * @package    TYPO3
  */

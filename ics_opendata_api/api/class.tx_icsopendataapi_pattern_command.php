@@ -27,7 +27,7 @@
 
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/class.tx_icsopenddataapi_command.php');
 
-/** 
+/**
  * Abstract command class triggered by pattern matching.
  * Defines the contract for a pattern command.
  *
@@ -37,14 +37,14 @@ require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/class.tx_icsopendd
  *
  * @author    Pierrick Caillon <pierrick@in-cite.net>
  * @package    TYPO3
- */ 
+ */
 abstract class tx_icsopendataapi_pattern_command extends tx_icsopenddataapi_command {
 	protected $triggeredName;
 
 	protected function __construct($name) {
 		$this->triggeredName = $name;
 	}
-	
+
 	public abstract function isValid();
 }
 

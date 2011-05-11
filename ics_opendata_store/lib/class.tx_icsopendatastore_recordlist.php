@@ -27,7 +27,37 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   73: class tx_icsopendatastore_recordList extends recordList
+ *   90:     public function __construct()
+ *   99:     public function getButtons()
+ *  144:     function getTable($table,$id,$rowlist)
+ *  500:     function renderListRow($table,$row,$cc,$titleCol,$thumbsCol,$indent=0)
+ *  620:     function setReferences($table, $uid)
+ *  640:     function renderListHeader($table, $currentIdList)
+ *  819:     protected function renderListNavigation()
+ *  889:     function calculatePointer()
+ *
+ *              SECTION: Rendering of various elements
+ *  956:     function makeControl($table,$row)
+ * 1195:     function makeClip($table,$row)
+ * 1284:     function makeRef($table,$uid)
+ * 1304:     function makeLocalizationPanel($table,$row)
+ * 1352:     function fieldSelectBox($table,$formFields=1)
+ *
+ *              SECTION: Helper functions
+ * 1423:     function linkClipboardHeaderIcon($string,$table,$cmd,$warning='')
+ * 1434:     function clipNumPane()
+ * 1448:     function addSortLink($code,$field,$table)
+ * 1473:     function recPath($pid)
+ * 1487:     function showNewRecLink($table)
+ * 1506:     function makeReturnUrl()
+ * 1520:     function listURL($altId='',$table=-1,$exclList='')
+ *
+ * TOTAL FUNCTIONS: 20
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 $LANG->includeLLFile('EXT:lang/locallang_mod_web_list.xml');
 require_once ($BACK_PATH.'class.db_list.inc');
@@ -42,18 +72,21 @@ require_once ($BACK_PATH.'class.db_list.inc');
  */
 class tx_icsopendatastore_recordList extends recordList {
 		// External:
-	var $alternateBgColors=FALSE;			// If true, table rows in the list will alternate in background colors (and have background colors at all!)
-	var $totalRowCount;						// count of record rows in view
+	var $alternateBgColors=FALSE; /**< If true, table rows in the list will alternate in background colors (and have background colors at all!) */
+	var $totalRowCount;	/**< count of record rows in view */
 
-	var $spaceIcon;							// space icon used for alignment
+	var $spaceIcon;	/**< space icon used for alignment */
 
 		// Internal:
-	var $pageRow=array();					// Set to the page record (see writeTop())
+	var $pageRow=array(); /**< Set to the page record (see writeTop()) */
 
-	var $references;						// References of the current record
-	var $translations;						// Translations of the current record
-	var $selFieldList;						// select fields for the query which fetches the translations of the current record
-
+	var $references; /**< References of the current record */
+	var $translations; /**< Translations of the current record */
+	var $selFieldList; /**< select fields for the query which fetches the translations of the current record */
+	
+	/**
+	 * _construct
+	 */
 	public function __construct() {
 		parent::__construct();
 	}
@@ -61,7 +94,7 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Create the panel of buttons for submitting the form or otherwise perform operations.
 	 *
-	 * @return	array	all available buttons as an assoc. array
+	 * @return array all available buttons as an assoc. array
 	 */
 	public function getButtons()	{
 		global $LANG;
@@ -103,9 +136,9 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Creates the listing of records from a single table
 	 *
-	 * @param	string		Table name
-	 * @param	integer		Page id
-	 * @param	string		List of fields to show in the listing. Pseudo fields will be added including the record header.
+	 * @param	string		$table: Table name
+	 * @param	integer		$id: Page id
+	 * @param	string		$rowList: List of fields to show in the listing. Pseudo fields will be added including the record header.
 	 * @return	string		HTML table with the listing for the record.
 	 */
 	function getTable($table,$id,$rowlist)	{
@@ -129,7 +162,7 @@ class tx_icsopendatastore_recordList extends recordList {
 
 			// Cleaning rowlist for duplicates and place the $titleCol as the first column always!
 		$this->fieldArray=array();
-		
+
 			// title Column
 		$this->fieldArray[] = $titleCol;	// Add title column
 			// type & format columns
@@ -454,12 +487,12 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Rendering a single row for the list
 	 *
-	 * @param	string		Table name
-	 * @param	array		Current record
-	 * @param	integer		Counter, counting for each time an element is rendered (used for alternating colors)
-	 * @param	string		Table field (column) where header value is found
-	 * @param	string		Table field (column) where (possible) thumbnails can be found
-	 * @param	integer		Indent from left.
+	 * @param	string		$table: Table name
+	 * @param	array		$row: Current record
+	 * @param	integer		$cc: Counter, counting for each time an element is rendered (used for alternating colors)
+	 * @param	string		$titleCol: Table field (column) where header value is found
+	 * @param	string		$thumbsCol: Table field (column) where (possible) thumbnails can be found
+	 * @param	integer		$indent: Indent from left.
 	 * @return	string		Table row for the element
 	 * @access private
 	 * @see getTable()
@@ -513,7 +546,7 @@ class tx_icsopendatastore_recordList extends recordList {
 							'</a>';
 					}
 					$theData[$fCol] = $warning . $this->linkWrapItems($table, $row['uid'], $recTitle, $row);
-					
+
 						// Render thumbsnails if a thumbnail column exists and there is content in it:
 					if ($this->thumbs && trim($row[$thumbsCol])) {
 						$theData[$fCol] .= '<br />' . $this->thumbCode($row,$table,$thumbsCol);
@@ -580,8 +613,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Write sys_refindex entries for current record to $this->references
 	 *
-	 * @param	string		Table name
-	 * @param	integer		Uid of current record
+	 * @param	string		$table: Table name
+	 * @param	integer		$uid: Uid of current record
 	 * @return	void
 	 */
 	function setReferences($table, $uid) {
@@ -598,8 +631,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Rendering the header row for a table
 	 *
-	 * @param	string		Table name
-	 * @param	array		Array of the currently displayed uids of the table
+	 * @param	string		$table: Table name
+	 * @param	array		$currentIdList: Array of the currently displayed uids of the table
 	 * @return	string		Header table row
 	 * @access private
 	 * @see getTable()
@@ -779,8 +812,7 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Creates a page browser for tables with many records
 	 *
-	 * @return	string	Navigation HTML
-	 *
+	 * @return	string		Navigation HTML
 	 * @author	Dmitry Pikhno <dpi@goldenplanet.com>
 	 * @author	Christian Kuhn <lolli@schwarzbu.ch>
 	 */
@@ -908,11 +940,6 @@ class tx_icsopendatastore_recordList extends recordList {
 		return ($this->addElement(1, '', $data));
 	}
 
-
-
-
-
-
 	/*********************************
 	 *
 	 * Rendering of various elements
@@ -922,8 +949,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Creates the control panel for a single record in the listing.
 	 *
-	 * @param	string		The table
-	 * @param	array		The record for which to make the control panel.
+	 * @param	string		$table: The table
+	 * @param	array		$row: The record for which to make the control panel.
 	 * @return	string		HTML table with the control panel (unless disabled)
 	 */
 	function makeControl($table,$row)	{
@@ -1161,8 +1188,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Creates the clipboard panel for a single record in the listing.
 	 *
-	 * @param	string		The table
-	 * @param	array		The record for which to make the clipboard panel.
+	 * @param	string		$table: The table
+	 * @param	array		$row: The record for which to make the clipboard panel.
 	 * @return	string		HTML table with the clipboard panel (unless disabled)
 	 */
 	function makeClip($table,$row)	{
@@ -1250,8 +1277,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Make reference count
 	 *
-	 * @param	string		Table name
-	 * @param	integer		UID of record
+	 * @param	string		$table: Table name
+	 * @param	integer		$uid: UID of record
 	 * @return	string		HTML-table
 	 */
 	function makeRef($table,$uid)	{
@@ -1270,8 +1297,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Creates the localization panel
 	 *
-	 * @param	string		The table
-	 * @param	array		The record for which to make the localization panel.
+	 * @param	string		$table: The table
+	 * @param	array		$row: The record for which to make the localization panel.
 	 * @return	array		Array with key 0/1 with content for column 1 and 2
 	 */
 	function makeLocalizationPanel($table,$row)	{
@@ -1318,8 +1345,8 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Create the selector box for selecting fields to display from a table:
 	 *
-	 * @param	string		Table name
-	 * @param	boolean		If true, form-fields will be wrapped around the table.
+	 * @param	string		$table: Table name
+	 * @param	boolean		$formFields: If true, form-fields will be wrapped around the table.
 	 * @return	string		HTML table with the selector box (name: displayFields['.$table.'][])
 	 */
 	function fieldSelectBox($table,$formFields=1)	{
@@ -1377,16 +1404,6 @@ class tx_icsopendatastore_recordList extends recordList {
 		return $content;
 	}
 
-
-
-
-
-
-
-
-
-
-
 	/*********************************
 	 *
 	 * Helper functions
@@ -1397,10 +1414,10 @@ class tx_icsopendatastore_recordList extends recordList {
 	 * Creates a link around $string. The link contains an onclick action which submits the script with some clipboard action.
 	 * Currently, this is used for setting elements / delete elements.
 	 *
-	 * @param	string		The HTML content to link (image/text)
-	 * @param	string		Table name
-	 * @param	string		Clipboard command (eg. "setCB" or "delete")
-	 * @param	string		Warning text, if any ("delete" uses this for confirmation)
+	 * @param	string		$string: The HTML content to link (image/text)
+	 * @param	string		$table: Table name
+	 * @param	string		$cmd: Clipboard command (eg. "setCB" or "delete")
+	 * @param	string		$warning: Warning text, if any ("delete" uses this for confirmation)
 	 * @return	string		<a> tag wrapped link.
 	 */
 	function linkClipboardHeaderIcon($string,$table,$cmd,$warning='')	{
@@ -1423,9 +1440,9 @@ class tx_icsopendatastore_recordList extends recordList {
 	 * It will automatically detect if sorting should be ascending or descending depending on $this->sortRev.
 	 * Also some fields will not be possible to sort (including if single-table-view is disabled).
 	 *
-	 * @param	string		The string to link (text)
-	 * @param	string		The fieldname represented by the title ($code)
-	 * @param	string		Table name
+	 * @param	string		$code: The string to link (text)
+	 * @param	string		$field: The fieldname represented by the title ($code)
+	 * @param	string		$table: Table name
 	 * @return	string		Linked $code variable
 	 */
 	function addSortLink($code,$field,$table)	{
@@ -1450,7 +1467,7 @@ class tx_icsopendatastore_recordList extends recordList {
 	 * Returns the path for a certain pid
 	 * The result is cached internally for the session, thus you can call this function as much as you like without performance problems.
 	 *
-	 * @param	integer		The page id for which to get the path
+	 * @param	integer		$pid: The page id for which to get the path
 	 * @return	string		The path.
 	 */
 	function recPath($pid)	{
@@ -1463,7 +1480,7 @@ class tx_icsopendatastore_recordList extends recordList {
 	/**
 	 * Returns true if a link for creating new records should be displayed for $table
 	 *
-	 * @param	string		Table name
+	 * @param	string		$table: Table name
 	 * @return	boolean		Returns true if a link for creating new records should be displayed for $table
 	 * @see		SC_db_new::showNewRecLink
 	 */
@@ -1495,9 +1512,9 @@ class tx_icsopendatastore_recordList extends recordList {
 	 * Fixed GPvars are id, table, imagemode, returlUrl, search_field, search_levels and showLimit
 	 * The GPvars "sortField" and "sortRev" are also included UNLESS they are found in the $exclList variable.
 	 *
-	 * @param	string		Alternative id value. Enter blank string for the current id ($this->id)
-	 * @param	string		Tablename to display. Enter "-1" for the current table.
-	 * @param	string		Commalist of fields NOT to include ("sortField" or "sortRev")
+	 * @param	string		$altId: Alternative id value. Enter blank string for the current id ($this->id)
+	 * @param	string		$table: Tablename to display. Enter "-1" for the current table.
+	 * @param	string		$exclList: Commalist of fields NOT to include ("sortField" or "sortRev")
 	 * @return	string		URL
 	 */
 	function listURL($altId='',$table=-1,$exclList='')	{

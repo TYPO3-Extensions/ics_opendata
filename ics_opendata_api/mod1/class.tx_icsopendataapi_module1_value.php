@@ -38,12 +38,12 @@ class tx_icsopendataapi_module1_value{
 
 	/**
 	 * Loads form
-	 * @param $value tx_icsopendataapi_value
-	 * @param $currentStack array
-	 * @param $elementName string
-	 * @param $index int
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_value	$value		
+	 * @param	array	$currentStack		
+	 * @param	string	$elementName
+	 * @param	int $index
+	 * @return	void
 	 */
 	function load($value, $currentStack, $elementPath, $elementName, $index){
 		$this->content .= '<div>';
@@ -61,8 +61,8 @@ class tx_icsopendataapi_module1_value{
 		for( $i=0; $i<$value->getParametersCount(); $i++){
 			$parameter = new tx_icsopendataapi_module1_parameter();
 			$parameter->load(
-				$value->getParameter($i), 
-				$currentStack, 
+				$value->getParameter($i),
+				$currentStack,
 				$elementPath,
 				$elementName . '[' . $index . '][parameters]',
 				$i
@@ -70,13 +70,13 @@ class tx_icsopendataapi_module1_value{
 			$this->content .= $parameter->getContent();
 		}
 	}
-	
+
 	/**
 	 * Generates form
-	 * @param $value tx_icsopendataapi_value
-	 * @param $elementName string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_value	$value		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function form($value, $elementName){
 		global $LANG;
@@ -94,13 +94,13 @@ class tx_icsopendataapi_module1_value{
 			</div>
 		';
 	}
-				
+
 	/**
 	 * Generates hidden form
-	 * @param $value tx_icsopendataapi_value
-	 * @param $elementName string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_value	$value		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function hiddenForm($value, $elementName){
 		$this->content .= '
@@ -108,12 +108,12 @@ class tx_icsopendataapi_module1_value{
 			<input type="hidden" name="' . $elementName .'[description]" value="' . $value->getDescription() . '" />
 		';
 	}
-	
+
 
 	/**
 	 * Retrieves content
-	 * 
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getContent(){
 		return $this->content;

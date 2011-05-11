@@ -5,7 +5,7 @@
 /**
  * Generates a random password
  *
- * @param $passwordSize integer, length of password
+ * @param integer	$passwordSize: length of password
  * @return string, the password
  */
 function pwdGenerator( $passwordSize = 10) {

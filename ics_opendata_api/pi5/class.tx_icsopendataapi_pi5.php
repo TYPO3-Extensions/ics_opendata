@@ -27,7 +27,16 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icsopendataapi_pi5 extends tx_icsopendataapi_common
+ *   65:     function main($content, $conf)
+ *  110:     function getContent($application, $date)
+ *  152:     function getStatItemContent($template, $uid, $date)
+ *
+ * TOTAL FUNCTIONS: 3
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'lib/class.tx_icsopendataapi_common.php');
@@ -44,27 +53,27 @@ class tx_icsopendataapi_pi5 extends tx_icsopendataapi_common {
 	var $prefixId      = 'tx_icsopendataapi_pi5';		// Same as class name
 	var $scriptRelPath = 'pi5/class.tx_icsopendataapi_pi5.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_opendata_api';	// The extension key.
-	
+
 
 	/**
 	 * The main method of the PlugIn
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	 * @return	The		content that is displayed on the website
 	 */
 	function main($content, $conf) {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
-	
+
 		$GLOBALS['TSFE']->additionalHeaderData[$extKey] = '<script src="typo3conf/ext/ics_opendata_api/res/tablefilter.js" type="text/javascript"></script>';
-			
+
 		if(is_null($GLOBALS['TSFE']->fe_user->user['uid'])){
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('nologin')));
 		}
-		
+
 		$uid = $this->piVars['uid'];
 		if(empty($uid)){
 			$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
@@ -89,13 +98,14 @@ class tx_icsopendataapi_pi5 extends tx_icsopendataapi_common {
 		}
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 
 	/**
 	 * Retrieves content
-	 * @param int $uid of application
 	 *
-	 * @return string content
+	 * @param	int		$uid: uid of application
+	 * @param	time		$date
+	 * @return	string		content
 	 */
 	function getContent($application, $date){
 		$html = $this->cObj->fileResource($this->templateFile);
@@ -109,41 +119,42 @@ class tx_icsopendataapi_pi5 extends tx_icsopendataapi_common {
 			'###URL###' => t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'),
 			'###BTN_PREVIOUS###' => $this->prefixId . '[btn_previous]',
 			'###BTN_PREVIOUS_VALUE###' => htmlspecialchars($this->pi_getLL('previous')),
-			'###DISPLAY_PREVIOUS###' => (($date-30) < mktime(0, 0, 0, date('m', $application['crdate']), date('d', $application['crdate']), date('Y', $application['crdate']))? 'disabled="disabled"': ''),			
+			'###DISPLAY_PREVIOUS###' => (($date-30) < mktime(0, 0, 0, date('m', $application['crdate']), date('d', $application['crdate']), date('Y', $application['crdate']))? 'disabled="disabled"': ''),
 			'###BTN_NEXT###' => $this->prefixId . '[btn_next]',
 			'###BTN_NEXT_VALUE###' => htmlspecialchars($this->pi_getLL('next')),
 			'###DISPLAY_NEXT###' => ($date == mktime(0, 0, 0, date('m'), date('d'), date('Y'))? 'disabled="disabled"': ''),
 			'###DATE###' => $this->prefixId . '[date]',
 			'###DATE_VALUE###' => $date,
 		);
-		
+
 		$statItemContent = $this->getStatItemContent($template, $application['uid'], $date);
-		
+
 		// Restores markers of template
 		$content .= $this->cObj->substituteMarkerArrayCached(
-			$template, 
-			$markerArray, 
+			$template,
+			$markerArray,
 			array('###STATISTIQUE_ITEM###' => $statItemContent)
 		);
-		
+
 		return $content;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Retrieves content item
-	 * @param string $template
-	 * @param int $uid
 	 *
-	 * @return string content
+	 * @param	string		$template
+	 * @param	int		$uid
+	 * @param	time		$date
+	 * @return	string		content
 	 */
-	function getStatItemContent($template, $uid, $date){		
+	function getStatItemContent($template, $uid, $date){
 		$template = $this->cObj->getSubpart($template, '###STATISTIQUE_ITEM###');
-		
+
 		$addWhere = ' AND `date` > ' . $GLOBALS['TYPO3_DB']->fullquotestr( mktime(0, 0, 0, date('m', $date), date('d', $date)-30, date('Y', $date)), $this->tables['statistics']);
 		$addWhere .= ' AND `date` < ' . $GLOBALS['TYPO3_DB']->fullquotestr( mktime(0, 0, 0, date('m', $date), date('d', $date), date('Y', $date)), $this->tables['statistics']);
-			
+
 		$where = array(
 			'tx_icsopendataapi_application' => $uid
 		);
@@ -160,7 +171,7 @@ class tx_icsopendataapi_pi5 extends tx_icsopendataapi_common {
 		}
 		return $content;
 	}
-	
+
 }
 
 

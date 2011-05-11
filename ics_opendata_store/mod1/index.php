@@ -27,7 +27,24 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   65: class tx_icsopendatastore_module1 extends t3lib_SCbase
+ *   73:     function init()
+ *   95:     function menuConfig()
+ *  117:     function main()
+ *  178:     function printContent()
+ *  192:     function moduleContent()
+ *  388:     function loadFilegroups()
+ *  425:     function renderFilegroup()
+ *  590:     function renderMenuButtons()
+ *  610:     protected function getButtons()
+ *  647:     public function getNewRecordParams()
+ *  658:     public function getEditRecordParams($sId)
+ *
+ * TOTAL FUNCTIONS: 11
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 require_once(t3lib_extMgm::extPath('ics_opendata_store') . 'lib/class.tx_icsopendatastore_recordlist.php');
@@ -50,6 +67,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 
 	/**
 	 * Initializes the Module
+	 *
 	 * @return	void
 	 */
 	function init()	{
@@ -104,7 +122,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		$this->pid = tx_icsopendatastore_sysfolder::getPid();
 		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->pid,$this->perms_clause);
 		$access = is_array($this->pageinfo) ? 1 : 0;
-	
+
 			// initialize doc
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->setModuleTemplate(t3lib_extMgm::extPath('ics_opendata_store') . 'mod1/mod_template.html');
@@ -115,14 +133,14 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 
 				// Draw the form
 			$this->doc->form = '<form action="" method="post" enctype="multipart/form-data">';
-		
+
 			$this->doc->JScode = $this->doc->wrapScriptTags('
 				function jumpToUrl(URL)	{	//
 					window.location.href = URL;
 					return false;
 				}
 			');
-			
+
 			$this->doc->postCode='
 				<script language="javascript" type="text/javascript">
 					script_ended = 1;
@@ -162,9 +180,9 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		echo $this->content;
 	}
 
-// Note alt_doc: 
+// Note alt_doc:
 // - overrideVals[table][field]: Forcer la valeur de field dans table à la valeur du paramètre.
-// - defVals[table][field]: Pour les nouveaux enregistrement, initialiser le valeur de field dans table à la valeur du paramètre. 
+// - defVals[table][field]: Pour les nouveaux enregistrement, initialiser le valeur de field dans table à la valeur du paramètre.
 // - columnsOnly[table]: Liste des champs à afficher pour table. Les champs de overrideVals sont masqués.
 	/**
 	 * Generates the module content
@@ -181,7 +199,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 
 		// Render files buttons ======
 		$sContent .= $this->renderMenuButtons();
-		
+
 			// Initialize the dblist object:
 		$dblist = t3lib_div::makeInstance('tx_icsopendatastore_recordList');
 		$dblist->backPath = $BACK_PATH;
@@ -315,7 +333,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 
 			// Setting up the context sensitive menu:
 		$this->doc->getContextMenuCode();
-		
+
 				// Draw the form
 		//$this->doc->form = '<form action="' . htmlspecialchars($dblist->listURL()) . '" method="post" enctype="multipart/form-data">';
 		$this->doc->form = '';
@@ -326,10 +344,10 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 			<input type="hidden" name="cmd_table" />
 			<input type="hidden" name="cmd" />
 		</form>';
-		
+
 		if ($sContent) {
 			// MODIFICATION Loïc le 25/11/2010. Suppression du choix des champs à afficher
-			//$sContent .= $dblist->fieldSelectBox($dblist->table); 
+			//$sContent .= $dblist->fieldSelectBox($dblist->table);
 
 				// Adding checkbox options for extended listing and clipboard display:
 			// $sContent .= '
@@ -358,23 +376,23 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		else {
 		}
 		$this->aListHeaderButtons = $dblist->getButtons();
-		
+
 		$this->content .= $this->doc->section($this->filegroupTitle, $sContent, 0, 1);
 	}
-	
+
 	/**
+	 * @return	boolean		Le succès du chargement de l'espace.
 	 * @author Pierrick Caillon <pierrick@in-cite.net>
 	 * @desc Charge l'espace courant. Le titre et les groupes sont enregistrés en variables d'instance.
-	 * @return boolean Le succès du chargement de l'espace.
 	 */
 	function loadFilegroups() {
 		global $LANG, $TYPO3_DB;
 		if (empty($this->id))
 		{
 			$oMessage = t3lib_div::makeInstance(
-				't3lib_FlashMessage', 
-				$LANG->getLL('info_selectfilegroup'), 
-				'', 
+				't3lib_FlashMessage',
+				$LANG->getLL('info_selectfilegroup'),
+				'',
 				t3lib_FlashMessage::INFO
 			);
 			t3lib_FlashMessageQueue::addMessage($oMessage);
@@ -385,9 +403,9 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		if (empty($aResults))
 		{
 			$oMessage = t3lib_div::makeInstance(
-				't3lib_FlashMessage', 
-				$LANG->getLL('error_nofilegroup'), 
-				'', 
+				't3lib_FlashMessage',
+				$LANG->getLL('error_nofilegroup'),
+				'',
 				t3lib_FlashMessage::ERROR
 			);
 			t3lib_FlashMessageQueue::addMessage($oMessage);
@@ -398,14 +416,15 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		return true;
 	}
 
-	
+
 	/**
 	 * Render filegroup
-	 * @return The filegroup content
+	 *
+	 * @return	The		filegroup content
 	 */
 	function renderFilegroup()	{
 		global $LANG;
-		
+
 		if(!empty($this->filegroup['licence'])) {
 			$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -422,7 +441,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$licenceValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['categories'])) {
 			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -439,7 +458,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$categoriesValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['agency'])) {
 			$agency = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -473,7 +492,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$contactValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['publisher'])) {
 			$publisher = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -490,7 +509,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$publisherValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['creator'])) {
 			$creator = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -507,7 +526,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$creatorValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['manager'])) {
 			$manager = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -524,7 +543,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$managerValue = '';
 			}
 		}
-		
+
 		if(!empty($this->filegroup['owner'])) {
 			$owner = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
@@ -541,28 +560,33 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 				$ownerValue = '';
 			}
 		}
-		
+
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('description') . '</div><div style="float:left;width:60%;">' . $this->filegroup['description'] . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('technical_data') . '</div><div style="float:left;width:60%;">' . $this->filegroup['technical_data'] . '</div></div>';
-		
+
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('agency') . '</div><div style="float:left;width:60%;">' . $agencyValue . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('category') . '</div><div style="float:left;width:60%;">' . $categoriesValue . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('contact') . '</div><div style="float:left;width:60%;">' . $contactValue . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('licence') . '</div><div style="float:left;width:60%;">' . $licenceValue . '</div></div>';
-		
+
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('release_date') . '</div><div style="float:left;width:60%;">' . (($this->filegroup['release_date'])? date('d/m/Y',$this->filegroup['release_date']) : '') . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('update_date') . '</div><div style="float:left;width:60%;">' . (($this->filegroup['update_date'])? date('d/m/Y',$this->filegroup['update_date']) : '') . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('time_period') . '</div><div style="float:left;width:60%;">' . $this->filegroup['time_period'] . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('update_frequency') . '</div><div style="float:left;width:60%;">' . $this->filegroup['update_frequency'] . '</div></div>';
-		
+
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('publisher') . '</div><div style="float:left;width:60%;">' . $publisherValue . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('creator') . '</div><div style="float:left;width:60%;">' . $creatorValue . '</div></div>';
 		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('manager') . '</div><div style="float:left;width:60%;">' . $managerValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('owner') . '</div><div style="float:left;width:60%;">' . $ownerValue . '</div></div><div style="clear:both;"></div>';	
-		
+		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('owner') . '</div><div style="float:left;width:60%;">' . $ownerValue . '</div></div><div style="clear:both;"></div>';
+
 		return $sContent;
 	}
-	
+
+	/**
+	 * Render menu buttons
+	 *
+	 * @return	string	content
+	 */
 	function renderMenuButtons()	{
 		global $LANG;
 
@@ -574,14 +598,14 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 			'<img ' .  t3lib_iconWorks::skinImg(t3lib_extMgm::extRelPath('ics_opendata_store'), 'res/editer.png') . ' title="' . $LANG->getLL('editFile') . '" alt="' . $LANG->getLL('editFile') . '" />' .
 			'</a></p>';
 		$sContent .='</div>';
-		
+
 		return $sContent;
 	}
-	
+
 	/**
 	 * Create the panel of buttons for submitting the form or otherwise perform operations.
 	 *
-	 * @return	array	all available buttons as an assoc. array
+	 * @return	array		all available buttons as an assoc. array
 	 */
 	protected function getButtons()	{
 		global $LANG;
@@ -606,7 +630,7 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 		$buttons['edit'] = '<a href="#" onclick="' . htmlspecialchars(t3lib_BEfunc::editOnClick('&edit[tx_icsopendatastore_filegroups][' . $this->id . ']=edit',$this->doc->backPath,-1)) . '">' .
 						'<img' . t3lib_iconWorks::skinImg(t3lib_extMgm::extRelPath('ics_opendata_store'), 'res/editer_icone.png') . ' title="' . $LANG->getLL('editFile') . '" alt="' . $LANG->getLL('editFile') . '" />' .
 						'</a>';
-						
+
 			// New record file
 		// $buttons['new_record'] = '<a href="#" onclick="' . htmlspecialchars(t3lib_BEfunc::editOnClick($this->getNewRecordParams(),$this->backPath,-1)) . '">' .
 						// '<img' . t3lib_iconWorks::skinImg(t3lib_extMgm::extRelPath('ics_opendata_store'), 'res/uploader_icone.png') . ' title="' . $LANG->getLL('newFile') . '" alt="' . $LANG->getLL('newFile') . '" />' .
@@ -614,12 +638,23 @@ class tx_icsopendatastore_module1 extends t3lib_SCbase {
 
 		return $buttons;
 	}
-	
+
+	/**
+	 * Get URL params for new tx_icsopendatastore_files record
+	 *
+	 * @return	string	params url
+	 */
 	public function getNewRecordParams()
 	{
 		return '&edit[tx_icsopendatastore_files][' . $this->pid . ']=new&overrideVals[tx_icsopendatastore_files][filegroup]=1&defVals[tx_icsopendatastore_files][filegroup]=' . $this->id;
 	}
-	
+
+	/**
+	 * get URL params for edit tx_icsopendatastore_files record
+	 *
+	 * @param	int		$sId: record uid
+	 * @return	string	params url
+	 */
 	public function getEditRecordParams($sId)
 	{
 		return '&edit[tx_icsopendatastore_files][' . $sId . ']=edit&overrideVals[tx_icsopendatastore_files][filegroup]=1&defVals[tx_icsopendatastore_files][filegroup]=' . $this->id;

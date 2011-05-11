@@ -27,7 +27,25 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   62: class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common
+ *   75:     function main($content, $conf)
+ *  172:     function renderSucces($messages)
+ *  204:     function renderFormCreate($errors = array())
+ *  255:     function existAppli()
+ *  271:     function registration()
+ *  283:     function is_uniqueKey()
+ *  301:     function renderFormEdit($application, $errors = array())
+ *  356:     function renderFieldImage($value, $field, $template)
+ *  419:     function renderField_group_parseFiles($fieldname, $fieldconf, &$files, &$errors, &$succes)
+ *  482:     function updateDB($update = true, &$errors = array(), $application = null)
+ *  598:     function valueToDB($fieldname, $value, &$errors, &$succes)
+ *  616:     function getMarkersForm($edit = false)
+ *
+ * TOTAL FUNCTIONS: 12
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'lib/randomGenerator.php');
@@ -46,13 +64,13 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 	var $scriptRelPath = 'pi2/class.tx_icsopendataapi_pi2.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_opendata_api';	// The extension key.
 
-	
+
 	/**
 	 * The main method of the PlugIn
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	 * @return	The		content that is displayed on the website
 	 */
 	function main($content, $conf) {
 		$this->conf = $conf;
@@ -60,27 +78,27 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->uniq = uniqid($this->extKey);
-	
+
 		$this->init();
-	
+
 		// Insert style and javascript on header of the page
 		if (isset($this->conf['styleApi'])) {
 			$GLOBALS['TSFE']->additionalHeaderData[$this->extKey] = '<link rel="stylesheet" type="text/css" href="' . $this->conf['styleApi'] .'" />';
 		}
 		$GLOBALS['TSFE']->additionalHeaderData[$this->extKey] .= '<script src="typo3conf/ext/ics_opendata_api/res/script.js" type="text/javascript"></script>';
-		
+
 		t3lib_div::loadTCA($this->tables['applications']);
-		
+
 		if ($this->conf['pid'] == "") {
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('pid_valid')));
 		}
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('nologin')));
 		}
-		
+
 		$usergroup = t3lib_div::trimExplode(',',  $this->conf['usergroup'], true);
 		$groupsUser = explode(',',$GLOBALS['TSFE']->gr_list,$GLOBALS['TSFE']->fe_user->user['uid']);
-		
+
 		$validUser = false;
 		if (!empty($usergroup) && is_array($groupsUser) && !empty($groupsUser)) {
 			foreach($usergroup as $group) {
@@ -90,22 +108,22 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 				}
 			}
 		}
-		
+
 		if (!$validUser) {
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('error_group')));
 		}
-		
+
 		$uid = $this->piVars['keyuid'];
-		
+
 		if ($uid) {
-			// EDIT 
+			// EDIT
 			$applications = $this->getApplications(tx_icsopendataapi_common::APPMODE_SINGLEUSER, null, $uid);
 			if (!$applications) {
 				$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
 			}else{
 				$errors = array();
 				if ($this->piVars['btn_registration']) { // Form is submitted
-					// Hook to validate extra fields 
+					// Hook to validate extra fields
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
 							$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -121,7 +139,7 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			// CREATE
 			if ($this->piVars['btn_registration']) { // Form is submitted
 				$errors = array();
-				// Hook to validate extra fields 
+				// Hook to validate extra fields
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
 						$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -129,7 +147,7 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 					}
 				}
 				$succes = ($succes)? $this->updateDB(false, $errors) : $succes;
-				
+
 				if ($succes) {
 					$content .= $this->renderSucces($errors);
 				} else {
@@ -138,66 +156,78 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			} else
 				$content .= $this->renderFormCreate();
 		}
-			
-		
-				
+
+
+
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
+	/**
+	 * Succes messages output
+	 *
+	 * @param	array		$messages: succes messages
+	 * @return	string		content
+	 */
 	function renderSucces($messages) {
 		// Get the application form template
 		$html = $this->cObj->fileResource($this->templateFile);
 		$template = array();
-		$template = $this->cObj->getSubpart($html, '###TEMPLATE_APPLICATION_FORM_SUCCES###');	
-		
+		$template = $this->cObj->getSubpart($html, '###TEMPLATE_APPLICATION_FORM_SUCCES###');
+
 		$output_messages = '';
 		if (!empty($messages)) {
-			$subpart_messages = $this->cObj->getSubpart($template, '###TEMPLATE_MESSAGES###');	
+			$subpart_messages = $this->cObj->getSubpart($template, '###TEMPLATE_MESSAGES###');
 			foreach($messages as $message) {
 				$markers = array('###MESSAGE###' => $message);
 				$output_messages .= $this->cObj->substituteMarkerArray($subpart_messages, $markers);
 			}
 		}
 		$template = $this->cObj->substituteSubpart($template, '###TEMPLATE_MESSAGES###', $output_messages);
-		
+
 		$markers = array(
 			'###BACK###' => $this->pi_getLL('back'),
 			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1),
 		);
 		$template = $this->cObj->substituteMarkerArray($template, $markers);
-		
+
 		return $template;
 	}
-	
+
+	/**
+	 * Create form output
+	 *
+	 * @param	array	$errors: errors messages
+	 * @return	string		content
+	 */
 	function renderFormCreate($errors = array()) {
 		// Get the application form template
 		$html = $this->cObj->fileResource($this->templateFile);
 		$template = array();
-		$template = $this->cObj->getSubpart($html, '###TEMPLATE_APPLICATION_FORM###');	
+		$template = $this->cObj->getSubpart($html, '###TEMPLATE_APPLICATION_FORM###');
 		$markerArray = $this->getMarkersForm();
-		
+
 		$output_errors = '';
 		if (!empty($errors)) {
-			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');	
+			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');
 			foreach($errors as $error) {
 				$markers = array('###ERROR_MSG###' => $error);
 				$output_errors .= $this->cObj->substituteMarkerArray($subpart_error, $markers);
 			}
 		}
 		$template = $this->cObj->substituteSubpart($template, '###TEMPLATE_ERRORS###', $output_errors);
-		
+
 		$subpart_logo = $this->cObj->getSubpart($template, '###TEMPLATE_LOGO###');
 		$logo = $this->renderFieldImage($application['logo'], 'logo', $subpart_logo);
-		
+
 		$subpart_screenshot = $this->cObj->getSubpart($template, '###TEMPLATE_SCREENSHOT###');
 		$screenshot = $this->renderFieldImage($application['screenshot'], 'screenshot', $subpart_screenshot);
-		
+
 		$subpartArray = array(
 			'###TEMPLATE_LOGO###' => $logo,
 			'###TEMPLATE_SCREENSHOT###' => $screenshot
 		);
 
-		// Hook pour modifier les conf 
+		// Hook pour modifier les conf
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -207,17 +237,18 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 
 		// Replace the markers
 		$content .= $this->cObj->substituteMarkerArrayCached(
-			$template, 
-			$markerArray, 
+			$template,
+			$markerArray,
 			$subpartArray
 		);
-		
-		return $content;	
+
+		return $content;
 	}
-	
+
 	/**
 	 * Check whether the application exist
-	 * @return boolean "true" if exist, otherwise "false"
+	 *
+	 * @return	boolean		"true" if exist, otherwise "false"
 	 */
 	function existAppli() {
 		$where = array(
@@ -228,23 +259,26 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			return true;
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Register the application
+	 *
+	 * @return	void
 	 */
-	function registration() {			
-		while( (is_null($this->key_appli)) 
+	function registration() {
+		while( (is_null($this->key_appli))
 			|| (!$this->is_uniqueKey()) ) {
 			$this->key_appli = pwdGenerator(15);
 		}
 	}
-	
+
 	/**
 	 * Check if the key is unique
-	 * @return boolean "true" otherwise "false"
+	 *
+	 * @return	boolean		"true" otherwise "false"
 	 */
-	function is_uniqueKey() {	
+	function is_uniqueKey() {
 		$where = array(
 			'key_appli' => $this->key_appli
 		);
@@ -253,44 +287,46 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			return true;
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Get the content
 	 *
-	 * @return $content
+	 * @param	array		$application: data application
+	 * @param	array		$errors: errors messages
+	 * @return	$content
 	 */
 	function renderFormEdit($application, $errors = array()) {
 		$html = $this->cObj->fileResource($this->templateFile);
 		$template = array();
 		$template = $this->cObj->getSubpart($html, '###TEMPLATE_APPLICATION_FORM###');
-		
+
 		$output_errors = '';
 		if (!empty($errors)) {
-			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');	
+			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');
 			foreach($errors as $error) {
 				$markers = array('###ERROR_MSG###' => $error);
 				$output_errors .= $this->cObj->substituteMarkerArray($subpart_error, $markers);
 			}
 		}
 		$template = $this->cObj->substituteSubpart($template, '###TEMPLATE_ERRORS###', $output_errors);
-		
+
 		$this->piVars = array_merge($application, $this->piVars);
-	
+
 		$markerArray = $this->getMarkersForm(true);
-				
+
 		$subpart_logo = $this->cObj->getSubpart($template, '###TEMPLATE_LOGO###');
 		$logo = $this->renderFieldImage($application['logo'], 'logo', $subpart_logo);
-		
+
 		$subpart_screenshot = $this->cObj->getSubpart($template, '###TEMPLATE_SCREENSHOT###');
 		$screenshot = $this->renderFieldImage($application['screenshot'], 'screenshot', $subpart_screenshot);
-		
+
 		$subpartArray = array(
 			'###TEMPLATE_LOGO###' => $logo,
 			'###TEMPLATE_SCREENSHOT###' => $screenshot
 		);
-		
-		// Hook pour modifier les conf 
+
+		// Hook pour modifier les conf
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -299,22 +335,30 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 		}
 
 		$content .= $this->cObj->substituteMarkerArrayCached(
-			$template, 
-			$markerArray, 
+			$template,
+			$markerArray,
 			$subpartArray
 		);
-		
+
 		return $content;
 	}
-	
+
+	/**
+	 * Render form fields type image
+	 *
+	 * @param	string		$value: field value
+	 * @param	string		$field: field name
+	 * @param	string		$template: base output
+	 * @return	string		content
+	 */
 	function renderFieldImage($value, $field, $template) {
 		t3lib_div::loadTCA($this->tables['applications']);
 		$fieldconf = $GLOBALS['TCA'][$this->tables['applications']]['columns'][$field];
-		
+
 		$fieldUpper = strtoupper($field);
-		
+
 		$files = t3lib_div::trimExplode(',', (is_array($value)) ? $value['files'] : $value, true);
-				
+
 		$markers = array(
 			'###'.$fieldUpper.'_LABEL###' => $this->pi_getLL($field),
 			'###'.$fieldUpper.'_NAME###' => $this->prefixId.'['.$field.'][files]',
@@ -324,27 +368,27 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			'###'.$fieldUpper.'_MAXSIZE###' => $fieldconf['config']['max_size'],
 		);
 		$template = $this->cObj->substituteMarkerArray($template, $markers);
-	
+
 		if (count($files) >= $fieldconf['config']['maxitems']) {
 			$template = $this->cObj->substituteSubpart($template, '###'.$fieldUpper.'_ADD###', $this->pi_getLL('files_number_max'));
 		}
-		
+
 		$outputFileDelete = '';
 		if (count($files)) {
 			$subpartFileDelete = $this->cObj->getSubpart($template, '###'.$fieldUpper.'_EXIST###');
-			
+
 			foreach ($files as $file) {
 				$uniqid = uniqid();
-				
+
 				if ($field == 'logo')
 					$imgResource = $this->cObj->getImgResource( $fieldconf['config']['uploadfolder'] . '/' . $file, array('width'=>'64m') );
 				else
 					$imgResource = $this->cObj->getImgResource( $fieldconf['config']['uploadfolder'] . '/' . $file, array('width'=>'150px', 'height'=>'150px') );
-				
+
 				$origFile_explode = explode('/', $imgResource['origFile']);
 				$imgAlt = htmlspecialchars($this->pi_getLL($fieldname)) . ' ' . $origFile_explode[count($origFile_explode)-1];
 				$imgTitle = htmlspecialchars($this->pi_getLL($fieldname)) . ' ' . $origFile_explode[count($origFile_explode)-1];
-			
+
 				$markers = array(
 					'###IMAGE###' => '<img src="' . $imgResource[3] . '" alt="' . $imgAlt . '" title="' . $imgTitle . '" />',
 					'###INDICE###' => $uniqid,
@@ -359,8 +403,16 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 
 		return $template;
 	}
-		
+
 	/**
+	 * Upload fields type file
+	 *
+	 * @param	string		$fieldname: field name
+	 * @param	array		$fieldconf: field conf TCA
+	 * @param	array		$files: files
+	 * @param	array		$errors: array to add errors message
+	 * @param	array		$succes: array to add succes message
+	 * @return	void
 	 */
 	function renderField_group_parseFiles($fieldname, $fieldconf, &$files, &$errors, &$succes) {
 		if (isset($this->piVars[$fieldname]) && is_array($this->piVars[$fieldname]) && !empty($this->piVars[$fieldname]))
@@ -368,9 +420,9 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			$pFiles = $this->piVars[$fieldname];
 			unset($pFiles['files']);
 			$delete = array_intersect($files, array_values($pFiles));
-			
+
 			$files = array_diff($files, array_values($pFiles));
-			
+
 			foreach ($delete as $file) {
 				if ($file) {
 					@unlink(t3lib_div::getFileAbsFileName($fieldconf['config']['uploadfolder'] . '/' . $file));
@@ -378,8 +430,8 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 				}
 			}
 		}
-	
-	
+
+
 		if ($_FILES[$this->prefixId]['tmp_name'][$fieldname]['file']) {
 			if (!is_uploaded_file($_FILES[$this->prefixId]['tmp_name'][$fieldname]['file'])) {
 				$errors[] = sprintf($this->pi_getLL('file_error_uploaded'), $_FILES[$this->prefixId]['name'][$fieldname]['file']);
@@ -391,19 +443,19 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 				$errors[] = sprintf($this->pi_getLL('file_error_size'), $_FILES[$this->prefixId]['name'][$fieldname]['file'], $fieldconf['config']['max_size']);
 			}else{
 				$newfile = basename(t3lib_div::fixWindowsFilePath($_FILES[$this->prefixId]['name'][$fieldname]['file']));
-				
+
 				$filefunc = t3lib_div::makeInstance('t3lib_basicFileFunctions');
 				$newfile = $filefunc->cleanFileName($newfile);
 				$newfile = $filefunc->getUniqueName($newfile, t3lib_div::getFileAbsFileName($fieldconf['config']['uploadfolder']));
 				$newfile = basename($newfile);
-				
+
 				$ext = '';
 				$allowed = t3lib_div::trimExplode(',', $fieldconf['config']['allowed'], true);
 				$disallowed = t3lib_div::trimExplode(',', $fieldconf['config']['disallowed'], true);
-			
+
 				if (strrpos($newfile, '.') !== false)
 					$ext = strtolower(substr($newfile, strrpos($newfile, '.') + 1));
-			
+
 				if (in_array($ext, $allowed) || !in_array($ext, $disallowed))
 				{
 					if (move_uploaded_file($_FILES[$this->prefixId]['tmp_name'][$fieldname]['file'], t3lib_div::getFileAbsFileName($fieldconf['config']['uploadfolder'] . '/' . $newfile))) {
@@ -419,41 +471,46 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 
 	/**
 	 * Update application's data
+	 *
+	 * @param	boolean		$update: activate insert or not
+	 * @param	array		$errors: messages errors
+	 * @param	array		$application: data application
+	 * @return	boolean
 	 */
 	function updateDB($update = true, &$errors = array(), $application = null) {
-		
+
 		$succes = array();
-		
+
 		// fields required
 		if (!$this->piVars['application'])
 			$errors[] =  $this->pi_getLL('required_name');
 		if (!$this->piVars['description'])
 			$errors[] =  $this->pi_getLL('required_description');
-		
-		if (!empty($errors)) {
-			return false;
-		}
-		
-		$logo = $this->valueToDB('logo', $this->piVars['logo'], $errors, $succes);
-		$screenshot = $this->valueToDB('screenshot', $this->piVars['screenshot'], $errors, $succes);	
 
 		if (!empty($errors)) {
 			return false;
 		}
-		
+
+		$logo = $this->valueToDB('logo', $this->piVars['logo'], $errors, $succes);
+		$screenshot = $this->valueToDB('screenshot', $this->piVars['screenshot'], $errors, $succes);
+
+		if (!empty($errors)) {
+			return false;
+		}
+
 		if (!$update) {
-			// INSERT 
+			// INSERT
 			if ($this->existAppli()) {
 				$errors[] = $this->pi_getLL('application_already');
 			}else{
 				$this->registration();
 			}
 		}
-		
+
 		if (!empty($errors)) {
 			return false;
 		}
-		
+
 		$data = array(
 			'application' => $this->piVars['application'],
 			'description' => $this->piVars['description'],
@@ -470,7 +527,7 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			$fields[] = 'key_appli';
 			$fields[] = 'max';
 		}
-		
+
 		if (isset($this->piVars['publish']) && $this->piVars['publish']) {
 			if (!$application['publication_date']) {
 				$data['publication_date'] = time();
@@ -484,9 +541,9 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			$data['publish'] = 0;
 			$fields[] = 'publish';
 		}
-		
+
 		if ($update) {
-			$req = $this->cObj->DBgetUpdate( 
+			$req = $this->cObj->DBgetUpdate(
 				$this->tables['applications'],
 				$this->piVars['keyuid'],
 				$data,
@@ -500,9 +557,9 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 					$_procObj->applicationFieldsDBUpdate($this->piVars['keyuid'], $this->conf, $this);
 				}
 			}
-			
+
 			$errors[] = htmlspecialchars($this->pi_getLL('application_updated')) . $this->key_appli;
-			
+
 		}else{
 			$req = $this->cObj->dbgetinsert(
 				$this->tables['applications'],
@@ -518,45 +575,43 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 					$_procObj->applicationFieldsDBUpdate($GLOBALS['TYPO3_DB']->sql_insert_id(), $this->conf, $this);
 				}
 			}
-			
+
 			$errors[] = htmlspecialchars($this->pi_getLL('registration_validated')) . ' ' . $this->key_appli;
 		}
-		
+
 		if (!empty($succes))
 			$errors = array_merge($errors, $succes);
 		return true;
 	}
-	
+
 	/**
 	 * Transforme une valeur pour base de données
 	 *
-	 * @param string $fieldname Le nom du champ
-	 * @param mixed $value La valeur du champ
-	 * @param array $errors
-	 * @param array $succes
-	 * 
-	 * @return string La valeur transformée
+	 * @param	string		$fieldname: Le nom du champ
+	 * @param	mixed		$value: La valeur du champ
+	 * @param	array		$errors
+	 * @param	array		$succes
+	 * @return	string		La valeur transformée
 	 */
 	function valueToDB($fieldname, $value, &$errors, &$succes) {
 		global $TCA;
 		$table = $this->tables['applications'];
-		t3lib_div::loadTCA($table);		
-		
+		t3lib_div::loadTCA($table);
+
 		$files = t3lib_div::trimExplode(',', (is_array($value)) ? ($value['files']) : ($value), true);
 		$this->renderField_group_parseFiles($fieldname, $TCA[$table]['columns'][$fieldname], $files, $errors, $succes);
 		$value = $files;
 		$value = implode(',', $value);
 		return $value;
 	}
-	
+
 	/**
 	 * Récupère les marqueurs du formulaire
 	 *
-	 * @param boolean $edit "true" si édition, sinon "false"
-	 *
-	 * @return mixed Les marqueurs
+	 * @param	boolean		$edit "true" si édition, sinon "false"
+	 * @return	mixed		Les marqueurs
 	 */
-	function getMarkersForm($edit = false) {		
+	function getMarkersForm($edit = false) {
 		$markerArray = array(
 			'###URL###' => t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'),
 			'###TITLE_FORM_APPLICATION###' => $edit ? htmlspecialchars($this->pi_getLL('application')) : htmlspecialchars($this->pi_getLL('new_application')),

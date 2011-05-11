@@ -25,7 +25,7 @@
  * $Id$
  */
 
-/** 
+/**
  * Command factory.
  *
  * @author    Tsi Yang <tsi@in-cite.net>, Pierrick Caillon <pierrick@in-cite.net>
@@ -33,22 +33,22 @@
  */
 class tx_icsopendataapi_factory {
 
-	private $version;
-	private $command;
-	private $patternCommand;
-	
+	private $version; /**< Version of API */
+	private $command; /**< The action */
+	private $patternCommand; /**< pattern command */
+
 	/**
 	 * Initializes the factory.
 	 *
-	 * @param $version String The version of API.
-	 * @return Boolean <code>True</code> is the version is valid otherwise <code>False</code>.
+	 * @param	string	$version: The version of API.
+	 * @return	Boolean		<code>True</code> is the version is valid otherwise <code>False</code>.
 	 */
 	function init($version) {
 		global $TYPO3_CONF_VARS;
-		
+
 		$this->version = $version;
 		if ((!isset($TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['command'][$version]) &&
-			!isset($TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['patterncommand'][$version])) || 
+			!isset($TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['patterncommand'][$version])) ||
 			(empty($TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['command'][$version]) &&
 			empty($TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['patterncommand'][$version])))
 			return false;
@@ -56,12 +56,12 @@ class tx_icsopendataapi_factory {
 		$this->patternCommand = $TYPO3_CONF_VARS['EXTCONF']['ics_opendata_api']['patterncommand'][$version];
 		return true;
 	}
-	
+
 	/**
 	 * Retrieves a new command for the specified action.
 	 *
-	 * @param $command String The action.
-	 * @return tx_icsopendataapi_command The instance of the requested action's command. <code>Null</code> if the action is not found.
+	 * @param	string	$command: The action.
+	 * @return	tx_icsopendataapi_command		The instance of the requested action's command. <code>Null</code> if the action is not found.
 	 */
 	function getCommand($command) {
 		if (is_array($this->patternCommand)) {
@@ -80,7 +80,13 @@ class tx_icsopendataapi_factory {
 			return $commandObj;
 		return null;
 	}
-	
+
+	/**
+	 * Get class name
+	 *
+	 * @param	string		$classRef: path class
+	 * @return	string		class name
+	 */
 	private function getUserObjClass($classRef) {
 		if (strpos($classRef, ':') !== false) {
 			list($file, $class) = t3lib_div::revExplode(':', $classRef, 2);

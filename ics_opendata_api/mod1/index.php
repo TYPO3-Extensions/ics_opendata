@@ -27,7 +27,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   65: class  tx_icsopendataapi_module1 extends t3lib_SCbase
+ *   73:     function init()
+ *   84:     function menuConfig()
+ *   94:     function main()
+ *  115:     function jumpToUrl(URL)
+ *  160:     function printContent()
+ *  170:     function moduleContent()
+ *  293:     function deleteElement( &$element, $delete)
+ *  332:     protected function getButtons()
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 $LANG->includeLLFile('EXT:ics_opendata_api/mod1/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
@@ -53,6 +67,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 
 	/**
 	 * Initializes the Module
+	 *
 	 * @return	void
 	 */
 	function init()	{
@@ -74,16 +89,16 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 	 * Main function of the module. Write the content to $this->content
 	 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
 	 *
-	 * @return	[type]		...
+	 * @return	void
 	 */
 	function main()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-		
+
 		// Access check!
 		// The page will show only if there is a valid page and if this page may be viewed by the user
 		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
 		$access = is_array($this->pageinfo) ? 1 : 0;
-	
+
 		// Initialize doc
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->setModuleTemplate(t3lib_extMgm::extPath('ics_opendata_api') . 'mod1/mod_template.html');
@@ -111,7 +126,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 
 			// $this->doc->JScode .= '<script language="javascript" type="text/javascript" src="script.js"></script>' . chr(10);
 			// $this->doc->inDocStyles = '@import url(styles.css)' . chr(10);
-			
+
 			$this->doc->JScode .= '
 			<script language="javascript" type="text/javascript">'
 			 . file_get_contents( t3lib_extMgm::extPath('ics_opendata_api') . '/mod1/script.js')
@@ -134,7 +149,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 		$this->content.= $this->doc->moduleBody($this->pageinfo, $docHeaderButtons, $markers);
 		$this->content.= $this->doc->endPage();
 		$this->content = $this->doc->insertStylesAndJS($this->content);
-	
+
 	}
 
 	/**
@@ -168,7 +183,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 
 			$POST = t3lib_div::_POST();
 			$command = new tx_icsopendataapi_command();
-					
+
 			if( isset($POST['loadCommand']) ){
 				$xml = file_get_contents($POST['url']);
 				$output = $xml;
@@ -188,16 +203,16 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 				}
 			}
 			if( isset($POST['hidden'])
-				|| isset($POST['newCommand']) 
+				|| isset($POST['newCommand'])
 				|| ( isset($POST['loadCommand']) && !is_bool($xml) ) ){
-				
+
 				if( isset($POST['command']) ){
 					try{
 						$command->loadPOST($POST['command']);
 					}catch(Exception $e){
 						var_dump($e);
 					}
-				}		
+				}
 				$current = 'home';
 				$delete = '';
 				if( isset($POST['hidden']) ){
@@ -205,7 +220,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 					$delete = $POST['hidden']['delete'];
 				}
 				if( $current == $delete )
-					$current = '';		
+					$current = '';
 				if( $delete != '' ){
 					$this->deleteElement( $command, explode( '|', $delete ) );
 				}
@@ -232,7 +247,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 				$this->content .= '</div>';
 				$this->content .= '<p><input type="hidden" name="hidden[current]" value="' . $current . '" id="current"/></p>';
 				$this->content .= '<p><input type="hidden" name="hidden[delete]" value="" id="delete" /></p>';
-				$this->content .= '</fieldset>';		
+				$this->content .= '</fieldset>';
 				$this->content .= '</div>';
 				// Generate the form
 				$this->content .= '<div class="content" id="content">';
@@ -264,16 +279,16 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 
 
 		//$this->content .= '<div style="clear: both;">POST:'  . t3lib_div::view_array($_POST) . '</div>';
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Deletes command elements
-	 * @param &$element element command, parameter or value
-	 * @param $delete array
 	 *
-	 * @return void
+	 * @param	object	&$element: element command, parameter or value
+	 * @param	array	$delete		
+	 * @return	void
 	 */
 	function deleteElement( &$element, $delete){
 		if( $delete[0] == 'command' ){
@@ -307,12 +322,12 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 		}else{
 		}
 	}
-	
-	
+
+
 	/**
 	 * Create the panel of buttons for submitting the form or otherwise perform operations.
 	 *
-	 * @return	array	all available buttons as an assoc. array
+	 * @return	array		all available buttons as an assoc. array
 	 */
 	protected function getButtons()	{
 		global $TCA, $LANG, $BACK_PATH, $BE_USER;
@@ -394,7 +409,7 @@ class  tx_icsopendataapi_module1 extends t3lib_SCbase {
 		return $buttons;
 		*/
 	}
-	
+
 }
 
 

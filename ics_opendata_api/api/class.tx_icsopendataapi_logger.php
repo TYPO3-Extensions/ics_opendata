@@ -25,7 +25,7 @@
  * $Id$
  */
 
-/** 
+/**
  * Updates log informations.
  *
  * @author    Tsi Yang <tsi@in-cite.net>
@@ -42,32 +42,37 @@ class tx_icsopendataapi_logger {
 	/**
 	 * Initializes the logger.
 	 *
-	 * @param $params array The service parameters
+	 * @param	array	$params: The service parameters
+	 * @return	void
 	 */
 	function init(array $params) {
 		$this->key = $params['key'];
 		$this->cmd = $params['cmd'];
-		
+
 		$row = $this->getRow();
 		$this->pid = $row['pid'];
 		$this->rid = $row['uid'];
 		$this->usage = $row['count_use'];
 	}
-	
+
 	/**
 	 * Logs the call and increments the counter.
+	 *
+	 * @return	void
 	 */
 	function logCall() {
 		$this->insertCall();
 		$this->incrementsUsage();
 	}
-	
+
 	/**
 	 * Adds the log record to the call log.
+	 *
+	 * @return	void
 	 */
 	private function insertCall() {
 		global $TYPO3_DB;
-	
+
 		$table = 'tx_icsopendataapi_logs';
 		$insertArray = array(
 			'pid' => $this->pid,
@@ -78,23 +83,25 @@ class tx_icsopendataapi_logger {
 			'cmd' => $this->cmd,
 		);
 		$TYPO3_DB->exec_INSERTquery(
-			$table, 
+			$table,
 			$insertArray
 		);
 	}
 	/**
 	 * Updates the usage counter.
+	 *
+	 * @return	void
 	 */
 	private function incrementsUsage() {
 		global $TYPO3_DB;
 		// Hardcoded update for concurrency support.
 		$TYPO3_DB->sql_query('UPDATE tx_icsopendataapi_applications SET count_use = count_use + 1, tstamp = UNIX_TIMESTAMP() WHERE uid = ' . $this->rid);
 	}
-	
+
 	/**
-	 * Retrieves the application's record. 
+	 * Retrieves the application's record.
 	 *
-	 * @return array The application's record.
+	 * @return	array		The application's record.
 	 */
 	private function getRow() {
 		global $TYPO3_DB;

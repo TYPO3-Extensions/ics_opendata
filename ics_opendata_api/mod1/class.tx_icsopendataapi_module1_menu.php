@@ -25,7 +25,7 @@
  * $Id$
  */
 
- 
+
 
 /**
  * Class 'Commands documentation menu' for the 'ics_opendata_api' extension.
@@ -39,35 +39,35 @@ class tx_icsopendataapi_module1_menu{
 
 	/**
 	 * Loads menu
-	 * @param $command tx_ics_opendata_api_command APIKR's Command
 	 *
-	 * @return void
+	 * @param	tx_ics_opendata_api_command $command: APIKR's Command
+	 * @return	void
 	 */
 	function load($command){
-		global $LANG;	
+		global $LANG;
 		$elementPath = 'command';
 		$elementName = 'command';
 		$this->command();
 		$this->addParameter( $elementPath . '|parameters|' . $command->getParametersCount() );
 		$this->parameters( $command, $elementName . '[parameters]', $elementPath . '|parameters');
 	}
-	
+
 	/**
 	 * Loads menu command
 	 *
-	 * @return void
+	 * @return	void
 	 */
 	private function command(){
 		global $LANG;
 		$onclick = "return changeForm('command')";
 		$this->content .= '<p><a href="javascript:void();" onclick="' . $onclick . '" >' . htmlspecialchars($LANG->getLL('show_command')) . '</a></p>';
 	}
-	
+
 	/**
 	 * Loads menu add parameter
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	string	$elementPath		
+	 * @return	void
 	 */
 	private function addParameter($elementPath){
 		global $LANG;
@@ -78,14 +78,14 @@ class tx_icsopendataapi_module1_menu{
 		$this->content .= '<input type="image" class="image" ' . t3lib_iconWorks::skinImg($BACK_PATH,'gfx/add.gif') . ' alt="' . htmlspecialchars($LANG->getLL('add_parameter.img')) . '" onclick="' . $onclick . '" id="' . $elementId . '"/>';
 		$this->content .= '</p>';
 	}
-	
+
 	/**
 	 * Loads menu parameters
-	 * @param $obj command or value
-	 * @param $elementName string
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	object 	$obj: command or value
+	 * @param	string	$elementName	
+	 * @param	string	$elementPath	
+	 * @return	void
 	 */
 	private function parameters($obj, $elementName, $elementPath){
 		$this->content .= '<div class="parameters_content">';
@@ -94,17 +94,17 @@ class tx_icsopendataapi_module1_menu{
 		}
 		$this->content .= '</div>';
 	}
-	
+
 	/**
 	 * Loads menu parameter
-	 * @param $parameter tx_icsopendataapi_parameter
-	 * @param $elementName string
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_parameter	$parameter	
+	 * @param	string	$elementName
+	 * @param	string	$elementPath
+	 * @return	void
 	 */
 	private function parameter($parameter, $elementName, $elementPath){
-		global $LANG;		
+		global $LANG;
 		$this->content .= '<p>';
 		$onclick = "return changeForm('" . $elementPath . "')";
 		$this->content .= '<a href="javascript:document.tx_icsopendataapi_module1.submit()" onclick="' . $onclick . '" >' . ( ($parameter->getName()=='')? str_replace('|', '_', $elementPath) : $parameter->getName() ) . '</a>';
@@ -116,12 +116,12 @@ class tx_icsopendataapi_module1_menu{
 			$this->values( $parameter, $elementName . '[values]', $elementPath . '|values' );
 		}
 	}
-	
+
 	/**
 	 * Loads menu add value
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	string $elementPath
+	 * @return	void
 	 */
 	private function addValue($elementPath){
 		global $LANG;
@@ -132,14 +132,14 @@ class tx_icsopendataapi_module1_menu{
 		$this->content .= '<input type="image" class="image" ' . t3lib_iconWorks::skinImg($BACK_PATH,'gfx/add.gif') . ' alt="' . htmlspecialchars($LANG->getLL('add_value.img')) . '" onclick="' . $onclick . '" id="' . $elementId . '"/>';
 		$this->content .= '</p>';
 	}
-	
+
 	/**
 	 * Loads menu values
-	 * @param $obj command or value
-	 * @param $elementName string
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	object	$obj: command or value
+	 * @param	string	$elementName
+	 * @param	string	$elementPath
+	 * @return	void
 	 */
 	private function values($parameter, $elementName, $elementPath){
 		$this->content .= '<div class="values_content">';
@@ -148,17 +148,17 @@ class tx_icsopendataapi_module1_menu{
 		}
 		$this->content .= '</div>';
 	}
-	
+
 	/**
 	 * Loads menu value
-	 * @param $value tx_icsopendataapi_value
-	 * @param $elementName string
-	 * @param $elementPath string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_value	$value
+	 * @param	string	$elementName
+	 * @param	string	$elementPath
+	 * @return	void
 	 */
 	private function value($value, $elementName, $elementPath){
-		global $LANG;		
+		global $LANG;
 		$this->content .= '<p>';
 		$onclick = "return changeForm('" . $elementPath . "')";
 		$this->content .= '<a href="javascript:document.tx_icsopendataapi_module1.submit()" onclick="' . $onclick . '" >' . ( ($value->getValue()=='')? str_replace('|', '_', $elementPath) : $value->getValue() ) . '</a>';
@@ -168,11 +168,11 @@ class tx_icsopendataapi_module1_menu{
 		$this->addParameter( $elementPath . '|parameters|' . $value->getParametersCount() );
 		$this->parameters($value, $elementName . '[parameters]', $elementPath . '|parameters' );
 	}
-	
+
 	/**
 	 * Retrieves content
 	 *
-	 * @return string
+	 * @return	string
 	 */
 	function getContent(){
 		return $this->content;

@@ -35,12 +35,15 @@ require_once( t3lib_extMgm::extPath('ics_opendata_api') . 'lib/class.tx_icsopend
  * @subpackage	tx_icsopendataapi
  */
 class tx_icsopendataapi_command{
-	
+
 	private $name = '', $cmd  = '', $description  = '', $brief = '';
 	private $parameters = array();
-	
+
 	/**
 	 * Loads a document xml
+	 *
+	 * @param	XMLReader		$XMLReader
+	 * @return	void
 	 */
 	function loadXML(XMLReader $xmlreader) {
 		// Check the node name.
@@ -93,7 +96,9 @@ class tx_icsopendataapi_command{
 
 	/**
 	 * Put command in a document xml
-	 * @param $xmlwriter XMLWriter
+	 *
+	 * @param	$xmlwriter		XMLWriter
+	 * @return	void
 	 */
 	function saveXML(XMLWriter $xmlwriter){
 		$xmlwriter->startElement('command');
@@ -116,6 +121,9 @@ class tx_icsopendataapi_command{
 
 	/**
 	 * Loads _POST variables
+	 *
+	 * @param	array	$post
+	 * @return	void
 	 */
 	function loadPOST($post){
 		foreach( $post as $postvar=>$value ){
@@ -148,88 +156,104 @@ class tx_icsopendataapi_command{
 
 	/**
 	 * Retrieves command's name
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getName(){
 		return $this->name;
 	}
-	
+
 	/**
 	 * Defines command's name
-	 * @param $name string
+	 *
+	 * @param	string	$name
+	 * @return	void
 	 */
 	function setName($name){
 		$this->name = $name;
 	}
-	
+
 	/**
 	 * Retrieves command's key
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getCmd(){
 		return $this->cmd;
 	}
-	
+
 	/**
 	 * Defines command's key
-	 * @param $cmd string The key of the command
+	 *
+	 * @param	string	$cmd: The key of the command
+	 * @return	void
 	 */
 	function setCmd($cmd){
 		$this->cmd = $cmd;
 	}
-	
+
 	/**
 	 * Retrieves command's brief
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getBrief(){
 		return $this->brief;
 	}
-	
+
 	/**
 	 * Defines command's brief
-	 * @param $brief string
+	 *
+	 * @param	string	$brief
+	 * @return	void
 	 */
 	function setBrief($brief){
 		$this->brief = $brief;
 	}
-	
+
 	/**
 	 * Retrieves command's description
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getDescription(){
 		return $this->description;
 	}
-	
+
 	/**
 	 * Defines command's description
-	 * @param $description string
+	 *
+	 * @param	string	$description
+	 * @return	void
 	 */
 	function setDescription($description){
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Count command parameters
-	 * @return integer The number of elements in parameters
+	 *
+	 * @return	integer		The number of elements in parameters
 	 */
 	function getParametersCount(){
 		return count($this->parameters);
 	}
-	
+
 	/**
 	 * Retrieves parameter
-	 * @param $i integer The indice of parameter
-	 * @return parameter
+	 *
+	 * @param	integer	$i: The indice of parameter
+	 * @return	parameter
 	 */
 	function getParameter($i){
 		return $this->parameters[$i];
 	}
-	
+
 	/**
 	 * Delete parameter
-	 * @param $obj parameter
+	 *
+	 * @param	object 	$obj: parameter
+	 * @return	void
 	 */
 	function removeParameter($obj){
 		$keys = array_keys($this->parameters, $obj, true);
@@ -237,10 +261,12 @@ class tx_icsopendataapi_command{
 		foreach ($keys as $key)
 			array_splice($this->parameters, $key, 1);
 	}
-	
+
 	/**
 	 * Insert parameter in parameters
-	 * @param $obj parameter
+	 *
+	 * @param	object	$obj: parameter
+	 * @return	void
 	 */
 	function addParameter($obj){
 		$this->parameters[] = $obj;

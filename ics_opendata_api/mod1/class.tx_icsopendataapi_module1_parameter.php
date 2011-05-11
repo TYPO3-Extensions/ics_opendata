@@ -38,12 +38,12 @@ class tx_icsopendataapi_module1_parameter{
 
 	/**
 	 * Loads form
-	 * @param $parameter tx_icsopendataapi_parameter
-	 * @param $currentStack array
-	 * @param $elementName string
-	 * @param $index int
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_parameter	$parameter		
+	 * @param	array	$currentStack		
+	 * @param	string	$elementName		
+	 * @param	int	$index		
+	 * @return	void
 	 */
 	function load($parameter, $currentStack, $elementPath, $elementName, $index){
 		$this->content .= '<div>';
@@ -61,8 +61,8 @@ class tx_icsopendataapi_module1_parameter{
 		for( $i=0; $i<$parameter->getValuesCount(); $i++){
 			$value = new tx_icsopendataapi_module1_value();
 			$value->load(
-				$parameter->getValue($i), 
-				$currentStack, 
+				$parameter->getValue($i),
+				$currentStack,
 				$elementPath,
 				$elementName . '[' . $index . '][values]',
 				$i
@@ -70,13 +70,13 @@ class tx_icsopendataapi_module1_parameter{
 			$this->content .= $value->getContent();
 		}
 	}
-	
+
 	/**
 	 * Generates form
-	 * @param $parameter tx_icsopendataapi_parameter
-	 * @param $elementName string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_parameter	$parameter		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function form($parameter, $elementName){
 		global $LANG;
@@ -110,13 +110,13 @@ class tx_icsopendataapi_module1_parameter{
 			</div>
 		';
 	}
-	
+
 	/**
 	 * Generates hidden form
-	 * @param $parameter tx_icsopendataapi_parameter
-	 * @param $elementName string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_parameter	$parameter		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function hiddenForm($parameter, $elementName){
 		$this->content .= '
@@ -125,13 +125,13 @@ class tx_icsopendataapi_module1_parameter{
 			<input type="hidden" name="' . $elementName . '[mandatory]" value="' . ($parameter->getMandatory()? 'on' : '') . '" />
 			<input type="hidden" name="' . $elementName . '[default]" value="' . $parameter->getDefault() . '" />
 			<input type="hidden" name="' . $elementName . '[description]" value="' . $parameter->getDescription() . '" />
-		';	
+		';
 	}
-	
+
 	/**
 	 * Retrieves content
-	 * 
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getContent(){
 		return $this->content;

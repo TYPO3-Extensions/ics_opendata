@@ -33,25 +33,24 @@
  * @subpackage	tx_userdatastore
  */
 class user_datastore_applicationCategories {
-	
+
 	/**
 	 * Rendu des champs d'une application dans un formulaire
 	 *
-	 * @param array $markerArray
-	 * @param array $subpartTab
-	 * @param array $application
-	 * @param array $lConf
-	 * @param object $object
-	 *
-	 * @return void
+	 * @param	array		$markerArray
+	 * @param	array		$subpartTab
+	 * @param	array		$application
+	 * @param	array		$lConf
+	 * @param	object		$object
+	 * @return	void
 	 */
 	function applicationFieldsRenderForm(&$markerArray, &$subpartTab, $template, $application = null, $lConf, $object) {
 		$markerArray['###DATASTORE_CATEGORIES_LABEL###'] = $GLOBALS['LANG']->sL('LLL:EXT:user_datastore/hook/locallang.xml:categories');
 		$markerArray['###DATASTORE_CATEGORIES_NAME###'] = $object->prefixID . '[categories]';
-		
-		$categories = $this->getCategories();		
+
+		$categories = $this->getCategories();
 		$applicationCategories = $this->getApplicationsCategories(array($application['uid']));
-		$subpart = $object->cObj->getSubpart($template, '###DATASTORE_CATEGORIES_OPTIONS###');		
+		$subpart = $object->cObj->getSubpart($template, '###DATASTORE_CATEGORIES_OPTIONS###');
 		foreach ($categories as $category) {
 			$markers['###CATEGORY_VALUE###'] = htmlspecialchars($category['uid']);
 			$markers['###CATEGORY_LABEL###'] = htmlspecialchars($category['name']);
@@ -63,23 +62,22 @@ class user_datastore_applicationCategories {
 		}
 		$subpartTab['###DATASTORE_CATEGORIES_OPTIONS###'] = $categoriesOptions;
 	}
-	
+
 	/**
 	 * Rendu des données de champs d'une application
 	 *
-	 * @param array $markerArray
-	 * @param string $subpart
-	 * @param array $application
-	 * @param array $lConf
-	 * @param object $object
-	 *
-	 * @return void
+	 * @param	array		$markerArray
+	 * @param	string		$subpart
+	 * @param	array		$application
+	 * @param	array		$lConf
+	 * @param	object		$object
+	 * @return	void
 	 */
 	function applicationFieldsRenderData(&$markerArray, &$subpartTab, $template, $application = null, $lConf, $object) {
 		$markerArray['###TITRE_DATASTORE_CATEGORIES###'] = $GLOBALS['LANG']->sL('LLL:EXT:user_datastore/hook/locallang.xml:categories');
 		if ($application) {
-			$subpart = $object->cObj->getSubpart($template, '###DATASTORE_CATEGORIES_GROUP###');	
-			
+			$subpart = $object->cObj->getSubpart($template, '###DATASTORE_CATEGORIES_GROUP###');
+
 			$categoryIDs = $this->getApplicationsCategories(array($application['uid']));
 			foreach ($categoryIDs as $categoryID) {
 				$category = t3lib_BEfunc::getRecord('tx_icsopendatastore_categories', $categoryID, 'name, description');
@@ -99,19 +97,19 @@ class user_datastore_applicationCategories {
 	/**
 	 * Rendu des données de champs d'une application
 	 *
-	 * @param array $markerArray
-	 * @param string $subpart
-	 * @param array $application
-	 * @param array $lConf
-	 * @param object $object
-	 *
-	 * @return void
+	 * @param	array		$markerArray
+	 * @param	string		$subpart
+	 * @param	array		$application
+	 * @param	array		$lConf
+	 * @param	object		$object
+	 * @param	text		$html
+	 * @return	void
 	 */
 	function applicationFieldsRenderCatalog(&$markerArray, &$subpart, $application = null, $lConf, $object, $html) {
 		$markerArray['###DATASTORE_CATEGORIES_LABEL###'] = $GLOBALS['LANG']->sL('LLL:EXT:user_datastore/hook/locallang.xml:categories');
 		if ($application) {
-			$template = $object->cObj->getSubpart($html, '###DATASTORE_CATEGORIES_GROUP###');	
-			
+			$template = $object->cObj->getSubpart($html, '###DATASTORE_CATEGORIES_GROUP###');
+
 			$categoryIDs = $this->getApplicationsCategories(array($application['uid']));
 			foreach ($categoryIDs as $categoryID) {
 				$category = t3lib_BEfunc::getRecord('tx_icsopendatastore_categories', $categoryID, 'name, description');
@@ -128,7 +126,7 @@ class user_datastore_applicationCategories {
 			$subpart = $object->cObj->substituteSubpart($subpart, '###DATASTORE_CATEGORIES_GROUP###', '');
 		}
 		if (!$categoriesGroup) {
-			$template = $object->cObj->getSubpart($html, '###DATASTORE_CATEGORIES###');	
+			$template = $object->cObj->getSubpart($html, '###DATASTORE_CATEGORIES###');
 			$subpart = $object->cObj->substituteSubpart($subpart, '###DATASTORE_CATEGORIES###', '');
 		}
 	}
@@ -136,6 +134,7 @@ class user_datastore_applicationCategories {
 	/**
 	 * Récupère les catégories
 	 *
+	 * @return	array
 	 */
 	private function getCategories () {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -148,13 +147,12 @@ class user_datastore_applicationCategories {
 		);
 		return $categories;
 	}
-	
+
 	/**
 	 * Récupère les catégories des applications
 	 *
-	 * @param array $applications Le tableau contenant les ID des applications
-	 *
-	 * @return mixed $applicationsCategories La liste d' ID de catégories d'applications
+	 * @param	array		$applications: Le tableau contenant les ID des applications
+	 * @return	mixed		Categories La liste d' ID de catégories d'applications
 	 */
 	private function getApplicationsCategories($applications) {
 		$applicationsCategories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -166,7 +164,7 @@ class user_datastore_applicationCategories {
 			'',
 			'',
 			'uid_foreign'
-		);			
+		);
 		return array_keys($applicationsCategories);
 	}
 }

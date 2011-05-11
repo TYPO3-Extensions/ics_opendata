@@ -36,13 +36,14 @@ require_once( t3lib_extMgm::extPath('ics_opendata_api') . 'mod1/class.tx_icsopen
  */
 class tx_icsopendataapi_module1_command{
 	private $content = '';
-	
+
 	/**
 	 * Loads command form
-	 * @param $command tx_ics_opendata_api_command APIKR's Command
-	 * @param $currentStack array Current element
 	 *
-	 * @return void
+	 * @param	tx_ics_opendata_api_command	$command: APIKR's Command
+	 * @param	array		$currentStack:Current element
+	 * @param	string		$elementPath
+	 * @return	void
 	 */
 	function load($command, $currentStack, $elementPath){
 		$elementName = 'command';
@@ -59,10 +60,10 @@ class tx_icsopendataapi_module1_command{
 			array_shift($currentStack);
 		}
 		for( $i=0; $i<$command->getParametersCount(); $i++ ){
-			$parameter = new tx_icsopendataapi_module1_parameter();			
-			$parameter->load( 
-				$command->getParameter($i), 
-				$currentStack, 
+			$parameter = new tx_icsopendataapi_module1_parameter();
+			$parameter->load(
+				$command->getParameter($i),
+				$currentStack,
 				$elementPath,
 				$elementName . '[parameters]',
 				$i
@@ -70,13 +71,13 @@ class tx_icsopendataapi_module1_command{
 			$this->content .= $parameter->getContent();
 		}
 	}
-	
+
 	/**
 	 * Generates form
-	 * @param $command tx_icsopendataapi_command
-	 * @param $elementName string
-	 * 
-	 * @return void
+	 *
+	 * @param	tx_icsopendataapi_command	$command		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function form($command, $elementName){
 		global $LANG;
@@ -100,15 +101,15 @@ class tx_icsopendataapi_module1_command{
 			<div class="button">
 				<input type="submit" name="update" value="' . htmlspecialchars($LANG->getLL('btn_update')) . '" />
 			</div>
-		';	
+		';
 	}
-	
+
 	/**
 	 * Generates hidden form
-	 * @param $command tx_icsopendataapi_command
-	 * @param $elementName string
 	 *
-	 * @return void
+	 * @param	tx_icsopendataapi_command	$command		
+	 * @param	string	$elementName		
+	 * @return	void
 	 */
 	private function hiddenForm($command, $elementName){
 		$this->content .= '
@@ -118,11 +119,11 @@ class tx_icsopendataapi_module1_command{
 			<input type="hidden" name="' . $elementName . '[description]" value="' . $command->getDescription() . '" />
 		';
 	}
-	
+
 	/**
 	 * Retrieves content
 	 *
-	 * @return string
+	 * @return	string
 	 */
 	function getContent(){
 		return $this->content;

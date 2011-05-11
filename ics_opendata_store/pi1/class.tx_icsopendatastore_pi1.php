@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 YANG Tsi <tsi@in-cite.net>
+*  (c) 2010 In Cité Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,7 +27,36 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *  101: class tx_icsopendatastore_pi1 extends tslib_pibase
+ *
+ *              SECTION: < Default search criteria */
+ *  102:     function main($content, $conf)
+ *  151:     function init()
+ *  254:     function renderSearh()
+ *  287:     function renderFileformatItems($template, $aFileformats)
+ *  319:     function renderCategoriesItems($template, $aCategories)
+ *  345:     function renderTiersItems($template, $aTiers)
+ *  369:     function renderList()
+ *  395:     function renderListHeader($template)
+ *  426:     function renderListRows($template)
+ *  537:     function renderListRow($template, $row)
+ *  571:     function renderFiles($view, $filegroup, $template)
+ *  642:     function renderSingle($id)
+ *  747:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ *  769:     function getFiles_mm($filegroup)
+ *  787:     function getFileSize($file)
+ *  802:     function getFileformats($searchable = false)
+ *  825:     function getFiletypes()
+ *  842:     function getCategories()
+ *  876:     function getTiersAgencies()
+ *  894:     protected function getListGetPageBrowser($numberOfPages)
+ *  916:     function renderRSS($rssLink, $imgSrc)
+ *
+ * TOTAL FUNCTIONS: 21
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
@@ -57,18 +86,18 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		'categories' => 'tx_icsopendatastore_categories',
 		'licences' => 'tx_icsopendatastore_licences',
 		'tiers' => 'tx_icsopendatastore_tiers',
-	);
+	); /**< Database tables */
 
-	protected $listFields = array('title', 'description', 'publisher', 'files', 'tstamp');
-	protected $detailFields = array('uid', 'title', 'publisher', 'agency', 'categories', 'time_period', 'update_date', 'update_frequency', 'description', 'technical_data', 'contact', 'files', 'licence', 'release_date', 'creator', 'manager', 'owner');
-	protected $list_criteria = array();
-	
+	protected $listFields = array('title', 'description', 'publisher', 'files', 'tstamp'); /**< Default view list fields */
+	protected $detailFields = array('uid', 'title', 'publisher', 'agency', 'categories', 'time_period', 'update_date', 'update_frequency', 'description', 'technical_data', 'contact', 'files', 'licence', 'release_date', 'creator', 'manager', 'owner'); /**< Default view details fields */
+	protected $list_criteria = array(); /**< Default search criteria */
+
 	/**
 	 * The main method of the PlugIn
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	 * @return	The	content that is displayed on the website
 	 */
 	function main($content, $conf) {
 		$this->conf = $conf;
@@ -110,13 +139,14 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 					}
 			}
 		}
-		
+
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 	/**
 	 * Init the plugin
-	 * @return boolean
+	 *
+	 * @return	boolean
 	 */
 	function init() {
 		// Get GP vars
@@ -141,7 +171,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 				$this->piVars['tiers'] = array_merge($this->piVars['tiers'], $tmp);
 			}
 		}
-		
+
 		$this->list_criteria = $this->piVars;
 		$this->list_criteriaNav = array();
 		foreach ($this->list_criteria as $criteria => $value) {
@@ -170,7 +200,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		if (empty($this->fileLinks)) {
 			$this->fileLinks = t3lib_div::trimExplode(',', $this->conf['displayList.']['fileLink'], true);
 		}
-		
+
 		// Single view
 		$detailFields = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'detailFields', 'single_setting'), true);
 		if (empty($detailFields)) {
@@ -179,21 +209,21 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		if ( !empty($detailFields) )
 			$this->detailFields = $detailFields;
 
-		// Get template file		
-		$templateflex_file = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template_file', 'configuration');		
+		// Get template file
+		$templateflex_file = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template_file', 'configuration');
 		$this->templateCode = $this->cObj->fileResource($templateflex_file ? $templateflex_file : $this->conf['templateFile']);
 
 		// Get view to display
 		$code = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'configuration');
 		$this->config['code'] = $code ? $code : $this->cObj->stdWrap($this->conf['code'], $this->conf['code.']);
-		
+
 		if (empty($this->config['code'])) {
 			$this->config['code'] = !empty($this->config['code'])?$this->config['code']:'SINGLE';
 		}
-		
+
 		$this->storage = !empty($this->cObj->data['pages'])?$this->cObj->data['pages']:0;
 		$this->fileField = !empty($this->conf['displayList.']['fileField'])?$this->conf['displayList.']['fileField']:'';
-		
+
 		if (!$this->conf['fileformatPictoMaxW'])
 			$this->conf['fileformatPictoMaxW'] = 62;
 		if (!$this->conf['fileformatPictoMaxW'])
@@ -202,23 +232,24 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$this->conf['licences']['logo.']['maxW'] = 20;
 		if (!$this->conf['licences']['logo.']['maxH'])
 			$this->conf['licences']['logo.']['maxH'] = 20;
-		
+
 		$this->nbFileGroup = 0;
 		$this->nbFileGroupByPage =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'nbFileGroupByPage', 'configuration');
 		if (!$this->nbFileGroupByPage) {
 			$this->nbFileGroupByPage = $this->conf['nbFileGroupByPage'];
 		}
-		//==========		
+		//==========
 
 		if (empty($this->conf['rss.']['imgSrc']))
 			$this->conf['rss.']['imgSrc'] = t3lib_extMgm::extRelPath($this->extKey) . 'res/img_rss.png';
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Render the search view
-	 * @return string $content The search view content
+	 *
+	 * @return	string		$content The search view content
 	 */
 	function renderSearh() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH###');
@@ -237,20 +268,21 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		$fileformatItems = $this->renderFileformatItems($template, $this->getFileformats(true));
 		$categoriesItems = $this->renderCategoriesItems($template, $this->getCategories());
 		$tiersItems = $this->renderTiersItems($template, $this->getTiersAgencies());
-		
+
 		$template = $this->cObj->substituteSubpart($template, '###FILEFORMAT_ITEM###', $fileformatItems);
 		$template = $this->cObj->substituteSubpart($template, '###CATEGORIES_ITEM###', $categoriesItems);
 		$template = $this->cObj->substituteSubpart($template, '###TIERS_ITEM###', $tiersItems);
-		
+
 		$content .= $this->cObj->substituteMarkerArray($template, $markers);
-		return $content;	
+		return $content;
 	}
-	
+
 	/**
 	 * Render file formats
-	 * @param string $template The template for file formats
-	 * @param array $aFileformats The file formats
-	 * @return $item
+	 *
+	 * @param	string		$template: The template for file formats
+	 * @param	array		$aFileformats: The file formats
+	 * @return	$item
 	 */
 	function renderFileformatItems($template, $aFileformats) {
 		if (is_array($aFileformats) && count($aFileformats)) {
@@ -269,19 +301,20 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 				);
 				if (is_array($this->piVars['fileformat']) && t3lib_div::inArray($this->piVars['fileformat'],$fileformat['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
-				}				
+				}
 				$fileformatItem = $this->cObj->getSubpart($template, '###FILEFORMAT_ITEM###');
 				$item .= $this->cObj->substituteMarkerArray($fileformatItem, $markers);
 			}
-		}		
+		}
 		return $item;
 	}
-	
+
 	/**
 	 * Render categories
-	 * @param string $template The template for categories
-	 * @param array The categories
-	 * @return $item
+	 *
+	 * @param	string		$template: The template for categories
+	 * @param	array		$aCategories: The categories
+	 * @return	$item
 	 */
 	function renderCategoriesItems($template, $aCategories) {
 		if (is_array($aCategories) && count($aCategories)) {
@@ -291,22 +324,23 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 					'###CATEGORIES_LABEL###' => $categories['name'],
 					'###CATEGORIES_VALUE###' => $categories['uid'],
 					'###CHECKED###' => '',
-				);				
+				);
 				if (is_array($this->piVars['categories']) && t3lib_div::inArray($this->piVars['categories'],$categories['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
-				}				
+				}
 				$categoriesItem = $this->cObj->getSubpart($template, '###CATEGORIES_ITEM###');
 				$item .= $this->cObj->substituteMarkerArray($categoriesItem, $markers);
 			}
 		}
 		return $item;
 	}
-	
+
 	/**
 	 * Render tiers
-	 * @param string $template The template for tiers
-	 * @param array The tiers
-	 * @return $item
+	 *
+	 * @param	string		$template: The template for tiers
+	 * @param	array		$aTiers: The tiers
+	 * @return	$item
 	 */
 	function renderTiersItems($template, $aTiers) {
 		if (is_array($aTiers) && count($aTiers)) {
@@ -316,22 +350,23 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 					'###TIERS_LABEL###' => $tiers['name'],
 					'###TIERS_VALUE###' => $tiers['uid'],
 					'###CHECKED###' => '',
-				);				
+				);
 				if (is_array($this->piVars['tiers']) && t3lib_div::inArray($this->piVars['tiers'],$tiers['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
-				}				
+				}
 				$tiersItem = $this->cObj->getSubpart($template, '###TIERS_ITEM###');
 				$item .= $this->cObj->substituteMarkerArray($tiersItem, $markers);
 			}
 		}
 		return $item;
 	}
-	
+
 	/**
 	 * Render list view
-	 * @return $content
+	 *
+	 * @return	$content
 	 */
-	function renderList() {		
+	function renderList() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_LIST###');
 
 		$headerItems = $this->renderListHeader($this->cObj->getSubpart($template, '###HEADER_ITEM###'));
@@ -343,24 +378,25 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
 		);
-		
+
 		$template = $this->cObj->substituteSubpart($template, '###HEADER_ITEM###', $headerItems);
 		$template = $this->cObj->substituteSubpart($template, '###GROUP_ROW_CONTENT###', $rowItems);
-		
+
 		$content .= $this->cObj->substituteMarkerArray($template, $markers);
 		return $content;
 	}
-	
+
 	/**
 	 * Render list headers
-	 * @param $template
-	 * @return $content
+	 *
+	 * @param	$template
+	 * @return	$content
 	 */
 	function renderListHeader($template) {
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
 			$markers['###HEADER' . strtoupper($field) . '###'] = htmlspecialchars($this->pi_getLL('th_' . $field));
-			$markers['###SORT' . strtoupper($field) . '_LINK###'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id 
+			$markers['###SORT' . strtoupper($field) . '_LINK###'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id
 				. '&' . $this->prefixId . '[sort][column]=' . $field
 				. '&' . $this->prefixId . '[sort][order]=' . (( ($this->list_criteria['sort']['column'] == $field) &&  ($this->list_criteria['sort']['order'] == 'ASC'))? 'DESC': 'ASC');
 			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field));
@@ -376,15 +412,16 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 					$markers['###SORT' . strtoupper($field) . '_IMG###'] = $this->conf['displayList.']['sort.']['sortImg.']['inactive'];
 			}
 		}
-		
-		$content .= $this->cObj->substituteMarkerArray($template, $markers);		
+
+		$content .= $this->cObj->substituteMarkerArray($template, $markers);
 		return $content;
 	}
-	
+
 	/**
 	 * Render list rows
-	 * @param $template
-	 * @return $content
+	 *
+	 * @param	$template
+	 * @return	$content
 	 */
 	function renderListRows($template) {
 		$queryJoin = '';
@@ -393,35 +430,35 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`tstamp`, "%Y%m%d") DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
 		else
 			$orderBy = '`' . $this->tables['filegroups'] . '`.`tstamp` DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
-		
+
 		// Set where clause with junture
 		if (isset($this->list_criteria['keywords']) && !empty($this->list_criteria['keywords'])) {
 			$whereClause .= ' AND (
-				LOCATE("' . strtoupper($this->list_criteria['keywords']) . '", UPPER(`'.$this->tables['filegroups'].'`.`title`)) 
+				LOCATE("' . strtoupper($this->list_criteria['keywords']) . '", UPPER(`'.$this->tables['filegroups'].'`.`title`))
 				OR LOCATE("' . strtoupper($this->list_criteria['keywords']) . '", UPPER(`'.$this->tables['filegroups'].'`.`description`)))
 			';
-		}	
+		}
 		if (isset($this->list_criteria['categories']) && count($this->list_criteria['categories'])) {
 			$whereCat = array();
 			foreach ($this->list_criteria['categories'] as $category) {
 				$whereCat[] = 'FIND_IN_SET(' . $category . ', `'.$this->tables['filegroups'] . '`.`categories`)';
 			}
 			$whereClause .= ' AND (' . implode(' OR ', $whereCat) . ')';
-		}		
+		}
 		if (isset($this->list_criteria['tiers']) && count($this->list_criteria['tiers'])) {
 			$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`agency` IN (' . implode(',',$this->list_criteria['tiers']) . '))';
-		}		
+		}
 		if (isset($this->list_criteria['fileformat']) && count($this->list_criteria['fileformat'])){
-			$queryJoin .= ' 
-				INNER JOIN ' . $this->tables['file_filegroup_mm'] . ' 
+			$queryJoin .= '
+				INNER JOIN ' . $this->tables['file_filegroup_mm'] . '
 				ON uid_foreign = ' . $this->tables['filegroups'] . '.`uid`
 				INNER JOIN ' . $this->tables['files'] . '
 				ON uid_local = ' . $this->tables['files'] . '.`uid`
 			';
 			$whereClause .= ' AND `' . $this->tables['files'] . '`.`format` IN (' . implode(',', $this->list_criteria['fileformat']) . ')' . $this->cObj->enableFields($this->tables['files']);
 		}
-		
-		//Get all filegroups			
+
+		//Get all filegroups
 		$filegroups = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'DISTINCT ' . $this->tables['filegroups'] . '.uid, count(*) as total',
 			$this->tables['filegroups'] . $queryJoin,
@@ -429,13 +466,13 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		);
 		if ( is_array($filegroups) && !empty($filegroups) )
 			$this->nbFileGroup = $filegroups[0]['total'];
-		
+
 		// Set sort and order and get filegroups for a page number
 		if ( in_array($this->list_criteria['sort']['column'], $this->listFields) && ($this->list_criteria['sort']['column'] != 'files') ) {
 			$tiers = array(
 				'agency',
 				'contact',
-				'publisher', 
+				'publisher',
 				'creator',
 				'manager',
 				'owner',
@@ -443,13 +480,13 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$order = ($this->list_criteria['sort']['order'])? $this->list_criteria['sort']['order']: 'ASC';
 			if ( ($this->list_criteria['sort']['column'] == 'tstamp') && ($this->conf['displayList.']['sort.']['tstamp.']['day']) ) {
 				$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '`, "%Y%m%d") ' . $order;
-			}	elseif ( in_array($this->list_criteria['sort']['column'], $tiers) ) {				
+			}	elseif ( in_array($this->list_criteria['sort']['column'], $tiers) ) {
 				$queryJoin .= ' LEFT OUTER JOIN `' . $this->tables['tiers'] . '` ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '`';
 				$orderBy = '`' . $this->tables['tiers'] . '`.`name` ' . $order;
 			}	else	{
 				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '` ' . $order;
 			}
-								
+
 			if ( $this->list_criteria['sort']['column'] != 'title')
 				$orderBy .= ', `' . $this->tables['filegroups'] . '`.`title` ASC';
 		}
@@ -471,30 +508,31 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$orderBy,
 			$start . ',' . $this->nbFileGroupByPage
 		);
-		
+
 		$i=0;
 		foreach ($filegroups as $filegroup) {
 			if ($i%2 == 0) {
 				$templateGroup = $this->cObj->getSubpart($template, '###GROUP_ROW###');
 			}	else	{
 				$templateGroup = $this->cObj->getSubpart($template, '###GROUP_ROW_ALT###');
-			}			
+			}
 			$content .= $this->cObj->substituteSubpart(
-				$templateGroup, 
-				'###ROW_ITEM###', 
+				$templateGroup,
+				'###ROW_ITEM###',
 				$this->renderListRow($this->cObj->getSubpart($templateGroup, '###ROW_ITEM###'), $filegroup)
 			);
 			$i++;
 		}
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Render list row
-	 * @param $template
-	 * @param $row
-	 * @return $content
+	 *
+	 * @param	$template
+	 * @param	$row
+	 * @return	$content
 	 */
 	function renderListRow($template, $row) {
 		$markers = array(
@@ -508,7 +546,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 				$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($publisher['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 			}	elseif ($field == $this->fileField) {
 				$filesContent = $this->renderFiles('LIST', $row['uid'], $this->cObj->getSubpart($template, '###SECTION_FILE###'));
-				$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);				
+				$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);
 			}	elseif (in_array($field, array('tstamp', 'update_date', 'release_date'))){
 				if (!empty($row[$field])&& $row[$field])
 					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
@@ -517,23 +555,24 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			}	else {
 				$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
 			}
-		}		
-		$content .= $this->cObj->substituteMarkerArray($template, $markers);		
+		}
+		$content .= $this->cObj->substituteMarkerArray($template, $markers);
 		return $content;
 	}
-	
+
 	/**
 	 * Render files
-	 * @param $view The view 'LIST' or 'SINGLE' to render files
-	 * @param $filegroup The filegroup's uid
-	 * @param $template The file's template to substitute
-	 * @return content The content of filegroup files template substituted
+	 *
+	 * @param	string		$view		The view 'LIST' or 'SINGLE' to render files
+	 * @param	int			$filegroup		The filegroup's uid
+	 * @param	string		$template		The file's template to substitute
+	 * @return	content		The content of filegroup files template substituted
 	 */
 	function renderFiles($view, $filegroup, $template) {
 		t3lib_div::loadTCA($this->tables['files']);
-		$uploadPaths['file'] = $GLOBALS['TCA'][$this->tables['files']]['columns']['file']['config']['uploadfolder'] . '/';		
+		$uploadPaths['file'] = $GLOBALS['TCA'][$this->tables['files']]['columns']['file']['config']['uploadfolder'] . '/';
 		t3lib_div::loadTCA($this->tables['fileformats']);
-		$uploadPaths['fileformat'] = $GLOBALS['TCA'][$this->tables['fileformats']]['columns']['picto']['config']['uploadfolder'] . '/';		
+		$uploadPaths['fileformat'] = $GLOBALS['TCA'][$this->tables['fileformats']]['columns']['picto']['config']['uploadfolder'] . '/';
 		if ($view == 'LIST') {
 			$filetypes = array();
 			foreach ($this->fileLinks as $fileLink) {
@@ -541,7 +580,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			}
 		}	else	{
 			$filetypes = $this->getFiletypes();
-		}		
+		}
 		$fields = array(
 			'record_type',
 			'file',
@@ -565,7 +604,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			}
 			$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				implode(', ', $fields),
-				'`' . $this->tables['filegroups'] . '`' . 
+				'`' . $this->tables['filegroups'] . '`' .
 				' LEFT OUTER JOIN `' . $this->tables['file_filegroup_mm'] . '` ON `' . $this->tables['file_filegroup_mm'] . '`.`uid_foreign` = `' . $this->tables['filegroups'] . '`.`uid`' .
 				' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`',
 				implode(' AND ', $where)
@@ -577,7 +616,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 					$link_item = '<a href="' . $uploadPaths['file'] . $file['file'] . '" target="_blank">' . $this->cObj->getSubpart($template, '###LINK_ITEM###') . '</a>';
 				}	else	{
 					$markers['###FILESIZE###'] = '';
-					$link_item = '<a href="' . $file['url'] . '" target="_blank">' . $this->cObj->getSubpart($template, '###LINK_ITEM###') . '</a>';					
+					$link_item = '<a href="' . $file['url'] . '" target="_blank">' . $this->cObj->getSubpart($template, '###LINK_ITEM###') . '</a>';
 				}
 				$format = t3lib_BEfunc::getRecord($this->tables['fileformats'], $file['format']);
 				$markers['###PICTO###'] = $this->getImgResource($uploadPaths['fileformat'] . $format['picto'], $format['name'], $this->conf['fileformatPictoMaxW'], $this->conf['fileformatPictoMaxH']);
@@ -585,7 +624,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 				$markers['###FILEMD5###'] = $dile['filemd5'];
 				$pictoItem = $this->cObj->substituteSubpart($template, '###LINK_ITEM###', $link_item);
 				$pictoItem = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($pictoItem, '###PICTO_ITEM###'), $markers);
-				$pictoItems .= $pictoItem;				
+				$pictoItems .= $pictoItem;
 			}
 			$sectionContent = $this->cObj->substituteSubpart($template, '###PICTO_ITEM###', $pictoItems);
 			if (!empty($files))
@@ -593,20 +632,23 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		}
 		return $content;
 	}
-	
+
 	/**
 	 * Render single view
+	 *
+	 * @param	int		$id: filegroup uid
+	 * @return	string		content
 	 */
 	function renderSingle($id) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SINGLE###');
-		
+
 		$filegroups = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'*',
 			'`' . $this->tables['filegroups'] . '`',
 			'`uid` = ' . $id . $this->cObj->enableFields($this->tables['filegroups'])
 		);
 		$filegroup = $filegroups[0];
-		
+
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
 			'###INTRO###' => $this->cObj->stdWrap($this->pi_getLL('detail_intro'), $this->conf['displaySingle.']['intro_stdWrap.']),
@@ -623,7 +665,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$tmp_subpart = $this->cObj->getSubpart($template, '###SUBPART_'. strtoupper($field) .'###');
 			if (!$filegroup[$field])
 				$tmp_subpart = '';
-			
+
 			$template = $this->cObj->substituteSubpart($template, '###SUBPART_'. strtoupper($field) .'###', $tmp_subpart);
 
 			switch($field) {
@@ -679,28 +721,28 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 							$dataValue[] = $data['name'];
 						}
 					}
-					
+
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap(implode(', ',$dataValue), $this->conf['displaySingle.'][$field . '_stdWrap.']);
 				break;
-				default : 
+				default :
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($filegroup[$field], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 			}
-		}		
+		}
 		$filesContent = $this->renderFiles('SINGLE', $id, $this->cObj->getSubpart($template, '###SECTION_FILE###'));
-		$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);				
+		$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);
 		$content .= $this->cObj->substituteMarkerArray($template, $markers);
 		return $content;
 	}
-	
+
 	/**
 	 * Rendering img resource
-	 * @param $resource The path to img resource
-	 * @param $desc The resource description 
-	 * @param $width
-	 * @param $height
-	 * @param $ext Render external resource "true", otherwise "false"
 	 *
-	 * @return img resource
+	 * @param	string		$resource: The path to img resource
+	 * @param	string		$desc: The resource description
+	 * @param	int			$width
+	 * @param	int			$height
+	 * @param	boolean		$ext: Render external resource "true", otherwise "false"
+	 * @return	img		resource
 	 */
 	function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false) {
 		$imgPicto['file'] = $resource;
@@ -717,11 +759,12 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			}
 		}
 	}
-	
+
 	/**
 	 * Retrieves filegroup files
-	 * @param $filegroup
-	 * @return $file_filegroup_mm The MM relations or null
+	 *
+	 * @param	int	$filegroup: filegroup uid
+	 * @return	$file_filegroup_mm		The MM relations or null
 	 */
 	function getFiles_mm($filegroup) {
 		$file_filegroup_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -729,7 +772,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			$this->tables['file_filegroup_mm'],
 			'`uid_foreign` = ' . $filegroup
 		);
-		
+
 		if (is_array($file_filegroup_mm) && count($file_filegroup_mm)) {
 			return $file_filegroup_mm;
 		}
@@ -739,7 +782,7 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 	 * Get filesize . Display correct format
 	 *
 	 * @param	string		$file
-	 * @return	document size with unit
+	 * @return	document		size with unit
 	 */
 	function getFileSize($file) {
 		if (filesize($file)>(1024*1024))
@@ -749,11 +792,12 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		else
 			return round(filesize($file)) . ' octets';
 	}
-	
+
 	/**
 	 * Retrieves fileformats
 	 *
-	 * @return $fileformats File formats
+	 * @param	boolean		$searchable
+	 * @return	$fileformats		File formats
 	 */
 	function getFileformats($searchable = false) {
 		$where = array('`pid` = ' . $this->storage);
@@ -766,17 +810,17 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			'',
 			'`sorting` ASC'
 		);
-	
+
 		if (is_array($fileformats) && count($fileformats)) {
 			return $fileformats;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Retrieves filetypes
 	 *
-	 * @return $filetypes File types
+	 * @return	$filetypes		File types
 	 */
 	function getFiletypes() {
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -789,10 +833,11 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			'uid'
 		);
 	}
-	
+
 	/**
 	 * Retrieves categories
-	 * @return categories
+	 *
+	 * @return	categories
 	 */
 	function getCategories() {
 		$filegroupsCategories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -820,12 +865,13 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 			'',
 			'`name` ASC'
 		);
-		return $categories;	
+		return $categories;
 	}
-	
+
 	/**
 	 * Retrieves tiers
-	 * @return tiers
+	 *
+	 * @return	tiers
 	 */
 	function getTiersAgencies() {
 		$agencies =  $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -838,10 +884,12 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 
 		return $agencies;
 	}
-	
+
 	/**
 	 * Get page bowser
 	 *
+	 * @param	int		$numberOfPages number of pages
+	 * @return	void
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
@@ -857,13 +905,13 @@ class tx_icsopendatastore_pi1 extends tslib_pibase {
 		$cObj->start(array(), '');
 		return $cObj->cObjGetSingle('USER', $conf);
 	}
-	
+
 	/**
 	 * Render RSS content
-	 * @param string $rssLink	The RSS link
-	 * @param string $imgSrc	The img resource
 	 *
-	 * @return string	The RSS link content
+	 * @param	string		$rssLink: The RSS link
+	 * @param	string		$imgSrc: The img resource
+	 * @return	string		The RSS link content
 	 */
 	function renderRSS($rssLink, $imgSrc) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RSS###');

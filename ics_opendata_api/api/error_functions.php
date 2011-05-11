@@ -36,9 +36,10 @@
 /** 
  * Output the specified error to an XML Writer.
  *
- * @param $xmlwriter XMLWriter The XML Writer used for status output.
- * @param $code Integer The error code.
- * @param $text String The error message.
+ * @param XMLWriter	$xmlwriter: The XML Writer used for status output.
+ * @param Integer	$code: The error code.
+ * @param String	$text: The error message.
+ * @return void
  */
 function makeError(XMLWriter $xmlwriter, $code, $text) {
 	$xmlwriter->startElement('status');

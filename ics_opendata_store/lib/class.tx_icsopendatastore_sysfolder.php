@@ -34,6 +34,21 @@
  */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   67: class tx_icsopendatastore_sysfolder
+ *
+ *              SECTION: < Storage pid */
+ *   76:     static function getPid()
+ *   87:     static function init()
+ *  103:     static function getAvailable()
+ *  117:     static function getPidList()
+ *  128:     static function create($pid=0)
+ *
+ * TOTAL FUNCTIONS: 5
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -51,12 +66,12 @@
  */
 class tx_icsopendatastore_sysfolder {
 
-	protected static $pid = 0;
-	
+	protected static $pid = 0; /**< Storage pid */
+
 	/**
+	 * @return	integer		L'identifiant de la page.
 	 * @author Pierrick Caillon <pierrick@in-cite.net>
 	 * @desc Récupérer l'identifiant du dossier de stockage des filegroups.
-	 * @return integer L'identifiant de la page.
 	 */
 	static function getPid() {
 		if (!tx_icsopendatastore_sysfolder::$pid)
@@ -107,7 +122,7 @@ class tx_icsopendatastore_sysfolder {
 	/**
 	 * Create a document folders
 	 *
-	 * @param	integer		$pid The PID of the sysfolder which is by default 0 to place the folder in the root.
+	 * @param	integer		$pid: The PID of the sysfolder which is by default 0 to place the folder in the root.
 	 * @return	void
 	 */
 	static function create($pid=0) {
@@ -124,7 +139,6 @@ class tx_icsopendatastore_sysfolder {
 		$fields_values['tstamp'] = time();
 		return $GLOBALS['TYPO3_DB']->exec_INSERTquery('pages', $fields_values);
 	}
-
 
 }
 

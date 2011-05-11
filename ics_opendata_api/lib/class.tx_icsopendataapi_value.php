@@ -38,12 +38,14 @@ class tx_icsopendataapi_value{
 
 	private $value = '', $description = '';
 	private $parameters = array();
-	
+
 	/**
 	 * Loads values in a document xml
-	 * @param $writer XMLWriter
+	 *
+	 * @param	$writer		XMLWriter
+	 * @return	void
 	 */
-	function loadXML(XMLreader $xmlreader){		
+	function loadXML(XMLreader $xmlreader){
 		// Check the node name.
 		if ($xmlreader->name != 'value')
 			throw new Exception('value element expected. ' . $xmlreader->name . ' found.');
@@ -89,10 +91,12 @@ class tx_icsopendataapi_value{
 				throw new Exception('Unable to read the value node sub elements.');
 		}
 	}
-	
+
 	/**
 	 * Put value in a doculent xml
-	 * @param $xmlwriter XMLWriter
+	 *
+	 * @param	$xmlwriter		XMLWriter
+	 * @return	void
 	 */
 	function saveXML(XMLWriter $xmlwriter){
 		$xmlwriter->startElement('value');
@@ -112,6 +116,9 @@ class tx_icsopendataapi_value{
 
 	/**
 	 * Loads _POST variables
+	 *
+	 * @param	array		$post
+	 * @return	void
 	 */
 	function loadPOST($post){
 		// Load value sub element
@@ -139,56 +146,66 @@ class tx_icsopendataapi_value{
 
 	/**
 	 * Retrieves value of value
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getValue(){
 		return $this->value;
 	}
-	
+
 	/**
 	 * Defines value of value
-	 * @param $value string
+	 *
+	 * @param	string	$value
+	 * @return	void
 	 */
 	function setValue($value){
 		$this->value = $value;
 	}
-	
+
 	/**
 	 * Retrieves value's description
-	 * @return string
-	 */	
+	 *
+	 * @return	string
+	 */
 	function getDescription(){
 		return $this->description;
 	}
-	
+
 	/**
 	 * Defines value's description
-	 * @param $description string
+	 *
+	 * @param	string	$description
+	 * @return	void
 	 */
 	function setDescription( $description ){
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Count value parameters
-	 * @return integer The number parameters
+	 *
+	 * @return	integer		The number parameters
 	 */
 	function getParametersCount(){
 		return count($this->parameters);
 	}
-	
+
 	/**
 	 * Retrieves parameter
-	 * @param $i integer The indice of parameter
-	 * @return parameter
+	 *
+	 * @param	integer	$i: The indice of parameter
+	 * @return	parameter
 	 */
 	function getParameter($i){
 		return $this->parameters[$i];
 	}
-	
+
 	/**
 	 * Delete parameter
-	 * @param $obj parameter
+	 *
+	 * @param	object	$obj: parameter
+	 * @return	void
 	 */
 	function removeParameter($obj){
 		$keys = array_keys($this->parameters, $obj, true);
@@ -196,12 +213,14 @@ class tx_icsopendataapi_value{
 		foreach ($keys as $key)
 			array_splice($this->parameters, $key, 1);
 	}
-	
+
 	/**
 	 * Insert parameter in parameters
-	 * @param $obj parameter
+	 *
+	 * @param	object	$obj: parameter
+	 * @return	void
 	 */
 	function addParameter($obj){
 		$this->parameters[] = $obj;
-	}	
+	}
 }

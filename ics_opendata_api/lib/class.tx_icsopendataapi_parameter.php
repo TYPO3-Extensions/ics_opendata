@@ -34,14 +34,16 @@ require_once( t3lib_extMgm::extPath('ics_opendata_api') . 'lib/class.tx_icsopend
  * @package	TYPO3
  * @subpackage	tx_icsopendataapi
  */
-
 class tx_icsopendataapi_parameter{
 
 	private $name = '', $type = '', $description = '', $mandatory = false, $default = '';
 	private $values = array();
-		
+
 	/**
 	 * Loads a document xml
+	 *
+	 * @param	XMLReader		$XMLReader $xmlreader: ...
+	 * @return	void
 	 */
 	function loadXML(XMLReader $xmlreader){
 		// Check the node name.
@@ -90,12 +92,14 @@ class tx_icsopendataapi_parameter{
 			}
 			if (!$xmlreader->read())
 				throw new Exception('Unable to read the parameter node sub elements.');
-		}		
+		}
 	}
-	
+
 	/**
 	 * Put parameter in a document xml
-	 * @param $xmlwriter XMLWriter
+	 *
+	 * @param	$xmlwriter		XMLWriter
+	 * @return	void
 	 */
 	function saveXML(XMLWriter $xmlwriter){
 		$xmlwriter->startElement('parameter');
@@ -116,9 +120,12 @@ class tx_icsopendataapi_parameter{
 		}
 		$xmlwriter->endElement();
 	}
-	
+
 	/**
 	 * Loads _POST variables
+	 *
+	 * @param	array		$post
+	 * @return	void
 	 */
 	function loadPOST($post){
 		// Load parameter sub element
@@ -152,84 +159,99 @@ class tx_icsopendataapi_parameter{
 			}
 		}
 	}
-	
+
 	/**
 	 * Retrieves parameter's name
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getName(){
 		return $this->name;
 	}
-	
+
 	/**
 	 * Defines parameter's name
-	 * @param $name string
+	 *
+	 * @param	string	$name
+	 * @return	void
 	 */
 	function setName($name){
 		$this->name = $name;
 	}
-	
+
 	/**
 	 * Retrieves parameter's type
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getType(){
 		return $this->type;
 	}
-	
+
 	/**
 	 * Defines parameter's type
-	 * @param $type string
+	 *
+	 * @param	string	$type
+	 * @return	void
 	 */
 	function setType($type){
 		if (!in_array($type, array('enum', 'string', 'number')))
 			throw new Exception('Invalid type. "enum", "string" or "number" expected. "' . $type . '" found.');
 		$this->type = $type;
 	}
-	
+
 	/**
 	 * Retrieves parameter's description
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getDescription(){
 		return $this->description;
 	}
-	
+
 	/**
 	 * Defines parameter's description
-	 * @param $description string
+	 *
+	 * @param	string	$description
+	 * @return	void
 	 */
 	function setDescription($description){
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Retrieves mandatory
-	 * @return boolean
+	 *
+	 * @return	boolean
 	 */
 	function getMandatory(){
 		return $this->mandatory;
 	}
-	
+
 	/**
 	 * Defines mandatory
-	 * @param $mandatory boolean
+	 *
+	 * @param	boolean	$mandatory
+	 * @return	void
 	 */
 	function setMandatory($mandatory){
 		$this->mandatory = $mandatory;
 	}
-	
+
 	/**
 	 * Retrieves default value
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	function getDefault(){
 		return $this->default;
 	}
-	
+
 	/**
 	 * Defines default value
-	 * @param $default string
+	 *
+	 * @param	string	$default
+	 * @return	void
 	 */
 	function setDefault($default){
 		$this->default = $default;
@@ -237,24 +259,28 @@ class tx_icsopendataapi_parameter{
 
 	/**
 	 * Count parameter values
-	 * @return integer The number values
+	 *
+	 * @return	integer		The number values
 	 */
 	function getValuesCount(){
 		return count($this->values);
 	}
-	
+
 	/**
 	 * Retrieves value
-	 * @param $i integer Indice of value
-	 * @return value
+	 *
+	 * @param	integer	$i: Indice of value
+	 * @return	value
 	 */
 	function getValue($i){
 		return $this->values[$i];
 	}
-	
+
 	/**
 	 * Delete value
-	 * @param $obj value
+	 *
+	 * @param	object	$obj: value
+	 * @return	void
 	 */
 	function removeValue($obj){
 		$keys = array_keys($this->values, $obj, true);
@@ -262,14 +288,16 @@ class tx_icsopendataapi_parameter{
 		foreach ($keys as $key)
 			array_splice($this->values, $key, 1);
 	}
-	
+
 	/**
 	 * Insert value in values
-	 * @param $obj value
+	 *
+	 * @param	object	$obj: value
+	 * @return	void
 	 */
 	function addValue($obj){
 		$this->values[] = $obj;
-	}	
+	}
 }
 
 ?>

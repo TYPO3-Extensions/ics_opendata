@@ -27,7 +27,15 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   46: class tx_icsopendatastore_filecontrol extends t3lib_TCEforms
+ *   54:     function makeControl($pi_aParameterArray, $pi_oFormObj)
+ *   69:     function getSingleField_typeGroup($table,$field,$row,&$PA,$tce)
+ *
+ * TOTAL FUNCTIONS: 2
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 /**
@@ -37,25 +45,25 @@
  */
 class tx_icsopendatastore_filecontrol extends t3lib_TCEforms {
 	/**
-	 * @desc Génère le code du contrôle backend personnalisé d'envoie de fichier pour les filegroups.
-	 * @author Pierrick Caillon <pierrick@in-cite.net>
-	 * @param $pi_aParameterArray array Informations à propos du champ à générer.
-	 * @param $oFormObj object L'instanced e TCEforms demandant le rendu du contrôle.
-	 * @return string Le code HTML du contrôle.
-	 */
+ * @param	array 	$pi_aParameterArray: Informations à propos du champ à générer.
+ * @param	object	$oFormObj: L'instanced e TCEforms demandant le rendu du contrôle.
+ * @return	string		Le code HTML du contrôle.
+ * @desc Génère le code du contrôle backend personnalisé d'envoie de fichier pour les filegroups.
+ * @author Pierrick Caillon <pierrick@in-cite.net>
+ */
 	function makeControl($pi_aParameterArray, $pi_oFormObj) {
 		return $this->getSingleField_typeGroup($pi_aParameterArray['table'], $pi_aParameterArray['field'], $pi_aParameterArray['row'], $pi_aParameterArray, $pi_oFormObj);
 	}
- 
+
 	/**
 	 * Generation of TCEform elements of the type "group"
 	 * This will render a selectorbox into which elements from either the file system or database can be inserted. Relations.
 	 *
-	 * @param	string		The table name of the record
-	 * @param	string		The field name which this element is supposed to edit
-	 * @param	array		The record data array where the value(s) for the field can be found
-	 * @param	array		An array with additional configuration options.
-	 * @param   t3lib_tceforms The calling TCEforms instance.
+	 * @param	string		$table: The table name of the record
+	 * @param	string		$field: The field name which this element is supposed to edit
+	 * @param	array		$row: The record data array where the value(s) for the field can be found
+	 * @param	array		$PA: An array with additional configuration options.
+	 * @param	t3lib_tceforms		$tce: The calling TCEforms instance.
 	 * @return	string		The HTML code for the TCEform field
 	 */
 	function getSingleField_typeGroup($table,$field,$row,&$PA,$tce)	{

@@ -32,10 +32,10 @@ require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/error_codes.php');
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/error_functions.php');
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'lib/xml2json/xml2json.php');
 
-/** 
+/**
  * Handles an API query call.
  * This service dispatches the call to the requested command.
- * It checks the call parameters, retrieves the requested command instance and 
+ * It checks the call parameters, retrieves the requested command instance and
  * executes it.
  *
  * @author    Tsi Yang <tsi@in-cite.net>, Pierrick Caillon <pierrick@in-cite.net>
@@ -46,20 +46,27 @@ class tx_icsopendataapi_service {
 	 * The request parameters.
 	 */
 	var $params = array(
-		'key' => '', // key of developpers application
-		'version' => '', // version of command
-		'cmd' => '', // command to execute
-		'output' => '', // output format
-		'param' => array(), // array where key/value pairs are "param of command" => "param value"
-	);
+		'key' => '',
+		'version' => '',
+		'cmd' => '',
+		'output' => '',
+		'param' => array(),
+	); /**< Params array :
+				key : key of developpers application
+				version : version of command
+				cmd : command to execute
+				output : output format
+				param : array where key/value pairs are "param of command" => "param value" */
 
 	/**
 	 * Initializes the service.
 	 * Initializes the eID subsystem.
 	 * Uses the HTTP GET/POST parameters to initializes the service parameters.
+	 *
+	 * @return	void
 	 */
 	function init() {
-		$this->feUserObj = tslib_eidtools::initFeUser(); // Initialize FE user object     
+		$this->feUserObj = tslib_eidtools::initFeUser(); // Initialize FE user object
 		tslib_eidtools::connectDB(); //Connect to database
 		tslib_fe::includeTCA();
 		foreach ($this->params as $gp => $var) {
@@ -72,7 +79,7 @@ class tx_icsopendataapi_service {
 	/**
 	 * Checks the call of API and writes the output with an XMLWriter
 	 *
-	 * @return string, Content
+	 * @return	string,		Content
 	 */
 	function main() {
 		$xmlwriter = new XMLWriter();
@@ -83,34 +90,36 @@ class tx_icsopendataapi_service {
 		$xmlwriter->setIndentString("\t");
 		//-- Starts the xml element "opendata"
 		$xmlwriter->startElement('opendata');
-		
-		$this->writeRequest($xmlwriter);		
+
+		$this->writeRequest($xmlwriter);
 		$this->writeAnswer($xmlwriter);
-				
+
 		//-- Ends the xml element "opendata"
 		$xmlwriter->endElement();
 		//-- Ends the document and returns the buffer.
 		$xmlwriter-> endDocument();
 		$content = $xmlwriter->outputMemory();
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Writes the request element to the XML output.
 	 *
-	 * @param $xmlwriter XMLWriter The output writer.
+	 * @param	XMLWriter	$xmlwriter: The output writer.
+	 * @return	void
 	 */
 	private function writeRequest(XMLWriter $xmlwriter) {
 		$xmlwriter->startElement('request');
 		$xmlwriter->text(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
 		$xmlwriter->endElement();
 	}
-	
+
 	/**
 	 * Writes the answer element to the XML output.
 	 *
-	 * @param $xmlwriter WMLWriter The output writer.
+	 * @param	XMLWriter	$xmlwriter: The output writer.
+	 * @return	void
 	 */
 	private function writeAnswer(XMLWriter $xmlwriter) {
 		$xmlwriter->startElement('answer');
@@ -123,20 +132,20 @@ class tx_icsopendataapi_service {
 			if (!$this->checkKey()) {
 				makeError($xmlwriter, ERROR_KEY_CODE, ERROR_KEY_TEXT);
 			}
-			else { // 
+			else { //
 				if ($this->isCallLimitReached()) {
 					makeError($xmlwriter, ERROR_MAX_CODE, ERROR_MAX_TEXT);
 				}
-				else { // Init the version	
-					$oFactory = t3lib_div::makeInstance('tx_icsopendataapi_factory');	
+				else { // Init the version
+					$oFactory = t3lib_div::makeInstance('tx_icsopendataapi_factory');
 					$initResult = $oFactory->init($this->params['version']);
-					
+
 					if (!$initResult) {
 						makeError($xmlwriter, ERROR_VERSION_CODE, ERROR_VERSION_TEXT);
-					}					 
-					else { // Create a new command				
+					}
+					else { // Create a new command
 						$oClasscommand = $oFactory->getCommand($this->params['cmd']);
-						
+
 						if (!is_object($oClasscommand)) {
 							makeError($xmlwriter, ERROR_COMMAND_CODE, ERROR_COMMAND_TEXT);
 						}
@@ -154,8 +163,8 @@ class tx_icsopendataapi_service {
 	 * Checks if the required parameters are specified.
 	 * Outputs the error status itself.
 	 *
-	 * @param $xmlwriter XMLWriter The WMLWriter for output.
-	 * @return boolean <code>True</code> if the parameters are specified otherwise <code>false</code>.
+	 * @param	XMLWriter	$xmlwriter: The XMLWriter for output.
+	 * @return	boolean		<code>True</code> if the parameters are specified otherwise <code>false</code>.
 	 */
 	private function checkCall(XMLWriter $xmlwriter){
 		if (empty($this->params['key'])) {
@@ -169,14 +178,14 @@ class tx_icsopendataapi_service {
 		if (empty($this->params['cmd'])) {
 			makeError($xmlwriter, ERROR_COMMAND_EMPTY_CODE, ERROR_COMMAND_EMPTY_TEXT);
 			return false;
-		}	
+		}
 		return true;
 	}
 
 	/**
 	 * Checks if the API Key is valid.
 	 *
-	 * @return Boolean <code>True</code> if the API Key is valid otherwise <code>false</code>.
+	 * @return	Boolean		<code>True</code> if the API Key is valid otherwise <code>false</code>.
 	 */
 	private function checkKey() {
 		global $TYPO3_DB;
@@ -188,11 +197,12 @@ class tx_icsopendataapi_service {
 		);
 		return (!empty($rows));
 	}
-		
+
 	/**
 	 * Displays the output.
 	 *
-	 * @param $output String The XML Output to print.
+	 * @param	string	$output: The XML Output to print.
+	 * @return	string	content
 	 */
 	function printOutput($output) {
 		global $TYPO3_CONF_VARS;
@@ -210,20 +220,22 @@ class tx_icsopendataapi_service {
 		header('Access-Control-Allow-Origin: *');
 		echo $output;
 	}
-	
+
 	/**
 	 * Logs the call.
+	 *
+	 * @return	void
 	 */
 	private function logCall() {
 		$logger = t3lib_div::makeInstance('tx_icsopendataapi_logger');
 		$logger->init($this->params);
 		$logger->logCall();
 	}
-	
+
 	/**
 	 * Checks if the period call limit is reached.
 	 *
-	 * @return Boolean <code>True</code> if the limit is reached otherwise <code>false</code>.
+	 * @return	Boolean		<code>True</code> if the limit is reached otherwise <code>false</code>.
 	 */
 	private function isCallLimitReached() {
 		global $TYPO3_DB;

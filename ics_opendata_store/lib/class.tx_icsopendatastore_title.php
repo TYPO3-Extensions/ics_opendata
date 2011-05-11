@@ -29,12 +29,18 @@
  * Class 'tx_icsopendatastore_title' to display title column label
  *
  * @author Tsi Yang <tsi@in-cite.net>
- *
  * @package	TYPO3
  * @subpackage	tx_icsopendatastore
- *
  */
 class tx_icsopendatastore_title	{
+
+	/**
+	 * @param	array		$params
+	 * @param	object		$pObj
+	 * @return	[type]		...
+	 * @author Tsi Yang <tsi@in-cite.net>
+	 * @desc Display title column label
+	 */
 	function getRecordTitle($params, $pObj){
 		if ($params['table'] == 'tx_icsopendatastore_files')	{
 			if ($params['row']['record_type'] == '0')	{

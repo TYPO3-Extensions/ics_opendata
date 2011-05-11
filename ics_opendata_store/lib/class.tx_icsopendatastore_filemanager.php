@@ -27,31 +27,41 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   49: class tx_icsopendatastore_filemanager
+ *   67:     function processDatamap_preProcessFieldArray(&$pi_aIncommingFieldArray, $pi_sTable, $pi_sId, $pi_oTce)
+ *  245:     function processDatamap_afterDatabaseOperations($pi_sStatus, $pi_sTable, $pi_sId, $pi_aFieldArray, $pi_oTce)
+ *
+ * TOTAL FUNCTIONS: 2
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 /**
+ * Cette classe est enregistrée comme crochet (hook) de TCEmain.
+ *          Actuellement, seul le champ file de tx_icsopendatastore_files est traité.
+ *
  * @desc Gère le comportement du contrôle backend personnalisé d'envoie de fichier.
- *       Cette classe est enregistrée comme crochet (hook) de TCEmain.
  * @author Pierrick Caillon <pierrick@in-cite.net>
  * @remarks Une amélioration serait de traiter tous les champs de type user utilisant le contrôle.
- *          Actuellement, seul le champ file de tx_icsopendatastore_files est traité.
  */
 class tx_icsopendatastore_filemanager {
 	/**
-	 * @desc Pré-traitement des valeurs de l'enregistrement soumis à TCEmain pour persistance.
-	 *       Fait respecter l'emplacement courant du fichier lié et son préfix (l'id de l'enregistrement).
-	 *       Prend en compte le fichier envoyé s'il y a et le pose à la place de tout fichier existant.
-	 *       Le fichier existant s'il y a se voie inséré le timestamp de l'heure de la modification.
+	 * Pré-traitement des valeurs de l'enregistrement soumis à TCEmain pour persistance.
+	 * Fait respecter l'emplacement courant du fichier lié et son préfix (l'id de l'enregistrement).
+	 * Prend en compte le fichier envoyé s'il y a et le pose à la place de tout fichier existant.
+	 * Le fichier existant s'il y a se voie inséré le timestamp de l'heure de la modification.
 	 *
-	 *       Pour un nouvel enregistrement, le nom du fichier ne peut être changé car l'id n'existe pas.
-	 *       Le fichier en vigueur est au format "<id>-<nom originel>".
-	 *       Le fichier d'un ancien fichier est au format "<id>-<timestamp>-<nom originel>".
+	 * Pour un nouvel enregistrement, le nom du fichier ne peut être changé car l'id n'existe pas.
+	 * Le fichier en vigueur est au format "<id>-<nom originel>".
+	 * Le fichier d'un ancien fichier est au format "<id>-<timestamp>-<nom originel>".
+	 *
+	 * @param	array		$pi_aIncommingFieldArray: Les données de l'enregistrement.
+	 * @param	string		$pi_sTable:	Le nom de la table affectée.
+	 * @param	string		$pi_sId: L'identifiant de l'enregistrement. Peut être une chaîne de caractère commençant par 'NEW'.
+	 * @param	object		$pi_oTce: L'instance de TCEmain effectuant la mise à jour de la base.
 	 * @author Pierrick Caillon <pierrick@in-cite.net>
-	 * @param $pi_aIncommingFieldArray array& Les données de l'enregistrement.
-	 * @param $pi_sTable string Le nom de la table affectée.
-	 * @param $pi_sId string L'identifiant de l'enregistrement. Peut être une chaîne de caractère commençant par 'NEW'.
-	 * @param $pi_oTce object L'instance de TCEmain effectuant la mise à jour de la base.
 	 */
 	function processDatamap_preProcessFieldArray(&$pi_aIncommingFieldArray, $pi_sTable, $pi_sId, $pi_oTce) {
 		if ($pi_oTce->bypassFileHandling)
@@ -108,11 +118,11 @@ class tx_icsopendatastore_filemanager {
 						if (rename(
 								t3lib_div::getFileAbsFileName($sFolder . '/' . $sFilename),
 								t3lib_div::getFileAbsFileName(
-									($sNewFolder ? $sNewFolder : $sFolder) . '/' . 
+									($sNewFolder ? $sNewFolder : $sFolder) . '/' .
 									($sNewFilename ? $sNewFilename : $sFilename)
 								)
 							)) {
-							$pi_aIncommingFieldArray['file'] = ($sNewFolder ? $sNewFolder : $sFolder) . '/' . 
+							$pi_aIncommingFieldArray['file'] = ($sNewFolder ? $sNewFolder : $sFolder) . '/' .
 								($sNewFilename ? $sNewFilename : $sFilename);
 						}
 					}
@@ -136,13 +146,13 @@ class tx_icsopendatastore_filemanager {
 				$aAllFiles['webspace']['deny'] = $aTcaFieldConf['disallowed'] ? $aTcaFieldConf['disallowed'] : '*';
 				$aAllFiles['ftpspace'] = $aAllFiles['webspace'];
 				$pi_oTce->fileFunc->init('', $aAllFiles);
-				
+
 					// For logging..
 				$aPropArr = $pi_oTce->getRecordProperties($pi_sTable,$pi_sId);
 				$sRecFID = $pi_sTable . ':' . $pi_sId . ':file';
-				
+
 				$sDest = $sDocFolder . $sFilegroup . '/';
-				
+
 				if (@is_dir(t3lib_div::getFileAbsFileName($sDest)) && (@is_file($aUploadedFileArray['tmp_name']) || @is_uploaded_file($aUploadedFileArray['tmp_name']))) {
 					$sTargetFileName = (is_int($pi_sId) ? ($pi_sId . '-') : ('')) . basename(t3lib_div::fixWindowsFilePath($aUploadedFileArray['name']));
 					$aFI = t3lib_div::split_fileref($sTargetFileName);
@@ -199,16 +209,17 @@ class tx_icsopendatastore_filemanager {
 			}
 		}
 	}
-	
+
 	/**
-	 * @desc Post-traitement des valeurs de l'enregistrement soumis à TCEmain pour persistance.
-	 *       Rempli le champ indiquant l'utilisateur aillant édité.
+	 * Post-traitement des valeurs de l'enregistrement soumis à TCEmain pour persistance.
+	 * Rempli le champ indiquant l'utilisateur aillant édité.
+	 *
 	 * @author Pierrick Caillon <pierrick@in-cite.net>
-	 * @param $pi_sStatus string Indication de la création ou de la mise à jour de l'enregistrement.
-	 * @param $pi_aFieldArray array& Les données de l'enregistrement.
-	 * @param $pi_sTable string Le nom de la table affectée.
-	 * @param $pi_sId string L'identifiant de l'enregistrement. Peut être une chaîne de caractère commençant par 'NEW'.
-	 * @param $pi_oTce object L'instance de TCEmain effectuant la mise à jour de la base.
+	 * @param string	$pi_sStatus: Indication de la création ou de la mise à jour de l'enregistrement.
+	 * @param array		$pi_aFieldArray: Les données de l'enregistrement.
+	 * @param string	$pi_sTable: Le nom de la table affectée.
+	 * @param string	$pi_sId: L'identifiant de l'enregistrement. Peut être une chaîne de caractère commençant par 'NEW'.
+	 * @param object	$pi_oTce: L'instance de TCEmain effectuant la mise à jour de la base.
 	 */
 	// function processDatamap_postProcessFieldArray($pi_sStatus, $pi_sTable, $pi_sId, &$pi_aFieldArray, $pi_oTce) {
 		// if ($pi_sTable == 'tx_icsopendatastore_files') {
@@ -218,16 +229,17 @@ class tx_icsopendatastore_filemanager {
 			// }
 		// }
 	// }
-	
+
 	/**
-	 * @desc Post-traitement des enregistrements traités par TCEmain après la modification de la base.
-	 *       Crée le dossier de sauvegarde des fichiers pour la fiche créé ou mise à jour.
+	 * Post-traitement des enregistrements traités par TCEmain après la modification de la base.	 
+	 * Crée le dossier de sauvegarde des fichiers pour la fiche créé ou mise à jour.
+	 *
+	 * @param	string	$pi_sStatus: Indication de la création ou de la mise à jour de l'enregistrement.
+	 * @param 	string	$pi_sTable: Nom de la table affectée.
+	 * @param	string	$pi_sId: Identifiant de l'enregistrement concerné.
+	 * @param	array	$pi_aFieldArray: Données de l'enregistrement.
+	 * @param	object	$pi_oTce: L'instance de TCEmain ayant effectué la mise à jour de la base.
 	 * @author Pierrick Caillon <pierrick@in-cite.net>
-	 * @param $pi_sStatus string Indication de la création ou de la mise à jour de l'enregistrement.
-	 * @param $pi_sTable string Nom de la table affectée.
-	 * @param $pi_sId string Identifiant de l'enregistrement concerné.
-	 * @param $pi_aFieldArray array Données de l'enregistrement.
-	 * @param $pi_oTce object L'instance de TCEmain ayant effectué la mise à jour de la base.
 	 */
 	function processDatamap_afterDatabaseOperations($pi_sStatus, $pi_sTable, $pi_sId, $pi_aFieldArray, $pi_oTce) {
 		if ($pi_sTable == 'tx_icsopendatastore_filegroups') {

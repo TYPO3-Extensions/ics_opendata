@@ -28,20 +28,21 @@
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/error_codes.php');
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/error_functions.php');
 
-/** 
+/**
  * Abstract command class.
  * Defines the contract for a command.
  *
  * @author    Tsi Yang <tsi@in-cite.net>, Pierrick Caillon <pierrick@in-cite.net>
  * @package    TYPO3
- */ 
+ */
 abstract class tx_icsopendataapi_command {
 
 	/**
 	 * Executes the command.
 	 *
-	 * @param $params array The command parameters.
-	 * @param $xmlwriter XMLWriter The XML Writer for output.
+	 * @param	array	$params: The command parameters.
+	 * @param	XMLWriter	$xmlwriter: The XML Writer for output.
+	 * @return	void
 	 */
 	function execute(array $params, XMLWriter $xmlwriter){
 		makeError($xmlwriter, ERROR_COMMAND_CODE, ERROR_COMMAND_TEXT);

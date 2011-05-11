@@ -32,30 +32,31 @@
  * Adapted by In Cité Solution <technique@in-cite.net> for plugin 'Datastore RSS' for the 'ics_opendata_store' extension.
  *
  */
- 
- 
- 
+
+
+
 require_once(PATH_tslib.'class.tslib_pibase.php');
 
 class tx_icsopendatastore_pi2 extends tslib_pibase{
 	var $prefixId      = 'tx_icsopendatastore_pi2';		// Same as class name
 	var $scriptRelPath = 'pi2/class.tx_icsopendatastore_pi2.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_opendata_store';	// The extension key.
-	
+
 	/**
 	 * Render datastore rss feed
+	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The rss feed content that is displayed on the website
+	 * @return	The	rss feed content that is displayed on the website
 	 */
 	function renderSingleRssPage($content,$conf) 	{
 		$this->conf = $conf;
-		
+
 		/* Get the template */
 		$this->templateFile = $this->conf['templateFile'];
 		if (!$this->templateFile)
 			$this->templateFile = 'typo3conf/ext/ics_opendata_store/res/rss2_tmplFile.tmpl';
-		
+
 		/* Declarations */
 		$rssId = intval(t3lib_div::_GP('rssFeed'));
 		$this->config = $GLOBALS['TSFE']->config['config']['datastore_rss.'];
@@ -67,16 +68,16 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 			'tstamp DESC',
 			'10'
 		);
-		
+
 		$pubDate = $this->feed[0]['tstamp'];
-		
+
 		$this->siteUrl = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
 		$this->charset = trim($GLOBALS['TSFE']->config['config']['renderCharset'])? $GLOBALS['TSFE']->config['config']['renderCharset'] : $GLOBALS['TSFE']->config['config']['metaCharset'];
 
 		$tmpl = $this->cObj->fileResource($this->templateFile);
 		$template['TEMPLATE_RSS2'] = $this->cObj->getSubpart($tmpl, '###TEMPLATE_RSS2###');
 		$markers = array();
-						
+
 		/* RSS feed header */
 		$template['HEADER'] = $this->cObj->getSubpart($template['TEMPLATE_RSS2'], '###HEADER###');
 		$markers = array(
@@ -125,7 +126,7 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 		}
 		$template['HEADER'] = $this->cObj->substituteSubpart($template['HEADER'], '###IMAGE###', $template['IMAGE']);
 
-		
+
 		/* RSS feed header's textInput */
 		$template['TEXTINPUT'] = '';
 		if ($this->conf['displayRSS.']['textInput.'])	{
@@ -139,7 +140,7 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 			$template['TEXTINPUT'] =  $this->cObj->substituteMarkerArray($template['TEXTINPUT'], $markersTextInput);
 		}
 		$template['HEADER'] = $this->cObj->substituteSubpart($template['HEADER'], '###TEXTINPUT###', $template['TEXTINPUT']);
-		
+
 		/* RSS feed header skipHours & skipDays */
 		if ($this->conf['displayRSS.']['skipHours.'])	{
 			$skipHours = t3lib_div::trimExplode(',', $this->conf['displayRSS.']['skipHours.'], true);
@@ -155,10 +156,10 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 			}
 			$markers['###SKIPDAYS###'] = $skipDays_content;
 		}
-		
+
 		$template['HEADER'] = $this->cObj->substituteMarkerArray($template['HEADER'], $markers);
-		
-		/* RSS feed content */		
+
+		/* RSS feed content */
 		$template['CONTENT'] = $this->cObj->getSubpart($template['TEMPLATE_RSS2'], '###CONTENT###');
 		$template['DATASET'] = $this->cObj->getSubpart($template['CONTENT'], '###DATASET###');
 		$datasets = '';
@@ -189,44 +190,46 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 			$datasets .= $this->cObj->substituteMarkerArray($template['DATASET'], $markersDataset);
 		}
 		$template['CONTENT'] = $this->cObj->substituteSubpart($template['CONTENT'], '###DATASET###', $datasets);
-		
+
 		//--
 		return $this->cObj->substituteMarkerArrayCached(
-			$template['TEMPLATE_RSS2'], 
-			$markers, 
+			$template['TEMPLATE_RSS2'],
+			$markers,
 			array(
 				'###HEADER###' => $template['HEADER'],
 				'###CONTENT###' => $template['CONTENT'],
 			)
 		);
 	}
-	
+
 	/**
 	 * Retrieves datastore dataset's author
-	 * @param 	int	$uid: The author uid
-	 * @return	string	The author's name
+	 *
+	 * @param	int		$uid: The author uid
+	 * @return	string		The author's name
 	 */
 	function getDatastoreAuthor($uid)	{
 		$author = t3lib_BEfunc::getrecord(
-			'tx_icsopendatastore_tiers', 
-			$uid, 
+			'tx_icsopendatastore_tiers',
+			$uid,
 			'name',
 			t3lib_BEfunc::BEenableFields('tx_icsopendatastore_tiers')
 		);
 		return $author['name'];
 	}
-	
+
 	/**
-	 * Retrieves datastore dataset's categories 
-	 * @param	array	$uids: Categories uid
-	 * @return	array	Categories name
+	 * Retrieves datastore dataset's categories
+	 *
+	 * @param	array		$uids: Categories uid
+	 * @return	array		Categories name
 	 */
 	function getDatastoreCategories($uids)	{
 		$categories = array();
 		foreach ($uids as $uid)	{
 			$category = t3lib_BEfunc::getrecord(
-				'tx_icsopendatastore_categories', 
-				$uid, 
+				'tx_icsopendatastore_categories',
+				$uid,
 				'name',
 				t3lib_BEfunc::BEenableFields('tx_icsopendatastore_categories')
 			);
@@ -234,11 +237,12 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 		}
 		return $categories;
 	}
-	
+
 	/**
 	 * Convert from utf-8 to charset
-	 * @param	string	$content: The content to convert
-	 * @return	The content converted
+	 *
+	 * @param	string		$content: The content to convert
+	 * @return	The		content converted
 	 */
 	function utf8_csConv($content)	{
 		if (strtoupper($this->charset) != 'UTF-8')
@@ -249,7 +253,6 @@ class tx_icsopendatastore_pi2 extends tslib_pibase{
 }
 
 
-global $TYPO3_CONF_VARS;
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_opendata_store/class.tx_icsopendatastore_pi2.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_opendata_store/class.tx_icsopendatastore_pi2.php']);
 }

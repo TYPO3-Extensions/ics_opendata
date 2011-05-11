@@ -27,7 +27,7 @@
 
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/class.tx_icsopenddataapi_command.php');
 
-/** 
+/**
  * Abstract file command class.
  * Defines the generic way of providing files via API.
  *
@@ -39,62 +39,51 @@ require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'api/class.tx_icsopendd
  *
  * @author    Pierrick Caillon <pierrick@in-cite.net>
  * @package    TYPO3
- */ 
+ */
 abstract class tx_icsopenddataapi_abstract_file_command extends tx_icsopenddataapi_command
 {
-	const EMPTY_MODE_CODE = 100;// ERROR_COMMAND_FIRST_CODE;
+	const EMPTY_MODE_CODE = 100; /**< ERROR_COMMAND_FIRST_CODE; */
 	const EMPTY_MODE_TEXT = "The mode should be not empty.";
-	const INVALID_MODE_CODE = 101;// ERROR_COMMAND_FIRST_CODE + 1;
+	const INVALID_MODE_CODE = 101; /**< ERROR_COMMAND_FIRST_CODE + 1; */
 	const INVALID_MODE_TEXT = "The specified mode is not recognized.";
-	const EMPTY_FILENAME_CODE = 102;// ERROR_COMMAND_FIRST_CODE + 2;
+	const EMPTY_FILENAME_CODE = 102; /**< ERROR_COMMAND_FIRST_CODE + 2; */
 	const EMPTY_FILENAME_TEXT = "Please, provide a filename.";
-	const FILENOTFOUND_CODE = 103; //ERROR_COMMAND_FIRST_CODE + 3;
+	const FILENOTFOUND_CODE = 103; /**< ERROR_COMMAND_FIRST_CODE + 3; */
 	const FILENOTFOUND_TEXT = 'The specified file was not found.';
-	const EMPTY_RETURN_CODE = 104;// ERROR_COMMAND_FIRST_CODE + 4;
+	const EMPTY_RETURN_CODE = 104; /**< ERROR_COMMAND_FIRST_CODE + 4; */
 	const EMPTY_RETURN_TEXT = "The specified return type should be not empty or unspecified.";
-	const INVALID_RETURN_CODE = 105;// ERROR_COMMAND_FIRST_CODE + 5;
+	const INVALID_RETURN_CODE = 105; /**< ERROR_COMMAND_FIRST_CODE + 5; */
 	const INVALID_RETURN_TEXT = "The specified return type is not recognized.";
-	const NOHANDLER_CODE = 106;// ERROR_COMMAND_FIRST_CODE + 6;
+	const NOHANDLER_CODE = 106; /**< ERROR_COMMAND_FIRST_CODE + 6; */
 	const NOHANDLER_TEXT = "The mode is valid but no handling has been done.";
 
-	/**
-	 * The default parameters values.
-	 */
 	var $params = array(
 		'mode' => '',
 		'filename' => '',
 		'return' => 'url',
-	);
-	
-	/**
-	 * The valid modes values.
-	 */
+	); /**< The default parameters values. */
+
 	var $modes = array(
 		'update',
 		'content',
-	);
-	
-	/**
-	 * The modes that requires the filename parameter.
-	 */
+	); /**< The valid modes values. */
+
 	var $filenameModes = array(
 		'update',
 		'content',
-	);
+	); /**< The modes that requires the filename parameter. */
 
-	/**
-	 * The valid return types.
-	 */
 	static $returns = array(
 		'url',
 		'inline',
-	);
-	
+	); /**< The valid return types. */
+
 	/**
 	 * Executes the command.
 	 *
-	 * @param $params array The command parameters.
-	 * @param $xmlwriter XMLWriter The XML Writer for output.
+	 * @param	array	$params: The command parameters.
+	 * @param	XMLWriter	$xmlwriter: The XML Writer for output.
+	 * @return	void
 	 */
 	function execute(array $params, XMLWriter $xmlwriter)
 	{
@@ -160,7 +149,7 @@ abstract class tx_icsopenddataapi_abstract_file_command extends tx_icsopenddataa
 	/**
 	 * Checks if the specified filename maps to a know file.
 	 *
-	 * @param $filename string The name of the file.
+	 * @param string	$filename: The name of the file.
 	 * @return boolean Whether filename is valid or not.
 	 */
 	protected abstract function isFile($filename);
@@ -168,27 +157,27 @@ abstract class tx_icsopenddataapi_abstract_file_command extends tx_icsopenddataa
 	/**
 	 * Retrieves the last modification time of the file.
 	 *
-	 * @param $filename string The name of the file.
+	 * @param string	$filename: The name of the file.
 	 * @return int The unix timestamp of the date of the last modification of the file.
 	 */
 	protected abstract function getLastUpdate($filename);
-	
+
 	/**
 	 * Retrieves the content or the url to content of the file.
 	 *
-	 * @param $filename string The name of the file.
-	 * @param $return string The type of the return value.
+	 * @param string $filename: The name of the file.
+	 * @param string $return: The type of the return value.
 	 * @return string The content or the url to the content of the file.
 	 * @see tx_icsopenddataapi_abstract_file_command::$returns
 	 */
 	protected abstract function getFile($filename, $return);
-	
+
 	/**
 	 * Executes the child class custom modes.
 	 *
-	 * @param $xmlwriter XMLWriter The XML Writer for output.
-	 * @param $params array The command parameters.
-	 * @return boolean Whether or not the request has been parsed.
+	 * @param	XMLWriter	$xmlwriter: The XML Writer for output.
+	 * @param	array	$params: The command parameters.
+	 * @return	boolean		Whether or not the request has been parsed.
 	 */
 	protected function parseCustom(XMLWriter $xmlwriter, array $params)
 	{
