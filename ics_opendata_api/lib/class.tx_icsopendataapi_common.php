@@ -31,7 +31,6 @@
  *
  *   58: class tx_icsopendataapi_common extends tslib_pibase
  *
- *              SECTION: < database table */
  *   80:     function tx_icsopendataapi_common()
  *   90:     function init()
  *  102:     function renderContentError($msg)

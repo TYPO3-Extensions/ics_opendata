@@ -31,7 +31,6 @@
  *
  *   63: class tx_icsopendataapi_pi6 extends tx_icsopendataapi_common
  *
- *              SECTION: < Default applications restriction */
  *   77:     function main($content, $conf)
  *   91:     function showscreenshot(element)
  *  107:     function setCurrent(element)

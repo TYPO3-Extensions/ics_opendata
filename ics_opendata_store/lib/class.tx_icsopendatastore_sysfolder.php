@@ -39,7 +39,6 @@
  *
  *   67: class tx_icsopendatastore_sysfolder
  *
- *              SECTION: < Storage pid */
  *   76:     static function getPid()
  *   87:     static function init()
  *  103:     static function getAvailable()

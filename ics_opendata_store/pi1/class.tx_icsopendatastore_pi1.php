@@ -31,7 +31,6 @@
  *
  *  101: class tx_icsopendatastore_pi1 extends tslib_pibase
  *
- *              SECTION: < Default search criteria */
  *  102:     function main($content, $conf)
  *  151:     function init()
  *  254:     function renderSearh()
