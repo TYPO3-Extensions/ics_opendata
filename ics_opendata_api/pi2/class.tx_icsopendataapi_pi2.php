@@ -113,6 +113,7 @@ class tx_icsopendataapi_pi2 extends tx_icsopendataapi_common {
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('error_group')));
 		}
 
+		$succes = true;
 		$uid = $this->piVars['keyuid'];
 
 		if ($uid) {
