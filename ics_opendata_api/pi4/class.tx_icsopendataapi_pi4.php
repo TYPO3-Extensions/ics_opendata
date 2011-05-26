@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In Cité Solution <technique@in-cite.net>
+*  (c) 2010 Tsi <tsi@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,30 +21,10 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/*
- * $Id$
- */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *
- *
- *   63: class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common
- *
- *   77:     function main($content, $conf)
- *   92:     function showscreenshot(element)
- *  108:     function setCurrent(element)
- *  154:     function init()
- *  177:     function confValidator()
- *  208:     function getDetailContent()
- *  225:     function detailView($content,$row)
- *  264:     function getListContent()
- *  290:     function listView($content,$rows=array())
- *  420:     function renderScreenshot($fieldname, $fieldconf, $value)
- *
- * TOTAL FUNCTIONS: 10
- * (This index is automatically created/updated by the extension "extdeveval")
- *
+ * Hint: use extdeveval to insert/update function index above.
  */
 
 require_once(t3lib_extMgm::extPath('ics_opendata_api') . 'lib/class.tx_icsopendataapi_common.php');
@@ -63,15 +43,15 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 	var $prefixId      = 'tx_icsopendataapi_pi4';		// Same as class name
 	var $scriptRelPath = 'pi4/class.tx_icsopendataapi_pi4.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_opendata_api';	// The extension key.
-	var $debugger	   = false; /**< Activate debugger mode */
-	var $where_restriction = ''; /**< Default applications restriction */
-
+	var $debugger	   = false;
+	var $where_restriction = '';
+	
 	/**
 	 * The main method of the PlugIn
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The		content that is displayed on the website
+	 * @return	The content that is displayed on the website
 	 */
 	function main($content, $conf) {
 		$this->where_restriction = ' AND `'.$this->tables['applications'].'`.`publication_date` >0 AND `'.$this->tables['applications'].'`.`publication_date` <'.time().' AND `'.$this->tables['applications'].'`.`lock_publication` = 0 AND `'.$this->tables['applications'].'`.`publish` = 1';
@@ -79,7 +59,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
-
+		
 		if( $this->confValidator() ){
 			$this->init();
 			if($this->debugger){
@@ -87,7 +67,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 				var_dump($this->piVars);
 			}
 			$GLOBALS['TSFE']->additionalHeaderData[$this->extKey] .= '
-			<script language="javascript" type="text/javascript">
+			<script language="javascript" type="text/javascript"> 
 				function showscreenshot(element){
 					for(i=0; i<3; i++){
 						elt = "' . $this->prefixId . '_screenshot" +i;
@@ -97,7 +77,6 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 					}
 					document.getElementById(element).style.display = "block";
 				}
-
 				function setCurrent(element){
 					for(i=0; i<3; i++){
 						elt = "' . $this->prefixId . '_min" +i;
@@ -138,12 +117,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 
 			return $this->pi_wrapInBaseClass($content);
 	}
-
-	/**
-	 * Configuration init
-	 *
-	 * @return	void
-	 */
+	
 	function init(){
 		parent::init();
 		if(!isset($this->piVars['page']) || !is_numeric($this->piVars["page"])){
@@ -161,12 +135,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		}
 		$this->piVars['maxRows'] = $this->piVars['page'] * $rows_by_page;
 	}
-
-	/**
-	 * Configuration validation
-	 *
-	 * @return	boolean
-	 */
+	
 	function confValidator(){
 		$ret = true;
 		//Validator setting
@@ -179,7 +148,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		}
 		else{
 			$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
-
+			
 			//Validator TCA field
 			if( !in_array($this->conf['list.']['orderDefault'],$orderAvailable) ||
 				!$this->existInApplicationTCA($this->conf['list.']['orderDefault']) ){
@@ -193,28 +162,22 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		return $ret;
 	}
 
+	
+	
 	/**
 	 * Retrieves content
-	 *
-	 * @return	string		content details of application
+	 * @return string content details of application
 	 */
 	function getDetailContent(){
 		global $TCA;
-
+		
 		$applications = $this->getApplications(tx_icsopendataapi_common::APPMODE_SINGLE, null, $this->piVars['uid']);
-
+		
 		if($applications)
 			return $applications[0];
 		return false;
 	}
-
-	/**
-	 * Render application details
-	 *
-	 * @param	string		$content: content
-	 * @param	array		$row: application data
-	 * @return	string		content
-	 */
+	
 	function detailView($content,$row){
 		global $TCA;
 		$table = $this->tables['applications'];
@@ -225,7 +188,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		$markerArray = array(
 			'###APPLICATION###' => $row['application'],
 			'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
-			'###DESCRIPTION###' => $row['description'],
+			'###DESCRIPTION###' => $this->renderText($row['description']),
 			'###DOWNLOAD###' => $row['count_use'],
 			'###PUBLISHER###' => $row['name'],
 			'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['publication_date']),
@@ -242,23 +205,22 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 			}
 		}
 		$content .= $this->cObj->substituteMarkerArrayCached(
-			$template,
-			$markerArray,
-			$subpartArray
+			$template, 
+			$markerArray, 
+			$subpartArray 
 		);
 		return $content;
 	}
-
+	
 	/**
 	 * Retrieves content
-	 *
-	 * @return	string		content details of application
+	 * @return string content details of application
 	 */
 	function getListContent(){
 		global $TCA;
-
+				
 		$number_applications = $this->getApplications(tx_icsopendataapi_common::APPMODE_ALL, 'count');
-
+		
 		if($number_applications && isset($number_applications[0]['count']) && $number_applications[0]['count']>0){
 			$this->piVars['maxRows'] = $number_applications[0]['count'];
 			$parameter = array(
@@ -269,22 +231,15 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 		}
 		else
 			$applications = false;
-
+		
 		return $applications;
 	}
-
-	/**
-	 * Render applications list
-	 *
-	 * @param	string		$content: content
-	 * @param	array		$row: applications data
-	 * @return	string		content
-	 */
+	
 	function listView($content,$rows=array()){
 		global $TCA;
 		$table = $this->tables['applications'];
 		t3lib_div::loadTCA($table);
-
+		
 		$html = $this->cObj->fileResource($this->templateFile);
 
 		if(!$html || $html == '')
@@ -296,9 +251,9 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 			$template['TEMPLATE'] = $this->cObj->getSubpart($template['TEMPLATE'], '###LIST###');
 
 			$template['COLS'] = $this->cObj->getSubpart($template['TEMPLATE'], '###COLS###');
-
+			
 			$template['ROWS'] = $this->cObj->getSubpart($template['COLS'], '###ROWS###');
-
+			
 			//<!-- Cols build start
 			$markers_array = array();
 			$content_cols = '';
@@ -314,10 +269,10 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 					'###PUBLISHER###' => $row['name'],
 					'###DOWNLOAD###' => $row['count_use'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['publication_date']),
-					'###DESCRIPTION###' => t3lib_div::fixed_lgd( $row['description'],$this->conf['list.']['descSize']),
+					'###DESCRIPTION###' => $this->renderText($row['description'],$this->conf['list.']['descSize']),
 					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid']) )
 				);
-
+				
 				$subpartArray = array();
 				// Hook
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
@@ -326,47 +281,47 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 						$_procObj->applicationFieldsRenderData($markerArray, $subpartArray, $template['ROWS'], $row, $this->conf, $this);
 					}
 				}
-
+				
 				// Row build
-				$content_rows .= $this->cObj->substituteMarkerArrayCached($template['ROWS'],$markerArray, $subpartArray);
+				$content_rows .= $this->cObj->substituteMarkerArrayCached($template['ROWS'],$markerArray, $subpartArray); 
 				//Build a col all n rows
 				if($count_rows%$this->conf['list.']['rowsByCol'] == 0 && $count_rows > 0){
 					$count_cols++;
-					$content_cols .= $this->cObj->substituteMarkerArrayCached($template['COLS'], array('###NUM_COL###' => $count_cols), array('###ROWS###'=>$content_rows));
+					$content_cols .= $this->cObj->substituteMarkerArrayCached($template['COLS'], array('###NUM_COL###' => $count_cols), array('###ROWS###'=>$content_rows));  
 					$content_rows = '';
 				}
 			}
 			// Build the last col if need
 			if($count_rows%$this->conf['list.']['rowsByCol'] != 0 && $count_rows > 0){
 				$count_cols++;
-				$content_cols .= $this->cObj->substituteMarkerArrayCached($template['COLS'], array('###NUM_COL###' => $count_cols), array('###ROWS###'=>$content_rows));
+				$content_cols .= $this->cObj->substituteMarkerArrayCached($template['COLS'], array('###NUM_COL###' => $count_cols), array('###ROWS###'=>$content_rows));  
 			}
 			//Cols build end -->
-
+			
 			//<!-- Header build start
-
+			
 			$template['FIRST_PAGE'] = '';
 			$template['LAST_PAGE'] = '';
 			if($this->piVars['page'] > 0)
 				$template['FIRST_PAGE'] = $this->cObj->getSubpart($template['TEMPLATE'], '###HIDE_FIRST_PAGE###');
-
-
+			
+			
 			$rows_by_page = $this->conf['list.']['colNum'] * $this->conf['list.']['rowsByCol'];
 			$pages = $this->piVars['maxRows']/$rows_by_page;
 			$pages = (int)$pages;
 			if($this->piVars['page'] * $rows_by_page + $rows_by_page < $this->piVars['maxRows'])
 				$template['LAST_PAGE'] = $this->cObj->getSubpart($template['TEMPLATE'], '###HIDE_LAST_PAGE###');
-
+						
 			$content_pages ='';
 
 			$markerArray = array(
 				'###FIRST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => 0, $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
 				'###LAST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => ($pages), $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
 			);
-
+			
 			$template['FIRST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['FIRST_PAGE'],$markerArray);
-
-			$template['LAST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['LAST_PAGE'],$markerArray);
+			
+			$template['LAST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['LAST_PAGE'],$markerArray); 
 
 			if($pages > 1){
 				for($i=0; $i<$pages+1; $i++){
@@ -382,7 +337,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 			foreach($orderAvailable as $k=>$v){
 				$label = str_replace('LLL:EXT:ics_opendata_api/locallang_db.xml:','',$TCA[$table]['columns'][$v]['label']);
 				if($k == $this->piVars['sort']) {
-
+					
 					$sort_content .= $separator . '<span class="current">'.htmlspecialchars($this->pi_getLL($label)) . '</span>';
 					}
 				else {
@@ -393,22 +348,24 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 			$markerArray = array(
 				'###SORT###' => $sort_content,
 				'###PAGES###' => $content_pages,
-			);
+			);			
 			//Header build end -->
-
+			
 			//Final link
 			$content .= $this->cObj->substituteMarkerArrayCached($template['TEMPLATE'], $markerArray, array('###COLS###'=>$content_cols, '###HIDE_FIRST_PAGE###'=>$template['FIRST_PAGE'], '###HIDE_LAST_PAGE###'=>$template['LAST_PAGE']));
 			return $content;
 		}
 	}
+	
+	
 
 	/**
 	 * Render screenshot content
+	 * @param string $fieldname
+	 * @param array $fieldconf
+	 * @param string or array $value
 	 *
-	 * @param	string		$fieldname
-	 * @param	array		$fieldconf
-	 * @param	string		or array $value
-	 * @return	string		content
+	 * @return string content
 	 */
 	function renderScreenshot($fieldname, $fieldconf, $value){
 		global $TSFE;
@@ -426,7 +383,7 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 						<img src="' . $fieldconf['config']['uploadfolder'] . '/' . $file . '" alt="logo" title="screenshot ' . $key . '" style="display: none;" id="' . $this->prefixId . '_screenshot' . $key . '"/>
 					';
 				}
-
+				
 				$imgResource = $this->cObj->getImgResource( $fieldconf['config']['uploadfolder'] . '/' . $file, array('width'=>'150m'));
 				if($key==0){
 					$img .= '
@@ -455,6 +412,24 @@ class tx_icsopendataapi_pi4 extends tx_icsopendataapi_common {
 			';
 		}
 		return $content;
+	}
+	
+	/**
+	 * Render text content
+	 *
+	 * @param string $text
+	 * @param int $limit
+	 * @return text
+	 */
+	function renderText ($text, $limit = 0) {
+		if($limit >0 ) {
+			$text = t3lib_div::fixed_lgd(strip_tags($text),$limit);
+		} else {
+			$text = strip_tags($text);
+			$text = ereg_replace("(http[s]?://)([^<>,[:space:]]+[[:alnum:]/])", "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $text);
+		}
+		$text = nl2br($text);
+		return $text;
 	}
 
 }
