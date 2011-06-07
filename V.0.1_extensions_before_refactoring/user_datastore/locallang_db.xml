@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- $Id$ -->
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'ics_opendata_store'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_icsopendataapi_applications.tx_userdatastore_categories">Categories</label>
+			<label index="tx_icsopendataapi_applications.tx_userdatastore_filegroups">Filegroup</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="tx_icsopendataapi_applications.tx_userdatastore_categories">Catégories</label>
+			<label index="tx_icsopendataapi_applications.tx_userdatastore_filegroups">Jeux de données</label>
+		</languageKey>
+	</data>
+</T3locallang>

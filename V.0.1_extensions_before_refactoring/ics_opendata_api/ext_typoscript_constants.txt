@@ -1,0 +1,21 @@
+# $Id$
+
+plugin.ics_opendata_api {
+	# cat=plugin.ics_opendata_api//; type=int; label= pidStorage : Storage folder for api's key
+	pid =
+	# cat=plugin.ics_opendata_api//; type=string; label= Usergroup : api usergroups, separated by coma
+	usergroup =
+	# cat=plugin.ics_opendata_api//; type=int; label= Edit : Edit page id for api's key
+	edit = 
+	# cat=plugin.ics_opendata_api//; type=int; label= Stat : Stat page id for api's key
+	stat =
+	
+	# cat=plugin.ics_opendata_api//; type=int; label= Create : Create page id for api's key
+	create =
+	
+	# cat=plugin.ics_opendata_api//; type=int; label= View : View page id for api's key
+	view =
+
+	# cat=plugin.ics_opendata_api//; type=string; label= Template file : The template file path
+	template = 
+}

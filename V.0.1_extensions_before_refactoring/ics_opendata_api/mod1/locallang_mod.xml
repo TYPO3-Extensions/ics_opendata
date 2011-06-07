@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- $Id$ -->
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txicsapikrM1&quot; - header, description</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">Commands documentation</label>
+			<label index="mlang_labels_tabdescr">Documentation of API commands</label>
+			<label index="mlang_labels_tablabel">cmddocs</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="mlang_tabs_tab">Documentation des commandes</label>
+			<label index="mlang_labels_tabdescr">Documentation des commandes de l'API</label>
+			<label index="mlang_labels_tablabel">cmddocs</label>
+		</languageKey>
+	</data>
+	<orig_hash type="array">
+		<languageKey index="fr" type="array">
+			<label index="mlang_tabs_tab" type="integer">259728301</label>
+			<label index="mlang_labels_tabdescr" type="integer">53728827</label>
+			<label index="mlang_labels_tablabel" type="integer">250975927</label>
+		</languageKey>
+	</orig_hash>
+	<orig_text type="array">
+		<languageKey index="fr" type="array">
+			<label index="mlang_tabs_tab">Commands documentation</label>
+			<label index="mlang_labels_tabdescr">Documentation of API commands</label>
+			<label index="mlang_labels_tablabel">cmddocs</label>
+		</languageKey>
+	</orig_text>
+</T3locallang>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- $Id$ -->
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'ics_opendata'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="moduleFunction.tx_icsopendata_modfunc1">Create a new opendata extension</label>
+			<label index="moduleFunction.tx_icsopendata_modfunc2">Edit opendata extension</label>
+		</languageKey>
+	</data>
+</T3locallang>

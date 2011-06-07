@@ -1,0 +1,12 @@
+# $Id$
+
+plugin.tx_icsopendataapi {
+	# Stockage folder for api's key
+	pid =
+	# Edit page for api's key
+	edit = 
+	# Stat page for api's key
+	stat =
+	# Stat page for api's key
+	create =
+}
