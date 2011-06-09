@@ -78,7 +78,7 @@
 			<label index="tx_icsoddatastore_filegroups.release_date">Date de sortie</label>
 			<label index="tx_icsoddatastore_filegroups.update_date">Date de mise à jour</label>
 			<label index="tx_icsoddatastore_filegroups.time_period">Période de validité</label>
-			<label index="tx_icsoddatastore_filegroups.update_frequency">Frequence</label>
+			<label index="tx_icsoddatastore_filegroups.update_frequency">Fréquence</label>
 			<label index="tx_icsoddatastore_filegroups.publisher">Editeur</label>
 			<label index="tx_icsoddatastore_filegroups.creator">Créateur</label>
 			<label index="tx_icsoddatastore_filegroups.manager">Gestionnaire</label>
