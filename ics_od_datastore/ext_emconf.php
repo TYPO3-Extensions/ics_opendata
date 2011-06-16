@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Opendata Datastore',
-	'description' => '',
+	'description' => 'Opendata plugins and module for Data Store. Support public store, RSS and BE module for dataset.',
 	'category' => 'plugin',
 	'author' => 'In Cite Solution',
 	'author_email' => 'technique@in-cite.net',

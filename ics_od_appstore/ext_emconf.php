@@ -12,12 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Opendata Applications Store',
-	'description' => 'This extension supplies applications store and a developper\'s area to manage there applications.
-Developpers can register new application and obtain an unique key application for this application.
-Developpers can edit, publish and application too.
-Developpers can look at applications calls statistics.
-
-Applications store show all developpers applications published.',
+	'description' => 'Opendata plugins for Applications Store. Support public store and plugins for applications owner to manage applications.',
 	'category' => 'plugin',
 	'author' => 'In Cite Solution',
 	'author_email' => 'technique@in-cite.net',

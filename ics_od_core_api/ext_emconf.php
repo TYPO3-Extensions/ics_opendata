@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Opendata API',
-	'description' => 'A simple API implementation for data requests.',
+	'description' => 'Main controller for XML/JSON access. Can use any specific command handlers.',
 	'category' => 'misc',
 	'author' => 'In Cite Solution',
 	'author_email' => 'technique@in-cite.net',

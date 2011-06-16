@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Opendata Appstore Datastore Relation',
-	'description' => 'The relation between open data datastore and appstore',
+	'description' => 'The relation between opendata datastore and appstore',
 	'category' => 'plugin',
 	'author' => 'In Cite Solution',
 	'author_email' => 'technique@in-cite.net',
