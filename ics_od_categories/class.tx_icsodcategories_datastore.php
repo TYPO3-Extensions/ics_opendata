@@ -129,7 +129,7 @@ class tx_icsodcategories_datastore {
 			$output = '';
 			foreach ($categories as $category) {
 				$checked = '';
-				if (in_array($category['uid'], $object->piVars['categories']))
+				if (is_array($object->piVars['categories']) && in_array($category['uid'], $object->piVars['categories']))
 					$checked = 'checked="checked"';
 
 				$markersCategories = array(

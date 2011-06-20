@@ -64,7 +64,8 @@ class tx_icsodstoresrel_appsDatasets {
 			foreach ($datasets as $dataset) {
 				$markers['###DATASET_VALUE###'] = htmlspecialchars($dataset['uid']);
 				$markers['###DATASET_LABEL###'] = htmlspecialchars($dataset['title']);
-				if (in_array($dataset['uid'], $applicationDatasets))
+				// if (in_array($dataset['uid'], $applicationDatasets))
+				if ( is_array($applicationDatasets) && in_array($dataset['uid'], $applicationDatasets))
 					$markers['###DATASET_SELECTED###'] = 'selected="selected"';
 				else
 					$markers['###DATASET_SELECTED###'] = '';
