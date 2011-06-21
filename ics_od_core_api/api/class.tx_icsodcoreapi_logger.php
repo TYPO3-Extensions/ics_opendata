@@ -42,7 +42,7 @@ class tx_icsodcoreapi_logger {
 	/**
 	 * Initializes the logger.
 	 *
-	 * @param	array		$params: The service parameters
+	 * @param	array	$params: The service parameters
 	 * @return	void
 	 */
 	function init(array $params) {
@@ -52,7 +52,7 @@ class tx_icsodcoreapi_logger {
 		$row = $this->getRow();
 		$this->pid = $row['pid'];
 		$this->rid = $row['uid'];
-		$this->usage = $row['count_use'];
+		$this->usage = $row['countcall'];
 	}
 
 	/**
@@ -78,7 +78,7 @@ class tx_icsodcoreapi_logger {
 			'pid' => $this->pid,
 			'tstamp' => time(),
 			'crdate' => time(),
-			'tx_icsodcoreapi_application' => $this->rid,
+			'application' => $this->rid,
 			'ip' => t3lib_div::getIndpEnv('REMOTE_ADDR'),
 			'cmd' => $this->cmd,
 		);
@@ -95,7 +95,7 @@ class tx_icsodcoreapi_logger {
 	private function incrementsUsage() {
 		global $TYPO3_DB;
 		// Hardcoded update for concurrency support.
-		$TYPO3_DB->sql_query('UPDATE tx_icsodcoreapi_applications SET count_use = count_use + 1, tstamp = UNIX_TIMESTAMP() WHERE uid = ' . $this->rid);
+		$TYPO3_DB->sql_query('UPDATE tx_icsodappstore_applications SET countcall = countcall + 1, tstamp = UNIX_TIMESTAMP() WHERE uid = ' . $this->rid);
 	}
 
 	/**
@@ -107,8 +107,8 @@ class tx_icsodcoreapi_logger {
 		global $TYPO3_DB;
 		$rows = $TYPO3_DB->exec_SELECTgetRows(
 			'*',
-			'tx_icsodcoreapi_applications',
-			'key_appli = ' . $TYPO3_DB->fullquotestr($this->key, $table) . ' ' .
+			'tx_icsodappstore_applications',
+			'apikey = ' . $TYPO3_DB->fullquotestr($this->key, $table) . ' ' .
 			'AND hidden = 0 AND deleted = 0'
 		);
 		return $rows[0];
