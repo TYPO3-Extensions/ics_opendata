@@ -73,7 +73,7 @@ class tx_icsodcoreapi_logger {
 	private function insertCall() {
 		global $TYPO3_DB;
 
-		$table = 'tx_icsodcoreapi_logs';
+		$table = 'tx_icsodappstore_logs';
 		$insertArray = array(
 			'pid' => $this->pid,
 			'tstamp' => time(),
