@@ -51,6 +51,7 @@
 
 require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/randomGenerator.php');
 require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/class.tx_icsodappstore_common.php');
+require_once (t3lib_extMgm::extPath('xajax') . 'class.tx_xajax.php');
 
 
 /**
@@ -65,6 +66,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 	var $scriptRelPath = 'pi2/class.tx_icsodappstore_pi2.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_od_appstore';	// The extension key.
 
+	var $xajax;
 
 	/**
 	 * The main method of the PlugIn
@@ -155,6 +157,29 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 
 		t3lib_div::loadTCA($this->tables['applications']);
 
+        // Instanciation de l'objet ajax
+        $this->xajax = t3lib_div::makeInstance('tx_xajax');
+		$url = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
+		
+		$this->xajax->setRequestURI($url);
+        // Appel ? une fonction pour d?coder les donn?es
+        $this->xajax->decodeUTF8InputOn();
+        // Encodage de la r?ponse au format UTF-8
+        $this->xajax->setCharEncoding('utf-8');
+        // Pour ?viter les conflits avec l'extension, on rajoute un prefix suppl?mentaire
+        $this->xajax->setWrapperPrefix($this->prefixId);
+        // Affichage des messages dans la barre de statut
+        $this->xajax->statusMessagesOn();
+        // Mode debug
+        if ($this->conf['xajax.']['debug'])
+			$this->xajax->debugOn();
+        // Nom des fonctions PHP pour le traitement des donn?es (tr?s important)
+        $this->xajax->registerFunction(array('filterPlatforms', &$this, 'filterPlatforms'));
+        // If this is an xajax request call our registered function, send output and exit
+        $this->xajax->processRequests();
+        // Else create javacript and add it to the normal output
+        $GLOBALS['TSFE']->additionalHeaderData[$this->extKey] .= $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('xajax'));
+
 		return true;
 	}
 
@@ -218,9 +243,13 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		$subpart_screenshot = $this->cObj->getSubpart($template, '###TEMPLATE_SCREENSHOT###');
 		$screenshot = $this->renderFieldImage($application['screenshot'], 'screenshot', $subpart_screenshot);
 
+		$subpart_platforms = $this->cObj->getSubpart($template, '###TEMPLATE_PLATFORMS###');
+		$platforms = $this->renderPlatforms(null, $subpart_platforms);
+		
 		$subpartArray = array(
 			'###TEMPLATE_LOGO###' => $logo,
-			'###TEMPLATE_SCREENSHOT###' => $screenshot
+			'###TEMPLATE_SCREENSHOT###' => $screenshot,
+			'###TEMPLATE_PLATFORMS###' => $platforms,
 		);
 
 		// Hook pour modifier les conf
@@ -317,9 +346,13 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		$subpart_screenshot = $this->cObj->getSubpart($template, '###TEMPLATE_SCREENSHOT###');
 		$screenshot = $this->renderFieldImage($application['screenshot'], 'screenshot', $subpart_screenshot);
 
+		$subpart_platforms = $this->cObj->getSubpart($template, '###TEMPLATE_PLATFORMS###');
+		$platforms = $this->renderPlatforms($application, $subpart_platforms);
+		
 		$subpartArray = array(
 			'###TEMPLATE_LOGO###' => $logo,
-			'###TEMPLATE_SCREENSHOT###' => $screenshot
+			'###TEMPLATE_SCREENSHOT###' => $screenshot,
+			'###TEMPLATE_PLATFORMS###' => $platforms,
 		);
 
 		// Hook pour modifier les conf
@@ -631,9 +664,9 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			'###DESCRIPTION_LABEL###' => htmlspecialchars($this->pi_getLL('description')),
 			'###DESCRIPTION###' => $this->prefixId.'[description]',
 			'###DESCRIPTION_VALUE###' => $this->piVars['description'] ? $this->piVars['description'] : '',
-			'###PLATFORM_LABEL###' => htmlspecialchars($this->pi_getLL('platform')),
-			'###PLATFORM###' => $this->prefixId.'[platform]',
-			'###PLATFORM_VALUE###' => $this->piVars['platform'] ? $this->piVars['platform'] : '',
+			// '###PLATFORM_LABEL###' => htmlspecialchars($this->pi_getLL('platform')),
+			// '###PLATFORM###' => $this->prefixId.'[platform]',
+			// '###PLATFORM_VALUE###' => $this->piVars['platform'] ? $this->piVars['platform'] : '',
 			'###LINK_LABEL###' => htmlspecialchars($this->pi_getLL('link')),
 			'###LINK###' => $this->prefixId.'[link]',
 			'###LINK_VALUE###' => $this->piVars['link'] ? $this->piVars['link'] : '',
@@ -652,6 +685,77 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		return $markerArray;
 	}
 
+	/**
+	 * Récupère les marqueurs des plateformes du formulaire
+	 *
+	 * @param	array	$application	L'application en cours d'édition
+	 * @param	string	$template		Le gabarit des plateformes
+	 * @return	string	Le gabarit
+	 */
+	private function renderPlatforms($application = null, $template) {
+		if (isset($application)) {
+			$resAppPlatforms = $this->getAppPlatforms($application);
+			$appPlatformIDs = array();
+			while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
+				$appPlatformIDs[] = $platform['uid'];
+			}
+		}
+		$platforms = $this->getAllPlatforms();
+		$markers = array(
+			'###PLATFORMS_LABEL###' => htmlspecialchars($this->pi_getLL('platforms')),
+			'###FILTER_PLATFORMS###' => $this->prefixId.'[filterPlatforms]',
+			'###BTN_FILTER_PLATFORMS###' => $this->prefixId.'[btn_filterPlatforms]',
+			'###ONCLICK_FILTER_PLATFORMS###' => 'onClick="var search = document.getElementById(\'filter_platforms\').value; var appID = document.getElementById(\'uid\').value; tx_icsodappstore_pi2filterPlatforms(search, appID);"'
+		);
+		$subpartGroup = $this->cObj->getSubpart($template, '###GROUP_PLATFORMS###');
+		foreach ($platforms as $id=>$platform) {
+			$markersGroup = array(
+				'###PLATFORM_LABEL###' => $platform['title'],
+				'###PLATFORM###' => $this->prefixId.'[platform][' . $platform['uid'] . ']',
+				'###PLATFORM_ID###' => $this->prefixId . '_platform_' . $platform['uid'],
+				'###CHECKED###' => (in_array($platform['uid'], $appPlatformIDs))? 'checked="checked"' : '',
+			);
+			$platformsContent .= $this->cObj->substituteMarkerArray($subpartGroup, $markersGroup);
+		}
+		$template = $this->cObj->substituteSubpart($template, '###GROUP_PLATFORMS###', $platformsContent);
+		$template = $this->cObj->substituteMarkerArray($template, $markers);
+		return $template;
+	}
+	
+	/**
+	 * Sélectionne les plateformes
+	 *
+	 * @param	string	$search	L'expression recherchée
+	 * @param	int		$appID	L'id de l'application
+	 * @return	mixed	La réponse xajax
+	 */
+	function filterPlatforms($search, $appID) {
+		$objResponse = new tx_xajax_response();
+		if ($appID) {
+			$resAppPlatforms = $this->getAppPlatforms(array('uid' => $appID));
+			$appPlatformIDs = array();
+			while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
+				$appPlatformIDs[] = $platform['uid'];
+			}
+		}
+		if ($search) {
+			$platforms = $this->getPlatforms($search);
+			foreach ($platforms as $id=>$platform) {
+				$platformsContent .= '<div class="platform">
+						<input type="checkbox" 
+							name="' . $this->prefixId.'[platform][' . $platform['uid'] . ']' . '" 
+							id="' . $this->prefixId . '_platform_' . $platform['uid'] . '" ' . 
+							((in_array($platform['uid'], $appPlatformIDs))? 'checked="checked"' : '') . '/>
+						<label for="' . $this->prefixId . '_platform_' . $platform['uid'] . '">' . $platform['title'] . '</label>
+					</div>
+				';
+			}
+			if($platformsContent != '')
+				$objResponse->addAssign('platforms', 'innerHTML', $platformsContent);
+		}
+
+		return $objResponse->getXML();
+	}
 }
 
 

@@ -11,6 +11,7 @@
 			<label index="name">Application</label>
 			<label index="description">Description</label>
 			<label index="platform">Platform</label>
+			<label index="platforms">Platforms</label>
 			<label index="logo">Logo</label>
 			<label index="key">Key</label>
 			<label index="nologin">Any user are connected..</label>
@@ -35,6 +36,7 @@
 			<label index="name">Application</label>
 			<label index="description">Description</label>
 			<label index="platform">Plateforme</label>
+			<label index="platforms">Plateformes</label>
 			<label index="key">Clé</label>
 			<label index="nologin">Merci de vous identifier, pour pouvoir accéder aux applications.</label>
 			<label index="edit">Éditer</label>

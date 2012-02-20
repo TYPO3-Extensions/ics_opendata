@@ -116,7 +116,7 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 			'###APPLICATION_CAPTION###' => htmlspecialchars($this->pi_getLL('titre')),
 			'###TITLE_NOM###' => htmlspecialchars($this->pi_getLL('name')),
 			'###TITLE_DESCRIPTION###' => htmlspecialchars($this->pi_getLL('description')),
-			'###TITLE_PLATFORM###' => htmlspecialchars($this->pi_getLL('platform')),
+			'###TITLE_PLATFORMS###' => htmlspecialchars($this->pi_getLL('platforms')),
 			'###TITLE_KEY###' => htmlspecialchars($this->pi_getLL('key')),
 			'###TITLE_MODIF###' => htmlspecialchars($this->pi_getLL('edit')),
 			'###TITLE_PUBLISH###' => htmlspecialchars($this->pi_getLL('publish')),
@@ -208,12 +208,19 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 
 					$subpart = $this->cObj->substituteSubpart($subpart, '###APPLICATION_PUBLISH###', '');
 				}
-
+				
+				$resAppPlatforms = $this->getAppPlatforms($application);
+				$appPlatforms = array();
+				while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
+					$appPlatforms[] = $platform['title'];
+				}
+				
+				
 				$markers = array(
 					'###NOM###' => $application['title'],
 					'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $application['logo'] ),
 					'###DESCRIPTION###' => $application['description'],
-					'###PLATFORM###' => $application['platform'],
+					'###PLATFORMS###' => implode(',', $appPlatforms),
 					'###KEY###' => $application['apikey'],
 					'###LINK_MODIF###' => $link_edit,
 					'###LABEL_MODIF###' => htmlspecialchars($this->pi_getLL('edit')),
@@ -233,6 +240,7 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 						$_procObj->applicationFieldsRenderData($markers, $subpartArray, $subpart, $application, $this->conf, $this);
 					}
 				}
+
 				$content .= $this->cObj->substituteMarkerArrayCached($subpart, $markers, $subpartArray);
 
 			}

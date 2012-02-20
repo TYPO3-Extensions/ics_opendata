@@ -13,6 +13,7 @@
 			<label index="name">Name * : </label>
 			<label index="description">Description * : </label>
 			<label index="platform">Platform : </label>
+			<label index="platforms">Platform : </label>
 			<label index="btn_registration">Register</label>
 			<label index="btn_back">Go back</label>
 			<label index="application_updated">The application is updated.</label>
@@ -45,6 +46,7 @@
 			<label index="name">Nom * :</label>
 			<label index="description">Description * :</label>
 			<label index="platform">Plateforme :</label>
+			<label index="platforms">Plateformes :</label>
 			<label index="btn_registration">Enregistrer</label>
 			<label index="back">Retour</label>
 			<label index="application_updated">L'application a été modifiée.</label>

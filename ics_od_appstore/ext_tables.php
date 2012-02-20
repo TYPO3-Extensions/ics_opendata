@@ -55,6 +55,24 @@ $TCA['tx_icsodappstore_statistics'] = array (
 );
 
 
+$TCA['tx_icsodappstore_platforms'] = array (
+	'ctrl' => array (
+		'title'     => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_platforms',
+		'label'     => 'title',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY title',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_icsodappstore_platforms.gif',
+	),
+);
+
+
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
 

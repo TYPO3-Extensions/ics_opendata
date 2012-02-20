@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsodappstore_applications'] = array (
 	'ctrl' => $TCA['tx_icsodappstore_applications']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,apikey,fe_cruser_id,title,description,platform,countcall,maxcall,release_date,logo,screenshot,link,update_date,lock_publication'
+		'showRecordFieldList' => 'hidden,apikey,fe_cruser_id,title,description,platform,platforms,countcall,maxcall,release_date,logo,screenshot,link,update_date,lock_publication'
 	),
 	'feInterface' => $TCA['tx_icsodappstore_applications']['feInterface'],
 	'columns' => array (
@@ -51,6 +51,19 @@ $TCA['tx_icsodappstore_applications'] = array (
 				'type' => 'input',	
 				'size' => '30',	
 				'eval' => 'trim',
+			)
+		),
+		'platforms' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_applications.platforms',		
+			'config' => array (
+				'type' => 'select',	
+				'foreign_table' => 'tx_icsodappstore_platforms',	
+				'foreign_table_where' => 'ORDER BY tx_icsodappstore_platforms.uid',	
+				'size' => '10',	
+				'minitems' => 0,
+				'maxitems' => 100,	
+				"MM" => "tx_icsodappstore_apps_platforms_mm",
 			)
 		),
 		'countcall' => array (		
@@ -153,7 +166,7 @@ $TCA['tx_icsodappstore_applications'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, apikey, fe_cruser_id, title, description, platform, countcall, maxcall, release_date, publish, logo, screenshot, link, update_date, lock_publication')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, apikey, fe_cruser_id, title, description, platform, platforms, countcall, maxcall, release_date, publish, logo, screenshot, link, update_date, lock_publication')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -277,5 +290,38 @@ $TCA['tx_icsodappstore_statistics'] = array (
 	'palettes' => array (
 		'1' => array('showitem' => '')
 	)
+);
+
+$TCA['tx_icsodappstore_platforms'] = array (
+    'ctrl' => $TCA['tx_icsodappstore_platforms']['ctrl'],
+    'interface' => array (
+        'showRecordFieldList' => 'hidden,title'
+    ),
+    'feInterface' => $TCA['tx_icsodappstore_platforms']['feInterface'],
+    'columns' => array (
+        'hidden' => array (        
+            'exclude' => 1,
+            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'config'  => array (
+                'type'    => 'check',
+                'default' => '0'
+            )
+        ),
+        'title' => array (        
+            'exclude' => 0,        
+            'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_platforms.title',        
+            'config' => array (
+                'type' => 'input',    
+                'size' => '30',    
+                'eval' => 'required,trim',
+            )
+        ),
+    ),
+    'types' => array (
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2')
+    ),
+    'palettes' => array (
+        '1' => array('showitem' => '')
+    )
 );
 ?>

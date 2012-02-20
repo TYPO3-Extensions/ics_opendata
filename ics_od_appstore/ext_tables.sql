@@ -13,7 +13,7 @@ CREATE TABLE tx_icsodappstore_applications (
 	apikey varchar(15) DEFAULT '' NOT NULL,
 	title varchar(255) DEFAULT '' NOT NULL,
 	description text,
-	old_platform varchar(255) DEFAULT '' NOT NULL,
+	platform varchar(255) DEFAULT '' NOT NULL,
 	platforms int(11) DEFAULT '0' NOT NULL
 	countcall int(11) DEFAULT '0' NOT NULL,
 	maxcall int(11) DEFAULT '0' NOT NULL,
@@ -28,8 +28,6 @@ CREATE TABLE tx_icsodappstore_applications (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
-
-#ALTER TABLE tx_icsodappstore_applications CHANGE COLUMN platform old_platform;
 
 
 #

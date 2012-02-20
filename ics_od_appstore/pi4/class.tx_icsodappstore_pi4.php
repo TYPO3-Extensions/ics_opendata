@@ -222,6 +222,11 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		$html = $this->cObj->fileResource($this->templateFile);
 		$template = array();
 		$template = $this->cObj->getSubpart($html, '###DETAIL###');
+		$resAppPlatforms = $this->getAppPlatforms($row);
+		$appPlatforms = array();
+		while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
+			$appPlatforms[] = $platform['title'];
+		}
 		$markerArray = array(
 			'###APPLICATION###' => $row['title'],
 			'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
@@ -231,6 +236,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 			'###SCREENSHOT###' => $this->renderScreenshot('screenshot', $TCA[$table]['columns']['screenshot'], $row['screenshot'] ),
 			'###LINK###' => '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>',
+			'###PLATFORMS###' => implode(',', $appPlatforms),
 			'###BACK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort']) )
 		);
 		$subpartArray = array();
@@ -307,6 +313,11 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			$count_rows = 0;
 			foreach($rows as $k => $row){
 				$count_rows++;
+				$resAppPlatforms = $this->getAppPlatforms($row);
+				$appPlatforms = array();
+				while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
+					$appPlatforms[] = $platform['title'];
+				}
 				$markerArray = array(
 					'###NUM_ROW###' => $count_rows,
 					'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
@@ -315,7 +326,8 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					'###DOWNLOAD###' => $row['countcall'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 					'###DESCRIPTION###' => t3lib_div::fixed_lgd( $row['description'],$this->conf['list.']['descSize']),
-					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid']) )
+					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid']) ),
+					'###PLATFORMS###' => implode(',', $appPlatforms),
 				);
 
 				$subpartArray = array();

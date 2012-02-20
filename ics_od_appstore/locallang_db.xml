@@ -10,7 +10,8 @@
 			<label index="tx_icsodappstore_applications.apikey">Application's key</label>
 			<label index="tx_icsodappstore_applications.title">Title</label>
 			<label index="tx_icsodappstore_applications.description">Description</label>
-			<label index="tx_icsodappstore_applications.platform">Platform</label>
+			<label index="tx_icsodappstore_applications.platform">Platform (deprecated)</label>
+			<label index="tx_icsodappstore_applications.platforms">Platforms</label>
 			<label index="tx_icsodappstore_applications.countcall">Count call</label>
 			<label index="tx_icsodappstore_applications.maxcall">Max call</label>
 			<label index="tx_icsodappstore_applications.release_date">Release date</label>
@@ -35,6 +36,8 @@
 			<label index="tx_icsodappstore_statistics.cmd">API's command</label>
 			<label index="tx_icsodappstore_statistics.count">Count calls</label>
 			<label index="tx_icsodappstore_statistics.date">Date</label>
+			<label index="tx_icsodappstore_platforms">Platforms</label>
+			<label index="tx_icsodappstore_platforms.title">Title</label>
 			<label index="tt_content.list_type_pi1">Display devloppers applications list</label>
 			<label index="tt_content.list_type_pi2">Application form</label>
 			<label index="tt_content.list_type_pi3">Statistics</label>
@@ -45,7 +48,8 @@
 			<label index="tx_icsodappstore_applications.apikey">Clé d'application</label>
 			<label index="tx_icsodappstore_applications.title">Nom</label>
 			<label index="tx_icsodappstore_applications.description">Description</label>
-			<label index="tx_icsodappstore_applications.platform">Plateforme</label>
+			<label index="tx_icsodappstore_applications.platform">Plateforme (obsolète)</label>
+			<label index="tx_icsodappstore_applications.platforms">Plateformes</label>
 			<label index="tx_icsodappstore_applications.countcall">Compteur d'appels</label>
 			<label index="tx_icsodappstore_applications.maxcall">Limite d'appels</label>
 			<label index="tx_icsodappstore_applications.release_date">Date de publication</label>
@@ -70,6 +74,8 @@
 			<label index="tx_icsodappstore_statistics.cmd">Commande d'API</label>
 			<label index="tx_icsodappstore_statistics.count">Compteur d'appels</label>
 			<label index="tx_icsodappstore_statistics.date">Date d'appel</label>
+			<label index="tx_icsodappstore_platforms">Plateformes</label>
+			<label index="tx_icsodappstore_platforms.title">Nom</label>
 			<label index="tt_content.list_type_pi1">Affiche la liste des applications développeurs</label>
 			<label index="tt_content.list_type_pi2">Formulaire d'application</label>
 			<label index="tt_content.list_type_pi3">Statistiques</label>

@@ -16,10 +16,27 @@
 			<label for="description" style="vertical-align: top;">###DESCRIPTION_LABEL###</label>
 			<textarea cols="50" rows="10" name="###DESCRIPTION###" id="description">###DESCRIPTION_VALUE###</textarea>
 		</div>
-		<div>
+		<!--  ###TEMPLATE_PLATFORMS### begin-->
+		<!--<div>
 			<label for="platform">###PLATFORM_LABEL###</label>
 			<input type="text" name="###PLATFORM###" value="###PLATFORM_VALUE###" id="platform" />
+		</div>-->
+		<div>
+			<label for="platforms">###PLATFORMS_LABEL###</label>
+			<div class="platforms" id="platforms">
+				<!-- ###GROUP_PLATFORMS### -->
+				<div class="platform">
+					<input type="checkbox" name="###PLATFORM###" id="###PLATFORM_ID###" ###CHECKED###/>
+					<label for="###PLATFORM_ID###">###PLATFORM_LABEL###</label>
+				</div>
+				<!-- ###GROUP_PLATFORMS### -->
+			</div>
+			<div class="searchPlatforms">
+				<input type="text" name="###FILTER_PLATFORMS###" value="" id="filter_platforms" />
+				<input type="button" name="###BTN_FILTER_PLATFORMS###" value="Ok" id="btn_filter_platforms" ###ONCLICK_FILTER_PLATFORMS### />
+			</div>
 		</div>
+		<!--  ###TEMPLATE_PLATFORMS### end-->
 		<!-- ###TEMPLATE_LOGO### begin-->
 		<div class="file">
 			<label for="logo">###LOGO_LABEL###</label>
@@ -108,8 +125,7 @@
 			<th>###TITLE_LOGO###</th>
 			<th>###TITLE_NOM###</th>
 			<th>###TITLE_KEY###</th>
-			<!--<th>###TITLE_DESCRIPTION###</th>-->
-			<th>###TITLE_PLATFORM###</th>
+			<th>###TITLE_PLATFORMS###</th>
 			<th>###TITLE_PUBLISH###</th>
 			<th>###TITLE_ACTIONS###</th>
 		</tr>
@@ -119,8 +135,7 @@
 			<td>###LOGO###</td>
 			<td>###NOM###</td>
 			<td>###KEY###</td>
-			<!--<td>###DESCRIPTION###</td>-->
-			<td>###PLATFORM###</td>
+			<td>###PLATFORMS###</td>
 			<td>###PUBLISH###</td>
 			<td class="actions">
 				<!-- ###APPLICATION_PUBLISH### --><p><a href="###LINK_PUBLISH###">###LABEL_PUBLISH###</a></p><!-- ###APPLICATION_PUBLISH### -->
@@ -250,5 +265,5 @@
 
 
 <!-- ###TEMPLATE_ERROR### start -->
-<div class="tx-icsopendataapi-error">###ERROR_MSG###</div>
+<div class="tx-icsodappstore-error">###ERROR_MSG###</div>
 <!-- ###TEMPLATE_ERROR### end -->

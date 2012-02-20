@@ -29,17 +29,20 @@
  *
  *
  *
- *   58: class tx_icsodappstore_common extends tslib_pibase
+ *   61: class tx_icsodappstore_common extends tslib_pibase
  *
- *   80:     function tx_icsodappstore_common()
- *   90:     function init()
- *  102:     function renderContentError($msg)
- *  116:     function getApplications($mode, $selectFields = null, $parameter = null)
- *  275:     function existInApplicationTCA($field)
- *  293:     function getStatistics($selectFields = '', $whereFields = array(), $addWhereText = '', $groupby = '', $order = '', $limit = '', $debugger = false)
- *  345:     function renderLogo($fieldname, $fieldconf, $value)
+ *   85:     function tx_icsodappstore_common()
+ *   95:     function init()
+ *  110:     function renderContentError($msg)
+ *  124:     function getApplications($mode, $selectFields = null, $parameter = null)
+ *  283:     function existInApplicationTCA($field)
+ *  301:     function getStatistics($selectFields = '', $whereFields = array(), $addWhereText = '', $groupby = '', $order = '', $limit = '', $debugger = false)
+ *  353:     function renderLogo($fieldname, $fieldconf, $value)
+ *  375:     function getAppPlatforms($application)
+ *  392:     function getAllPlatforms()
+ *  406:     function getPlatforms($search)
  *
- * TOTAL FUNCTIONS: 7
+ * TOTAL FUNCTIONS: 10
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -68,6 +71,8 @@ class tx_icsodappstore_common extends tslib_pibase {
 		'applications' => 'tx_icsodappstore_applications',
 		'statistics' => 'tx_icsodappstore_statistics',
 		'users' => 'fe_users',
+		'platforms' => 'tx_icsodappstore_platforms',
+		'apps_platforms_mm' => 'tx_icsodappstore_apps_platforms_mm'
 	); /**< database table */
 
 
@@ -89,7 +94,7 @@ class tx_icsodappstore_common extends tslib_pibase {
 	function init() {
 		if (is_array($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icsodappstore.'])) {
 			$this->conf = array_merge($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icsodappstore.'], $this->conf);
-		}		
+		}
 		if ($this->conf['template'])
 			$this->templateFile = $this->conf['template'];
 		return true;
@@ -358,6 +363,51 @@ class tx_icsodappstore_common extends tslib_pibase {
 			return '<img src="' . $bigImage . '" alt="Logo" title="logo"/>';
 
 		return '';
+	}
+
+	/**
+	 * Retrieves application's platforms
+	 *
+	 * @param	array		$application	The application
+	 * @return	resource
+	 */
+	function getAppPlatforms($application) {
+		return $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			'`'.$this->tables['platforms'].'`.`uid`,`'.$this->tables['platforms'].'`.`title`',
+			$this->tables['applications'],
+			$this->tables['apps_platforms_mm'],
+			$this->tables['platforms'],
+			' AND `' . $this->tables['applications'] . '`.`uid` = ' . $application['uid'],
+			'',
+			$this->tables['platforms'].'.title'
+		);
+	}
+
+	/**
+	 * Retrieves all platforms
+	 *
+	 * @return	mixed		All platforms
+	 */
+	function getAllPlatforms() {
+		return $platforms_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'`uid`, `title`',
+			$this->tables['platforms'],
+			'1'
+		);
+	}
+
+	/**
+	 * Retrieves all platforms
+	 *
+	 * @param	string		$search	The string to search
+	 * @return	mixed		All platforms
+	 */
+	function getPlatforms($search) {
+		return $platforms_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'`uid`, `title`',
+			$this->tables['platforms'],
+			'1 AND (title LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ' OR uid LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ')'
+		);
 	}
 }
 
