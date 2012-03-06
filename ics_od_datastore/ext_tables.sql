@@ -79,27 +79,6 @@ CREATE TABLE tx_icsoddatastore_licences (
 
 
 
-#
-# Table structure for table 'tx_icsoddatastore_downloads'
-#
-CREATE TABLE tx_icsoddatastore_downloads (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	filegroup int(11) DEFAULT '0' NOT NULL,
-	ip varchar(40) DEFAULT '' NOT NULL,
-	file int(11) DEFAULT '0' NOT NULL,
-	
-	PRIMARY KEY (uid),
-	KEY parent (pid)
-);
-
-
-
 
 #
 # Table structure for table 'tx_icsoddatastore_files_filegroup_mm'
@@ -184,4 +163,66 @@ CREATE TABLE tx_icsoddatastore_filetypes (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
+);
+
+
+#
+# Table structure fo table 'tx_icsoddatastore_statistics'
+#
+CREATE TABLE tx_icsoddatastore_statistics (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+    deleted tinyint(4) DEFAULT '0' NOT NULL,
+    hidden tinyint(4) DEFAULT '0' NOT NULL,
+	date int(11) DEFAULT '0' NOT NULL,
+	filegroup int(11) DEFAULT '0' NOT NULL,
+	file int(11) DEFAULT '0' NOT NULL,
+	count int(11) DEFAULT '0' NOT NULL,
+    
+    PRIMARY KEY (uid),
+    KEY parent (pid),
+	KEY date(date)	
+);
+
+#
+# Table structure for table 'tx_icsoddatastore_downloads'
+#
+CREATE TABLE tx_icsoddatastore_downloads (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	filegroup int(11) DEFAULT '0' NOT NULL,
+	ip varchar(40) DEFAULT '' NOT NULL,
+	file int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_icsoddatastore_monthdownloads'
+#
+CREATE TABLE tx_icsoddatastore_monthdownloads (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	filegroup int(11) DEFAULT '0' NOT NULL,
+	ip varchar(40) DEFAULT '' NOT NULL,
+	file int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
 );
