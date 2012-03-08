@@ -110,8 +110,9 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				$orderBy = 'total DESC';
 				break;
 			case 'FILE':
-				$fields = array('file', 'filegroup', 'count');
-				$orderBy = 'count DESC';
+				$fields = array('file', 'filegroup', 'SUM(count) as total');
+				$groupBy = 'file';
+				$orderBy = 'total DESC';
 				break;
 			case 'CATEGORY':
 			default:
@@ -230,7 +231,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				$count = $row['total'];
 				break;
 			case 'FILE':
-				$count = $row['count'];
+				$count = $row['total'];
 				break;
 			case 'CATEGORY':
 			default:

@@ -4,6 +4,7 @@
 	* Feature: Implemented stats by datasets
 	* Feature: Partial implementation of stats by files
 	* Feature: Added pi3 flexform
+	* Fix: Bad implementation of stats by files
 
 2011-05-12 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sql table for files downloads statistics
