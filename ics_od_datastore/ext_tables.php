@@ -140,12 +140,14 @@ $TCA['tx_icsoddatastore_filetypes'] = array(
 
 
 t3lib_div::loadTCA('tt_content');
+$TCA['pages']['columns']['module']['config']['items'][] = array('LLL:EXT:ics_od_datastore/locallang.xml:sysfolder', 'datastore');
+
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
 
 $TCA['tt_content']['types'][$_EXTKEY.'_pi1']['showitem']='CType;;4;button;1-1-1, header;;3;;2-2-2,pi_flexform;;;;1-1-1'; // new! flexform
 
 // you add pi_flexform to be renderd when your plugin is shown
- $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='pi_flexform';                  // new! flexform
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='pi_flexform';                  // new! flexform
  
  // NOTE: Be sure to change ''sampleflex'' to the correct directory name of your extension!                   // new! flexform
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', 'FILE:EXT:ics_od_datastore/flexform_ds_pi1.xml');             // new! flexform
@@ -159,18 +161,13 @@ t3lib_extMgm::addPlugin(array(
 
 t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Data Store");
 
-
-// Plugin RSS
 if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_icsoddatastore_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_icsoddatastore_pi1_wizicon.php';
 }
 
-$TCA['pages']['columns']['module']['config']['items'][] = array('LLL:EXT:ics_od_datastore/locallang.xml:sysfolder', 'datastore');
 
-
-t3lib_div::loadTCA('tt_content');
+// Plugin RSS
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi2']='layout,select_key';
-
 
 t3lib_extMgm::addPlugin(array(
 	'LLL:EXT:ics_od_datastore/locallang_db.xml:tt_content.list_type_pi2',
@@ -183,5 +180,20 @@ if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_icsoddatastore_pi2_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi2/class.tx_icsoddatastore_pi2_wizicon.php';
 }
 t3lib_extMgm::addStaticFile($_EXTKEY,"pi2/static/","Data Store RSS");
+
+
+// Stats download
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi3']='layout,select_key';
+
+t3lib_extMgm::addPlugin(array(
+	'LLL:EXT:ics_od_datastore/locallang_db.xml:tt_content.list_type_pi3',
+	$_EXTKEY . '_pi3',
+	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
+),'list_type');
+
+
+if (TYPO3_MODE == 'BE') {
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_icsoddatastore_pi3_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi3/class.tx_icsoddatastore_pi3_wizicon.php';
+}
 
 ?>

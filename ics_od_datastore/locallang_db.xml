@@ -66,6 +66,7 @@
 			<label index="tx_icsoddatastore_fileformats.searchable">Searchable</label>
 			<label index="tt_content.list_type_pi1">Data store</label>
 			<label index="tt_content.list_type_pi2">Data store RSS</label>
+			<label index="tt_content.list_type_pi3">Stats files download</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="tx_icsoddatastore_filegroups">Groupe de fichier (opendata)</label>
@@ -126,6 +127,7 @@
 			<label index="tx_icsoddatastore_filetypes.description">Description</label>
 			<label index="tt_content.list_type_pi1">Jeux de données</label>
 			<label index="tt_content.list_type_pi2">Jeux de données RSS</label>
+			<label index="tt_content.list_type_pi3">Stats de técléchargements de fichiers</label>
 		</languageKey>
 	</data>
 </T3locallang>

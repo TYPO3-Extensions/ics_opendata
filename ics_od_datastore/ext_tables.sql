@@ -184,7 +184,7 @@ CREATE TABLE tx_icsoddatastore_statistics (
     
     PRIMARY KEY (uid),
     KEY parent (pid),
-	KEY date(date)	
+	KEY date(date, filegroup)
 );
 
 #
