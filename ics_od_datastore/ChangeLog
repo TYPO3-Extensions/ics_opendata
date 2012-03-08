@@ -1,6 +1,9 @@
 2011-08-12 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added statistics table sql index on date and dataset
 	* Feature: Added plugin pi3
+	* Feature: Implemented stats by datasets
+	* Feature: Partial implementation of stats by files
+	* Feature: Added pi3 flexform
 
 2011-05-12 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sql table for files downloads statistics

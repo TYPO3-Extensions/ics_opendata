@@ -36,6 +36,13 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 	var $scriptRelPath = 'pi3/class.tx_icsoddatastore_pi3.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'ics_od_datastore';	// The extension key.
 
+	var $templateFile = 'typo3conf/ext/ics_od_datastore/res/template.html'; /**< Path of template file */	
+	var $tables = array(
+		'stats' => 'tx_icsoddatastore_statistics',
+		'datasets' => 'tx_icsoddatastore_filegroups',
+		'files' => 'tx_icsoddatastore_files',
+	);
+
 	private static $defaultSize = 10;	// Default size of rank
 	private static $defaultType = 'dataset';	// Default type of rank
 
@@ -52,14 +59,184 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
-		$content = 'stat toto';
+		$this->pi_initPIflexForm();
+		$this->init();
+		
+		$rows = $this->getStats();
+		$content = $this->renderStats($rows);
 
 		return $this->pi_wrapInBaseClass($content);
 	}
 	
+	/**
+	 * Initialize the plugin
+	 *
+	 * @return void
+	 */
 	function init() {
-		$this->conf['size'] = self::$defaultSize;
-		$this->conf['type'] = self::$defaultType;
+		$templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template', 'main');
+		$templateFile = $templateFile? $templateFile: $this->conf['template'];
+		if ($templateFile)
+			$this->templateFile = $templateFile;
+		$this->templateCode = $this->cObj->fileResource($this->templateFile);
+		
+		$type = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'type', 'main');
+		$this->conf['view.']['type'] = $type? $type: $this->conf['view.']['type'];
+		$this->conf['view.']['type'] = $this->conf['view.']['type']? $this->conf['view.']['type']: self::$defaultType;
+		
+		$size = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'size', 'main');
+		$this->conf['view.']['size'] = $size? $size: $this->conf['view.']['size'] ;
+		$this->conf['view.']['size'] = $this->conf['view.']['size'] ? $this->conf['view.']['size'] : self::$defaultSize;
+		
+		$period = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'period', 'main');
+		$this->conf['view.']['period'] = $period? $period: $this->conf['view.']['period'];
+	}
+	
+	/**
+	 * Retrieves stats
+	 *
+	 * @return mixed	Stats rows
+	 */
+	function getStats() {
+		$groupBy = '';
+		$orderBy = '';
+		$where_clause = '1';
+		
+		$type = (string)strtoupper(trim($this->conf['view.']['type']));
+		switch ($type) {
+			case 'DATASET':
+				$fields = array('filegroup', 'SUM(count) as total');
+				$groupBy = 'filegroup';
+				$orderBy = 'total DESC';
+				break;
+			case 'FILE':
+				$fields = array('file', 'filegroup', 'count');
+				$orderBy = 'count DESC';
+				break;
+			case 'CATEGORY':
+			default:
+				trigger_error('Any code implemented for type ' . $type, E_USER_ERROR);
+		}
+		if ($this->conf['view.']['period']) {
+			$date = mktime(0, 0, 0, date('m'), date('d')- $this->conf['view.']['period'], date('Y'));
+			$where_clause .= ' AND date>=' . $date;
+		}
+		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			(isset($fields) && is_array($fields) && !empty($fields))? implode(',', $fields): '*',
+			$this->tables['stats'],
+			$where_clause,
+			$groupBy,
+			$orderBy,
+			$this->conf['view.']['size'] 
+		);
+	}
+	
+	/**
+	 * Render stats
+	 *
+	 * @param	array		$rows: Statistics rows
+	 * @return string		Stats HTML content
+	 */
+	function renderStats(array $rows = null) {
+		if (!isset($rows) || empty($rows))
+			return $this->renderEmpty();
+			
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_STATISTICS###');
+		$subparts = array();
+		$itemTemplate = $this->cObj->getSubpart($template, '###TOP_ITEM###');
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$type = (string)strtolower(trim($this->conf['view.']['type']));
+		foreach ($rows as $index=>$row) {
+			$data = $this->renderData($row);
+			$dataRow = array(
+				'rank' => $index +1,
+				'uid' => $data[0],
+				'title' => $data[1],
+				'count' => $this->renderCount($row),
+				// TODO : ajouter url dans le cas type = file avec url réécrit
+			);
+			$cObj->start($dataRow, 'Stats');
+			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+			$markers = array();
+			$lMarkers = array(
+				'RANK' => $cObj->stdWrap($dataRow['rank'], $this->conf['renderObj.'][$type . '.']['rank.']),
+				'DATA' => $cObj->stdWrap($dataRow['title'], $this->conf['renderObj.'][$type . '.']['data.']),
+				'COUNT' => $cObj->stdWrap($dataRow['count'], $this->conf['renderObj.'][$type . '.']['count.']),
+			);
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $lMarkers, '###|###');
+			$subparts['###TOP_ITEM###'] .= $this->cObj->substituteMarkerArray($itemContent, $markers, '###|###');			
+		}
+		$markers = array(
+			'TITLE' => $this->pi_getLL('top_dl', 'Top download', true)
+		);
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
+		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+	}
+	
+	/**
+	 * Render data
+	 *
+	 * @param	array		$row: Statistic's row
+	 * @return string		Data HTML content wrapped
+	 */
+	private function renderData(array $row) {
+		$data = array();
+		$type = (string)strtoupper(trim($this->conf['view.']['type']));
+		switch ($type) {
+			case 'DATASET':
+				$data = $row['filegroup'];
+				$datasets = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'title',
+					$this->tables['datasets'],
+					'uid=' . $row['filegroup'],
+					'',
+					'',
+					1
+				);
+				if (is_array($datasets) && !empty($datasets))
+					$data = array($row['filegroup'], $datasets[0]['title']);
+				break;
+			case 'FILE':
+				$data = $row['file'];
+				$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'file',
+					$this->tables['files'],
+					'uid=' . $row['file'],
+					'',
+					'',
+					1
+				);
+				if (is_array($files) && !empty($files))
+					$data = array($row['file'], $files[0]['file']);
+				break;
+			case 'CATEGORY':
+			default:
+				trigger_error('Any data render implemented for type ' . $type, E_USER_ERROR);
+		}
+		return $data;
+	}
+	
+	/**
+	 * Render count
+	 *
+	 * @param	array		$row: Statistic's row
+	 * @return string		Data HTML content wrapped
+	 */
+	private function renderCount(array $row) {
+		$count = 0;
+		$type = (string)strtoupper(trim($this->conf['view.']['type']));
+		switch ($type) {
+			case 'DATASET':
+				$count = $row['total'];
+				break;
+			case 'FILE':
+				$count = $row['count'];
+				break;
+			case 'CATEGORY':
+			default:
+				trigger_error('Any count render implemented for type ' . $type, E_USER_ERROR);
+		}
+		return $count;
 	}
 
 }
