@@ -1,4 +1,7 @@
-2011-08-12 Tsi YANG <tsi@in-cite.net>
+2012-03-09 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added sorting configuration. Keeping default on last timestamp and title. Keeping configuration on day and title. The new configuration is on last timestamp only.
+
+2012-03-08 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added statistics table sql index on date and dataset
 	* Feature: Added plugin pi3
 	* Feature: Implemented stats by datasets

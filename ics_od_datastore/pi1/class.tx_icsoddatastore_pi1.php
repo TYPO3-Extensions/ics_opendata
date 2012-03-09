@@ -189,6 +189,20 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$this->fileLinks = t3lib_div::trimExplode(',', $this->conf['displayList.']['fileLink'], true);
 		}
 
+		// Get sorting
+		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'sortingParams');
+		switch ($sortName) {
+			case 'LASTDATE_TITLE':
+				$this->conf['displayList.']['sort.']['tstamp.']['day'] = 1;
+				break;
+			case 'LASTTSTAMP':
+				$this->conf['displayList.']['sort.']['tstamp.']['day'] = 0;
+				$this->conf['sorting.']['name'] = 'tstamp';
+				$this->conf['sorting.']['order'] = 'DESC';
+				break;
+			default:
+		}
+		
 		// Single view
 		$detailFields = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'detailFields', 'single_setting'), true);
 		if (empty($detailFields)) {
@@ -397,10 +411,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderListRows($template) {
 		$queryJoin = '';
 		$whereClause = '';
-		if ($this->conf['displayList.']['sort.']['tstamp.']['day'])
+		if ($this->conf['displayList.']['sort.']['tstamp.']['day']) {
+			// Group dataset by day: retrieves dataset order by day, dataset updated or created the same day are sorted by title
 			$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`tstamp`, "%Y%m%d") DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
-		else
+		} elseif ($this->conf['sorting.']['name']) {
+			$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->conf['sorting.']['name'] . '` ' . $this->conf['sorting.']['order'];
+		} else { // Default
 			$orderBy = '`' . $this->tables['filegroups'] . '`.`tstamp` DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
+		}
 
 		// Set where clause with junture
 		if (isset($this->list_criteria['keywords']) && !empty($this->list_criteria['keywords'])) {

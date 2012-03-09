@@ -81,5 +81,36 @@
 				</el>
 			</ROOT>
 		</configuration>
+		<sortingParams>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortingParams</sheetTitle>
+				</TCEforms>
+				<el>
+					<sortName>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0"  type="array"/>
+									<numIndex index="1"  type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_dateAndTitle</numIndex>
+										<numIndex index="1">LASTDATE_TITLE</numIndex>
+									</numIndex>
+									<numIndex index="2"  type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_lasttstamp</numIndex>
+										<numIndex index="1">LASTTSTAMP</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</sortName>
+				</el>
+			</ROOT>
+		</sortingParams>
 	</sheets>
 </T3DataStructure>

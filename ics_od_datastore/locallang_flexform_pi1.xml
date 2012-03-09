@@ -13,6 +13,10 @@
 			<label index="nbFileGroupByPage">Max records</label>
 			<label index="list_setting">List setting</label>
 			<label index="fileLink">File link</label>
+			<label index="sortingParams">Sorting params</label>
+			<label index="sortName">Sort name</label>
+			<label index="sortName_dateAndTitle">Last Update and title</label>
+			<label index="sortName_lasttstamp">Last update Update</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="configuration">Configuration</label>
@@ -21,6 +25,10 @@
 			<label index="nbFileGroupByPage">Nombre maximum d'enregistrements par page</label>
 			<label index="list_setting">Vue liste</label>
 			<label index="fileLink">Lien vers fichiers</label>
+			<label index="sortingParams">Paramètre de tri</label>
+			<label index="sortName">Trier par</label>
+			<label index="sortName_dateAndTitle">Dernières mise à jour et titre</label>
+			<label index="sortName_lasttstamp">Dernières mise à jour</label>
 		</languageKey>
 	</data>
 </T3locallang>
