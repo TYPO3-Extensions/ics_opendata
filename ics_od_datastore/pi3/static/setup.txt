@@ -22,8 +22,6 @@ plugin.tx_icsoddatastore_pi3 {
 				typolink {
 					# TODO : cas type = file avec url réécrit
 					# parameter = url
-					parameter = ./{field:title}
-					parameter.insertData = 1
 				}
 			}
 			count.noTrimWrap = || téléchargements|
