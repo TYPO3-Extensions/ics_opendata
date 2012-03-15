@@ -31,25 +31,26 @@
  *
  *   73: class tx_icsoddatastore_pi1 extends tslib_pibase
  *
+ *              SECTION: < Default search criteria 
  *   99:     function main($content, $conf)
  *  147:     function init()
- *  243:     function renderSearch()
- *  281:     function renderFileformatItems($template, $aFileformats)
- *  313:     function renderTiersItems($template, $aTiers)
- *  337:     function renderList()
- *  363:     function renderListHeader($template)
- *  394:     function renderListRows($template)
- *  508:     function renderListRow($template, $row)
- *  551:     function renderFiles($view, $filegroup, $template)
- *  622:     function renderSingle($id)
- *  721:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
- *  743:     function getFiles_mm($filegroup)
- *  761:     function getFileSize($file)
- *  776:     function getFileformats($searchable = false)
- *  799:     function getFiletypes()
- *  816:     function getTiersAgencies()
- *  834:     protected function getListGetPageBrowser($numberOfPages)
- *  856:     function renderRSS($rssLink, $imgSrc)
+ *  264:     function renderSearch()
+ *  302:     function renderFileformatItems($template, $aFileformats)
+ *  334:     function renderTiersItems($template, $aTiers)
+ *  359:     function renderList()
+ *  384:     function renderListHeader($template)
+ *  415:     function renderListRows($template)
+ *  539:     function renderListRow($template, $row)
+ *  588:     function renderFiles($view, $filegroup, $template)
+ *  661:     function renderSingle($id)
+ *  760:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ *  782:     function getFiles_mm($filegroup)
+ *  800:     function getFileSize($file)
+ *  815:     function getFileformats($searchable = false)
+ *  838:     function getFiletypes()
+ *  855:     function getTiersAgencies()
+ *  873:     protected function getListGetPageBrowser($numberOfPages)
+ *  895:     function renderRSS($rssLink, $imgSrc)
  *
  * TOTAL FUNCTIONS: 19
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -189,20 +190,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$this->fileLinks = t3lib_div::trimExplode(',', $this->conf['displayList.']['fileLink'], true);
 		}
 
-		// Get sorting
-		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'sortingParams');
-		switch ($sortName) {
-			case 'LASTDATE_TITLE':
-				$this->conf['displayList.']['sort.']['tstamp.']['day'] = 1;
-				break;
-			case 'LASTTSTAMP':
-				$this->conf['displayList.']['sort.']['tstamp.']['day'] = 0;
-				$this->conf['sorting.']['name'] = 'tstamp';
-				$this->conf['sorting.']['order'] = 'DESC';
-				break;
-			default:
-		}
-		
 		// Single view
 		$detailFields = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'detailFields', 'single_setting'), true);
 		if (empty($detailFields)) {
@@ -240,13 +227,29 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if (!$this->nbFileGroupByPage) {
 			$this->nbFileGroupByPage = $this->conf['nbFileGroupByPage'];
 		}
+
+		// Get select params
+		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'selectParams');
+		$this->conf['sorting.']['name'] = $sortName? $sortName: $this->conf['sorting.']['name'];
+		$sortOrder = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortOrder', 'selectParams');
+		$this->conf['sorting.']['order'] = $sortOrder? $sortOrder: $this->conf['sorting.']['order'];
+		if (!$this->conf['sorting.']['name'] && !$this->conf['sorting.']['order']) {
+			$this->conf['sorting.']['name'] = 'tstamp';
+			$this->conf['sorting.']['order'] = 'DESC';
+		}
+
+		$agencies = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'agencies', 'selectParams'), true);
+		if (!empty($agencies)) {
+			$this->conf['select.']['agencies'] = implode(',', $agencies);
+		}
+
 		//==========
-		if (!$this->conf['singlePid']) 
+		if (!$this->conf['singlePid'])
 			$this->conf['singlePid'] = $GLOBALS['TSFE']->id;
-			
-		if (!$this->conf['resultsSearchPid']) 
+
+		if (!$this->conf['resultsSearchPid'])
 			$this->conf['resultsSearchPid'] = $GLOBALS['TSFE']->id;
-			
+
 		if (empty($this->conf['rss.']['imgSrc']))
 			$this->conf['rss.']['imgSrc'] = t3lib_extMgm::extRelPath($this->extKey) . 'res/img_rss.png';
 
@@ -330,12 +333,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 */
 	function renderTiersItems($template, $aTiers) {
 		if (is_array($aTiers) && count($aTiers)) {
+			$agencies = t3lib_div::trimExplode(',', $this->conf['select.']['agencies'], true);
 			foreach ($aTiers as $tiers) {
 				$markers = array(
 					'###PREFIXID###' => $this->prefixId,
 					'###TIERS_LABEL###' => $tiers['name'],
 					'###TIERS_VALUE###' => $tiers['uid'],
-					'###CHECKED###' => '',
+					'###CHECKED###' => in_array($tiers['uid'], $agencies)? 'checked = "checked"': '',
 				);
 				if (is_array($this->piVars['tiers']) && t3lib_div::inArray($this->piVars['tiers'],$tiers['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
@@ -411,13 +415,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderListRows($template) {
 		$queryJoin = '';
 		$whereClause = '';
-		if ($this->conf['displayList.']['sort.']['tstamp.']['day']) {
-			// Group dataset by day: retrieves dataset order by day, dataset updated or created the same day are sorted by title
-			$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`tstamp`, "%Y%m%d") DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
-		} elseif ($this->conf['sorting.']['name']) {
-			$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->conf['sorting.']['name'] . '` ' . $this->conf['sorting.']['order'];
-		} else { // Default
-			$orderBy = '`' . $this->tables['filegroups'] . '`.`tstamp` DESC, `' . $this->tables['filegroups'] . '`.`title` ASC';
+
+		if ($this->conf['sorting.']['name']) {
+			if (($this->conf['sorting.']['name'] == 'tstamp') && $this->conf['displayList.']['sort.']['tstamp.']['day']) {
+				// Group dataset by day: retrieves dataset order by day, dataset updated or created the same day are sorted by title
+				$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`tstamp`, "%Y%m%d") ' . $this->conf['sorting.']['order'] . ', `' . $this->tables['filegroups'] . '`.`title` ASC';
+			} else {
+				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->conf['sorting.']['name'] . '` ' . $this->conf['sorting.']['order'];
+			}
 		}
 
 		// Set where clause with junture
@@ -427,8 +432,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				OR LOCATE("' . strtoupper($this->list_criteria['keywords']) . '", UPPER(`'.$this->tables['filegroups'].'`.`description`)))
 			';
 		}
-		if (isset($this->list_criteria['tiers']) && count($this->list_criteria['tiers'])) {
-			$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`agency` IN (' . implode(',',$this->list_criteria['tiers']) . '))';
+		if ((isset($this->list_criteria['tiers']) && count($this->list_criteria['tiers'])) || $this->conf['select.']['agencies']) {
+			$agencies = array();
+			if (is_array($this->list_criteria['tiers']))
+				$agencies = $this->list_criteria['tiers'];
+			if ($select_agencies = t3lib_div::trimExplode(',', $this->conf['select.']['agencies'], true))
+				$agencies = array_merge($agencies, $select_agencies);
+			if (!empty($agencies))
+				$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`agency` IN (' . implode(',', $agencies) . '))';
 		}
 		if (isset($this->list_criteria['fileformat']) && count($this->list_criteria['fileformat'])){
 			$queryJoin .= '
@@ -549,7 +560,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					else
 						$markers['###' . strtoupper($field) . '###'] = '';
 					break;
-				default:				
+				default:
 					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
 			}
 		}

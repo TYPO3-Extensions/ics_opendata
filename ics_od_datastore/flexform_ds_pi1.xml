@@ -81,10 +81,10 @@
 				</el>
 			</ROOT>
 		</configuration>
-		<sortingParams>
+		<selectParams>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortingParams</sheetTitle>
+					<sheetTitle>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:selectParams</sheetTitle>
 				</TCEforms>
 				<el>
 					<sortName>
@@ -95,12 +95,12 @@
 								<items type="array">
 									<numIndex index="0"  type="array"/>
 									<numIndex index="1"  type="array">
-										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_dateAndTitle</numIndex>
-										<numIndex index="1">LASTDATE_TITLE</numIndex>
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_tstamp</numIndex>
+										<numIndex index="1">tstamp</numIndex>
 									</numIndex>
 									<numIndex index="2"  type="array">
-										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_lasttstamp</numIndex>
-										<numIndex index="1">LASTTSTAMP</numIndex>
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_crdate</numIndex>
+										<numIndex index="1">crdate</numIndex>
 									</numIndex>
 								</items>
 								<size>1</size>
@@ -109,8 +109,42 @@
 							</config>
 						</TCEforms>
 					</sortName>
+					<sortOrder>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortOrder</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0"  type="array"/>
+									<numIndex index="1"  type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortOrder_asc</numIndex>
+										<numIndex index="1">ASC</numIndex>
+									</numIndex>
+									<numIndex index="2"  type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortOrder_desc</numIndex>
+										<numIndex index="1">DESC</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</sortOrder>
+					<agencies>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:agencies</label>
+							<config type="array">
+								<type>select</type>
+								<itemsProcFunc>tx_icsoddatastore_dynflex->addAgencies</itemsProcFunc>
+								<size>10</size>
+								<minitems>0</minitems>
+								<maxitems>100</maxitems>
+							</config>
+						</TCEforms>
+					</agencies>
 				</el>
 			</ROOT>
-		</sortingParams>
+		</selectParams>
 	</sheets>
 </T3DataStructure>
