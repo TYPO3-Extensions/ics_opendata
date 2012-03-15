@@ -10,6 +10,9 @@ if (TYPO3_MODE == 'BE') {
 	t3lib_extMgm::addModulePath('web_txicsoddatastoreM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
 		
 	t3lib_extMgm::addModule('web', 'txicsoddatastoreM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+	if (t3lib_div::int_from_ver(TYPO3_version) >= '4005000') {
+		t3lib_extMgm::addNavigationComponent('web_txicsoddatastoreM1', '');
+	}
 }
 
 include_once(t3lib_extMgm::extPath('ics_od_datastore') . 'lib/class.tx_icsoddatastore_title.php');
