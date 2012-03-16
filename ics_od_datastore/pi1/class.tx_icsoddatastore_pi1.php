@@ -164,7 +164,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$this->list_criteria = $this->piVars;
 		$this->list_criteriaNav = array();
 		foreach ($this->list_criteria as $criteria => $value) {
-			if ( ($criteria != 'uid') && ($criteria != 'submit') ) {
+			if ( ($criteria != 'uid') && ($criteria != 'submit') && ($criteria != 'returnID') ) {
 				$this->list_criteriaNav[$this->prefixId . '[' . $criteria . ']'] = $value;
 			}
 		}
@@ -539,7 +539,17 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderListRow($template, $row) {
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
-			'###URL###' => $this->pi_getPageLink($this->conf['singlePid'], '', array_merge($this->list_criteriaNav, array($this->prefixId . '[uid]' => $row['uid']))),
+			'###URL###' => $this->pi_getPageLink(
+				$this->conf['singlePid'], 
+				'', 
+				array_merge(
+					$this->list_criteriaNav, 
+					array(
+						$this->prefixId . '[uid]' => $row['uid'],
+						$this->prefixId . '[returnID]' => $GLOBALS['TSFE']->id,
+					)
+				)
+			),
 		);
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
@@ -555,6 +565,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				case 'tstamp':
 				case 'update_date':
 				case 'release_date':
+				case 'crdate':
 					if (!empty($row[$field])&& $row[$field])
 						$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
 					else
@@ -672,7 +683,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###INTRO###' => $this->cObj->stdWrap($this->pi_getLL('detail_intro'), $this->conf['displaySingle.']['intro_stdWrap.']),
 			'###FORMAT###' => $this->cObj->stdWrap($this->pi_getLL('detail_formatavailable'), $this->conf['displaySingle.']['formatavaillable_stdWrap.']),
-			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back'), $this->list_criteriaNav),
+			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back'), $this->list_criteriaNav, 0, $this->piVars['returnID']),
 			'###OTHER_DATA###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_other_data'), $this->conf['displaySingle.']['other_data_stdWrap.']),
 		);
 

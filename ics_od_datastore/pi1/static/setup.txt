@@ -5,6 +5,7 @@ plugin.tx_icsoddatastore_pi1{
 	fileFormatPictoMaxW = {$config.tx_icsoddatastore_pi1.fileFormatPictoMaxW}
 	fileFormatPictoMaxH = {$config.tx_icsoddatastore_pi1.fileFormatPictoMaxH}
 	nbFileGroupByPage = {$config.tx_icsoddatastore_pi1.nbFileGroupByPage}
+	singlePid = {$config.tx_icsoddatastore_pi1.singlePid}
 	
 	displayList {
 		fields = {$config.tx_icsoddatastore_pi1.displayList.fields}
@@ -31,6 +32,11 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		publisher_label_stdWrap.stdWrap {
 			wrap = <p class="label publisher">|</p>
+		}
+		
+		crdate_stdWrap.stdWrap {
+			wrap = <p class="crdate_date">|</p>
+			strftime = %d %B %Y
 		}
 		
 		update_date_stdWrap.stdWrap {

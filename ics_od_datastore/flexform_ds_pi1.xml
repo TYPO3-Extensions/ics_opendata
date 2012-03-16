@@ -99,8 +99,8 @@
 										<numIndex index="1">tstamp</numIndex>
 									</numIndex>
 									<numIndex index="2"  type="array">
-										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_crdate</numIndex>
-										<numIndex index="1">crdate</numIndex>
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_release</numIndex>
+										<numIndex index="1">release_date</numIndex>
 									</numIndex>
 								</items>
 								<size>1</size>

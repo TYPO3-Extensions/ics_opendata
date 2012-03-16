@@ -1,3 +1,8 @@
+2012-03-16 Tsi YANG <tsi@in-cite.net>
+	* Fix: Forgotten conf in setup.txt
+	* Fix: Mistakes in sorting.
+	* Feature: Added template list for last update and last release views.
+
 2012-03-15 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sorting configuration on crdate.
 	* Feature: Added select configuration. Possibility to filter on agencies.
