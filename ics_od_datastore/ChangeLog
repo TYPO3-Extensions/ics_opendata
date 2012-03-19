@@ -1,3 +1,6 @@
+2012-03-19 Tsi YANG <tsi@in-cite.net>
+	* Feature: Retrieved first category's picto on list view. Displaying on last release template.
+
 2012-03-16 Tsi YANG <tsi@in-cite.net>
 	* Fix: Forgotten conf in setup.txt
 	* Fix: Mistakes in sorting.

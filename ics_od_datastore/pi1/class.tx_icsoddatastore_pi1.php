@@ -550,7 +550,21 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					)
 				)
 			),
+			'###CATEGORY_PICTO###' => '',
 		);
+		
+		$cat_pictos = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'mm.uid_local, mm.uid_foreign, cat.picto',
+			'tx_icsodcategories_categories AS cat
+				JOIN tx_icsodcategories_categories_relation_mm AS mm ON mm.uid_local = cat.uid',
+			'cat.deleted = 0 AND mm.tablenames = \'tx_icsoddatastore_filegroups\' AND mm.uid_foreign =' . $row['uid'],
+			'',
+			'mm.sorting_foreign'
+		);
+		if (is_array($cat_pictos) && !empty($cat_pictos)) {
+			$markers['###CATEGORY_PICTO###'] = $this->cObj->stdWrap($cat_pictos[0]['picto'], $this->conf['displayList.']['category_picto.']);
+		}
+		
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
 			switch ($field) {

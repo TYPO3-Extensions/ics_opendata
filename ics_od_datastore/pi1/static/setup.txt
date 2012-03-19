@@ -120,6 +120,18 @@ plugin.tx_icsoddatastore_pi1{
 			wrap = <p class="label tstamp">|</p>
 		}
 
+		
+		#Category's picto
+		category_picto {
+			setContentToCurrent = 1
+			cObject = IMAGE
+			cObject {
+				file.import.current = 1
+				file.height = 68
+			}
+			stdWrap.wrap = <div class="cat_picto">| </div>
+		}
+		
 		# Link to file for data type
 		fileLink = {$config.tx_icsoddatastore_pi1.displayList.fileLink}
 		
@@ -255,7 +267,9 @@ plugin.tx_icsoddatastore_pi1{
 			wrap = <p class="label owner">|</p>
 		}
 	}
-	
+
+
+#Default styles	
 	_CSS_DEFAULT_STYLE (
 div.tx_icsoddatastore_pi1_intro {
 	background-color:#f2f2f2;
@@ -364,7 +378,9 @@ div.tx_icsoddatastore_pi1_backlink {
 }
 
 div.tx_icsoddatastore_pi1_search,
-div.tx_icsoddatastore_pi1_list {
+div.tx_icsoddatastore_pi1_list,
+div.tx_icsoddatastore_pi1_lastUpdate,
+div.tx_icsoddatastore_pi1_lastRelease {
 	float:left;
 	width:100%;
 	clear:both;
