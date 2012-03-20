@@ -41,16 +41,16 @@
  *  384:     function renderListHeader($template)
  *  415:     function renderListRows($template)
  *  539:     function renderListRow($template, $row)
- *  588:     function renderFiles($view, $filegroup, $template)
- *  661:     function renderSingle($id)
- *  760:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
- *  782:     function getFiles_mm($filegroup)
- *  800:     function getFileSize($file)
- *  815:     function getFileformats($searchable = false)
- *  838:     function getFiletypes()
- *  855:     function getTiersAgencies()
- *  873:     protected function getListGetPageBrowser($numberOfPages)
- *  895:     function renderRSS($rssLink, $imgSrc)
+ *  613:     function renderFiles($view, $filegroup, $template)
+ *  704:     function renderSingle($id)
+ *  803:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ *  825:     function getFiles_mm($filegroup)
+ *  843:     function getFileSize($file)
+ *  858:     function getFileformats($searchable = false)
+ *  881:     function getFiletypes()
+ *  898:     function getTiersAgencies()
+ *  916:     protected function getListGetPageBrowser($numberOfPages)
+ *  938:     function renderRSS($rssLink, $imgSrc)
  *
  * TOTAL FUNCTIONS: 19
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -266,12 +266,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$markers = array(
 			'###FORM_ACTION###' => '#',
 			'###PREFIXID###' => $this->prefixId,
-			'###KEYWORDS_LABEL###' => htmlspecialchars($this->pi_getLL('search_keywords')),
+			'###KEYWORDS_LABEL###' => $this->pi_getLL('search_keywords', 'Keywords', true),
 			'###KEYWORDS_VALUE###' => $this->piVars['keywords'],
-			'###SEARCHBUTTON_VALUE###' => $this->pi_getLL('search_submit'),
+			'###SEARCHBUTTON_VALUE###' => $this->pi_getLL('search_submit', 'Submit', true),
 			'###FORM_ACTION###' => $this->pi_getPageLink($this->conf['resultsSearchPid']),
-			'###TITLE_TIERS###' => $this->pi_getLL('search_tiersTitle'),
-			'###TITLE_FILEFORMAT###' => $this->pi_getLL('search_fileformatTitle'),
+			'###TITLE_TIERS###' => $this->pi_getLL('search_tiersTitle', 'Tiers', true),
+			'###TITLE_FILEFORMAT###' => $this->pi_getLL('search_fileformatTitle', 'File format', true),
 		);
 
 		$fileformatItems = $this->renderFileformatItems($template, $this->getFileformats(true));
@@ -306,7 +306,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					$fileformatValue = strtoupper($fileformat['extension']);
 				}
 				else {
-					$fileformatValue = $this->pi_getLL('search_fileformatOther');
+					$fileformatValue = $this->pi_getLL('search_fileformatOther', 'Other format', true);
 				}
 				$markers = array(
 					'###PREFIXID###' => $this->prefixId,
@@ -363,7 +363,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$rowItems = $this->renderListRows($template);
 
 		$markers = array(
-			'###CAPTION###' => htmlspecialchars($this->pi_getLL('list_caption')),
+			'###CAPTION###' => $this->pi_getLL('list_caption', 'List', true),
 			'###UNIQID###' => uniqid($this->prefixId),
 			'###PREFIXID###' => $this->prefixId,
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
@@ -384,13 +384,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderListHeader($template) {
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
-			$markers['###HEADER' . strtoupper($field) . '###'] = htmlspecialchars($this->pi_getLL('th_' . $field));
+			$markers['###HEADER' . strtoupper($field) . '###'] = $this->pi_getLL('th_' . $field, $field, true);
 			$markers['###SORT' . strtoupper($field) . '_LINK###'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id
 				. '&' . $this->prefixId . '[sort][column]=' . $field
 				. '&' . $this->prefixId . '[sort][order]=' . (( ($this->list_criteria['sort']['column'] == $field) &&  ($this->list_criteria['sort']['order'] == 'ASC'))? 'DESC': 'ASC');
-			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field));
-			$markers['###SORT' . strtoupper($field) . '_ALT###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_alt', 'Sort on ' . $field));
-			$markers['###SORT' . strtoupper($field) . '_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_title', 'Sort on ' . $field));
+			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = $this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field, true);
+			$markers['###SORT' . strtoupper($field) . '_ALT###'] = $this->pi_getLL('sort_' . $field . '_alt', 'Sort on ' . $field, true);
+			$markers['###SORT' . strtoupper($field) . '_TITLE###'] = $this->pi_getLL('sort_' . $field . '_title', 'Sort on ' . $field, true);
 			if ($this->list_criteria['sort']['column'] == $field) {
 				if ($this->list_criteria['sort']['order'] == 'ASC') {
 					$markers['###SORT' . strtoupper($field) . '_IMG###'] = $this->conf['displayList.']['sort.']['sortImg.']['asc'];
@@ -540,10 +540,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
 			'###URL###' => $this->pi_getPageLink(
-				$this->conf['singlePid'], 
-				'', 
+				$this->conf['singlePid'],
+				'',
 				array_merge(
-					$this->list_criteriaNav, 
+					$this->list_criteriaNav,
 					array(
 						$this->prefixId . '[uid]' => $row['uid'],
 						$this->prefixId . '[returnID]' => $GLOBALS['TSFE']->id,
@@ -552,7 +552,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			),
 			'###CATEGORY_PICTO###' => '',
 		);
-		
+
 		$cat_pictos = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'mm.uid_local, mm.uid_foreign, cat.picto',
 			'tx_icsodcategories_categories AS cat
@@ -564,7 +564,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if (is_array($cat_pictos) && !empty($cat_pictos)) {
 			$markers['###CATEGORY_PICTO###'] = $this->cObj->stdWrap($cat_pictos[0]['picto'], $this->conf['displayList.']['category_picto.']);
 		}
-		
+
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
 			switch ($field) {
@@ -636,6 +636,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		foreach ($fields as $idx=>$field) {
 			$fields[$idx] = '`' . $this->tables['files'] . '`.`' . $field . '` as ' . $field;
 		}
+		if (!in_array($this->tables['files'].'.uid', $fields))
+			$fields[] = $this->tables['files'].'.uid';
 		foreach ($filetypes as $type) {
 			$where = array(
 				'1' . $this->cObj->enableFields($this->tables['files']) . $this->cObj->enableFields($this->tables['filegroups']),
@@ -655,19 +657,35 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			);
 			$pictoItems = '';
 			foreach ($files as $file) {
+				$markers = array(
+					'###FILESIZE###' => '',
+					'###FILEMD5###' => '',
+				);
 				if ($file['record_type'] == 0) {
 					$markers['###FILESIZE###'] = $this->getFileSize($uploadPaths['file'] . $file['file']);
-					$link_item = '<a href="' . $uploadPaths['file'] . $file['file'] . '" target="_blank">' . $this->cObj->getSubpart($template, '###LINK_ITEM###') . '</a>';
-				}	else	{
-					$markers['###FILESIZE###'] = '';
-					$link_item = '<a href="' . $file['url'] . '" target="_blank">' . $this->cObj->getSubpart($template, '###LINK_ITEM###') . '</a>';
+					$markers['###FILEMD5###'] = md5_file($uploadPaths['file'] . $file['file']);
+				} else {
+					$markers['###FILEMD5###'] = md5_file($file['url']);
 				}
-				$format = t3lib_BEfunc::getRecord($this->tables['fileformats'], $file['format']);
-				$markers['###PICTO###'] = $this->getImgResource($uploadPaths['fileformat'] . $format['picto'], $format['name'], $this->conf['fileformatPictoMaxW'], $this->conf['fileformatPictoMaxH']);
-				$markers['###FILEEXT###'] = $file['name'];
-				$markers['###FILEMD5###'] = $dile['filemd5'];
-				$pictoItem = $this->cObj->substituteSubpart($template, '###LINK_ITEM###', $link_item);
-				$pictoItem = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($pictoItem, '###PICTO_ITEM###'), $markers);
+				$formats = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'name, picto',
+					$this->tables['fileformats'],
+					'1' . $this->cObj->enableFields($this->tables['fileformats']) . ' AND uid=' . $file['format'] ,
+					'',
+					'',
+					'1'
+				);
+				if (is_array($formats) && !empty($formats)) {
+					$format = $formats[0];
+					$file['picto'] = $format['picto'];
+				}
+				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$cObj->start($file, $this->tables['files']);
+				$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+				$markers['###PICTO###'] =  $cObj->stdWrap('', $this->conf['datasetFile.']);
+				$markers['###FILEEXT###'] = htmlspecialchars($format['name']);
+
+				$pictoItem = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($template, '###PICTO_ITEM###'), $markers);
 				$pictoItems .= $pictoItem;
 			}
 			$sectionContent = $this->cObj->substituteSubpart($template, '###PICTO_ITEM###', $pictoItems);
@@ -695,14 +713,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
-			'###INTRO###' => $this->cObj->stdWrap($this->pi_getLL('detail_intro'), $this->conf['displaySingle.']['intro_stdWrap.']),
-			'###FORMAT###' => $this->cObj->stdWrap($this->pi_getLL('detail_formatavailable'), $this->conf['displaySingle.']['formatavaillable_stdWrap.']),
-			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back'), $this->list_criteriaNav, 0, $this->piVars['returnID']),
-			'###OTHER_DATA###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_other_data'), $this->conf['displaySingle.']['other_data_stdWrap.']),
+			'###INTRO###' => $this->cObj->stdWrap($this->pi_getLL('detail_intro', 'Introduction', true), $this->conf['displaySingle.']['intro_stdWrap.']),
+			'###FORMAT###' => $this->cObj->stdWrap($this->pi_getLL('detail_formatavailable', 'Available format', true), $this->conf['displaySingle.']['formatavaillable_stdWrap.']),
+			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back', 'Back', true), $this->list_criteriaNav, 0, $this->piVars['returnID']),
+			'###OTHER_DATA###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_other_data', 'Other data', true), $this->conf['displaySingle.']['other_data_stdWrap.']),
 		);
 
 		foreach ($this->detailFields as $field) {
-			$markers['###' . strtoupper($field) . '_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_' . $field), $this->conf['displaySingle.'][$field . '_label_stdWrap.']);
+			$markers['###' . strtoupper($field) . '_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_' . $field, $field, true), $this->conf['displaySingle.'][$field . '_label_stdWrap.']);
 
 			/** Ne pas afficher les champs non remplis **/
 			$tmp_subpart = '';

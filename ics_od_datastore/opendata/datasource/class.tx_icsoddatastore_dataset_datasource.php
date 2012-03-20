@@ -119,6 +119,7 @@ class tx_icsoddatastore_dataset_datasource
 
 				$files = $this->_datasourceDB->exec_SELECTgetRows(
 					'`tx_icsoddatastore_files`.`uid` as `id`,
+					`tx_icsoddatastore_files`.`uid`,
 					`tx_icsoddatastore_files`.`record_type`,
 					`tx_icsoddatastore_files`.`file`,
 					`tx_icsoddatastore_files`.`url`,
@@ -157,9 +158,10 @@ class tx_icsoddatastore_dataset_datasource
 					$file['format'] = $formats[0]['name'];
 
 					// Get file's path and file size
+					$makeLink = t3lib_div::makeInstance('tx_icsoddatastore_makelink');
+					$file['url'] = $makeLink->generateUrl($file);
 					if ($file['record_type'] == 0)
 					{
-						$file['url'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $file['file'];
 						$file['size'] = filesize($uploadPath . '/' . $file['file']);
 					}
 					else

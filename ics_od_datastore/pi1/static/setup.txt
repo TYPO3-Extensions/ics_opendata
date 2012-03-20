@@ -6,6 +6,20 @@ plugin.tx_icsoddatastore_pi1{
 	fileFormatPictoMaxH = {$config.tx_icsoddatastore_pi1.fileFormatPictoMaxH}
 	nbFileGroupByPage = {$config.tx_icsoddatastore_pi1.nbFileGroupByPage}
 	singlePid = {$config.tx_icsoddatastore_pi1.singlePid}
+
+	#Link to file
+	datasetFile {
+		cObject = IMAGE
+		cObject {
+			file.import = uploads/tx_icsoddatastore/
+			file.import.field = picto
+			file.width < fileFormatPictoMaxW
+		}
+		typolink {
+			parameter.cObject = USER
+			parameter.cObject.userFunc = tx_icsoddatastore_makelink->main
+		}
+	}
 	
 	displayList {
 		fields = {$config.tx_icsoddatastore_pi1.displayList.fields}
@@ -119,7 +133,6 @@ plugin.tx_icsoddatastore_pi1{
 		tstamp_label_stdWrap.stdWrap {
 			wrap = <p class="label tstamp">|</p>
 		}
-
 		
 		#Category's picto
 		category_picto {
@@ -134,7 +147,7 @@ plugin.tx_icsoddatastore_pi1{
 		
 		# Link to file for data type
 		fileLink = {$config.tx_icsoddatastore_pi1.displayList.fileLink}
-		
+		 
 		# Sort on record's update day
 		sort {
 			tstamp.day = {$config.tx_icsoddatastore_pi1.displayList.sort.tstamp.day}
@@ -334,7 +347,7 @@ div.tx_icsoddatastore_pi1_pictoItem {
 	margin:0.25em 0 0.25em 0;
 }
 
-div.tx_icsoddatastore_pi1_fileSize {
+div.tx_icsoddatastore_pi1_fileSize,  div.tx_icsoddatastore_pi1_md5{
 	font-size:0.8em;
 	color:#818181;
 }
