@@ -64,6 +64,8 @@
 			<label index="tx_icsoddatastore_filetypes.name">name</label>
 			<label index="tx_icsoddatastore_filetypes.description">Description</label>
 			<label index="tx_icsoddatastore_fileformats.searchable">Searchable</label>
+			<label index="tx_icsoddatastore_monthdownloads">Files month logs</label>
+			<label index="tx_icsoddatastore_statistics">Files stats</label>
 			<label index="tt_content.list_type_pi1">Data store</label>
 			<label index="tt_content.list_type_pi2">Data store RSS</label>
 			<label index="tt_content.list_type_pi3">Stats files download</label>
@@ -96,7 +98,7 @@
 			<label index="tx_icsoddatastore_licences.name">Nom</label>
 			<label index="tx_icsoddatastore_licences.link">Lien vers la licence</label>
 			<label index="tx_icsoddatastore_licences.logo">Lien vers le logo de la licence</label>
-			<label index="tx_icsoddatastore_downloads">Entrée de journal de téléchargement (opendata)</label>
+			<label index="tx_icsoddatastore_downloads">Logs de téléchargement des fichiers</label>
 			<label index="tx_icsoddatastore_downloads.filegroup">Groupe de fichiers</label>
 			<label index="tx_icsoddatastore_downloads.ip">Adresse IP</label>
 			<label index="tx_icsoddatastore_downloads.file">Fichier</label>
@@ -125,6 +127,8 @@
 			<label index="tx_icsoddatastore_filetypes">Type de fichier (opendata)</label>
 			<label index="tx_icsoddatastore_filetypes.name">Nom</label>
 			<label index="tx_icsoddatastore_filetypes.description">Description</label>
+			<label index="tx_icsoddatastore_monthdownloads">Logs de téléchargement mensuel des fichiers</label>
+			<label index="tx_icsoddatastore_statistics">Stats de téléchargement des fichiers</label>
 			<label index="tt_content.list_type_pi1">Jeux de données</label>
 			<label index="tt_content.list_type_pi2">Jeux de données RSS</label>
 			<label index="tt_content.list_type_pi3">Stats de técléchargements de fichiers</label>

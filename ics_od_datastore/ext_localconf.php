@@ -15,6 +15,11 @@ t3lib_extMgm::addPItoST43($_EXTKEY, 'pi3/class.tx_icsoddatastore_pi3.php', '_pi3
 
 $TYPO3_CONF_VARS['FE']['eID_include']['ics_od_datastoredownload'] = 'EXT:ics_od_datastore/downloadfile/class.tx_icsoddatastore_download.php';
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatastore_task'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Logs file download',
+    'description'      => 'Logs file download',
+);
 
 //--- API commands ---
 

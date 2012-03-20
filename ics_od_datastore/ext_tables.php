@@ -141,6 +141,39 @@ $TCA['tx_icsoddatastore_filetypes'] = array(
 	)
 );
 
+$TCA['tx_icsoddatastore_monthdownloads'] = array (
+	'ctrl' => array (
+		'title'     => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_monthdownloads',		
+		'label'     => 'filegroup',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY filegroup',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_icsoddatastore_monthdownloads.gif',
+	),
+);
+
+$TCA['tx_icsoddatastore_statistics'] = array (
+	'ctrl' => array (
+		'title'     => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_statistics',		
+		'label'     => 'filegroup',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY filegroup',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_icsoddatastore_statistics.gif',
+	),
+);
 
 t3lib_div::loadTCA('tt_content');
 $TCA['pages']['columns']['module']['config']['items'][] = array('LLL:EXT:ics_od_datastore/locallang.xml:sysfolder', 'datastore');
