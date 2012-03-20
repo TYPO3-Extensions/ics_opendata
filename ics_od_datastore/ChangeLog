@@ -2,6 +2,7 @@
 	* Feature: Added stats download.
 	* Refactor: Reworked file link generation. Must call makelink class for all file links.
 	* Fix: Passed data through htmlspecialchars.
+	* Fix: Mistakes in extern url generation.
 
 2012-03-19 Tsi YANG <tsi@in-cite.net>
 	* Feature: Retrieved first category's picto on list view. Displaying on last release template.

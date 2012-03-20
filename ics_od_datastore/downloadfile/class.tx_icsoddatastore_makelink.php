@@ -41,7 +41,7 @@ class tx_icsoddatastore_makelink {
 		switch (intval($extConf['stats'])) {
 			case 1:	// Stats method 302
 			case 2:	// Stats method readfile
-				$url = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?eID=ics_od_datastoredownload&file=' . $row['uid'];
+				$url = $row['record_type'] ? $row['url'] : t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?eID=ics_od_datastoredownload&file=' . $row['uid'];
 				break;
 			default:
 				$url = $row['record_type'] ? $row['url'] : t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $row['file'];
