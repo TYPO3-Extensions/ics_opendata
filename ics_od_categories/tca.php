@@ -62,9 +62,22 @@ $TCA['tx_icsodcategories_categories'] = array (
                 "MM" => "tx_icsodcategories_categories_relation_mm",
             )
         ),
+		'picto' => array (        
+			'exclude' => 0,        
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_fileformats.picto',        
+			'config' => array (
+				'type' => 'group',
+				'internal_type' => 'file',
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],    
+				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],    
+				'size' => 1,    
+				'minitems' => 0,
+				'maxitems' => 1,
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, parent,relation')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, picto, parent,relation')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

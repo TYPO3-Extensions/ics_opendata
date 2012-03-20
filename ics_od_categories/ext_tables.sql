@@ -13,6 +13,7 @@ CREATE TABLE tx_icsodcategories_categories (
 	description text,
 	parent int(11) DEFAULT '0' NOT NULL,
 	relation int(11) DEFAULT '0' NOT NULL,
+	picto text,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
