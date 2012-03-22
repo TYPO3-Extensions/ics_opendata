@@ -122,6 +122,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 			$date = mktime(0, 0, 0, date('m'), date('d')- $this->conf['view.']['period'], date('Y'));
 			$where_clause .= ' AND date>=' . $date;
 		}
+		$where_clause .= ' ' . $this->cObj->enableFields($this->tables['stats']);
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			(isset($fields) && is_array($fields) && !empty($fields))? implode(',', $fields): '*',
 			$this->tables['stats'],
@@ -189,7 +190,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				$datasets = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'title',
 					$this->tables['datasets'],
-					'uid=' . $row['filegroup'],
+					'uid=' . $row['filegroup'] . ' ' . $this->cObj->enableFields($this->tables['datasets']),
 					'',
 					'',
 					1
@@ -202,7 +203,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'file',
 					$this->tables['files'],
-					'uid=' . $row['file'],
+					'uid=' . $row['file'] . ' ' . $this->cObj->enableFields($this->tables['files']),
 					'',
 					'',
 					1

@@ -10,7 +10,7 @@ plugin.tx_icsoddatastore_pi3 {
 		dataset {
 			data {
 				typolink {
-					parameter = 38
+					parameter = 
 					additionalParams.field = uid
 					additionalParams.wrap = &tx_icsoddatastore_pi1[uid]=|
 				}
