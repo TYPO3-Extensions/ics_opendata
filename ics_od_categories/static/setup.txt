@@ -12,6 +12,18 @@ plugin.tx_icsoddatastore_pi1{
 		categories_label_stdWrap.stdWrap {
 			wrap = <p class="label categories">|</p>
 		}
+
+		#Category's picto
+		category_picto {
+			setContentToCurrent = 1
+			cObject = IMAGE
+			cObject {
+				file.import.current = 1
+				file.import.listNum = 0
+				file.height = 68
+			}
+			stdWrap.wrap = <div class="cat_picto">| </div>
+		}
 	}
 	
 	displaySingle {

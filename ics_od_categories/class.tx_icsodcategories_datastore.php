@@ -90,8 +90,10 @@ class tx_icsodcategories_datastore {
 
 		if ($categories && is_array($categories) && !empty($categories)) {
 			$listNameCategories = array();
+			$pictos = array();
 			foreach ($categories as $category) {
 				$listNameCategories[] = $category['name'];
+				$pictos[] = $category['picto'];
 			}
 			$output .= implode(', ', $listNameCategories);
 
@@ -104,6 +106,7 @@ class tx_icsodcategories_datastore {
 
 		$markers['###CATEGORIES_LABEL###'] = $object->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories_label'), $conf['categories_label_stdWrap.']);
 		$markers['###CATEGORIES_VALUE###'] = $object->cObj->stdWrap($output, $conf['categories_stdWrap.']);
+		$markers['###CATEGORY_PICTO###'] = $object->cObj->stdWrap(implode(',', $pictos), $conf['category_picto.']);
 	}
 
 	/**

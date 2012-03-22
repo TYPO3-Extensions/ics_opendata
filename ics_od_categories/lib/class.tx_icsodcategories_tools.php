@@ -133,7 +133,8 @@ class tx_icsodcategories_tools extends tslib_pibase {
 			'`'.$this->tables['categories'].'`.`uid`,
 			`'.$this->tables['categories'].'`.`name`,
 			`'.$this->tables['categories'].'`.`description`,
-			`'.$this->tables['categories'].'`.`parent`',
+			`'.$this->tables['categories'].'`.`parent`,
+			`'.$this->tables['categories'].'`.`picto`',
 			'`'.$this->tables['categories'].'`',
 			'`'.$this->tables['categories'].'`.`uid` = ' . $uid . ' ' . $this->cObj->enableFields($this->tables['categories'])
 		);
@@ -150,7 +151,8 @@ class tx_icsodcategories_tools extends tslib_pibase {
 			'`'.$this->tables['categories'].'`.`uid`,
 				`'.$this->tables['categories'].'`.`name`,
 				`'.$this->tables['categories'].'`.`description`,
-				`'.$this->tables['categories'].'`.`parent`',
+				`'.$this->tables['categories'].'`.`parent`,
+				`'.$this->tables['categories'].'`.`picto`',
 			'`'.$this->tables['categories'].'`
 				INNER JOIN `'.$this->tables['mm'].'`
 					ON `'.$this->tables['mm'].'`.`uid_local` = `'.$this->tables['categories'].'`.`uid`
