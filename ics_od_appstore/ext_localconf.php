@@ -23,6 +23,14 @@ t3lib_extMgm::addPItoST43($_EXTKEY, 'pi3/class.tx_icsodappstore_pi3.php', '_pi3'
 
 t3lib_extMgm::addPItoST43($_EXTKEY, 'pi4/class.tx_icsodappstore_pi4.php', '_pi4', 'list_type', 0);
 
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsodappstore_task'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Logs API',
+    'description'      => 'Logs API',
+);
+
+
 // * End user inclusions 0
 
 
