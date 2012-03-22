@@ -167,12 +167,12 @@ class tx_icsodcoreapi_service {
 	 * @return	boolean		<code>True</code> if the parameters are specified otherwise <code>false</code>.
 	 */
 	private function checkCall(XMLWriter $xmlwriter){
-		if (empty($this->params['key'])) {
-			makeError($xmlwriter, ERROR_KEY_EMPTY_CODE, ERROR_KEY_EMPTY_TEXT);
-			return false;
-		}
 		if (empty($this->params['version'])) {
 			makeError($xmlwriter, ERROR_VERSION_EMPTY_CODE, ERROR_VERSION_EMPTY_TEXT);
+			return false;
+		}
+		if (empty($this->params['key'])) {
+			makeError($xmlwriter, ERROR_KEY_EMPTY_CODE, ERROR_KEY_EMPTY_TEXT);
 			return false;
 		}
 		if (empty($this->params['cmd'])) {

@@ -103,42 +103,58 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
 		$this->init();
-		$codes = t3lib_div::trimExplode(',', $this->config['code'], 1);
-		while (list(, $theCode) = each($codes)) {
-			$theCode = (string)strtoupper(trim($theCode));
-			switch ($theCode) {
-				case 'SINGLE':
-					if (isset($this->piVars['uid'])) {
-						$content .= $this->renderSingle($this->piVars['uid']);
-						if (t3lib_extMgm::isLoaded('ratings') && $this->conf['ratings']) {
-							$ratingsAPI = t3lib_div::makeInstance('tx_ratings_api');
-							$content .= $ratingsAPI->getRatingDisplay($this->tables['filegroups'] . '_' . $this->piVars['uid']);
+		if ($this->controlVars($content)) {
+			$codes = t3lib_div::trimExplode(',', $this->config['code'], 1);
+			while (list(, $theCode) = each($codes)) {
+				$theCode = (string)strtoupper(trim($theCode));
+				switch ($theCode) {
+					case 'SINGLE':
+						if (isset($this->piVars['uid'])) {
+							$content .= $this->renderSingle($this->piVars['uid']);
+							if (t3lib_extMgm::isLoaded('ratings') && $this->conf['ratings']) {
+								$ratingsAPI = t3lib_div::makeInstance('tx_ratings_api');
+								$content .= $ratingsAPI->getRatingDisplay($this->tables['filegroups'] . '_' . $this->piVars['uid']);
+							}
 						}
-					}
-					break;
-				case 'LIST':
-					if (!isset($this->piVars['uid'])) {
-						$content .= $this->renderList();
-					}
-					break;
-				case 'SEARCH':
-					if (!isset($this->piVars['uid'])) {
-						$content .= $this->renderSearch();
-					}
-					break;
-				case 'RSSFEED':
-					if ($pageId = $GLOBALS['TSFE']->tmpl->setup['datastore_rss.']['typeNum']) {
-						$content .= $this->renderRSS(
-							t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id . '&type=' . $pageId,
-							$this->conf['rss.']['imgSrc']
-						);
-					}
+						break;
+					case 'LIST':
+						if (!isset($this->piVars['uid'])) {
+							$content .= $this->renderList();
+						}
+						break;
+					case 'SEARCH':
+						if (!isset($this->piVars['uid'])) {
+							$content .= $this->renderSearch();
+						}
+						break;
+					case 'RSSFEED':
+						if ($pageId = $GLOBALS['TSFE']->tmpl->setup['datastore_rss.']['typeNum']) {
+							$content .= $this->renderRSS(
+								t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id . '&type=' . $pageId,
+								$this->conf['rss.']['imgSrc']
+							);
+						}
+				}
 			}
 		}
-
 		return $this->pi_wrapInBaseClass($content);
 	}
-
+	
+	/**
+	 * Control piVars data
+	 *
+	 * @param	string		$content: html content
+	 * @return	boolean	
+	 */
+	function controlVars(&$content) {
+		$error = false;
+		if (isset($this->piVars['uid']) && !is_numeric($this->piVars['uid'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+			$error = true;
+		}	
+		return $error ? false : true;		
+	}
+	
 	/**
 	 * Init the plugin
 	 *
@@ -266,12 +282,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$markers = array(
 			'###FORM_ACTION###' => '#',
 			'###PREFIXID###' => $this->prefixId,
-			'###KEYWORDS_LABEL###' => $this->pi_getLL('search_keywords', 'Keywords', true),
-			'###KEYWORDS_VALUE###' => $this->piVars['keywords'],
-			'###SEARCHBUTTON_VALUE###' => $this->pi_getLL('search_submit', 'Submit', true),
+			'###KEYWORDS_LABEL###' => htmlspecialchars($this->pi_getLL('search_keywords', 'Keywords', true)),
+			'###KEYWORDS_VALUE###' => htmlspecialchars($this->piVars['keywords']),
+			'###SEARCHBUTTON_VALUE###' => htmlspecialchars($this->pi_getLL('search_submit', 'Submit', true)),
 			'###FORM_ACTION###' => $this->pi_getPageLink($this->conf['resultsSearchPid']),
-			'###TITLE_TIERS###' => $this->pi_getLL('search_tiersTitle', 'Tiers', true),
-			'###TITLE_FILEFORMAT###' => $this->pi_getLL('search_fileformatTitle', 'File format', true),
+			'###TITLE_TIERS###' => htmlspecialchars($this->pi_getLL('search_tiersTitle', 'Tiers', true)),
+			'###TITLE_FILEFORMAT###' => htmlspecialchars($this->pi_getLL('search_fileformatTitle', 'File format', true)),
 		);
 
 		$fileformatItems = $this->renderFileformatItems($template, $this->getFileformats(true));
@@ -310,9 +326,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				}
 				$markers = array(
 					'###PREFIXID###' => $this->prefixId,
-					'###FILEFORMAT_LABEL###' => $fileformatValue,
+					'###FILEFORMAT_LABEL###' => htmlspecialchars($fileformatValue),
 					'###FILEFORMAT_VALUE###' => $fileformat['uid'],
-					'###CHECKED###' => $fileformatValue,
+					'###CHECKED###' => '',
 				);
 				if (is_array($this->piVars['fileformat']) && t3lib_div::inArray($this->piVars['fileformat'],$fileformat['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
@@ -337,8 +353,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			foreach ($aTiers as $tiers) {
 				$markers = array(
 					'###PREFIXID###' => $this->prefixId,
-					'###TIERS_LABEL###' => $tiers['name'],
-					'###TIERS_VALUE###' => $tiers['uid'],
+					'###TIERS_LABEL###' => htmlspecialchars($tiers['name']),
+					'###TIERS_VALUE###' => htmlspecialchars($tiers['uid']),
 					'###CHECKED###' => in_array($tiers['uid'], $agencies)? 'checked = "checked"': '',
 				);
 				if (is_array($this->piVars['tiers']) && t3lib_div::inArray($this->piVars['tiers'],$tiers['uid'])) {
@@ -363,7 +379,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$rowItems = $this->renderListRows($template);
 
 		$markers = array(
-			'###CAPTION###' => $this->pi_getLL('list_caption', 'List', true),
+			'###CAPTION###' => htmlspecialchars($this->pi_getLL('list_caption', 'List', true)),
 			'###UNIQID###' => uniqid($this->prefixId),
 			'###PREFIXID###' => $this->prefixId,
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
@@ -384,13 +400,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderListHeader($template) {
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
-			$markers['###HEADER' . strtoupper($field) . '###'] = $this->pi_getLL('th_' . $field, $field, true);
+			$markers['###HEADER' . strtoupper($field) . '###'] = htmlspecialchars($this->pi_getLL('th_' . $field, $field, true));
 			$markers['###SORT' . strtoupper($field) . '_LINK###'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id
 				. '&' . $this->prefixId . '[sort][column]=' . $field
 				. '&' . $this->prefixId . '[sort][order]=' . (( ($this->list_criteria['sort']['column'] == $field) &&  ($this->list_criteria['sort']['order'] == 'ASC'))? 'DESC': 'ASC');
-			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = $this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field, true);
-			$markers['###SORT' . strtoupper($field) . '_ALT###'] = $this->pi_getLL('sort_' . $field . '_alt', 'Sort on ' . $field, true);
-			$markers['###SORT' . strtoupper($field) . '_TITLE###'] = $this->pi_getLL('sort_' . $field . '_title', 'Sort on ' . $field, true);
+			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field, true));
+			$markers['###SORT' . strtoupper($field) . '_ALT###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_alt', 'Sort on ' . $field, true));
+			$markers['###SORT' . strtoupper($field) . '_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_title', 'Sort on ' . $field, true));
 			if ($this->list_criteria['sort']['column'] == $field) {
 				if ($this->list_criteria['sort']['order'] == 'ASC') {
 					$markers['###SORT' . strtoupper($field) . '_IMG###'] = $this->conf['displayList.']['sort.']['sortImg.']['asc'];
@@ -450,7 +466,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			';
 			$whereClause .= ' AND `' . $this->tables['files'] . '`.`format` IN (' . implode(',', $this->list_criteria['fileformat']) . ')' . $this->cObj->enableFields($this->tables['files']);
 		}
-
+		$whereClause .= $this->cObj->enableFields($this->tables['filegroups']);
 		// Hook for add fields markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'] as $_classRef) {
@@ -555,6 +571,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		foreach ($this->listFields as $field) {
 			$markers['###HEADERID' . strtoupper($field) . '###'] = $this->headersId[$field];
 			switch ($field) {
+				case 'creator':
+				case 'manager':
+				case 'owner':
 				case 'publisher':
 					$publisher = t3lib_BEfunc::getRecord($this->tables['tiers'], $row[$field]);
 					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($publisher['name'], $this->conf['displayList.'][$field . '_stdWrap.']);
@@ -639,8 +658,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				implode(', ', $fields),
 				'`' . $this->tables['filegroups'] . '`' .
 				' LEFT OUTER JOIN `' . $this->tables['file_filegroup_mm'] . '` ON `' . $this->tables['file_filegroup_mm'] . '`.`uid_foreign` = `' . $this->tables['filegroups'] . '`.`uid`' .
-				' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`',
-				implode(' AND ', $where)
+				' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`' . $this->cObj->enableFields($this->tables['files']),
+				implode(' AND ', $where) .$this->cObj->enableFields($this->tables['filegroups'])
 			);
 			$pictoItems = '';
 			foreach ($files as $file) {
@@ -719,27 +738,27 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 			switch($field) {
 				case 'publisher':
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'agency' :
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'contact' :
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'creator' :
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'manager' :
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'owner' :
-					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field]);
+					$tiers = t3lib_BEfunc::getRecord($this->tables['tiers'], $filegroup[$field], '`name`', ' and `hidden`=0');
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($tiers['name'], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 					break;
 				case 'licence' :
@@ -845,11 +864,11 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function getFileformats($searchable = false) {
 		$where = array('`pid` = ' . $this->storage);
 		if ($searchable)
-			$where[] = 	'searchable = 1 ' . $this->cObj->enableFields($this->tables['fileformats']);
+			$where[] = 	'searchable = 1';
 		$fileformats = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'`uid`, `name`, `extension`',
 			$this->tables['fileformats'],
-			implode(' AND ', $where),
+			implode(' AND ', $where) . $this->cObj->enableFields($this->tables['fileformats']),
 			'',
 			'`sorting` ASC'
 		);
@@ -885,8 +904,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function getTiersAgencies() {
 		$agencies =  $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'`' . $this->tables['tiers'] . '`.`uid`, `' . $this->tables['tiers'] . '`.`name`',
-			$this->tables['filegroups'] . ' JOIN ' . $this->tables['tiers'] . ' ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups']  . '`.`agency`',
-			'1',
+			$this->tables['filegroups'] . ' JOIN ' . $this->tables['tiers'] . ' ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups']  . '`.`agency` ' . $this->cObj->enableFields($this->tables['tiers']),
+			'1 ' . $this->cObj->enableFields($this->tables['filegroups']),
 			'`' . $this->tables['filegroups']  . '`.`agency`',
 			'`' . $this->tables['tiers'] . '`.`name` ASC'
 		);
@@ -928,9 +947,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###URL###' => $rssLink,
 			'###LINK_IMAGE###' => $imgSrc,
-			'###LINK_ALT###' => $this->pi_getLL('rss_alt', 'rss', true),
-			'###LINK_TITLE###' => $this->pi_getLL('rss_title', 'rss', true),
-			'###LINK_TEXT###' => $this->pi_getLL('rss_text', 'rss feed', true),
+			'###LINK_ALT###' => htmlspecialchars($this->pi_getLL('rss_alt', 'rss', true)),
+			'###LINK_TITLE###' => htmlspecialchars($this->pi_getLL('rss_title', 'rss', true)),
+			'###LINK_TEXT###' => htmlspecialchars($this->pi_getLL('rss_text', 'rss feed', true)),
 		);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}

@@ -15,6 +15,8 @@
 			<label index="count">Call</label>
 			<label index="next">Next 30 days</label>
 			<label index="previous">Previous 30 days</label>
+			<label index="error_param_uid">Error: uid param incorrect</label>
+			<label index="error_param_date">Error: date param incorrect</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="nologin">Merci de vous identifier, pour pouvoir accéder aux statistiques.</label>

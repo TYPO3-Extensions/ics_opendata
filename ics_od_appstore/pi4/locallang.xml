@@ -17,6 +17,7 @@
 			<label index="application_not_exist">Application not exists.</label>
 			<label index="bad_ts">Error TypoScript.</label>
 			<label index="download_api">Download :</label>
+			<label index="screenshot">screenshot</label>
 			<label index="tx_icsodappstore_applications">opendata applications</label>
 			<label index="tx_icsodappstore_applications.apikey">the application's key</label>
 			<label index="tx_icsodappstore_applications.fe_cruser_id">frontend user</label>
@@ -45,6 +46,7 @@
 			<label index="application_not_exist">L'application n'existe pas.</label>
 			<label index="bad_ts">Erreur TypoScript.</label>
 			<label index="download_api">Téléchargement :</label>
+			<label index="screenshot">capture</label>
 			<label index="tx_icsodappstore_applications">Applications</label>
 			<label index="tx_icsodappstore_applications.apikey">Clé de l'application</label>
 			<label index="tx_icsodappstore_applications.fe_cruser_id">Utilisateur</label>

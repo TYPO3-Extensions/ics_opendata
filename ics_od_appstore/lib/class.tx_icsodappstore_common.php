@@ -377,7 +377,7 @@ class tx_icsodappstore_common extends tslib_pibase {
 			$this->tables['applications'],
 			$this->tables['apps_platforms_mm'],
 			$this->tables['platforms'],
-			' AND `' . $this->tables['applications'] . '`.`uid` = ' . $application['uid'],
+			' AND `' . $this->tables['applications'] . '`.`uid` = ' . $application['uid'] . ' ' . $this->cObj->enableFields($this->tables['applications']). ' ' . $this->cObj->enableFields($this->tables['platforms']),
 			'',
 			$this->tables['platforms'].'.title'
 		);
@@ -392,7 +392,7 @@ class tx_icsodappstore_common extends tslib_pibase {
 		return $platforms_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'`uid`, `title`',
 			$this->tables['platforms'],
-			'1'
+			'`title` != \'\' ' . $this->cObj->enableFields($this->tables['platforms'])
 		);
 	}
 
@@ -406,7 +406,7 @@ class tx_icsodappstore_common extends tslib_pibase {
 		return $platforms_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'`uid`, `title`',
 			$this->tables['platforms'],
-			'1 AND (title LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ' OR uid LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ')'
+			'1 AND (title LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ' OR uid LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ') ' . $this->cObj->enableFields($this->tables['platforms'])
 		);
 	}
 }

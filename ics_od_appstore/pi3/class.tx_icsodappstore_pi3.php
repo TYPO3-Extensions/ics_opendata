@@ -74,30 +74,50 @@ class tx_icsodappstore_pi3 extends tx_icsodappstore_common {
 		if(is_null($GLOBALS['TSFE']->fe_user->user['uid'])){
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->pi_getLL('nologin')));
 		}
-
-		if (empty($this->piVars['uid'])) {
-			$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
-		} else {
-			$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['uid']);
-			if (!$applications) {
+		
+		if ($this->controlVars($content)) { 
+			if (empty($this->piVars['uid'])) {
 				$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
 			} else {
-				$application = $applications[0];
-				$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-				if (isset($this->piVars['btn_next'])) {
-					$date = mktime(0, 0, 0, date('m', $this->piVars['date']), date('d', $this->piVars['date'])+30, date('Y', $this->piVars['date']));
-				}
-				if (isset($this->piVars['btn_previous'])) {
-					$date = mktime(0, 0, 0, date('m', $this->piVars['date']), date('d', $this->piVars['date'])-30, date('Y', $this->piVars['date']));
-				}
-				if ($date > mktime(0, 0, 0, date('m'), date('d'), date('Y')))
+				$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['uid']);
+				if (!$applications) {
+					$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
+				} else {
+					$application = $applications[0];
 					$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-				$content .= $this->getContent($application, $date);
+					if (isset($this->piVars['btn_next'])) {
+						$date = mktime(0, 0, 0, date('m', $this->piVars['date']), date('d', $this->piVars['date'])+30, date('Y', $this->piVars['date']));
+					}
+					if (isset($this->piVars['btn_previous'])) {
+						$date = mktime(0, 0, 0, date('m', $this->piVars['date']), date('d', $this->piVars['date'])-30, date('Y', $this->piVars['date']));
+					}
+					if ($date > mktime(0, 0, 0, date('m'), date('d'), date('Y')))
+						$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+					$content .= $this->getContent($application, $date);
+				}
 			}
 		}
 		return $this->pi_wrapInBaseClass($content);
 	}
-
+	
+	/**
+	 * Control piVars data
+	 *
+	 * @param	string		$content: html content
+	 * @return	boolean	
+	 */
+	function controlVars(&$content) {
+		$error = false;
+		if (isset($this->piVars['uid']) && !is_numeric($this->piVars['uid'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+			$error = true;
+		}	
+		if (isset($this->piVars['date']) && !is_numeric($this->piVars['date'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_date'));
+			$error = true;
+		}	
+		return $error ? false : true;
+	}
 
 	/**
 	 * Retrieves content

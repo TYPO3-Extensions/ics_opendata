@@ -37,6 +37,7 @@
 			<label index="file_error_extension">An error occured. Extension of file %1$s has not authorized.</label>
 			<label index="required_name">Name is required</label>
 			<label index="required_description">Description is required</label>
+			<label index="error_param_keyuid">Error: keyuid param incorrect</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="pid_valid">Le pid n'est pas valide.</label>

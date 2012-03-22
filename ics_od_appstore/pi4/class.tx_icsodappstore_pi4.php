@@ -227,12 +227,13 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
 			$appPlatforms[] = $platform['title'];
 		}
+		$pObj = t3lib_div::makeInstance("tslib_cObj");
 		$markerArray = array(
 			'###APPLICATION###' => $row['title'],
 			'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
-			'###DESCRIPTION###' => $row['description'],
+			'###DESCRIPTION###' => $this->pi_RTEcssText($row['description']),
 			'###DOWNLOAD###' => $row['countcall'],
-			'###PUBLISHER###' => $row['name'],
+			'###PUBLISHER###' => htmlspecialchars($row['name']),
 			'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 			'###SCREENSHOT###' => $this->renderScreenshot('screenshot', $TCA[$table]['columns']['screenshot'], $row['screenshot'] ),
 			'###LINK###' => '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>',
@@ -254,7 +255,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		);
 		return $content;
 	}
-
+	
 	/**
 	 * Retrieves content
 	 *
@@ -321,8 +322,8 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 				$markerArray = array(
 					'###NUM_ROW###' => $count_rows,
 					'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
-					'###APPLICATION###' => $row['title'],
-					'###PUBLISHER###' => $row['name'],
+					'###APPLICATION###' => htmlspecialchars($row['title']),
+					'###PUBLISHER###' => htmlspecialchars($row['name']),
 					'###DOWNLOAD###' => $row['countcall'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 					'###DESCRIPTION###' => t3lib_div::fixed_lgd( $row['description'],$this->conf['list.']['descSize']),
@@ -431,11 +432,11 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			foreach($files as $key=>$file){
 				if($key==0){
 					$content .= '
-						<img src="' . $fieldconf['config']['uploadfolder'] . '/' . $file . '" alt="screenshot ' . $key . '" title="logo" id="' . $this->prefixId . '_screenshot' . $key . '"/>
+						<img src="' . $fieldconf['config']['uploadfolder'] . '/' . $file . '" alt="' . $this->pi_getLL('screenshot'). ' ' . $key . '" title="logo" id="' . $this->prefixId . '_screenshot' . $key . '"/>
 						';
 				}else{
 					$content .= '
-						<img src="' . $fieldconf['config']['uploadfolder'] . '/' . $file . '" alt="logo" title="screenshot ' . $key . '" style="display: none;" id="' . $this->prefixId . '_screenshot' . $key . '"/>
+						<img src="' . $fieldconf['config']['uploadfolder'] . '/' . $file . '" alt="logo" title="' . $this->pi_getLL('screenshot'). ' ' . $key . '" style="display: none;" id="' . $this->prefixId . '_screenshot' . $key . '"/>
 					';
 				}
 
@@ -444,7 +445,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					$img .= '
 					<div class="soft-img-key-min soft-img-key-min'.$key.'">
 						<a href="javascript: onclick = showscreenshot(\'' . $this->prefixId . '_screenshot' . $key . '\');setCurrent(\'' . $this->prefixId . '_min' . $key . '\'); ">
-							<img src="' . $imgResource[3] . '"/>
+							<img src="' . $imgResource[3] . '"  alt="'.$this->pi_getLL('screenshot').' ' . strval(intval($key)+1) .'" />
 							<div id="' . $this->prefixId . '_min' . $key . '" class="current"></div>
 						</a>
 					</div>' ;
@@ -453,7 +454,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					$img .= '
 					<div class="soft-img-key-min soft-img-key-min'.$key.'">
 						<a href="javascript: onclick = showscreenshot(\'' . $this->prefixId . '_screenshot' . $key . '\');setCurrent(\'' . $this->prefixId . '_min' . $key . '\'); ">
-							<img src="' . $imgResource[3] . '"/>
+							<img src="' . $imgResource[3] . '"  alt="'.$this->pi_getLL('screenshot').' ' . strval(intval($key)+1) .'" />
 							<div id="' . $this->prefixId . '_min' . $key . '"></div>
 						</a>
 					</div>';

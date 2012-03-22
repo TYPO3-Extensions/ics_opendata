@@ -1,8 +1,11 @@
 2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Change to version 1.0.3
-
-2012-03-22 Emilie SAGNIEZ <emilie@in-cite.net>
 	* Depends typo3 4.3 (scheduler)
+	* Fix: add function to control piVars data format 
+	* Fix: add forgotten htmlspecialchars
+	* Fix: Move "screenshot" text to locallang
+	* Fix: add "pi_RTEcssText" function for respect htmlarea format (description field)
+	* Fix: Platforms fiels not save in front-end forms
 
 2012-03-22 Tsi YANG  <tsi@in-cite.net>
 	* Feature: Added scheduler task for statistics

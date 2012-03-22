@@ -30,6 +30,8 @@
 			<label index="success_publish">Application %1$s published.</label>
 			<label index="success_unpublish">Application %1$s unpublished.</label>
 			<label index="message_empty">Pas encore d'application ?</label>
+			<label index="error_param_publish">Error: publish param incorrect</label>
+			<label index="error_param_unpublish">Error: unpublish param incorrect</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="titre">Liste des applications</label>

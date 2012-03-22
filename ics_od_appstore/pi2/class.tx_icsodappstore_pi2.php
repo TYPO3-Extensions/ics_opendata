@@ -86,34 +86,51 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			return $this->pi_wrapInBaseClass($this->renderContentError($this->contentError));
 
 		$succes = true;
-		if ($this->piVars['keyuid']) { // Update mode
-			$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['keyuid']);
-			if (!$applications) {
-				$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
-			} else {
-				$messages = array();
-				if ($this->piVars['btn_registration']) {
-					$succes = $this->updateDB(true, $messages, $applications[0]);
-					$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['keyuid']);
-				}
-				$content .= $this->renderFormEdit($applications[0], $messages);
-			}
-		} else { // Insert mode
-			if ($this->piVars['btn_registration']) {
-				$messages = array();
-				$succes = $this->updateDB(false, $messages);
-				if ($succes) {
-					$content .= $this->renderSucces($messages);
+		
+		if ($this->controlVars($content)) { 
+			if ($this->piVars['keyuid']) { // Update mode
+				$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['keyuid']);
+				if (!$applications) {
+					$content .= $this->renderContentError($this->pi_getLL('application_not_exists'));
 				} else {
-					$content .= $this->renderFormCreate($messages);
+					$messages = array();
+					if ($this->piVars['btn_registration']) {
+						$succes = $this->updateDB(true, $messages, $applications[0]);
+						$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $this->piVars['keyuid']);
+					}
+					$content .= $this->renderFormEdit($applications[0], $messages);
 				}
-			} else
-				$content .= $this->renderFormCreate();
+			} else { // Insert mode
+				if ($this->piVars['btn_registration']) {
+					$messages = array();
+					$succes = $this->updateDB(false, $messages);
+					if ($succes) {
+						$content .= $this->renderSucces($messages);
+					} else {
+						$content .= $this->renderFormCreate($messages);
+					}
+				} else
+					$content .= $this->renderFormCreate();
+			}
 		}
-
 		return $this->pi_wrapInBaseClass($content);
 	}
-
+	
+	/**
+	 * Control piVars data
+	 *
+	 * @param	string		$content: html content
+	 * @return	boolean	
+	 */
+	function controlVars(&$content) {
+		$error = false;
+		if (isset($this->piVars['keyuid']) && !is_numeric($this->piVars['keyuid'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_keyuid'));
+			$error = true;
+		}	
+		return $error ? false : true;
+	}
+	
 	/**
 	 * Init the plugin
 	 *
@@ -156,8 +173,17 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		$GLOBALS['TSFE']->additionalHeaderData[$this->extKey] .= '<script src="typo3conf/ext/ics_od_appstore/res/script.js" type="text/javascript"></script>';
 
 		t3lib_div::loadTCA($this->tables['applications']);
+       $this->initAjax();
 
-        // Instanciation de l'objet ajax
+		return true;
+	}
+	
+	/**
+	 *	Init ajax
+	 *
+	 */
+	function initAjax() {
+		 // Instanciation de l'objet ajax
         $this->xajax = t3lib_div::makeInstance('tx_xajax');
 		$url = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
 		
@@ -179,10 +205,8 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
         $this->xajax->processRequests();
         // Else create javacript and add it to the normal output
         $GLOBALS['TSFE']->additionalHeaderData[$this->extKey] .= $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('xajax'));
-
-		return true;
 	}
-
+	
 	/**
 	 * Succes messages output
 	 *
@@ -199,14 +223,14 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		if (!empty($messages)) {
 			$subpart_messages = $this->cObj->getSubpart($template, '###TEMPLATE_MESSAGES###');
 			foreach($messages as $message) {
-				$markers = array('###MESSAGE###' => $message);
+				$markers = array('###MESSAGE###' => htmlspecialchars($message));
 				$output_messages .= $this->cObj->substituteMarkerArray($subpart_messages, $markers);
 			}
 		}
 		$template = $this->cObj->substituteSubpart($template, '###TEMPLATE_MESSAGES###', $output_messages);
 
 		$markers = array(
-			'###BACK###' => $this->pi_getLL('back'),
+			'###BACK###' => htmlspecialchars($this->pi_getLL('back')),
 			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1),
 		);
 		$template = $this->cObj->substituteMarkerArray($template, $markers);
@@ -231,7 +255,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		if (!empty($errors)) {
 			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');
 			foreach($errors as $error) {
-				$markers = array('###ERROR_MSG###' => $error);
+				$markers = array('###ERROR_MSG###' => htmlspecialchars($error));
 				$output_errors .= $this->cObj->substituteMarkerArray($subpart_error, $markers);
 			}
 		}
@@ -549,13 +573,12 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 		$data = array(
 			'title' => $this->piVars['title'],
 			'description' => $this->piVars['description'],
-			'platform' => $this->piVars['platform'],
 			'logo' => $logo,
 			'screenshot' => $screenshot,
 			'link' => $this->piVars['link'],
 			'update_date' => time(),
 		);
-		$fields = array('title', 'description', 'platform', 'logo', 'screenshot', 'link', 'update_date');
+		$fields = array('title', 'description', 'logo', 'screenshot', 'link', 'update_date');
 		if (!$update) {
 			$data['apikey'] = $this->apikey;
 			$data['maxcall'] = '999999999';
@@ -610,16 +633,33 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 				implode(',', $fields),
 				true
 			);
-
+			$this->piVars['keyuid'] = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			// Hook pour enregistrer les autres champs d'une application
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
 					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$_procObj->applicationFieldsDBUpdateAfter($GLOBALS['TYPO3_DB']->sql_insert_id(), $data, $fields, $this->conf, $this);
+					$_procObj->applicationFieldsDBUpdateAfter($this->piVars['keyuid'], $data, $fields, $this->conf, $this);
 				}
 			}
 
 			$errors[] = htmlspecialchars($this->pi_getLL('registration_validated')) . ' ' . $this->apikey;
+		}
+		
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			$this->tables['apps_platforms_mm'], 
+			'`uid_local` =' . $this->piVars['keyuid']
+		);
+		
+		if (is_array($this->piVars['platform']) && !empty($this->piVars['platform'])) {
+			foreach ($this->piVars['platform'] as $platform => $check) {
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery(
+					$this->tables['apps_platforms_mm'], 
+					array(
+						'uid_local' => $this->piVars['keyuid'],
+						'uid_foreign' => $platform,
+					)
+				);
+			}
 		}
 
 		if (!empty($succes))
@@ -660,7 +700,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			'###TITLE_FORM_APPLICATION###' => $edit ? htmlspecialchars($this->pi_getLL('title')) : htmlspecialchars($this->pi_getLL('new_application')),
 			'###APPLICATION_LABEL###' => htmlspecialchars($this->pi_getLL('name')),
 			'###APPLICATION###' => $this->prefixId.'[title]',
-			'###APPLICATION_VALUE###' => $this->piVars['title'] ? $this->piVars['title'] : '',
+			'###APPLICATION_VALUE###' => $this->piVars['title'] ? htmlspecialchars($this->piVars['title']) : '',
 			'###DESCRIPTION_LABEL###' => htmlspecialchars($this->pi_getLL('description')),
 			'###DESCRIPTION###' => $this->prefixId.'[description]',
 			'###DESCRIPTION_VALUE###' => $this->piVars['description'] ? $this->piVars['description'] : '',
@@ -679,7 +719,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			'###UID_VALUE###' => $edit ? $this->piVars['keyuid'] : 0,
 			'###BTN_REGISTRATION###' => $this->prefixId.'[btn_registration]',
 			'###BTN_REGISTRATION_VALUE###' => htmlspecialchars($this->pi_getLL('btn_registration')),
-			'###BACK###' => $this->pi_getLL('back'),
+			'###BACK###' => htmlspecialchars($this->pi_getLL('back')),
 			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1),
 		);
 		return $markerArray;

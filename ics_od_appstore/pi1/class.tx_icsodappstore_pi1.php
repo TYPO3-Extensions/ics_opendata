@@ -69,22 +69,42 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
 		$this->init();
-
-		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
-			$content .= $this->renderContentError($this->pi_getLL('nologin'));
-		}else{
-			$errors = array();
-			if ( isset($this->piVars['publish'])) {
-				$succes = $this->publish($this->piVars['publish'], false, $errors);
-			}elseif ( isset($this->piVars['unpublish'])) {
-				$succes = $this->publish($this->piVars['unpublish'], true, $errors);
+		
+		if ($this->controlVars($content)) {
+			if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
+				$content .= $this->renderContentError($this->pi_getLL('nologin'));
+			}else{
+				$errors = array();
+				if ( isset($this->piVars['publish'])) {
+					$succes = $this->publish($this->piVars['publish'], false, $errors);
+				}elseif ( isset($this->piVars['unpublish'])) {
+					$succes = $this->publish($this->piVars['unpublish'], true, $errors);
+				}
+				$content .= $this->getContent($errors);
 			}
-			$content .= $this->getContent($errors);
 		}
-
 		return $this->pi_wrapInBaseClass($content);
 	}
-
+	
+	/**
+	 * Control piVars data
+	 *
+	 * @param	string		$content: html content
+	 * @return	boolean	
+	 */
+	function controlVars(&$content) {
+		$error = false;
+		if (isset($this->piVars['publish']) && !is_numeric($this->piVars['publish'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_publish'));
+			$error = true;
+		}	
+		if (isset($this->piVars['unpublish']) && !is_numeric($this->piVars['unpublish'])) {
+			$content .= $this->renderContentError($this->pi_getLL('error_param_unpublish'));
+			$error = true;
+		}
+		return $error ? false : true;		
+	}
+	
 	/**
 	 * Retrieves the template and substitue markers
 	 *
@@ -100,7 +120,7 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 		if (!empty($errors)) {
 			$subpart_error = $this->cObj->getSubpart($template, '###TEMPLATE_ERRORS###');
 			foreach ($errors as $error) {
-				$markers = array('###ERROR_MSG###' => $error);
+				$markers = array('###ERROR_MSG###' => htmlspecialchars($error));
 				$output_errors .= $this->cObj->substituteMarkerArray($subpart_error, $markers);
 			}
 		}
@@ -217,11 +237,11 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 				
 				
 				$markers = array(
-					'###NOM###' => $application['title'],
+					'###NOM###' => htmlspecialchars($application['title']),
 					'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $application['logo'] ),
-					'###DESCRIPTION###' => $application['description'],
+					'###DESCRIPTION###' => $this->pi_RTEcssText($application['description']),
 					'###PLATFORMS###' => implode(',', $appPlatforms),
-					'###KEY###' => $application['apikey'],
+					'###KEY###' => htmlspecialchars($application['apikey']),
 					'###LINK_MODIF###' => $link_edit,
 					'###LABEL_MODIF###' => htmlspecialchars($this->pi_getLL('edit')),
 					'###LINK_PUBLISH###' => $link_publish,
