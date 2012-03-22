@@ -1,0 +1,19 @@
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change to version 1.1.1
+
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Fix: add picto only if exist
+
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change to version 1.1.0
+
+2012-03-20 Tsi YANG  <tsi@in-cite.net>
+	* Feature: Added categories pictos process
+
+2012-03-20 Tsi YANG  <tsi@in-cite.net>
+	* Feature: Added picto field
+	* Fix: Mistakes in css class name
+
+2011-05-13 In Cite Solution  <technique@in-cite.net>
+
+	* initial code generated with kickstarter
