@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- $Id$ -->
-<command name="Get agencies" cmd="datastore_getagencies" brief="Retrieves agencies.">
-	<description>Retrieves datastore agencies.</description>
-</command>
