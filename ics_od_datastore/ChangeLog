@@ -1,10 +1,13 @@
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change to version 1.1.1
+
 2012-03-22 Emilie SAGNIEZ <emilie@in-cite.net>
 	* Depends typo3 4.3 (scheduler)
 
 2012-03-22 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Removed categories pictos process to ics_od_categories extension.
 
-2012-03-20 Emilie SAGNIEZ  <emilie@in-cite.net>
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Change to version 1.1.0
 
 2012-03-20 Tsi YANG <tsi@in-cite.net>
