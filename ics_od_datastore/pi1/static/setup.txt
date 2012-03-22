@@ -133,18 +133,7 @@ plugin.tx_icsoddatastore_pi1{
 		tstamp_label_stdWrap.stdWrap {
 			wrap = <p class="label tstamp">|</p>
 		}
-		
-		#Category's picto
-		category_picto {
-			setContentToCurrent = 1
-			cObject = IMAGE
-			cObject {
-				file.import.current = 1
-				file.height = 68
-			}
-			stdWrap.wrap = <div class="cat_picto">| </div>
-		}
-		
+				
 		# Link to file for data type
 		fileLink = {$config.tx_icsoddatastore_pi1.displayList.fileLink}
 		 
