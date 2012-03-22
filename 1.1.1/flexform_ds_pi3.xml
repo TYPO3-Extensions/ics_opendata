@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<T3DataStructure>
+	<meta>
+       <langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<main>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:configuration</sheetTitle>
+				</TCEforms>
+				<el>
+					<template>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:template</label>
+						   <config>
+								<type>input</type>
+								<eval>trim</eval>
+								<default></default>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?what_to_display=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</template>
+					<type>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:type</label>
+							<config>	
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array"/>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:type_dataset</numIndex>
+										<numIndex index="1">DATASET</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:type_file</numIndex>
+										<numIndex index="1">FILE</numIndex>
+									</numIndex>
+								</items>
+								<maxitems>1</maxitems>
+								<size>1</size>
+								<multiple>1</multiple>
+							</config>
+						</TCEforms>
+					</type>
+					<size>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:size</label>
+							<config>
+								<type>input</type>
+								<eval>num</eval>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</size>
+					<period>
+						<TCEforms>
+							<label>LLL:EXT:ics_od_datastore/locallang_flexform_pi3.xml:period</label>
+							<config>
+								<type>input</type>
+								<eval>num</eval>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</period>
+				</el>
+			</ROOT>
+		</main>
+	</sheets>
+</T3DataStructure>

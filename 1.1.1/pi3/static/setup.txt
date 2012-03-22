@@ -1,0 +1,30 @@
+plugin.tx_icsoddatastore_pi3 {
+	view {
+		type = DATASET
+		size = 10
+		period = 0
+	}
+
+	# Render data
+	renderObj {
+		dataset {
+			data {
+				typolink {
+					parameter = 
+					additionalParams.field = uid
+					additionalParams.wrap = &tx_icsoddatastore_pi1[uid]=|
+				}
+			}
+			count.noTrimWrap = || téléchargements|
+		}
+		file {
+			data {
+				typolink {
+					# TODO : cas type = file avec url réécrit
+					# parameter = url
+				}
+			}
+			count.noTrimWrap = || téléchargements|
+		}
+	}
+}
