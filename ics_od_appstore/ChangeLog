@@ -1,3 +1,6 @@
+2012-03-22 Emilie SAGNIEZ <emilie@in-cite.net>
+	* Depends typo3 4.3 (scheduler)
+
 2012-03-22 Tsi YANG  <tsi@in-cite.net>
 	* Feature: Added scheduler task for statistics
 

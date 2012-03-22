@@ -46,6 +46,7 @@ require_once(t3lib_extMgm::extPath('ics_od_categories') . 'lib/class.tx_icsodcat
  * Plugin 'Common for plugins' for the 'ics_od_categories' extension.
  *
  * @author	Emilie Prud'homme <emilie@in-cite.net>
+ * @author	Tsi Yang <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icsodcategories
  */
@@ -93,7 +94,8 @@ class tx_icsodcategories_datastore {
 			$pictos = array();
 			foreach ($categories as $category) {
 				$listNameCategories[] = $category['name'];
-				$pictos[] = $category['picto'];
+				if ($category['picto'] && file_exists($category['picto']))
+					$pictos[] = $category['picto'];
 			}
 			$output .= implode(', ', $listNameCategories);
 

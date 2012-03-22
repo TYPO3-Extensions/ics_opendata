@@ -54,6 +54,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  * Plugin 'Common for plugins' for the 'ics_od_categories' extension.
  *
  * @author	Emilie Prud'homme <emilie@in-cite.net>
+ * @author	Tsi Yang <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icsodcategories
  */
