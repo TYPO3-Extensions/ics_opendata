@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<command name="GetCategories" cmd="od_getcategories" brief="Get categories">
+	<description>Retrieves Open Data categories.</description>
+</command> 
