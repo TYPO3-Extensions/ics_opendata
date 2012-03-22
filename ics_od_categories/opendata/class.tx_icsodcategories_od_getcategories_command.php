@@ -127,6 +127,9 @@ class tx_icsodcategories_od_getcategories_command extends tx_icsodcoreapi_comman
 			// *************************
 
 			// ... (Add additional operations here) ...
+			$element['picto'] = null;
+			if ($category['picto'])
+				$element['picto'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $category['picto'];
 
 			// * End user inclusions 4
 

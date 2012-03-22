@@ -107,7 +107,8 @@ class tx_icsodcategories_category_datasource
 			'`tx_icsodcategories_categories`.`uid` AS `id`, ' .
 			'`tx_icsodcategories_categories`.`name` AS `name`, ' .
 			'`tx_icsodcategories_categories`.`description` AS `description`, ' .
-			'`tx_icsodcategories_categories`.`parent` AS `parent`';
+			'`tx_icsodcategories_categories`.`parent` AS `parent`, ' . 
+			'`tx_icsodcategories_categories`.`picto` AS `picto`';
 		$queryarray['fromtable'] =
 			'`tx_icsodcategories_categories`';
 		$queryarray['where'] =
