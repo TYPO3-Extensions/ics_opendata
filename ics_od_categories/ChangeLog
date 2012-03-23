@@ -1,3 +1,7 @@
+2012-03-23 Tsi YANG  <tsi@in-cite.net>
+	* Fix : Added sorting on retrieving categories elements.
+	* Refactor : Reworked typoscript configuration to display categories.
+
 2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: update autoload
 

@@ -42,7 +42,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_categories') . 'lib/class.tx_icsodcategories_tools.php');
 
 /**
  * Plugin 'Common for plugins' for the 'ics_od_categories' extension.

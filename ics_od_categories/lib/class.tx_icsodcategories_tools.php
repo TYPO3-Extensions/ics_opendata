@@ -147,7 +147,7 @@ class tx_icsodcategories_tools extends tslib_pibase {
 	 * @param	int		$uid	uid of external element
 	 * @return	array
 	 */
-	function getCategoriesElement($uid) {
+	function getCategoriesElement($uid, $orderBy='') {
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'`'.$this->tables['categories'].'`.`uid`,
 				`'.$this->tables['categories'].'`.`name`,
@@ -160,7 +160,9 @@ class tx_icsodcategories_tools extends tslib_pibase {
 				INNER JOIN `'.$this->tables['ext'].'`
 					ON `'.$this->tables['mm'].'`.`uid_foreign` = `'.$this->tables['ext'].'`.`uid`
 					AND `'.$this->tables['mm'].'`.`tablenames` = \'' . $this->tables['ext'] . '\'',
-			'`'.$this->tables['ext'].'`.`uid` = ' . $uid . ' ' . $this->cObj->enableFields($this->tables['categories']) . $this->cObj->enableFields($this->tables['ext'])
+			'`'.$this->tables['ext'].'`.`uid` = ' . $uid . ' ' . $this->cObj->enableFields($this->tables['categories']) . $this->cObj->enableFields($this->tables['ext']),
+			'',
+			$orderBy
 		);
 	}
 

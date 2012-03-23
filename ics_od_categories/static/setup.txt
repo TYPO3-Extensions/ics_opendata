@@ -5,34 +5,37 @@ plugin.tx_icsoddatastore_pi1{
 	templateFile = EXT:ics_od_categories/res/exemple_template_datastore.html
 	
 	displayList {
-		categories_stdWrap.stdWrap {
-			wrap = <p class="value categories">|</p>
-		}
-		
-		categories_label_stdWrap.stdWrap {
-			wrap = <p class="label categories">|</p>
-		}
-
-		#Category's picto
-		category_picto {
-			setContentToCurrent = 1
-			cObject = IMAGE
-			cObject {
-				file.import.current = 1
-				file.import.listNum = 0
-				file.height = 68
+		categories {
+			separator = ,
+			category {
+				if.isTrue.field = picto
+				cObject = IMAGE
+				cObject {
+					file.import.field = picto
+					file.height = 68
+				}
+				stdWrap.wrap = <div class="cat_picto">| </div>
 			}
-			stdWrap.wrap = <div class="cat_picto">| </div>
+			listNum = 0
+			label {
+				stdWrap.wrap = <p class="label categories">|</p>
+			}
+			# Order by name, position
+			order = position
 		}
 	}
 	
 	displaySingle {
-		categories_stdWrap.stdWrap {
-			wrap = <p class="value categories">|</p>
-		}
-		
-		categories_label_stdWrap.stdWrap {
-			wrap = <p class="label categories">|</p>
+		categories {
+			separator = ,&nbsp;
+			category {
+				field = value
+			}
+			stdWrap.wrap = <p class="value categories">|</p>
+			label {
+				stdWrap.wrap = <p class="label categories">|</p>
+			}
+			order = name
 		}
 	}
 
