@@ -29,18 +29,17 @@
  *
  *
  *
- *   53: class tx_icsodcategories_datastore
- *   64:     function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $object)
- *   85:     function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $filegroup, $conf, $object)
- *  148:     function additionalFieldsSearchMarkers(&$markers, &$subpartArray, &$template, $conf, $object)
- *  193:     function additionalFieldsRSSMarkers(&$markersDataset, &$subpartArray, $template, $filegroup, $conf, $object)
+ *   52: class tx_icsodcategories_datastore
+ *   63:     function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $object)
+ *   84:     function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $filegroup, $conf, $object)
+ *  119:     function additionalFieldsSearchMarkers(&$markers, &$subpartArray, &$template, $conf, $object)
+ *  164:     function additionalFieldsRSSMarkers(&$markersDataset, &$subpartArray, $template, $filegroup, $conf, $object)
  *
  * TOTAL FUNCTIONS: 4
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_categories') . 'lib/class.tx_icsodcategories_tools.php');
 
 /**
  * Plugin 'Common for plugins' for the 'ics_od_categories' extension.
@@ -86,7 +85,7 @@ class tx_icsodcategories_datastore {
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
-		switch ((string)strtoupper(trim($conf['categories.']['order']))) {
+		switch ((string)strtoupper(trim($conf['categories.']['sorting']))) {
 			case 'NAME':
 				$orderBy = '`'.$tools->tables['categories'].'`.`name`';
 				break;
@@ -96,7 +95,7 @@ class tx_icsodcategories_datastore {
 			default:
 				$orderBy = '';
 		}
-
+		
 		$categories = $tools->getCategoriesElement($filegroup['uid'], $orderBy);
 		$output = '';
 
@@ -106,21 +105,15 @@ class tx_icsodcategories_datastore {
 			$outputCats = array();
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 			foreach ($categories as $category) {
-				// $listNameCategories[] = $category['name'];
-				// if ($category['picto'] && file_exists($category['picto']))
-					// $pictos[] = $category['picto'];
-
 				$data = array(
-					'value' => $category['name'],
+					'name' => $category['name'],
 					'picto' => ($category['picto'] && file_exists($category['picto']))? $category['picto']: '',
 				);
 				$cObj->start($data, 'Category');
 				$cObj->setParent($object->data, $object->currentRecord);
 				$outputCats[] = $cObj->stdWrap('', $conf['categories.']['category.']);
 			}
-			// $output .= implode(', ', $listNameCategories);
 			$output .= implode($conf['categories.']['separator'], $outputCats);
-			// var_dump($outputCats);
 
 			$subpart = $object->cObj->getSubpart($template, '###SUBPART_CATEGORIES###');
 			$template = $object->cObj->substituteSubpart($template, '###SUBPART_CATEGORIES###', $subpart);
@@ -130,9 +123,7 @@ class tx_icsodcategories_datastore {
 		}
 
 		$markers['###CATEGORIES_LABEL###'] = $object->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories_label'), $conf['categories.']['label.']);
-		// $markers['###CATEGORIES_VALUE###'] = $object->cObj->stdWrap($output, $conf['categories_stdWrap.']);
 		$markers['###CATEGORIES_VALUE###'] = $object->cObj->stdWrap($output, $conf['categories.']);
-		// $markers['###CATEGORY_PICTO###'] = $object->cObj->stdWrap(implode(',', $pictos), $conf['category_picto.']);
 	}
 
 	/**

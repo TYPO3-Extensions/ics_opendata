@@ -144,7 +144,8 @@ class tx_icsodcategories_tools extends tslib_pibase {
 	/**
 	 * List of elements categories
 	 *
-	 * @param	int		$uid	uid of external element
+	 * @param	int		$uid		uid of external element
+	 * @param	string	$orderBy	Order By
 	 * @return	array
 	 */
 	function getCategoriesElement($uid, $orderBy='') {

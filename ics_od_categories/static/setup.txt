@@ -21,7 +21,7 @@ plugin.tx_icsoddatastore_pi1{
 				stdWrap.wrap = <p class="label categories">|</p>
 			}
 			# Order by name, position
-			order = position
+			sorting = position
 		}
 	}
 	
@@ -29,13 +29,13 @@ plugin.tx_icsoddatastore_pi1{
 		categories {
 			separator = ,&nbsp;
 			category {
-				field = value
+				field = name
 			}
 			stdWrap.wrap = <p class="value categories">|</p>
 			label {
 				stdWrap.wrap = <p class="label categories">|</p>
 			}
-			order = name
+			sorting = name
 		}
 	}
 
