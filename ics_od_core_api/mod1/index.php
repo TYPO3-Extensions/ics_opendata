@@ -48,12 +48,6 @@ require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'lib/class.tx_icsodcoreapi_command.php' );
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'lib/class.tx_icsodcoreapi_parameter.php' );
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'lib/class.tx_icsodcoreapi_value.php' );
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'mod1/class.tx_icsodcoreapi_module1_menu.php' );
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'mod1/class.tx_icsodcoreapi_module1_command.php' );
-
 
 /**
  * Module 'Commands documentation' for the 'ics_od_core_api' extension.

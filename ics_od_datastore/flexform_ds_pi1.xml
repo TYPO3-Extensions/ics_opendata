@@ -102,6 +102,10 @@
 										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_release</numIndex>
 										<numIndex index="1">release_date</numIndex>
 									</numIndex>
+									<numIndex index="3"  type="array">
+										<numIndex index="0">LLL:EXT:ics_od_datastore/locallang_flexform_pi1.xml:sortName_title</numIndex>
+										<numIndex index="1">title</numIndex>
+									</numIndex>
 								</items>
 								<size>1</size>
 								<minitems>0</minitems>

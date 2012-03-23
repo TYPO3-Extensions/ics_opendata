@@ -25,8 +25,6 @@
  * $Id$
  */
 
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'lib/class.tx_icsodcoreapi_parameter.php' );
-
 /**
  * Objet 'value' for the 'ics_od_core_api' extension.
  *

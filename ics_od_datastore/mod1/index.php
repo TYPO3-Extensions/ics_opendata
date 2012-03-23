@@ -47,7 +47,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_datastore') . 'lib/class.tx_icsoddatastore_recordlist.php');
 $LANG->includeLLFile('EXT:ics_od_datastore/mod1/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.

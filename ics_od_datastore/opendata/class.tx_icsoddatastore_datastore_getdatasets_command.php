@@ -34,8 +34,6 @@
  * @package    TYPO3.ics_od_datastore
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsodcoreapi_command.php');
-
 class tx_icsoddatastore_datastore_getdatasets_command extends tx_icsodcoreapi_command
 {
 

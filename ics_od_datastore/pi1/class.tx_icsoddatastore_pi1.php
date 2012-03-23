@@ -440,7 +440,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->conf['sorting.']['name'] . '` ' . $this->conf['sorting.']['order'];
 			}
 		}
-
 		// Set where clause with junture
 		if (isset($this->list_criteria['keywords']) && !empty($this->list_criteria['keywords'])) {
 			$whereClause .= ' AND (
@@ -651,7 +650,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				'`' . $this->tables['files'] . '`.`type` = ' . $type['uid'],
 				'(`' . $this->tables['files'] . '`.`file` NOT LIKE "" OR `' . $this->tables['files'] . '`.`url` NOT LIKE "")',
 			);
-			if (isset($this->list_criteria['fileformat']) && ($view == 'LIST')) {
+			if (isset($this->list_criteria['fileformat']) && ($view == 'LIST') && $this->conf['displayList.']['renderOnlySearchedFileFormats']) {
 				$where[] = '`' . $this->tables['files'] . '`.`format` IN (' . implode(',',$this->list_criteria['fileformat']) . ')';
 			}
 			$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(

@@ -46,8 +46,6 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
-
-require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/class.tx_icsodappstore_common.php');
 if(t3lib_extMgm::isLoaded('ratings'))
 	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
 

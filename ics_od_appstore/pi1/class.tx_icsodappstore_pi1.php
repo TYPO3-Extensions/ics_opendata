@@ -40,8 +40,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/class.tx_icsodappstore_common.php');
-
 
 /**
  * Plugin 'Display developpers applications list' for the 'ics_od_appstore' extension.

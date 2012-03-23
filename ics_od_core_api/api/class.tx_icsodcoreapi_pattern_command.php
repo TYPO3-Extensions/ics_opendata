@@ -25,8 +25,6 @@
  * $Id$
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsopenddataapi_command.php');
-
 /**
  * Abstract command class triggered by pattern matching.
  * Defines the contract for a pattern command.

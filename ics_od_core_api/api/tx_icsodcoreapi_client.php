@@ -36,8 +36,6 @@
  * @package    TYPO3
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsodcoreapi_service.php');
-
 $fob = t3lib_div::makeInstance('tx_icsodcoreapi_service');
 $fob->init();
 $output = $fob->main();

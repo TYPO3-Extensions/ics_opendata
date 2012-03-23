@@ -24,8 +24,6 @@
 /*
  * $Id$
  */
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'lib/class.tx_icsodcoreapi_parameter.php' );
-require_once( t3lib_extMgm::extPath('ics_od_core_api') . 'mod1/class.tx_icsodcoreapi_module1_parameter.php' );
 /**
  * Class 'Commands documentation value' for the 'ics_od_core_api' extension.
  *

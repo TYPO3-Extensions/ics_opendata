@@ -146,6 +146,8 @@ plugin.tx_icsoddatastore_pi1{
 				desc = {$config.tx_icsoddatastore_pi1.displayList.sort.sortImg.desc}
 			} 
 		}
+		
+		renderOnlySearchedFileFormats = {$config.tx_icsoddatastore_pi1.displayList.renderOnlySearchedFileFormats}
 	}
 	
 	displaySingle {

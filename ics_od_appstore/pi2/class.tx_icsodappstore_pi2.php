@@ -50,7 +50,6 @@
  */
 
 require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/randomGenerator.php');
-require_once(t3lib_extMgm::extPath('ics_od_appstore') . 'lib/class.tx_icsodappstore_common.php');
 require_once (t3lib_extMgm::extPath('xajax') . 'class.tx_xajax.php');
 
 

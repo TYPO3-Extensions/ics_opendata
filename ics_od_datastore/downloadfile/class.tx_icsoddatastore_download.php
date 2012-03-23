@@ -29,8 +29,6 @@
  * @package    TYPO3
  */
 require_once(PATH_tslib . 'class.tslib_fe.php');
-require_once(t3lib_extMgm::extPath('ics_od_datastore') . 'downloadfile/class.tx_icsoddatastore_hitcounter.php');
-require_once(t3lib_extMgm::extPath('ics_od_datastore') . 'downloadfile/class.tx_icsoddatastore_dlfile.php');
 
 tslib_eidtools::connectDB();
 

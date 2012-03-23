@@ -26,8 +26,6 @@
  */
 
 require_once(PATH_tslib . 'class.tslib_fe.php');
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsodcoreapi_factory.php');
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsodcoreapi_logger.php');
 require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/error_codes.php');
 require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/error_functions.php');
 require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'lib/xml2json/xml2json.php');

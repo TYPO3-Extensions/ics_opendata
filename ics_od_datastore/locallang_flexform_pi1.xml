@@ -17,6 +17,7 @@
 			<label index="sortName">Sort name</label>
 			<label index="sortName_tstamp">Update date</label>
 			<label index="sortName_release">Release date</label>
+			<label index="sortName_title">Title</label>
 			<label index="sortOrder">Sort order</label>
 			<label index="sortOrder_asc">Ascendant</label>
 			<label index="sortOrder_desc">Descendant</label>
@@ -33,6 +34,7 @@
 			<label index="sortName">Trier par</label>
 			<label index="sortName_tstamp">Date de mise à jour</label>
 			<label index="sortName_release">Date de publication</label>
+			<label index="sortName_title">Nom</label>
 			<label index="agencies">Agences</label>
 			<label index="sortOrder">Ordre de tri</label>
 			<label index="sortOrder_asc">Ascendant</label>

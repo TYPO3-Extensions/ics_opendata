@@ -48,8 +48,6 @@
  * @package    TYPO3.ics_od_appstore
  */
 
-require_once(t3lib_extMgm::extPath('ics_od_core_api') . 'api/class.tx_icsodcoreapi_command.php');
-
 class tx_icsodappstore_getauthors_command extends tx_icsodcoreapi_command
 {
 	var $params = array();
