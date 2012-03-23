@@ -1,3 +1,6 @@
+2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Version changed to 1.1.2
+	
 2012-03-23 Tsi YANG  <tsi@in-cite.net>
 	* Documentation: Updated with picto.
 	* Comments: Cleaned comments.
@@ -8,9 +11,9 @@
 	* Fix: update autoload
 
 2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
-	* Change to version 1.1.1
+	* Version changed to 1.1.1
 	* Fix: add picto only if exist
-	* Change to version 1.1.0
+	* Version changed to 1.1.2
 
 2012-03-20 Tsi YANG  <tsi@in-cite.net>
 	* Feature: Added categories pictos process
