@@ -2,6 +2,7 @@
 	* Feature: Add TS configuration: displayList.renderOnlySearchedFileFormats
 	* Feature: Add title sorting to pi1 flexform
 	* Fix: update autoload
+	* Feature: Add typoscript that converts line breaks to <br />-tags in dataset description field 
 
 2012-03-22 Tsi YANG <tsi@in-cite.net>
 	* Documentation: Added documentation on "How to display last updated and last released" and stats download.

@@ -167,6 +167,7 @@ plugin.tx_icsoddatastore_pi1{
 		
 		description_stdWrap.stdWrap {
 			wrap = <p class="value description">|</p>
+			br = 1
 		}
 		description_label_stdWrap.stdWrap {
 			wrap = <p class="label description">|</p>
