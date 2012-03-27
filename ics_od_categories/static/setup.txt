@@ -38,6 +38,10 @@ plugin.tx_icsoddatastore_pi1{
 			sorting = name
 		}
 	}
+	
+	displaySearch {
+		categories =
+	}
 
 }	
 

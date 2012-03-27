@@ -101,9 +101,10 @@ class tx_icsodcategories_tools extends tslib_pibase {
 	 * List of all categories
 	 *
 	 * @param	boolean	$current Selected used categories only
+	 * @param	array	$uids	Categories uids
 	 * @return	array
 	 */
-	function getCategories($current = false) {
+	function getCategories($current = false, $uids = null, $orderBy='') {
 		$where = $innerjoin = '';
 		if ($current) {
 			$innerjoin .= ' INNER JOIN `'.$this->tables['mm'].'`
@@ -113,14 +114,21 @@ class tx_icsodcategories_tools extends tslib_pibase {
 					AND `'.$this->tables['mm'].'`.`tablenames` = \'' . $this->tables['ext'] . '\'';
 			$where .= $this->cObj->enableFields($this->tables['ext']);
 		}
+		if (is_array($uids) && !empty($uids)) {
+			$where .= ' AND `' . $this->tables['categories'].'`.`uid` IN (' . implode(',', $uids) . ')';
+		}
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'DISTINCT `'.$this->tables['categories'].'`.`uid`,
 				`'.$this->tables['categories'].'`.`name`,
 				`'.$this->tables['categories'].'`.`description`,
-				`'.$this->tables['categories'].'`.`parent`',
+				`'.$this->tables['categories'].'`.`parent`,
+				`'.$this->tables['categories'].'`.`picto`',
 			'`'.$this->tables['categories'].'`'.$innerjoin,
-			'1 ' . $this->cObj->enableFields($this->tables['categories']).$where
+			'1 ' . $this->cObj->enableFields($this->tables['categories']).$where,
+			'',
+			$orderBy
 		);
+		
 	}
 
 	/**

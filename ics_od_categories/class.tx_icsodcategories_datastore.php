@@ -171,6 +171,33 @@ class tx_icsodcategories_datastore {
 	}
 
 	/**
+	 * Render selected criteria fields markers
+	 *
+	 * @param	array		$markers		markers array
+	 * @param	array		$subpartArray	subparts array
+	 * @param	string		$template		Template HTML
+	 * @param	array		$conf		configuration array
+	 * @param	array		$object		object
+	 * @return	void
+	 */
+	function additionalSelectedCriteriaMarkers(&$markers, &$subpartArray, &$template, $conf, $object) {
+		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
+		$tools->init($object->tables['filegroups'], $object->cObj);
+
+		$categories = array();
+		if (is_array($object->piVars['categories']) && !empty($object->piVars['categories'])) {
+			$rows = $tools->getCategories(true, $object->piVars['categories'], '`'.$tools->tables['categories'].'`.`name`');
+			if (is_array($rows) && !empty($rows)) {
+				foreach ($rows as $row) {
+					$categories[] = $row['name'];
+				}
+			}
+		}
+		$markers['###SC_CATEGORIES_LABEL###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:sc_categories_label');
+		$markers['###SC_CATEGORIES_VALUE###'] = $object->cObj->stdWrap(implode(',', $categories), $conf['displaySearch.']['categories.']);
+	}
+	
+	/**
 	 * Render RSS categories fields markers
 	 *
 	 * @param	array		$markersDataset		markers array
