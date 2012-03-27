@@ -440,10 +440,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
 		);
-		$template = $this->cObj->substituteSubpart($template, '###HEADER_ITEM###', $headerItems);
-		$template = $this->cObj->substituteSubpart($template, '###GROUP_ROW_CONTENT###', $rowItems);
-
-		$content .= $this->cObj->substituteMarkerArray($template, $markers);
+		$subpartArray = array();
+		$subpartArray['###HEADER_ITEM###'] = $headerItems;
+		$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
+		
+		// Hook for add fields markers to list view
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalListFieldsMarkers($markers, $subpartArray, $template, $this);
+			}
+		}
+		
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $markers, $subpartArray);
 		return $content;
 	}
 
