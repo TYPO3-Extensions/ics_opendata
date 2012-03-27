@@ -1,5 +1,10 @@
+2012-03-27 Emilie SAGNIEZ  <emilie@in-cite.net>
+	Feature: Added additionalListFieldsMarkers hook
+	Fix: Corrected additionalSelectedCriteriaMarkers hook
+
 2012-03-27 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added selected criteria informations on search form.
+	* Refactor: Externalized setup css styles.
 
 2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Feature: Add TS configuration: displayList.renderOnlySearchedFileFormats
