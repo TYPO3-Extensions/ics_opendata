@@ -60,8 +60,8 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
-$LANG->includeLLFile('EXT:lang/locallang_mod_web_list.xml');
-require_once ($BACK_PATH.'class.db_list.inc');
+$GLOBALS['LANG']->includeLLFile('EXT:lang/locallang_mod_web_list.xml');
+require_once ($GLOBALS['BACK_PATH'].'class.db_list.inc');
 
 /**
  * Rendu de la liste d'enregistrement comme dans le module Web>List.

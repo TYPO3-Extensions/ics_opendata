@@ -105,6 +105,10 @@
 			<label index="rss_alt">Lien vers la page RSS</label>
 			<label index="rss_title">Lien vers la page RSS</label>
 			<label index="rss_text">Flux RSS</label>
+			<label index="selectedCriteria">Vos critères de recherche</label>
+			<label index="sc_keywords">Mots-clés</label>
+			<label index="sc_tiers">Agences</label>
+			<label index="sc_formats">Formats</label>
 		</languageKey>
 	</data>
 </T3locallang>

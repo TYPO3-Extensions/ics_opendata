@@ -1,3 +1,6 @@
+2012-03-27 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added selected criteria informations on search form.
+
 2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Feature: Add TS configuration: displayList.renderOnlySearchedFileFormats
 	* Feature: Add title sorting to pi1 flexform
