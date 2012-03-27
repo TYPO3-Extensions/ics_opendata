@@ -201,15 +201,17 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 			case 'FILE':
 				$data = $row['file'];
 				$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-					'file',
+					'*',
 					$this->tables['files'],
 					'uid=' . $row['file'] . ' ' . $this->cObj->enableFields($this->tables['files']),
 					'',
 					'',
 					1
 				);
-				if (is_array($files) && !empty($files))
-					$data = array($row['file'], $files[0]['file']);
+				if (is_array($files) && !empty($files)) {
+					$makeLink = t3lib_div::makeInstance('tx_icsoddatastore_makelink');
+					$data = array($row['file'], $makeLink->generateUrl($files[0]));
+				}
 				break;
 			case 'CATEGORY':
 			default:
