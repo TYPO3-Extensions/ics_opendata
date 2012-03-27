@@ -354,8 +354,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		);
 		$subpartArray = array();
 		// Hook for add fields markers
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsSearchMarkers'])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsSearchMarkers'] as $_classRef) {
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
 				$_procObj->additionalSelectedCriteriaMarkers($markers, $subpartArray, $template, $this->conf, $this);
 			}
