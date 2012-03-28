@@ -15,8 +15,11 @@ plugin.tx_icsodappstore_pi2.styleApi = typo3conf/ext/ics_od_appstore/res/css/sty
 
 
 # AppStore
-plugin.tx_icsodappstore_pi4.template =  {$plugin.ics_od_appstore.template}
-plugin.tx_icsodappstore_pi4.styleApi = typo3conf/ext/ics_od_appstore/res/css/styles.css
+plugin.tx_icsodappstore_pi4 {
+	template =  {$plugin.ics_od_appstore.template}
+	styleApi = typo3conf/ext/ics_od_appstore/res/css/styles.css
+	singlePid = {$plugin.ics_od_appstore.singlePid}
+}
 
 plugin.tx_icsodappstore_pi4.list {
 	colNum = 2

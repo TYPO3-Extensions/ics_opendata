@@ -144,6 +144,9 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 	 */
 	function init(){
 		parent::init();
+		if (!$this->conf['singlePid'])
+			$this->conf['singlePid'] = $GLOBALS['TSFE']->id;
+			
 		if(!isset($this->piVars['page']) || !is_numeric($this->piVars["page"])){
 			$this->piVars['page'] = 0;
 		}
@@ -226,6 +229,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			$appPlatforms[] = $platform['title'];
 		}
 		$pObj = t3lib_div::makeInstance("tslib_cObj");
+		$backID = $this->piVars['returnID'] ? $this->piVars['returnID'] : $GLOBALS['TSFE']->id;
 		$markerArray = array(
 			'###APPLICATION###' => $row['title'],
 			'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
@@ -236,7 +240,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			'###SCREENSHOT###' => $this->renderScreenshot('screenshot', $TCA[$table]['columns']['screenshot'], $row['screenshot'] ),
 			'###LINK###' => '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>',
 			'###PLATFORMS###' => implode(',', $appPlatforms),
-			'###BACK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort']) )
+			'###BACK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($backID, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort']) )
 		);
 		$subpartArray = array();
 		// Hook for application extra fields
@@ -325,7 +329,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					'###DOWNLOAD###' => $row['countcall'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 					'###DESCRIPTION###' => t3lib_div::fixed_lgd( $row['description'],$this->conf['list.']['descSize']),
-					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid']) ),
+					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($this->conf['singlePid'], array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid'], $this->prefixId.'[returnID]'=> $GLOBALS['TSFE']->id) ),
 					'###PLATFORMS###' => implode(',', $appPlatforms),
 				);
 

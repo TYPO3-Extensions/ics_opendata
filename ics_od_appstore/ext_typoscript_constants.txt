@@ -18,4 +18,7 @@ plugin.ics_od_appstore {
 
 	# cat=plugin.ics_od_appstore//; type=string; label= Template file : The template file path
 	template = 
+	
+	# cat=plugin.ics_od_appstore//; type=int; label= View Single: Single view page id 
+	singlePid =
 }

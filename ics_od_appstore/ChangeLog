@@ -1,6 +1,7 @@
 2012-03-28 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Add view list hook
 	* Use pagebrowse extension to generate list pagination if configuration actived
+	* Add possibility to have single view page different of list view page
 
 2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Version changed to 1.0.4
