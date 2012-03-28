@@ -405,10 +405,23 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 				'###SORT###' => $sort_content,
 				'###PAGES###' => $content_pages,
 			);
+			$subpartArray = array(
+				'###COLS###' => $content_cols,
+				'###HIDE_FIRST_PAGE###' => $template['FIRST_PAGE'],
+				'###HIDE_LAST_PAGE###' => $template['LAST_PAGE']
+			);
 			//Header build end -->
-
+			
+			// Hook for add fields markers to list view
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj->additionalListFieldsMarkers($markerArray, $subpartArray, $template, $this);
+				}
+			}
+		
 			//Final link
-			$content .= $this->cObj->substituteMarkerArrayCached($template['TEMPLATE'], $markerArray, array('###COLS###'=>$content_cols, '###HIDE_FIRST_PAGE###'=>$template['FIRST_PAGE'], '###HIDE_LAST_PAGE###'=>$template['LAST_PAGE']));
+			$content .= $this->cObj->substituteMarkerArrayCached($template['TEMPLATE'], $markerArray, $subpartArray);
 			return $content;
 		}
 	}
