@@ -29,6 +29,8 @@ plugin.tx_icsodappstore_pi4.list {
 	logo.file = typo3conf/ext/ics_od_appstore/res/default.png
 	logo.file.maxW = 106
 	logo.file.maxH = 106	
+	
+	usePagebrowse = 0
 }
 
 plugin.tx_icsodappstore_pi4.detail{

@@ -409,6 +409,27 @@ class tx_icsodappstore_common extends tslib_pibase {
 			'1 AND (title LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ' OR uid LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($search . '%', $this->tables['platforms']) . ') ' . $this->cObj->enableFields($this->tables['platforms'])
 		);
 	}
+	
+	/**
+	 * Get page bowser
+	 *
+	 * @param	int		$numberOfPages number of pages
+	 * @return	void
+	 */
+	protected function getListGetPageBrowser($numberOfPages) {
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
+		$conf += array(
+			'pageParameterName' => $this->prefixId . '|page',
+			'numberOfPages' => $numberOfPages,
+		);
+
+		// Get page browser
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+
+		/* @var $cObj tslib_cObj */
+		$cObj->start(array(), '');
+		return $cObj->cObjGetSingle('USER', $conf);
+	}
 }
 
 

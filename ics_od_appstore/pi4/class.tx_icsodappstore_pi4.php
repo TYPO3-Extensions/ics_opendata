@@ -368,25 +368,31 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			if($this->piVars['page'] * $rows_by_page + $rows_by_page < $this->piVars['maxRows'])
 				$template['LAST_PAGE'] = $this->cObj->getSubpart($template['TEMPLATE'], '###HIDE_LAST_PAGE###');
 
-			$content_pages ='';
+			$pagebrowser ='';
+			if ($this->conf['list.']['usePagebrowse']) {
+				$template['FIRST_PAGE'] = '';
+				$template['LAST_PAGE'] = '';
+				$pagebrowser = $this->getListGetPageBrowser(intval(ceil($this->piVars['maxRows']/$rows_by_page)));
+			} else {
+				$markerArray = array(
+					'###FIRST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => 0, $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
+					'###LAST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => ($pages), $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
+				);
 
-			$markerArray = array(
-				'###FIRST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => 0, $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
-				'###LAST_PAGE_LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id, array($this->prefixId.'[page]' => ($pages), $this->prefixId.'[sort]'=> $this->piVars['sort']) ),
-			);
+				$template['FIRST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['FIRST_PAGE'],$markerArray);
 
-			$template['FIRST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['FIRST_PAGE'],$markerArray);
+				$template['LAST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['LAST_PAGE'],$markerArray);
 
-			$template['LAST_PAGE'] = $this->cObj->substituteMarkerArrayCached($template['LAST_PAGE'],$markerArray);
-
-			if($pages > 1){
-				for($i=0; $i<$pages+1; $i++){
-					if($this->piVars['page']==$i)
-						$content_pages .= '<span>'.($i + 1).'</span>';
-					else
-						$content_pages .= $GLOBALS['TSFE']->cObj->getTypoLink(($i + 1)."",$GLOBALS['TSFE']->id, array($this->prefixId.'[page]'=> $i, $this->prefixId.'[sort]'=> $this->piVars['sort'] ));
+				if($pages > 1){
+					for($i=0; $i<$pages+1; $i++){
+						if($this->piVars['page']==$i)
+							$pagebrowser .= '<span>'.($i + 1).'</span>';
+						else
+							$pagebrowser .= $GLOBALS['TSFE']->cObj->getTypoLink(($i + 1)."",$GLOBALS['TSFE']->id, array($this->prefixId.'[page]'=> $i, $this->prefixId.'[sort]'=> $this->piVars['sort'] ));
+					}
 				}
 			}
+			
 			$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
 			$sort_content = '';
 			$separator ='';
@@ -403,7 +409,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			}
 			$markerArray = array(
 				'###SORT###' => $sort_content,
-				'###PAGES###' => $content_pages,
+				'###PAGES###' => $pagebrowser,
 			);
 			$subpartArray = array(
 				'###COLS###' => $content_cols,
