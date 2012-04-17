@@ -1,3 +1,7 @@
+2012-04-17 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Feature: change filegroup view in BE module: only TCA fields are displayed
+	* Fix: Field categories in backend module datastore
+
 2012-03-27 Emilie SAGNIEZ  <emilie@in-cite.net>
 	Feature: Added additionalListFieldsMarkers hook
 	Fix: Corrected additionalSelectedCriteriaMarkers hook
