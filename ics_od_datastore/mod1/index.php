@@ -440,12 +440,13 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				$licenceValue = '';
 			}
 		}
-
-		if(!empty($this->filegroup['categories'])) {
+		if(!empty($this->filegroup['tx_icsodcategories_categories'])) {
 			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
-				'`tx_icsoddatastore_categories`',
-				'`uid` IN (' . $this->filegroup['categories'] . ')'
+				'`tx_icsodcategories_categories`
+					INNER JOIN `tx_icsodcategories_categories_relation_mm`
+					ON `tx_icsodcategories_categories_relation_mm`.`uid_local` = `tx_icsodcategories_categories`.`uid`',
+				'`tx_icsodcategories_categories_relation_mm`.`uid_foreign` = ' . $this->filegroup['uid'] . ''
 			);
 			if(is_array($categories) && count($categories)) {
 				foreach($categories as $category) {
