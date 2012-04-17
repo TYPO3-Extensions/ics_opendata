@@ -1,3 +1,6 @@
+2012-04-17 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Add details view subparts: DESCRIPTION_SUBPART and LINK_SUBPART, if description field is empty, DESCRIPTION_SUBPART is removed, if link field is empty, LINK_SUBPART is removed
+
 2012-03-28 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Add view list hook
 	* Use pagebrowse extension to generate list pagination if configuration actived

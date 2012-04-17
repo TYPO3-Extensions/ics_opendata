@@ -230,19 +230,55 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		}
 		$pObj = t3lib_div::makeInstance("tslib_cObj");
 		$backID = $this->piVars['returnID'] ? $this->piVars['returnID'] : $GLOBALS['TSFE']->id;
+		
+		$vLink = $row['link'] ? '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>' : '';
+		$vDescription = $row['description'] ? $this->pi_RTEcssText($row['description']) : '';
+		$vPublishDate = $row['release_date'] ? strftime("%d/%m/%Y",$row['release_date']) : '';
+		$vPublisher = $row['name'] ? htmlspecialchars($row['name']) : '';
+		$vPlatforms = implode(',', $appPlatforms);
+		
+		$subpartArray = array();
 		$markerArray = array(
 			'###APPLICATION###' => $row['title'],
 			'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
-			'###DESCRIPTION###' => $this->pi_RTEcssText($row['description']),
 			'###DOWNLOAD###' => $row['countcall'],
-			'###PUBLISHER###' => htmlspecialchars($row['name']),
-			'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
+			'###LINK###' => $vLink,
+			'###DESCRIPTION###' => $vDescription,
+			'###PUBLISH_DATE###' => $vPublishDate,
+			'###PUBLISHER###' => $vPublisher,
 			'###SCREENSHOT###' => $this->renderScreenshot('screenshot', $TCA[$table]['columns']['screenshot'], $row['screenshot'] ),
-			'###LINK###' => '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>',
-			'###PLATFORMS###' => implode(',', $appPlatforms),
+			'###PLATFORMS###' => $vPlatforms,
 			'###BACK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($backID, array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort']) )
 		);
-		$subpartArray = array();
+		
+		
+		$subpartArray['###DESCRIPTION_SUBPART###'] = '';
+		if ($row['description']) {
+			$description_subpart = $this->cObj->getSubpart($template, '###DESCRIPTION_SUBPART###');
+			$subpartArray['###DESCRIPTION_SUBPART###'] = $this->cObj->substituteMarkerArray(
+				$description_subpart, 
+				array('###DESCRIPTION###' => $vDescription)
+			);
+		}
+		
+		$subpartArray['###LINK_SUBPART###'] = '';
+		if ($row['link']) {
+			$link_subpart = $this->cObj->getSubpart($template, '###LINK_SUBPART###');
+			$subpartArray['###LINK_SUBPART###'] = $this->cObj->substituteMarkerArray(
+				$link_subpart, 
+				array('###LINK###' => $vLink)
+			);
+		}
+		
+		$subpartArray['###PLATFORMS_SUBPART###'] = '';
+		if (!empty($appPlatforms)) {
+			$platforms_subpart = $this->cObj->getSubpart($template, '###PLATFORMS_SUBPART###');
+			$subpartArray['###PLATFORMS_SUBPART###'] = $this->cObj->substituteMarkerArray(
+				$platforms_subpart, 
+				array('###PLATFORMS###' => $vPlatforms)
+			);
+		}		
+		
 		// Hook for application extra fields
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderData'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderData'] as $_classRef) {
