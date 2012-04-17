@@ -16,7 +16,7 @@
 			<label index="description">Description :</label>
 			<label index="technical_data">Technical data :</label>
 			<label index="agency">Agency :</label>
-			<label index="category">Category :</label>
+			<label index="tx_icsodcategories_categories">Category :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
 			<label index="release_date">Release date :</label>
@@ -40,7 +40,7 @@
 			<label index="description">Description :</label>
 			<label index="technical_data">Données technique :</label>
 			<label index="agency">Agence :</label>
-			<label index="category">Catégorie :</label>
+			<label index="tx_icsodcategories_categories">Catégorie :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
 			<label index="release_date">Mise à disposition :</label>

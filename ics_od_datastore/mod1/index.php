@@ -424,7 +424,17 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 	function renderFilegroup()	{
 		global $LANG;
 
-		if(!empty($this->filegroup['licence'])) {
+		$beFields = t3lib_div::trimExplode(',', $GLOBALS['TCA']['tx_icsoddatastore_filegroups']['types']['0']['showitem']);
+		foreach ($beFields as &$field) {
+			$pos = strpos($field, ';');
+			if ($pos > 0)
+				$field = substr($field, 0, $pos);
+		}
+		$hiddenFields = array('hidden', 'title', 'files');
+		$beFields = array_diff($beFields, $hiddenFields);
+		
+		$licenceValue = '';
+		if(in_array('licence', $beFields) && !empty($this->filegroup['licence'])) {
 			$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_licences`',
@@ -436,11 +446,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$licenceValue = implode(', ', $aLicence);
 			}
-			else {
-				$licenceValue = '';
-			}
 		}
-		if(!empty($this->filegroup['tx_icsodcategories_categories'])) {
+		$this->filegroup['licence'] = $licenceValue;
+		
+		$categoriesValue = '';
+		if(in_array('tx_icsodcategories_categories', $beFields) && !empty($this->filegroup['tx_icsodcategories_categories'])) {
 			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsodcategories_categories`
@@ -454,12 +464,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$categoriesValue = implode(', ', $aCat);
 			}
-			else {
-				$categoriesValue = '';
-			}
 		}
-
-		if(!empty($this->filegroup['agency'])) {
+		$this->filegroup['tx_icsodcategories_categories'] = $categoriesValue;
+		
+		$agencyValue = '';
+		if(in_array('agency', $beFields) && !empty($this->filegroup['agency'])) {
 			$agency = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -471,12 +480,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$agencyValue = implode(', ', $aAgency);
 			}
-			else {
-				$agencyValue = '';
-			}
 		}
-
-		if(!empty($this->filegroup['contact'])) {
+		$this->filegroup['agency'] = $agencyValue;
+		
+		$contactValue = '';
+		if(in_array('contact', $beFields) && !empty($this->filegroup['contact'])) {
 			$contact = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -488,12 +496,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$contactValue = implode(', ', $aContact);
 			}
-			else {
-				$contactValue = '';
-			}
 		}
-
-		if(!empty($this->filegroup['publisher'])) {
+		$this->filegroup['contact'] = $contactValue;
+		
+		$publisherValue = '';
+		if(in_array('publisher', $beFields) && !empty($this->filegroup['publisher'])) {
 			$publisher = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -505,12 +512,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$publisherValue = implode(', ', $aPublisher);
 			}
-			else {
-				$publisherValue = '';
-			}
 		}
+		$this->filegroup['publisher'] = $publisherValue;
 
-		if(!empty($this->filegroup['creator'])) {
+		$creatorValue = '';
+		if(in_array('creator', $beFields) && !empty($this->filegroup['creator'])) {
 			$creator = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -522,12 +528,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$creatorValue = implode(', ', $aCreator);
 			}
-			else {
-				$creatorValue = '';
-			}
 		}
-
-		if(!empty($this->filegroup['manager'])) {
+		$this->filegroup['creator'] = $creatorValue;
+		
+		$managerValue = '';
+		if(in_array('manager', $beFields) && !empty($this->filegroup['manager'])) {
 			$manager = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -539,12 +544,11 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$managerValue = implode(', ', $aManager);
 			}
-			else {
-				$managerValue = '';
-			}
 		}
-
-		if(!empty($this->filegroup['owner'])) {
+		$this->filegroup['manager'] = $managerValue;
+		
+		$ownerValue = '';
+		if(in_array('owner', $beFields) && !empty($this->filegroup['owner'])) {
 			$owner = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'`name`',
 				'`tx_icsoddatastore_tiers`',
@@ -556,29 +560,19 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				}
 				$ownerValue = implode(', ', $aOwner);
 			}
-			else {
-				$ownerValue = '';
-			}
 		}
-
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('description') . '</div><div style="float:left;width:60%;">' . $this->filegroup['description'] . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('technical_data') . '</div><div style="float:left;width:60%;">' . $this->filegroup['technical_data'] . '</div></div>';
-
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('agency') . '</div><div style="float:left;width:60%;">' . $agencyValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('category') . '</div><div style="float:left;width:60%;">' . $categoriesValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('contact') . '</div><div style="float:left;width:60%;">' . $contactValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('licence') . '</div><div style="float:left;width:60%;">' . $licenceValue . '</div></div>';
-
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('release_date') . '</div><div style="float:left;width:60%;">' . (($this->filegroup['release_date'])? date('d/m/Y',$this->filegroup['release_date']) : '') . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('update_date') . '</div><div style="float:left;width:60%;">' . (($this->filegroup['update_date'])? date('d/m/Y',$this->filegroup['update_date']) : '') . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('time_period') . '</div><div style="float:left;width:60%;">' . $this->filegroup['time_period'] . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('update_frequency') . '</div><div style="float:left;width:60%;">' . $this->filegroup['update_frequency'] . '</div></div>';
-
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('publisher') . '</div><div style="float:left;width:60%;">' . $publisherValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('creator') . '</div><div style="float:left;width:60%;">' . $creatorValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('manager') . '</div><div style="float:left;width:60%;">' . $managerValue . '</div></div>';
-		$sContent .= '<div style="clear:both;float:left;width:100%;"><div style="float:left;width:15em;">' . $LANG->getLL('owner') . '</div><div style="float:left;width:60%;">' . $ownerValue . '</div></div><div style="clear:both;"></div>';
-
+		$this->filegroup['owner'] = $ownerValue;
+		
+		$this->filegroup['release_date'] = $this->filegroup['release_date'] ? date('d/m/Y',$this->filegroup['release_date']) : '';
+		$this->filegroup['update_date'] = $this->filegroup['update_date'] ? date('d/m/Y',$this->filegroup['update_date']) : '';
+		
+		foreach ($beFields as $field) {
+			$sContent .= '<div style="clear:both;float:left;width:100%;">
+				<div style="float:left;width:15em;">' . $LANG->getLL($field) . '</div>
+				<div style="float:left;width:60%;">' . $this->filegroup[$field] . '</div>
+			</div>';
+		}
+		$sContent .= '<div style="clear:both;"></div>';
 		return $sContent;
 	}
 
