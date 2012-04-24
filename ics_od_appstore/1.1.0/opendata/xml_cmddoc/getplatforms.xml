@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Get platforms" cmd="appstore_getplatforms" brief="Retrieves platforms.">
+	<description>
+		Retrieves all the platforms.
+	</description>
+</command>
