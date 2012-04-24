@@ -31,7 +31,7 @@ config.ics_od_appstore {
 		orderAvailable = release_date,countcall
 		
 		# cat=plugin.ics_od_appstore/list/; type=int; label= Max description characters 
-		descSize = 220
+		descSize = 220|...
 		
 		logo {
 			# cat=plugin.ics_od_appstore/list/; type=file; label= Default image application 

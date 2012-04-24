@@ -231,7 +231,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		$pObj = t3lib_div::makeInstance("tslib_cObj");
 		$backID = $this->piVars['returnID'] ? $this->piVars['returnID'] : $GLOBALS['TSFE']->id;
 		
-		$vLink = $row['link'] ? '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.t3lib_div::fixed_lgd( $row['link'], 29) . '</a>' : '';
+		$vLink = $row['link'] ? '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.tslib_cObj::crop( $row['link'], 29) . '</a>' : '';
 		$vDescription = $row['description'] ? $this->pi_RTEcssText($row['description']) : '';
 		$vPublishDate = $row['release_date'] ? strftime("%d/%m/%Y",$row['release_date']) : '';
 		$vPublisher = $row['name'] ? htmlspecialchars($row['name']) : '';
@@ -364,7 +364,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					'###PUBLISHER###' => htmlspecialchars($row['name']),
 					'###DOWNLOAD###' => $row['countcall'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
-					'###DESCRIPTION###' => t3lib_div::fixed_lgd( $row['description'],$this->conf['list.']['descSize']),
+					'###DESCRIPTION###' => tslib_cObj::crop( $row['description'],$this->conf['list.']['descSize']),
 					'###LINK###' => $GLOBALS['TSFE']->cObj->getTypoLink_URL($this->conf['singlePid'], array($this->prefixId.'[page]' => $this->piVars['page'], $this->prefixId.'[sort]'=> $this->piVars['sort'],$this->prefixId.'[uid]' => $row['uid'], $this->prefixId.'[returnID]'=> $GLOBALS['TSFE']->id) ),
 					'###PLATFORMS###' => implode(',', $appPlatforms),
 				);
@@ -526,6 +526,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		}
 		return $content;
 	}
+
 
 }
 

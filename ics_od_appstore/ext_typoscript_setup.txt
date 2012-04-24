@@ -26,7 +26,7 @@ plugin.tx_icsodappstore_pi4.list {
 	rowsByCol = 3
 	orderDefault = release_date
 	orderAvailable = release_date,countcall
-	descSize = 220
+	descSize = 220|...
 
 	logo = IMG_RESSOURCE
 	logo.file = typo3conf/ext/ics_od_appstore/res/default.png
