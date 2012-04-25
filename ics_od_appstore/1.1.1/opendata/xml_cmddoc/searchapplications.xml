@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Search applications" cmd="appstore_searchapplications" brief="Retrieves applications.">
+	<description>
+		Retrieves applications.
+		Fill params to search applications from title, update date, release date, author...
+	</description>
+	<parameters>
+		<parameter name="title" type="string" mandatory="0">
+			<description>Title of applications to search.</description>
+		</parameter>
+		<parameter name="updated_start" type="string" mandatory="0">
+			<description>Search from date updated. Give date under this format YYYY-MM-DD.</description>
+		</parameter>
+		<parameter name="updated_end" type="string" mandatory="0">
+			<description>Search to date updated. Give date under this format YYYY-MM-DD.</description>
+		</parameter>
+		<parameter name="released_start" type="string" mandatory="0">
+			<description>Search from date release. Give date under this format YYYY-MM-DD.</description>
+		</parameter>
+		<parameter name="released_end" type="string" mandatory="0">
+			<description>Search to date release. Give date under this format YYYY-MM-DD</description>
+		</parameter>
+		<parameter name="platforms" type="string" mandatory="0">
+			<description>IDs list of platforms or platforms titles separated by coma ","</description>
+		</parameter>
+		<parameter name="categories" type="string" mandatory="0">
+			<description>IDs list of categories or categories titles separated by coma ",".</description>
+		</parameter>
+		<parameter name="datasets" type="string" mandatory="0">
+			<description>IDs list of datasets or datasets titles separated by coma ",".</description>
+		</parameter>
+		<parameter name="author" type="string" mandatory="0">
+			<description>Author's ID or Author's name.</description>
+		</parameter>
+		<parameter name="page" type="number" mandatory="0" default="1">
+			<description>The number of page.</description>
+		</parameter>
+		<parameter name="pagelimit" type="number" mandatory="0" default="50">
+			<description>The limit of applications per page.</description>
+		</parameter>
+	</parameters>
+</command>

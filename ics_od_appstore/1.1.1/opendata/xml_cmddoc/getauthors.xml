@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Get authors" cmd="appstore_getauthors" brief="Retrieves authors.">
+	<description>
+		Retrieves all applications authors.
+	</description>
+</command>
