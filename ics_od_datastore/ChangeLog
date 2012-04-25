@@ -1,3 +1,7 @@
+2012-04-25 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Add pagebrowse dependency
+	* Version changed to 1.1.3
+
 2012-04-17 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Feature: change filegroup view in BE module: only TCA fields are displayed
 	* Fix: Field categories in backend module datastore
