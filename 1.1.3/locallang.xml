@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- $Id$ -->
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'ics_od_datastore'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="pi1_title">Opendata files store</label>
+			<label index="pi1_plus_wiz_description">opendatastore files</label>
+			<label index="sysfolder">Datastore</label>
+			<label index="pi2_title">Datastore RSS</label>
+			<label index="pi2_plus_wiz_description">Datastore RSS feed on filegroups</label>
+			<label index="pi3_title">Stats download</label>
+			<label index="pi3_plus_wiz_description">Stats files download</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="pi1_title">Entrepôt de fichiers</label>
+			<label index="pi1_plus_wiz_description">Entrepôt de fichiers</label>
+			<label index="sysfolder">Entrepôt</label>
+			<label index="pi2_title">Datastore RSS</label>
+			<label index="pi2_plus_wiz_description">Flux RSS des datasets</label>
+			<label index="pi3_title">Statistiques de téléchargements</label>
+			<label index="pi3_plus_wiz_description">Statistiques de téléchargements des fichiers</label>
+		</languageKey>
+	</data>
+</T3locallang>
