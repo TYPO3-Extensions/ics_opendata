@@ -1,3 +1,6 @@
+2012-05-03 Tsi YANG <tsi@in-cite.net>
+	* Refactor: Added TCA field files on filegroup.
+	
 2012-04-25 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Add pagebrowse dependency
 	* Version changed to 1.1.3

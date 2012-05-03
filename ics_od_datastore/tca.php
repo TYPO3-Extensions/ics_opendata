@@ -7,7 +7,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_filegroups']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner'
+        'showRecordFieldList' => 'hidden,title,description,technical_data,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner'
     ),
 	'feInterface' => $TCA['tx_icsoddatastore_filegroups']['feInterface'],
 	'columns' => array (
@@ -424,9 +424,26 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 				),
             )
         ),
+		'files' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.files',
+			'config' => array (
+				'type' => 'select',
+				'items' => array (
+					array('',0),
+				),
+				'foreign_table' => 'tx_icsoddatastore_files',
+				'foreign_table_where' => 'ORDER BY tx_icsoddatastore_files.uid',
+				'size' => 10,
+				'minitems' => 0,
+				'maxitems' => 100,
+				'MM' => "tx_icsoddatastore_files_filegroup_mm",
+				'MM_opposite_field' => 'filegroup',
+			),
+		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')
