@@ -226,3 +226,11 @@ CREATE TABLE tx_icsoddatastore_monthdownloads (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
+
+
+#
+# Table structure for table 'fe_groups'
+#
+CREATE TABLE fe_groups (
+	tx_icsoddatastore_filemount  varchar(255) DEFAULT '' NOT NULL
+);

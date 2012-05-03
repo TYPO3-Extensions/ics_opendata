@@ -175,6 +175,26 @@ $TCA['tx_icsoddatastore_statistics'] = array (
 	),
 );
 
+
+// Add fe_groups filemount field
+$filemountCol = array(
+	'tx_icsoddatastore_filemount' => array(
+		'exclude' => 0,
+		'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filemount',
+		'config' => array(
+			'type' => 'input',
+			'size' => '50',
+			'eval' => 'trim',
+		),
+	),
+);
+t3lib_div::loadTCA('fe_groups');
+t3lib_extMgm::addTCAcolumns('fe_groups',$filemountCol,1);
+t3lib_extMgm::addToAllTCAtypes('fe_groups','tx_icsoddatastore_filemount');
+
+
+
+
 t3lib_div::loadTCA('tt_content');
 $TCA['pages']['columns']['module']['config']['items'][] = array('LLL:EXT:ics_od_datastore/locallang.xml:sysfolder', 'datastore');
 
