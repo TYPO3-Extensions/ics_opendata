@@ -1,6 +1,8 @@
+2012-05-15 Tsi YANG <tsi@in-cite.net>
+	* Feature: Partial implementation of hook on TCA FE Admin for table tx_icsoddatastore_files field file.
+
 2012-05-14 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: Initialize renderEmpty function to tx_icsoddatastore_pi3 class
-	
 
 2012-05-03 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added datastore filemount.
