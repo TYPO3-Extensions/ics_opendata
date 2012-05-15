@@ -97,6 +97,20 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$this->fieldLabels = $fieldLabels;
 	}
 
+	/* TODO
+	function renderEntries (complete params here) {
+		si record_type == url
+			Liste_des_champs = liste_des_champs - fichier
+		si record_type == fichier
+			Liste_des_champs = liste_des_champs - url
+		
+		foreach ($Liste_des_champs as $champ) {
+			$content .= $renderer->handleFormField($field);
+		}
+		return $content;
+	}
+	*/
+	
 	/**
 	 * Generates form field
 	 *
@@ -120,8 +134,6 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$this->renderer = $renderer;
 
 
-		// TODO: ajouter la sélection sur datastore_filemount
-		// Faire la saisie classique d'un fichier
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'tx_icsoddatastore_filemount',
 			'fe_groups',
@@ -195,6 +207,10 @@ class tx_icsoddatastore_TCAFEAdmin {
 			if (!$this->piVars['tx_icsdatastore_filemount'])
 				return false;
 		}
+		
+		/* TODO
+			Vérifier la saisie des champs url et fichier
+		*/
 
 		return true;
 	}
