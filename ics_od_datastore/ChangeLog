@@ -1,4 +1,5 @@
 2012-05-21 Tsi YANG <tsi@in-cite.net>
+	* Fix: Omitted condition on use TCA FE Admin .
 	* Feature: Implemented form view switch record type.
 	* Feature: Added typoscript configuration on tx_icsoddatastore_files fields.
 

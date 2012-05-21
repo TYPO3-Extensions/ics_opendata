@@ -259,7 +259,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi3', 'FILE:EXT:ics_od_datastore/fle
 
 
 
-
-t3lib_extMgm::addStaticFile($_EXTKEY,"hook/static/","Datastore hook");
+if (t3lib_extMgm::isLoaded('ics_tcafe_admin'))
+	t3lib_extMgm::addStaticFile($_EXTKEY,"hook/static/","Datastore hook");
 
 ?>
