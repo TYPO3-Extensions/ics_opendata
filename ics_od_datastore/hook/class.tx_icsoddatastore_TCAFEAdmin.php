@@ -97,20 +97,6 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$this->fieldLabels = $fieldLabels;
 	}
 
-	/* TODO
-	function renderEntries (complete params here) {
-		si record_type == url
-			Liste_des_champs = liste_des_champs - fichier
-		si record_type == fichier
-			Liste_des_champs = liste_des_champs - url
-		
-		foreach ($Liste_des_champs as $champ) {
-			$content .= $renderer->handleFormField($field);
-		}
-		return $content;
-	}
-	*/
-	
 	/**
 	 * Generates form field
 	 *
@@ -124,35 +110,65 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	string		HTML form field content
 	 */
 	function handleFormField($pi_base, $table, $field, array $fieldLabels, $row=null, array $conf, $renderer=null) {
-		if ($table!='tx_icsoddatastore_files' || $field!='file')
+		$fields = array('file', 'url', 'record_type');
+		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return '';
-
+		if (!isset($renderer))
+			return '';
+			
 		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
 			throw new Exception('Any user is logged.');
 
 		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
 		$this->renderer = $renderer;
 
+		t3lib_div::loadTCA($this->table);
+		$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
+		
+		$content = '';
+		switch ($field) {
+			case 'file':
+				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'tx_icsoddatastore_filemount',
+					'fe_groups',
+					'1 ' . $this->cObj->enableFields('fe_groups') . ' AND uid IN(' . $GLOBALS['TSFE']->fe_user->user['usergroup'] . ')',
+					'',
+					'',
+					'',
+					'tx_icsoddatastore_filemount'
+				);
 
-		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-			'tx_icsoddatastore_filemount',
-			'fe_groups',
-			'1 ' . $this->cObj->enableFields('fe_groups') . ' AND uid IN(' . $GLOBALS['TSFE']->fe_user->user['usergroup'] . ')',
-			'',
-			'',
-			'',
-			'tx_icsoddatastore_filemount'
-		);
+				if (!is_array($rows) || empty($rows))
+					throw new Exception('Any filemount is associate to user ' . $GLOBALS['TSFE']->fe_user->user['username'] . ' fe_group(s).');
 
-		if (!is_array($rows) || empty($rows))
-			throw new Exception('Any filemount is associate to user ' . $GLOBALS['TSFE']->fe_user->user['username'] . ' fe_group(s).');
-
-		$filemounts = array_keys($rows);
-		$content = $this->renderForm_filemount($filemounts);
-
-		t3lib_div::loadTCA($table);
-		$config = $GLOBALS['TCA'][$table]['columns'][$field]['config'];
-		$content .= $this->renderer->handleFormField_typeGroup($field, $config);
+				$filemounts = array_keys($rows);
+				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$data = array(
+					'filemounts' => $this->renderForm_filemount($filemounts),
+					'file' => $this->renderer->handleFormField_typeGroup($field, $config),
+					'record_type' => $row['record_type'],
+				);
+				$cObj->start($data, 'File');
+				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
+				$content = $cObj->stdWrap('', $this->conf['renderForm.'][$table.'.'][$field.'.']);
+				break;
+			case 'url':
+				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$data = array(
+					'url' => $this->renderer->handleFormField_typeInput($field, $config),
+					'record_type' => $row['record_type'],
+				);
+				$cObj->start($data, 'File');
+				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
+				$content = $cObj->stdWrap('', $this->conf['renderForm.'][$table.'.'][$field.'.']);
+				break;
+			case 'record_type':
+				$content = $this->renderer->handleFormField_typeSelect_single($this->renderer->getSelectItemArray($field, $config), $field, $config);
+				$content = $this->cObj->stdWrap($content, $this->conf['renderForm.'][$table.'.'][$field.'.']);
+				break;
+			default:
+		}
+		
 		return $content;
 	}
 

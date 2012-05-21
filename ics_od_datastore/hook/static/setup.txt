@@ -1,0 +1,64 @@
+plugin.tx_icstcafeadmin_pi1 {
+	renderForm {
+		tx_icsoddatastore_files.file.cObject = TEXT
+		tx_icsoddatastore_files.file.cObject {
+			cObject = CASE
+			cObject {
+				key.field = record_type
+				1 = COA_INT
+				1 {
+					10 = TEXT
+					10 {
+						field = filemounts
+						addParams.style = display: none
+						addParams.id = tx_icsoddatastore_files_filemounts
+					}
+					20 = TEXT
+					20 {
+						field = file
+						addParams.style = display: none
+						addParams.id = tx_icsoddatastore_files_file
+					}
+				}
+				default = COA_INT
+				default {
+					10 = TEXT
+					10 {
+						field = filemounts
+						addParams.id = tx_icsoddatastore_files_filemounts
+					}
+					20 = TEXT
+					20 {
+						field = file
+						addParams.id = tx_icsoddatastore_files_file
+					}
+				}
+			}
+		}
+		tx_icsoddatastore_files.url.cObject = TEXT
+		tx_icsoddatastore_files.url.cObject {
+			cObject = CASE
+			cObject {
+				key.field = record_type
+				1 = TEXT
+				1 {
+					field = url
+					addParams.id = tx_icsoddatastore_files_url
+				}
+				default = TEXT
+				default {
+					field = url
+					addParams.style = display: none
+					addParams.id = tx_icsoddatastore_files_url
+				}
+			}
+		}
+		tx_icsoddatastore_files.record_type = TEXT
+		tx_icsoddatastore_files.record_type {
+			addParams.onchange = if(this.selectedIndex==0) { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'none'; } else { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'block';}
+			addParams._offset = 4
+ 		}
+	}
+	
+	
+}

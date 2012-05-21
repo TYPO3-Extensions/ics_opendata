@@ -1,3 +1,7 @@
+2012-05-21 Tsi YANG <tsi@in-cite.net>
+	* Feature: Implemented form view switch record type.
+	* Feature: Added typoscript configuration on tx_icsoddatastore_files fields.
+
 2012-05-15 Tsi YANG <tsi@in-cite.net>
 	* Comments : Added TODO on hook
 	* Feature: Partial implementation of hook on TCA FE Admin for table tx_icsoddatastore_files field file.

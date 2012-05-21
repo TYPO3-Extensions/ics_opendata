@@ -256,4 +256,10 @@ t3lib_extMgm::addStaticFile($_EXTKEY,"pi3/static/","Datastore statistics");
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi3']='pi_flexform';
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi3', 'FILE:EXT:ics_od_datastore/flexform_ds_pi3.xml');
 
+
+
+
+
+t3lib_extMgm::addStaticFile($_EXTKEY,"hook/static/","Datastore hook");
+
 ?>
