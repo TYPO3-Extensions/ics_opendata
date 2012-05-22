@@ -60,5 +60,4 @@ plugin.tx_icstcafeadmin_pi1 {
  		}
 	}
 	
-	
 }

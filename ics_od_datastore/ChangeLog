@@ -1,3 +1,7 @@
+2012-05-22 Tsi YANG <tsi@in-cite.net>
+	* Feature: Implemented hook on process_valueToDB.
+	* Feature: Adjusted hook declaration on controlEntry.
+
 2012-05-21 Tsi YANG <tsi@in-cite.net>
 	* Fix: Omitted condition on use TCA FE Admin .
 	* Feature: Implemented form view switch record type.

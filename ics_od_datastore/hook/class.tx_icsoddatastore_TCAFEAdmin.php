@@ -27,29 +27,28 @@
  *
  *
  *
- *   41: class tx_icsoddatastore_TCAFEAdmin
- *   72:     function init($pi_base, $table, $field, $fieldLabels=null, $row=null, array $conf)
- *  100:     function handleFormField($pi_base, $table, $field, array $fieldLabels, array $row, array $conf, $renderer=null)
- *  141:     private function renderForm_filemount($filemounts=null)
- *  177:     function controlEntry($pi_base, $table, $field, $value, array $evals, array $conf, tx_icstcafeadmin_controlForm $ctrlForm)
- *  201:     function process_valueToDB($pi_base, $table, $field, &$value, $row=null, array $conf, tx_icstcafeadmin_DBTools $dbTools)
+ *   52: class tx_icsoddatastore_TCAFEAdmin
+ *   83:     function init($pi_base, $table, $field, $fieldLabels=null, $row=null, array $conf)
+ *  111:     function handleFormField($pi_base, $table, $field, array $fieldLabels, $row=null, array $conf, $renderer=null)
+ *  180:     private function renderForm_filemount($filemounts=null)
+ *  217:     function controlEntry($pi_base, $table, $field, $value, array $conf, tx_icstcafeadmin_controlForm $controller, &$control)
+ *  255:     function process_valueToDB($pi_base, $table, $field, &$value, $row=null, array $conf, tx_icstcafeadmin_DBTools $dbTools)
  *
  * TOTAL FUNCTIONS: 5
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
- 
+
 /**
  * Class 'tx_icsoddatastore_TCAFEAdmin' for the 'ics_od_datastore' extension.
  *
- * This class implements ics_TCAFE_Admin hooks. 
+ * This class implements ics_TCAFE_Admin hooks.
  * It is used to fill and process file field of table tx_icsdatastore_files.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icstcafeadmin
  */
-
 class tx_icsoddatastore_TCAFEAdmin {
 	private $pi_base;
 	private $prefixId;
@@ -115,7 +114,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 			return '';
 		if (!isset($renderer))
 			return '';
-			
+
 		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
 			throw new Exception('Any user is logged.');
 
@@ -124,7 +123,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 
 		t3lib_div::loadTCA($this->table);
 		$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
-		
+
 		$content = '';
 		switch ($field) {
 			case 'file':
@@ -146,7 +145,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$data = array(
 					'filemounts' => $this->renderForm_filemount($filemounts),
 					'file' => $this->renderer->handleFormField_typeGroup($field, $config),
-					'record_type' => $row['record_type'],
+					'record_type' => $this->renderer->getDefaultEntryValue('record_type'),
 				);
 				$cObj->start($data, 'File');
 				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
@@ -156,7 +155,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$data = array(
 					'url' => $this->renderer->handleFormField_typeInput($field, $config),
-					'record_type' => $row['record_type'],
+					'record_type' => $this->renderer->getDefaultEntryValue('record_type'),
 				);
 				$cObj->start($data, 'File');
 				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
@@ -168,15 +167,15 @@ class tx_icsoddatastore_TCAFEAdmin {
 				break;
 			default:
 		}
-		
+
 		return $content;
 	}
 
 	/**
-	 * Render fielmount entry
+	 * Render filemount entry
 	 *
-	 * @param	array		$filemounts: Array of fielmounts
-	 * @return	string		HTML fielmount entry content
+	 * @param	array		$filemounts: Array of filemounts
+	 * @return	string		HTML filemount entry content
 	 */
 	private function renderForm_filemount($filemounts=null) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILEMOUNT###');
@@ -202,6 +201,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
 
+
 	/**
 	 * Control entry
 	 *
@@ -209,24 +209,34 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	string		$table: The table name
 	 * @param	string		$field: The fieldname
 	 * @param	mixed		$value: The value to conrtol
-	 * @param	array		$evals: Array of evals on field
-	 * @param	array		$conf: Typoscript conf array (plugin.tx_icstcafeadmin_pi1.controlEntries.file.eval = filemount)
-	 * @param	tx_icstcafeadmin_controlForm		$ctrlForm: Instance of tx_icstcafeadmin_controlForm
-	 * @return	boolean		"True" if entry is checked, otherwise "False"
+	 * @param	array		$conf: Typoscript conf array
+	 * @param	tx_icstcafeadmin_controlForm		$controller: Instance of tx_icstcafeadmin_controlForm
+	 * @param	&boolean		$control: Reference to control flag
+	 * @return	boolean		"True" if extra eval is processing, otherwise "False"
 	 */
-	function controlEntry($pi_base, $table, $field, $value, array $evals, array $conf, tx_icstcafeadmin_controlForm $ctrlForm) {
+	function controlEntry($pi_base, $table, $field, $value, array $conf, tx_icstcafeadmin_controlForm $controller, &$control) {
+		$fields = array('file', 'url');
+		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
+			return false;
 
-		if ($table!='tx_icsoddatastore_files' || $field!='file')
-			return true;
+		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
 
-		if (in_array('filemount', $evals)) {
-			if (!$this->piVars['tx_icsdatastore_filemount'])
-				return false;
+		switch ($field) {
+			case 'file':
+				if ($this->piVars['record_type']==0) {	// The record is a file
+					if (!$this->piVars['tx_icsdatastore_filemount'])
+						$control = false;
+					if ($control && empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
+						$control = false;
+				}
+				break;
+			case 'url':
+				if ($this->piVars['record_type']==1) {	// The record is an url
+					if (empty($this->piVars['url']))
+						$control = false;
+				}
+				break;
 		}
-		
-		/* TODO
-			Vérifier la saisie des champs url et fichier
-		*/
 
 		return true;
 	}
@@ -240,25 +250,42 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	string		$field: The fieldname
 	 * @param	mixed		$value: The value to process
 	 * @param	tx_icstcafeadmin_DBTools		$DBTools: Instance of tx_icstcafeadmin_DBTools
+	 *
 	 * @return	boolean		"True" if the value is processing, otherwise "False"
 	 */
-	function process_valueToDB($pi_base, $table, $field, &$value, $row=null, array $conf, tx_icstcafeadmin_DBTools $dbTools) {
-		if ($table!='tx_icsoddatastore_files' || $field!='file')
+	function process_valueToDB($pi_base, $table, $field, &$value, $row=null, array $conf, tx_icstcafeadmin_DBTools $dbTools) {		
+		$fields = array('file', 'url');
+		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
 
 		$this->init($pi_base, $table, $field, null, $row, $conf);
 		$this->dbTools = $dbTools;
 
-		if (!$this->piVars['tx_icsdatastore_filemount'])
-			throw new Exception('Filemount must not be empty.');
-
-		$fileArray = array();
-		$fileArray = t3lib_div::getAllFilesAndFoldersInPath (
-			$fileArray,
-			$this->piVars['tx_icsdatastore_filemount']
-		);
-
-		var_dump($fileArray);
+		switch ($field) {
+			case 'file':
+				if ($this->piVars['record_type']==0) {	// The record is a file
+					if (!$this->piVars['tx_icsdatastore_filemount'])
+						throw new Exception('Required field tx_icsdatastore_filemount must not be empty.');
+					if (empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
+						throw new Exception('Required field ' . $field . ' must not be empty.');
+					t3lib_div::loadTCA($this->table);
+					$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
+					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $this->piVars['tx_icsdatastore_filemount']);
+				}
+				else {
+					$value = '';
+				}
+				break;
+			case 'url':
+				if ($this->piVars['record_type']==1) {	// The record is an url
+					if (empty($this->piVars['url']))
+						throw new Exception('Required field ' . $field . ' must not be empty.');
+				}
+				else {
+					$value = '';
+				}
+				break;
+		}
 
 		return true;
 	}
