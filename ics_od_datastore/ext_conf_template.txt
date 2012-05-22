@@ -1,2 +1,10 @@
 # cat=Basic//a; type=int; label=Stats method: Activate the stats download. Methods : 1 => method 302, 2 => method readfile, other => no stats
 stats=0
+
+datasetFolder {
+	# cat=basic/datasetFolder/a; type=string; label=prefix: Prefix dataset folder name.
+	prefix=
+	
+	# cat=basic/datasetFolder/b; type=string; label=suffix: Suffix dataset folder name.
+	suffix=
+}

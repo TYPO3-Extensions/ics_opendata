@@ -219,6 +219,9 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
 
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
 
 		switch ($field) {
@@ -258,6 +261,9 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
 
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		$this->init($pi_base, $table, $field, null, $row, $conf);
 		$this->dbTools = $dbTools;
 
@@ -270,7 +276,16 @@ class tx_icsoddatastore_TCAFEAdmin {
 						throw new Exception('Required field ' . $field . ' must not be empty.');
 					t3lib_div::loadTCA($this->table);
 					$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
-					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $this->piVars['tx_icsdatastore_filemount']);
+					
+					$folders = t3lib_div::getAllFilesAndFoldersInPath (array(), $this->piVars['tx_icsdatastore_filemount'], '', true, 1);
+					$uploadFolder = $this->piVars['tx_icsdatastore_filemount'];
+					if ($this->piVars['filegroup']) {
+						$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
+						$uploadFolder = $this->piVars['tx_icsdatastore_filemount'].$extConf['datasetFolder.']['prefix'].$this->piVars['filegroup'].$extConf['datasetFolder.']['suffix'].'/';
+						if (!in_array($folder, $folders))
+							t3lib_div::mkdir(t3lib_div::getFileAbsFileName($uploadFolder));
+					}
+					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $uploadFolder);
 				}
 				else {
 					$value = '';

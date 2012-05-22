@@ -1,4 +1,5 @@
 2012-05-22 Tsi YANG <tsi@in-cite.net>
+	* Fearure: Added configuration to file upload folder.
 	* Feature: Implemented hook on process_valueToDB.
 	* Feature: Adjusted hook declaration on controlEntry.
 
