@@ -282,7 +282,9 @@
 
 
 
+
 <!-- This template complete TEMPLATE_FORM_FILE for field "file" of table "tx_icsoddatastore_files"-->
+
 <!-- ###TEMPLATE_FORM_FILEMOUNT### start-->
 <div class="datastore_filemounts">
 	<label for="###FILEMOUNT_ID###">###FILEMOUNT_LABEL###</label>
@@ -294,3 +296,21 @@
 </div>
 <!-- ###TEMPLATE_FORM_FILEMOUNT### end-->
 
+
+
+<!-- ###TEMPLATE_FORM_FILES_FIELD_FILE### start-->
+	<div class="###PREFIXID###_group-file">
+		<label for="###ITEM_ID###" class="###PREFIXID###_group-file-label">###FIELDLABEL###</label>
+		<input type="hidden" name="###ITEM_NAME###" value="###ITEM_VALUE###" />
+		
+		<!-- ###SUPBART_ADDFILE### start-->
+		<input type="file" name="###ADDFILE_NAME###" />###GROUPFILE_INFORMATIONS###
+		<!-- ###SUPBART_ADDFILE### end-->
+		
+		<div class="###PREFIXID###_files">
+			<!-- ###SUBPART_FILE_DELETE### start-->
+			<span>###FILE_DEL_VALUE###</span>
+			<!-- ###SUBPART_FILE_DELETE### end-->
+		</div>
+	</div>
+<!-- ###TEMPLATE_FORM_FILES_FIELD_FILE### end-->

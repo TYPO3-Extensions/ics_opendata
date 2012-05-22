@@ -119,6 +119,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 			throw new Exception('Any user is logged.');
 
 		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
+		// var_dump($this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###'));
 		$this->renderer = $renderer;
 
 		t3lib_div::loadTCA($this->table);
@@ -144,7 +145,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$data = array(
 					'filemounts' => $this->renderForm_filemount($filemounts),
-					'file' => $this->renderer->handleFormField_typeGroup($field, $config),
+					'file' => $this->renderer->handleFormField_typeGroup_file($field, $config, $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###')),
 					'record_type' => $this->renderer->getDefaultEntryValue('record_type'),
 				);
 				$cObj->start($data, 'File');

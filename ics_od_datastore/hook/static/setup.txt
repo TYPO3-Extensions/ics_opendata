@@ -1,4 +1,5 @@
 plugin.tx_icstcafeadmin_pi1 {
+	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin.html
 	renderForm {
 		tx_icsoddatastore_files.file.cObject = TEXT
 		tx_icsoddatastore_files.file.cObject {
