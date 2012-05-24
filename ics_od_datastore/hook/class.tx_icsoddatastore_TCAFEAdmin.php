@@ -63,6 +63,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	private $table;
 	private $fields;
 	private $fieldLabels;
+	private $row=null;
 
 	var $renderer;
 
@@ -75,12 +76,12 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	string		$table
 	 * @param	string		$field
 	 * @param	array		$fieldLabels: : Associative array of fields labels like field=>labelfield
-	 * @param	array		$row: The record row
+	 * @param	int			$rowUid : The record id
 	 * @param	array		$conf: Typoscript conf array
 	 * @param	tx_icstcafeadmin_FormRenderer		$renderer: Instance of tx_icstcafeadmin_FormRenderer
 	 * @return	void
 	 */
-	function init($pi_base, $table, $field, $fieldLabels=null, $row=null, array $conf) {
+	function init($pi_base, $table, $field, $fieldLabels=null, $rowUid=0, array $conf) {
 		$this->pibase = $pi_base;
 		$this->prefixId = $pi_base->prefixId;
 		$this->extKey = $pi_base->extKey;
@@ -94,6 +95,17 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$this->table = $table;
 		$this->fields = $fields;
 		$this->fieldLabels = $fieldLabels;
+		
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'*',
+			$this->table,
+			'1' . $this->pibase->cObj->enableFields($this->table) . ' AND uid='.$rowUid,
+			'',
+			'',
+			'1'
+		);
+		if (is_array($rows) && !empty($rows))
+			$this->row = $rows[0];
 	}
 
 	/**
@@ -103,23 +115,22 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	string		$table
 	 * @param	string		$field
 	 * @param	array		$fieldLabels: : Associative array of fields labels like field=>labelfield
-	 * @param	array		$row: The record row
+	 * @param	int			$rowUid : The record id
 	 * @param	array		$conf: Typoscript conf array
 	 * @param	tx_icstcafeadmin_FormRenderer		$renderer: Instance of tx_icstcafeadmin_FormRenderer
 	 * @return	string		HTML form field content
 	 */
-	function handleFormField($pi_base, $table, $field, array $fieldLabels, $row=null, array $conf, $renderer=null) {
+	function handleFormField($pi_base, $table, $field, array $fieldLabels, $rowUid=0, array $conf, $renderer=null) {
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		$fields = array('file', 'url', 'record_type');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return '';
 		if (!isset($renderer))
 			return '';
 
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-
-		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
-		// var_dump($this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###'));
+		$this->init($pi_base, $table, $field, $fieldLabels, $rowUid, $conf);
 		$this->renderer = $renderer;
 
 		t3lib_div::loadTCA($this->table);
@@ -209,28 +220,32 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	string		$table: The table name
 	 * @param	string		$field: The fieldname
 	 * @param	mixed		$value: The value to conrtol
+	 * @param	int			$rowUid : The record id
 	 * @param	array		$conf: Typoscript conf array
 	 * @param	tx_icstcafeadmin_controlForm		$controller: Instance of tx_icstcafeadmin_controlForm
 	 * @param	&boolean		$control: Reference to control flag
+	 *
 	 * @return	boolean		"True" if extra eval is processing, otherwise "False"
 	 */
-	function controlEntry($pi_base, $table, $field, $value, array $conf, tx_icstcafeadmin_controlForm $controller, &$control) {
+	function controlEntry($pi_base, $table, $field, $value, $rowUid=0, array $conf, tx_icstcafeadmin_controlForm $controller, &$control) {
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		$fields = array('file', 'url');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
 
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-			
-		$this->init($pi_base, $table, $field, $fieldLabels, $row, $conf);
+		$this->init($pi_base, $table, $field, $fieldLabels, $rowUid, $conf);
 
 		switch ($field) {
 			case 'file':
 				if ($this->piVars['record_type']==0) {	// The record is a file
-					if (!$this->piVars['tx_icsdatastore_filemount'])
-						$control = false;
-					if ($control && empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
-						$control = false;
+					if (!$this->row['file']) {
+						if (!$this->piVars['tx_icsdatastore_filemount'])
+							$control = false;
+						if ($control && empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
+							$control = false;
+					}
 				}
 				break;
 			case 'url':
@@ -249,45 +264,51 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 *
 	 * @param	tx_icstcafeadmin_pi1		$pi_base: Instance of tx_icstcafeadmin_pi1
 	 * @param	string		$table: The table name
-	 * @param	array		$row: The record rows
 	 * @param	string		$field: The fieldname
 	 * @param	mixed		$value: The value to process
+	 * @param	int			$rowUid: The record id
+	 * @param	array		$conf: Typoscript configuration
 	 * @param	tx_icstcafeadmin_DBTools		$DBTools: Instance of tx_icstcafeadmin_DBTools
 	 *
 	 * @return	boolean		"True" if the value is processing, otherwise "False"
 	 */
-	function process_valueToDB($pi_base, $table, $field, &$value, $row=null, array $conf, tx_icstcafeadmin_DBTools $dbTools) {		
+	function process_valueToDB($pi_base, $table, $field, &$value, $rowUid=0, array $conf, tx_icstcafeadmin_DBTools $dbTools) {		
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		$fields = array('file', 'url');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
 
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-			
-		$this->init($pi_base, $table, $field, null, $row, $conf);
+		$this->init($pi_base, $table, $field, null, $rowUid, $conf);
 		$this->dbTools = $dbTools;
 
 		switch ($field) {
 			case 'file':
 				if ($this->piVars['record_type']==0) {	// The record is a file
-					if (!$this->piVars['tx_icsdatastore_filemount'])
-						throw new Exception('Required field tx_icsdatastore_filemount must not be empty.');
-					if (empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
-						throw new Exception('Required field ' . $field . ' must not be empty.');
-					t3lib_div::loadTCA($this->table);
-					$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
-					
-					$uploadFolder = $this->piVars['tx_icsdatastore_filemount'];
-					if ($this->piVars['filegroup']) {
-						$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
-						$uploadFolder = $this->piVars['tx_icsdatastore_filemount'].$extConf['datasetFolder.']['prefix'].$this->piVars['filegroup'].$extConf['datasetFolder.']['suffix'].'/';
-						if (!file_exists(t3lib_div::getFileAbsFileName($uploadFolder)))
-							t3lib_div::mkdir(t3lib_div::getFileAbsFileName($uploadFolder));
+					if ($this->row['file']) {
+						$value = $this->row['file'];
 					}
-					$newFile = $uploadFolder.basename(t3lib_div::fixWindowsFilePath($_FILES[$this->prefixId]['name'][$field]['file']));
-					if (file_exists($newFile))
-						@unlink(t3lib_div::getFileAbsFileName($newFile));
-					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $uploadFolder, false);
+					else {
+						if (!$this->piVars['tx_icsdatastore_filemount'])
+							throw new Exception('Required field tx_icsdatastore_filemount must not be empty.');
+						if (empty($_FILES[$this->prefixId]['tmp_name'][$field]['file']))
+							throw new Exception('Required field ' . $field . ' must not be empty.');
+						t3lib_div::loadTCA($this->table);
+						$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
+						
+						$uploadFolder = $this->piVars['tx_icsdatastore_filemount'];
+						if ($this->piVars['filegroup']) {
+							$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
+							$uploadFolder = $this->piVars['tx_icsdatastore_filemount'].$extConf['datasetFolder.']['prefix'].$this->piVars['filegroup'].$extConf['datasetFolder.']['suffix'].'/';
+							if (!file_exists(t3lib_div::getFileAbsFileName($uploadFolder)))
+								t3lib_div::mkdir(t3lib_div::getFileAbsFileName($uploadFolder));
+						}
+						$newFile = $uploadFolder.basename(t3lib_div::fixWindowsFilePath($_FILES[$this->prefixId]['name'][$field]['file']));
+						if (file_exists($newFile))
+							@unlink(t3lib_div::getFileAbsFileName($newFile));
+						$value = $this->dbTools->renderField_group_parseFiles($this->table, $field, $row, $this->piVars[$field], $config, $uploadFolder, false);
+					}
 				}
 				else {
 					$value = '';
@@ -319,6 +340,9 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	boolean		"True" if the value is processing, otherwise "False"
 	 */
 	function deleteRecord($table, $rowUid=0, array $conf, $pi_base, &$delete) {
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
+			
 		if ($table != 'tx_icsoddatastore_files')
 			return false;
 		

@@ -1,4 +1,5 @@
 2012-05-24 Tsi YANG <tsi@in-cite.net>
+	* Update: Adjusted hook code because refactor ics_tcafe_admin.
 	* Bug: Updated hook on file.
 	* Feature: Implemented hook file deleteRecord.
 
