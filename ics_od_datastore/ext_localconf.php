@@ -24,7 +24,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatasto
 if (t3lib_extMgm::isLoaded('ics_tcafe_admin')) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['handleFormField'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['process_valueToDB'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['extra_evalEntry'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['controlEntry'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['deleteRecord'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
 }
 //--- API commands ---
 

@@ -1,5 +1,9 @@
+2012-05-24 Tsi YANG <tsi@in-cite.net>
+	* Bug: Updated hook on file.
+	* Feature: Implemented hook file deleteRecord.
+
 2012-05-22 Tsi YANG <tsi@in-cite.net>
-	* Feature: Adpated template for fiel entry.
+	* Feature: Adpated template for field entry.
 	* Fearure: Added configuration to file upload folder.
 	* Feature: Implemented hook on process_valueToDB.
 	* Feature: Adjusted hook declaration on controlEntry.

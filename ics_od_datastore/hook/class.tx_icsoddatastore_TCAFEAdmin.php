@@ -202,7 +202,6 @@ class tx_icsoddatastore_TCAFEAdmin {
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
 
-
 	/**
 	 * Control entry
 	 *
@@ -278,15 +277,17 @@ class tx_icsoddatastore_TCAFEAdmin {
 					t3lib_div::loadTCA($this->table);
 					$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
 					
-					$folders = t3lib_div::getAllFilesAndFoldersInPath (array(), $this->piVars['tx_icsdatastore_filemount'], '', true, 1);
 					$uploadFolder = $this->piVars['tx_icsdatastore_filemount'];
 					if ($this->piVars['filegroup']) {
 						$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
 						$uploadFolder = $this->piVars['tx_icsdatastore_filemount'].$extConf['datasetFolder.']['prefix'].$this->piVars['filegroup'].$extConf['datasetFolder.']['suffix'].'/';
-						if (!in_array($folder, $folders))
+						if (!file_exists(t3lib_div::getFileAbsFileName($uploadFolder)))
 							t3lib_div::mkdir(t3lib_div::getFileAbsFileName($uploadFolder));
 					}
-					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $uploadFolder);
+					$newFile = $uploadFolder.basename(t3lib_div::fixWindowsFilePath($_FILES[$this->prefixId]['name'][$field]['file']));
+					if (file_exists($newFile))
+						@unlink(t3lib_div::getFileAbsFileName($newFile));
+					$value = $this->dbTools->renderField_group_parseFiles($field, $row, $this->piVars[$field], $config, $uploadFolder, false);
 				}
 				else {
 					$value = '';
@@ -304,5 +305,46 @@ class tx_icsoddatastore_TCAFEAdmin {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Delete record
+	 *
+	 * @param	string		$table: The table name
+	 * @param	int			$rowUid: The record uid
+	 * @param	array		$conf: Typoscript configuration
+	 * @param	tslib_pibase	$pi_base: Instance of tslib_pibase
+	 * @param	&boolean	$delete: Reference to delete flag
+	 *
+	 * @return	boolean		"True" if the value is processing, otherwise "False"
+	 */
+	function deleteRecord($table, $rowUid=0, array $conf, $pi_base, &$delete) {
+		if ($table != 'tx_icsoddatastore_files')
+			return false;
+		
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'file, record_type',
+			$table,
+			'1' . $pi_base->cObj->enableFields($table) . ' AND uid='. $rowUid,
+			'',
+			'',
+			'1'
+		);
+		if (is_array($rows) && !empty($rows)) {
+			$row = $rows[0];
+			if ($row['record_type']==0) {
+				@unlink(t3lib_div::getFileAbsFileName($row['file']));
+			}
+		}
+		
+		$delete = $pi_base->cObj->DBgetUpdate(
+			$table,
+			$rowUid,
+			array('deleted' => '1'),
+			'deleted',
+			true
+		);
+		
+		return $delete;
 	}
 }
