@@ -157,7 +157,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$data = array(
 					'filemounts' => $this->renderForm_filemount($filemounts),
 					'file' => $this->renderer->handleFormField_typeGroup_file($field, $config, $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###')),
-					'record_type' => $this->renderer->getDefaultEntryValue('record_type'),
+					'record_type' => $this->renderer->getEntryValue('record_type'),
 				);
 				$cObj->start($data, 'File');
 				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
@@ -167,7 +167,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$data = array(
 					'url' => $this->renderer->handleFormField_typeInput($field, $config),
-					'record_type' => $this->renderer->getDefaultEntryValue('record_type'),
+					'record_type' => $this->renderer->getEntryValue('record_type'),
 				);
 				$cObj->start($data, 'File');
 				$cObj->setParent($cObj->data, $this->cObj->currentRecord);
