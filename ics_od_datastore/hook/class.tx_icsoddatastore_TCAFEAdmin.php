@@ -99,7 +99,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'*',
 			$this->table,
-			'1' . $this->pibase->cObj->enableFields($this->table) . ' AND uid='.$recordId,
+			'deleted=0 AND uid='.$recordId,
 			'',
 			'',
 			'1'
@@ -108,6 +108,23 @@ class tx_icsoddatastore_TCAFEAdmin {
 			$this->row = $rows[0];
 	}
 
+	/**
+	 * Process plugin before init
+	 *
+	 * @param	string		$content: The content
+	 * @param	array		$conf: Typoscript configuration
+	 * @param	tslib_pibase	$pi_base: Instance of tslib_pibase
+	 * @return	boolean		"True" whether not run into error, otherwise "False"
+	 */
+	function process_beforeInit(&$content, array $conf, $pi_base) {
+		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
+			tx_icstcafeadmin_debug::error('Any user is logged.');
+			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Generates form entries
 	 *

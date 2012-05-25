@@ -1,4 +1,5 @@
 2012-05-25 Tsi YANG <tsi@in-cite.net>
+	* Feature: Implemented TCA FE Admin hook process befiore init plugin.
 	* Feature: Implemented TCA FE Admin hook to process tx_icsoddatastore_files field md5.
 
 2012-05-24 Tsi YANG <tsi@in-cite.net>
