@@ -74,6 +74,18 @@ class tx_icsoddatastore_TCAFEAdmin {
 	var $renderer;
 
 	var $dbTools;
+	
+	private $oddatastore_tables = array(
+		'tx_icsoddatastore_filegroups',
+		'tx_icsoddatastore_fileformats',
+		'tx_icsoddatastore_licences',
+		'tx_icsoddatastore_downloads',
+		'tx_icsoddatastore_files',
+		'tx_icsoddatastore_tiers',
+		'tx_icsoddatastore_filetypes',
+		'tx_icsoddatastore_monthdownloads',
+		'tx_icsoddatastore_statistics',
+	);
 
 	/**
 	 * Initialize properties
@@ -117,12 +129,16 @@ class tx_icsoddatastore_TCAFEAdmin {
 	/**
 	 * Process plugin first of all
 	 *
+	 * @param	string			$table: The tablename
 	 * @param	string		$content: The content
 	 * @param	array		$conf: Typoscript configuration
 	 * @param	tslib_pibase		$pi_base: Instance of tslib_pibase
 	 * @return	boolean		"True" whether not run into error, otherwise "False"
 	 */
-	function startOff(&$content, array $conf, $pi_base) {
+	function startOff($table, &$content, array $conf, $pi_base) {
+		if (!in_array($table, $this->oddatastore_tables))
+			return true;
+		
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
 			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
@@ -163,29 +179,25 @@ class tx_icsoddatastore_TCAFEAdmin {
 	/**
 	 * Process user TCA FE Admin
 	 *
-	 * @param	&string		$content: The PlugIn content
-	 * @param	&array		$conf: The PlugIn configuration
-	 * @param	tslib_pibase		$pi_base: Instance of tx_icstcafeadmin_pi1
+	 * @param	string			$table: The tablename
+	 * @param	&string			$content: The PlugIn content
+	 * @param	&array			$conf: The PlugIn configuration
+	 * @param	tslib_pibase	$pi_base: Instance of tx_icstcafeadmin_pi1
 	 * @return	boolean		“True” whether process, otherwise “False”
 	 */
-	function user_TCAFEAdmin(&$content, &$conf, $pi_base) {
-		if (!$conf['tx_icsoddatastore_files_list.']['from_otherTableView'])
+	function user_TCAFEAdmin($table, &$content, &$conf, $pi_base) {
+		if (!in_array($table, $this->oddatastore_tables) || !$conf['tx_icsoddatastore_files_list.']['from_otherTableView'])
 			return false;
-
+		
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
 			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
 			return false;
 		}
-		$pi_base->setTable(false);
-		if (!$pi_base->loadTable()) {
-			tx_icstcafeadmin_debug::error('Table can not be loaded from TCA.');
-			$content = $pi_base->pi_getLL('data_not_available', 'Invalid table ' . $pi_base->table, true);
-		}
 
 		$pi_base->init();
-
 		$content = $pi_base->renderContent();
+		
 		return true;
 	}
 
@@ -233,11 +245,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	string		HTML form field content
 	 */
 	function renderEntries($pi_base, $table, array $fields, array $fieldLabels, $recordId=0, array $conf, $renderer=null) {
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-
 		if ($table!='tx_icsoddatastore_files')
 			return '';
+			
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
 
 		$fields = array_diff($fields, array('md5'));
 		foreach ($fields as $field) {
@@ -259,13 +271,13 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	string		HTML form field content
 	 */
 	function handleFormField($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null) {
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-		if (!isset($renderer))
-			return '';
 		$fields = array('file', 'url', 'record_type');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return '';
+		if (!isset($renderer))
+			return '';
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
 
 		$this->init($pi_base, $table, null, $fieldLabels, $recordId, $conf);
 		$this->renderer = $renderer;
@@ -364,12 +376,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	boolean		"True" if extra eval is processing, otherwise "False"
 	 */
 	function controlEntry($pi_base, $table, $field, $value, $recordId=0, array $conf, tx_icstcafeadmin_controlForm $controller, &$control) {
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-
 		$fields = array('file', 'url');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
 
 		$this->init($pi_base, $table, null, $fieldLabels, $recordId, $conf);
 
@@ -408,12 +419,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	boolean		"True" if the value is processing, otherwise "False"
 	 */
 	function process_valueToDB($pi_base, $table, $field, &$value, $recordId=0, array $conf, tx_icstcafeadmin_DBTools $dbTools) {
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-
 		$fields = array('file', 'url', 'md5');
 		if ($table!='tx_icsoddatastore_files' || !in_array($field, $fields))
 			return false;
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
 
 		$this->init($pi_base, $table, null, null, $recordId, $conf);
 		$this->dbTools = $dbTools;
@@ -481,11 +491,10 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	boolean		"True" if the value is processing, otherwise "False"
 	 */
 	function deleteRecord($table, $recordId=0, array $conf, $pi_base, &$delete) {
-		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
-			throw new Exception('Any user is logged.');
-
 		if ($table != 'tx_icsoddatastore_files')
 			return false;
+		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
+			throw new Exception('Any user is logged.');
 
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'file, record_type',

@@ -1,4 +1,5 @@
 2012-05-31 Tsi YANG <tsi@in-cite.net>
+	* Refactor: Reworked hook condition.
 	* Feature: Implemented partial hook to render list files on dataset single view.
 
 2012-05-25 Tsi YANG <tsi@in-cite.net>
