@@ -1,5 +1,8 @@
 plugin.tx_icstcafeadmin_pi1 {
 	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin.html
+	table {
+		showHidden = 0
+	}
 	renderForm {
 		tx_icsoddatastore_files.file.cObject = TEXT
 		tx_icsoddatastore_files.file.cObject {
@@ -61,4 +64,16 @@ plugin.tx_icstcafeadmin_pi1 {
  		}
 	}
 	
+}
+
+plugin.tx_icstcafeadmin_pi1.controlEntries.tx_icsoddatastore_files.file.eval = filemount
+
+# TS configuration for tx_icsoddatastore_files list view call from tx_icsoddatastore_filegroups single view
+tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 < plugin.tx_icstcafeadmin_pi1
+tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
+	tx_icsoddatastore_files_list.from_otherTableView = 1
+	userFunc = tx_icstcafeadmin_pi1->user_TCAFEAdmin
+	pidStorages = 
+	view.modes = LIST
+	table.tablename = tx_icsoddatastore_files
 }

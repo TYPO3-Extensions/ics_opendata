@@ -27,20 +27,21 @@
  *
  *
  *
- *   58: class tx_icsoddatastore_TCAFEAdmin
- *   90:     function init($pi_base, $table, $fields=null, $fieldLabels=null, $recordId=0, array $conf)
- *  125:     function startOff(&$content, array $conf, $pi_base)
- *  145:     function process_afterInit($table, &$fields, $fieldLabels=null, &$content, &$conf, $pi_base)
- *  171:     function user_TCAFEAdmin(&$content, &$conf, $pi_base)
- *  205:     function renderValue($pi_base, $table, $field, $fieldLabels=null, &$value, $recordId, array $conf, $renderer)
- *  235:     function renderEntries($pi_base, $table, array $fields, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
- *  261:     function handleFormField($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
- *  329:     private function renderForm_filemount($filemounts=null)
- *  366:     function controlEntry($pi_base, $table, $field, $value, $recordId=0, array $conf, tx_icstcafeadmin_controlForm $controller, &$control)
- *  410:     function process_valueToDB($pi_base, $table, $field, &$value, $recordId=0, array $conf, tx_icstcafeadmin_DBTools $dbTools)
- *  483:     function deleteRecord($table, $recordId=0, array $conf, $pi_base, &$delete)
+ *   59: class tx_icsoddatastore_TCAFEAdmin
+ *  103:     function init($pi_base, $table, $fields=null, $fieldLabels=null, $recordId=0, array $conf)
+ *  139:     function startOff($table, &$content, array $conf, $pi_base)
+ *  162:     function process_afterInit($table, &$fields, $fieldLabels=null, &$content, &$conf, $pi_base)
+ *  189:     function user_TCAFEAdmin($table, &$content, &$conf, $pi_base)
+ *  218:     function renderValue($pi_base, $table, $field, $fieldLabels=null, &$value, $recordId, array $conf, $renderer)
+ *  246:     function renderEntries($pi_base, $table, array $fields, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
+ *  272:     function handleFormField($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
+ *  340:     private function renderForm_filemount($filemounts=null)
+ *  377:     function controlEntry($pi_base, $table, $field, $value, $recordId=0, array $conf, tx_icstcafeadmin_controlForm $controller, &$control)
+ *  420:     function process_valueToDB($pi_base, $table, $field, &$value, $recordId=0, array $conf, tx_icstcafeadmin_DBTools $dbTools)
+ *  492:     function deleteRecord($table, $recordId=0, array $conf, $pi_base, &$delete)
+ *  538:     function getRecords($table, array $requestFields, $whereClause='', $groupBy='', $orderBy='', $limit='', &$rows, array $conf, $pi_base)
  *
- * TOTAL FUNCTIONS: 11
+ * TOTAL FUNCTIONS: 12
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -74,7 +75,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	var $renderer;
 
 	var $dbTools;
-	
+
 	private $oddatastore_tables = array(
 		'tx_icsoddatastore_filegroups',
 		'tx_icsoddatastore_fileformats',
@@ -129,7 +130,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	/**
 	 * Process plugin first of all
 	 *
-	 * @param	string			$table: The tablename
+	 * @param	string		$table: The tablename
 	 * @param	string		$content: The content
 	 * @param	array		$conf: Typoscript configuration
 	 * @param	tslib_pibase		$pi_base: Instance of tslib_pibase
@@ -138,7 +139,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	function startOff($table, &$content, array $conf, $pi_base) {
 		if (!in_array($table, $this->oddatastore_tables))
 			return true;
-		
+
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
 			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
@@ -179,16 +180,16 @@ class tx_icsoddatastore_TCAFEAdmin {
 	/**
 	 * Process user TCA FE Admin
 	 *
-	 * @param	string			$table: The tablename
-	 * @param	&string			$content: The PlugIn content
-	 * @param	&array			$conf: The PlugIn configuration
-	 * @param	tslib_pibase	$pi_base: Instance of tx_icstcafeadmin_pi1
+	 * @param	string		$table: The tablename
+	 * @param	&string		$content: The PlugIn content
+	 * @param	&array		$conf: The PlugIn configuration
+	 * @param	tslib_pibase		$pi_base: Instance of tx_icstcafeadmin_pi1
 	 * @return	boolean		“True” whether process, otherwise “False”
 	 */
 	function user_TCAFEAdmin($table, &$content, &$conf, $pi_base) {
 		if (!in_array($table, $this->oddatastore_tables) || !$conf['tx_icsoddatastore_files_list.']['from_otherTableView'])
 			return false;
-		
+
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
 			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
@@ -197,7 +198,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 
 		$pi_base->init();
 		$content = $pi_base->renderContent();
-		
+
 		return true;
 	}
 
@@ -218,15 +219,13 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if ($table!='tx_icsoddatastore_filegroups' || $field!='files' || $conf['currentView']!='viewSingle')
 			return false;
 
-		$lConf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icstcafeadmin_pi1.'];
-		$lConf['tx_icsoddatastore_files_list.']['from_otherTableView'] = true;
-		$lConf['userFunc'] = 'tx_icstcafeadmin_pi1->user_TCAFEAdmin';
-		$lConf['pidStorages'] = implode(',', $renderer->storage);
-		$lConf['view.']['modes'] = 'LIST';
-		$lConf['table.']['tablename'] = 'tx_icsoddatastore_files';
+		$lConf = $GLOBALS['TSFE']->tmpl->setup['tx_icsoddatastore_files.']['config.']['tx_icstcafeadmin_pi1.'];
+		if (!$lConf['pidStorages'])
+			$lConf['pidStorages'] = implode(',', $renderer->storage);
+		$lConf['table.']['select_filegroup'] = $recordId;
+
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		$cObj->start(array());
-		$objType = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icstcafeadmin_pi1'];
 		$value = $cObj->cObjGetSingle('USER', $lConf);
 
 		return true;
@@ -247,7 +246,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	function renderEntries($pi_base, $table, array $fields, array $fieldLabels, $recordId=0, array $conf, $renderer=null) {
 		if ($table!='tx_icsoddatastore_files')
 			return '';
-			
+
 		if (!$GLOBALS['TSFE']->fe_user->user['uid'])
 			throw new Exception('Any user is logged.');
 
@@ -488,7 +487,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	array		$conf: Typoscript configuration
 	 * @param	tslib_pibase		$pi_base: Instance of tslib_pibase
 	 * @param	&boolean		$delete: Reference to delete flag
-	 * @return	boolean		"True" if the value is processing, otherwise "False"
+	 * @return	boolean		“True” whether process, otherwise “False”
 	 */
 	function deleteRecord($table, $recordId=0, array $conf, $pi_base, &$delete) {
 		if ($table != 'tx_icsoddatastore_files')
@@ -519,6 +518,48 @@ class tx_icsoddatastore_TCAFEAdmin {
 			true
 		);
 
-		return $delete;
+		return true;
 	}
+
+	/**
+	 * Retrieves records
+	 *
+	 * @param	string		$table: The table name
+	 * @param	array		$requestFields: The array of request fields
+	 * @param	string		$whereClause:
+	 * @param	string		$groupBy:
+	 * @param	string		$orderBy:
+	 * @param	string		$limit:
+	 * @param	mixed		$rows :
+	 * @param	array		$conf: Typoscript conf array
+	 * @param	tx_icstcafeadmin_pi1		$pi_base: Instance of tx_icstcafeadmin_pi1
+	 * @return	boolean		“True” whether process, otherwise “False”
+	 */
+	function getRecords($table, array $requestFields, $whereClause='', $groupBy='', $orderBy='', $limit='', &$rows, array $conf, $pi_base) {
+		if ($table!='tx_icsoddatastore_files' || !$conf['table.']['select_filegroup'])
+			return false;
+
+		foreach ($requestFields as $field) {
+			$select[] = $table.'.'.$field . ' AS ' . $field;
+		}
+
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			implode(',', $select),
+			'tx_icsoddatastore_files',
+			'tx_icsoddatastore_files_filegroup_mm',
+			'tx_icsoddatastore_filegroups',
+			' AND ' . $whereClause . ' AND tx_icsoddatastore_files_filegroup_mm.uid_foreign='.$conf['table.']['select_filegroup'] ,
+			$groupBy,
+			$orderBy,
+			$limit
+		);
+		$output = array();
+		while ($output[] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {;}
+		array_pop($output);
+		$GLOBALS['TYPO3_DB']->sql_free_result($result);
+		$rows = $output;
+
+		return true;
+	}
+
 }
