@@ -75,7 +75,7 @@ class tx_icsodcoreapi_factory {
 				}
 			}
 		}
-		$commandObj = t3lib_div::getUserObj($this->command[$command]);
+		$commandObj = t3lib_div::getUserObj($this->command[$command], 'user_', true);
 		if ($commandObj && is_a($commandObj, 'tx_icsodcoreapi_command'))
 			return $commandObj;
 		return null;
