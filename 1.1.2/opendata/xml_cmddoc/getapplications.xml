@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<command name="Get applications" cmd="appstore_getapplications" brief="Retrieves applications.">
+	<description>
+		Retrieves applications.&#13;
+		Applications are returned for applications ID list or for given page.&#13;
+		It is possible to sort applications on title, updated date or released date.&#13;
+		Example 1 : ids="2,15, 17,18", sort="title|desc" returns applications 2, 15, 17,18 order by title.&#13;
+		Example 2 : page="3" returns 2nd page of applications.&#13;
+		By default, the page sheet is set to 1 and the limit of applications per page is set to 50.
+	</description>
+	<parameters>
+		<parameter name="ids" type="string" mandatory="0">
+			<description>The IDs list of applications to request.</description>
+		</parameter>
+		<parameter name="page" type="number" mandatory="0" default="1">
+			<description>The number of page.</description>
+		</parameter>
+		<parameter name="pagelimit" type="number" mandatory="0" default="50">
+			<description>The limit of applications per page</description>
+		</parameter>
+		<parameter name="sort" type="string" mandatory="0" default="TITLE|ASC">
+			<description>The sort param. Possible sort params are "TITLE", "UPDATE_DATE", "RELEASE_DATE" and the sort order "ASC" or "DESC".</description>
+		</parameter>
+	</parameters>
+</command>
