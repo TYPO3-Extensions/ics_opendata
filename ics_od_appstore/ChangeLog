@@ -26,11 +26,11 @@
 2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Version changed to 1.0.3
 	* Depends typo3 4.3 (scheduler)
-	* Fix: add function to control piVars data format 
-	* Fix: add forgotten htmlspecialchars
-	* Fix: Move "screenshot" text to locallang
-	* Fix: add "pi_RTEcssText" function for respect htmlarea format (description field)
-	* Fix: Platforms fiels not save in front-end forms
+	* Fix: add function to control piVars data format (credits go to Smile who repport this issue).  
+	* Fix: add forgotten htmlspecialchars (credits go to Smile who repport this issue). 
+	* Fix: Move "screenshot" text to locallang (credits go to Smile who repport this issue). 
+	* Fix: add "pi_RTEcssText" function for respect htmlarea format (description field) (credits go to Smile who repport this issue). 
+	* Fix: Platforms fiels not save in front-end forms (credits go to Smile who repport this issue). 
 
 2012-03-22 Tsi YANG  <tsi@in-cite.net>
 	* Feature: Added scheduler task for statistics
