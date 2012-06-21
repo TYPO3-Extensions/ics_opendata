@@ -202,6 +202,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$this->headersId[$field] = uniqid($this->prefixId);
 		}
 
+
 		$this->fileLinks = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'fileLink', 'displayList'), true);
 		if (empty($this->fileLinks)) {
 			$this->fileLinks = t3lib_div::trimExplode(',', $this->conf['displayList.']['fileLink'], true);
@@ -255,6 +256,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$this->conf['sorting.']['order'] = 'DESC';
 		}
 
+
 		$agencies = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'agencies', 'selectParams'), true);
 		if (!empty($agencies)) {
 			$this->conf['select.']['agencies'] = implode(',', $agencies);
@@ -263,6 +265,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		//==========
 		if (!$this->conf['singlePid'])
 			$this->conf['singlePid'] = $GLOBALS['TSFE']->id;
+
 
 		if (!$this->conf['resultsSearchPid'])
 			$this->conf['resultsSearchPid'] = $GLOBALS['TSFE']->id;
@@ -539,6 +542,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			}
 		}
 
+
 		// Get all filegroups
 		$filegroups = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'DISTINCT `' . $this->tables['filegroups'] . '`.`uid`',
@@ -568,6 +572,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '` ' . $order;
 			}
 
+
 			if ( $this->list_criteria['sort']['column'] != 'title')
 				$orderBy .= ', `' . $this->tables['filegroups'] . '`.`title` ASC';
 		}
@@ -589,6 +594,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$orderBy,
 			$start . ',' . $this->nbFileGroupByPage
 		);
+
 
 		$i=0;
 		foreach ($filegroups as $filegroup) {
@@ -798,6 +804,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			if (!$filegroup[$field])
 				$tmp_subpart = '';
 
+
 			$template = $this->cObj->substituteSubpart($template, '###SUBPART_'. strtoupper($field) .'###', $tmp_subpart);
 
 			switch($field) {
@@ -974,6 +981,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'`' . $this->tables['tiers'] . '`.`name` ASC'
 		);
 
+
 		return $agencies;
 	}
 
@@ -984,11 +992,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
-		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
+		$conf = $this->conf['displayList.']['pagebrowse.'];
 		$conf += array(
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
 		);
+
 
 		// Get page browser
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -1017,6 +1026,26 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
+	
+	/**
+     * @return    string        The additionalParams variable in getPageLink from tx_pagebrowse_pi1
+	 * @author	GOYER Frederic <frederic.goyer@in-cite.net>
+     */
+    function getExtraQueryString() {
+        $gp = t3lib_div::_GP($this->prefixId);
+        foreach($gp as $key => $val) {
+            if(is_array($val)) {
+                $ind = 0;
+                foreach($val as $v)
+                    if(!empty($v))
+                        $str[] = $this->prefixId . '['. $key .'][' . $ind++ . ']=' . $v;
+            }else
+                if(!empty($val) && $key != 'page')
+                    $str[] = $this->prefixId . '['. $key .']=' . $val;
+        }
+        $str = '&' . implode('&', $str);
+        return $str;
+    }
 }
 
 

@@ -1,3 +1,6 @@
+2012-06-21 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Fix: datastore pagination don't keep search params
+	
 2012-06-04 Tsi YANG <tsi@in-cite.net>
 	* Feature: Implemented TCA FE Admin getRecord hook.
 	* Feature: Added Typoscript configuration to render files list view from dataset single view.
