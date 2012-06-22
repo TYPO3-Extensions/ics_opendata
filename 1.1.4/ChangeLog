@@ -1,3 +1,6 @@
+2012-06-22 Aurelien GRAYO <aurelien@in-cite.net>
+	* Backport fix of revision 62213 (Initialize renderEmpty function to tx_icsoddatastore_pi3 class)
+
 2012-04-25 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Add pagebrowse dependency
 	* Version changed to 1.1.3

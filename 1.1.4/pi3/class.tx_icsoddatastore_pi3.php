@@ -141,7 +141,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 	 */
 	function renderStats(array $rows = null) {
 		if (!isset($rows) || empty($rows))
-			return $this->renderEmpty();
+			return $this->renderEmpty($this->pi_getLL('statsEmpty'));
 			
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_STATISTICS###');
 		$subparts = array();
@@ -243,6 +243,14 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 		return $count;
 	}
 
+	/**
+	 * Render empty message
+	 *
+	 * @return	string		html content
+	 */
+	function renderEmpty($msg) {
+		return $this->cObj->stdWrap($msg, $this->conf['empty.']);
+	}
 }
 
 
