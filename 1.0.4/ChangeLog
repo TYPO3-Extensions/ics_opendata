@@ -1,0 +1,16 @@
+2012-06-22 Aurelien GRAYO  <aurelien@in-cite.net>
+	* Release ics_od_core_api 1.0.4
+
+2012-06-05 Tsi Yang  <tsi@in-cite.net>
+	* Bug fix:  Typo3 4.5
+
+2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Fix: update autoload
+	* Version changed to 1.0.3
+
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change params control order  (credits go to Smile who suggest this improvement). 
+
+2011-05-13 In Cité Solution  <technique@in-cite.net>
+
+	* initial code generated with kickstarter
