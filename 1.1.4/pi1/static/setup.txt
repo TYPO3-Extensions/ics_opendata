@@ -148,6 +148,14 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		
 		renderOnlySearchedFileFormats = {$config.tx_icsoddatastore_pi1.displayList.renderOnlySearchedFileFormats}
+		pagebrowse < plugin.tx_pagebrowse_pi1
+		pagebrowse {
+			extraQueryString.cObject = COA
+			extraQueryString.cObject {
+				1 = TEXT
+				1.postUserFunc = tx_icsoddatastore_pi1->getExtraQueryString
+			}
+		}
 	}
 	
 	displaySingle {
