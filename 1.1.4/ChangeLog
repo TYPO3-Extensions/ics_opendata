@@ -1,0 +1,75 @@
+2012-04-25 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Add pagebrowse dependency
+	* Version changed to 1.1.3
+
+2012-04-17 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Feature: change filegroup view in BE module: only TCA fields are displayed
+	* Fix: Field categories in backend module datastore
+
+2012-03-27 Emilie SAGNIEZ  <emilie@in-cite.net>
+	Feature: Added additionalListFieldsMarkers hook
+	Fix: Corrected additionalSelectedCriteriaMarkers hook
+
+2012-03-27 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added selected criteria informations on search form.
+	* Refactor: Externalized setup css styles.
+	* Fix: Mistakes on files generated url
+
+2012-03-23 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Feature: Add TS configuration: displayList.renderOnlySearchedFileFormats
+	* Feature: Add title sorting to pi1 flexform
+	* Fix: update autoload
+	* Feature: Add typoscript that converts line breaks to <br />-tags in dataset description field 
+	* Version changed to 1.1.2
+
+2012-03-22 Tsi YANG <tsi@in-cite.net>
+	* Documentation: Added documentation on "How to display last updated and last released" and stats download.
+
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change to version 1.1.1
+	* Depends typo3 4.3 (scheduler)
+	* Fix: add function to control piVars data format
+	* Fix: add "enableFields" function at each SQL request
+
+2012-03-22 Tsi YANG <tsi@in-cite.net>
+	* Refactor: Removed categories pictos process to ics_od_categories extension.
+
+2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Change to version 1.1.0
+
+2012-03-20 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added stats download.
+	* Refactor: Reworked file link generation. Must call makelink class for all file links.
+	* Fix: Passed data through htmlspecialchars.
+	* Fix: Mistakes in extern url generation.
+	* Feature: Added scheduler task to process download logs.
+
+2012-03-19 Tsi YANG <tsi@in-cite.net>
+	* Feature: Retrieved first category's picto on list view. Displaying on last release template.
+
+2012-03-16 Tsi YANG <tsi@in-cite.net>
+	* Fix: Forgotten conf in setup.txt
+	* Fix: Mistakes in sorting.
+	* Feature: Added template list for last update and last release views.
+
+2012-03-15 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added sorting configuration on crdate.
+	* Feature: Added select configuration. Possibility to filter on agencies.
+
+2012-03-09 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added sorting configuration. Keeping default on last timestamp and title. Keeping configuration on day and title. The new configuration is on last timestamp only.
+
+2012-03-08 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added statistics table sql index on date and dataset
+	* Feature: Added plugin pi3
+	* Feature: Implemented stats by datasets
+	* Feature: Partial implementation of stats by files
+	* Feature: Added pi3 flexform
+	* Fix: Bad implementation of stats by files
+
+2011-05-12 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added sql table for files downloads statistics
+
+2011-05-12 In Cite Solution  <technique@in-cite.net>
+
+	* initial code generated with kickstarter
