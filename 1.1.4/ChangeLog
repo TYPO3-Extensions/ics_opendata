@@ -1,6 +1,7 @@
 2012-06-22 Aurelien GRAYO <aurelien@in-cite.net>
 	* Backport fix of revision 62213 (Initialize renderEmpty function to tx_icsoddatastore_pi3 class)
 	* Backport fix of revision 63627 (datastore pagination don't keep search params)
+	* Release of ics_od_datastore 1.1.4 on TER
 	
 2012-04-25 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Add pagebrowse dependency
