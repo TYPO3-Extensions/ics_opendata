@@ -1,3 +1,6 @@
+2012-06-29 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Fix: Removed top download  hidden record.
+
 2012-06-21 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: datastore pagination don't keep search params
 	

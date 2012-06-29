@@ -105,12 +105,16 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 		$type = (string)strtoupper(trim($this->conf['view.']['type']));
 		switch ($type) {
 			case 'DATASET':
-				$fields = array('filegroup', 'SUM(count) as total');
-				$groupBy = 'filegroup';
+				$fields = array('`'.$this->tables['stats'].'`.`filegroup`', 'SUM(`'.$this->tables['stats'].'`.`count`) as total');
+				$tables = $this->tables['stats'].' JOIN '.$this->tables['datasets'].' ON `'.$this->tables['stats'].'`.`filegroup` = `'.$this->tables['datasets'].'`.`uid`';
+				$where_clause .= ' ' . $this->cObj->enableFields($this->tables['datasets']);
+				$groupBy = '`'.$this->tables['stats'].'`.`filegroup`';
 				$orderBy = 'total DESC';
 				break;
 			case 'FILE':
-				$fields = array('file', 'filegroup', 'SUM(count) as total');
+				$fields = array('`'.$this->tables['stats'].'`.`file`', '`'.$this->tables['stats'].'`.filegroup`', 'SUM(`'.$this->tables['stats'].'`.`count`) as total');
+				$tables = $this->tables['stats'].' JOIN '.$this->tables['files'].' ON `'.$this->tables['stats'].'`.`file` = `'.$this->tables['files'].'`.`uid`';
+				$where_clause .= ' ' . $this->cObj->enableFields($this->tables['files']);
 				$groupBy = 'file';
 				$orderBy = 'total DESC';
 				break;
@@ -125,7 +129,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 		$where_clause .= ' ' . $this->cObj->enableFields($this->tables['stats']);
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			(isset($fields) && is_array($fields) && !empty($fields))? implode(',', $fields): '*',
-			$this->tables['stats'],
+			$tables,
 			$where_clause,
 			$groupBy,
 			$orderBy,
