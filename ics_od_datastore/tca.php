@@ -770,11 +770,10 @@ $TCA['tx_icsoddatastore_tiers'] = array (
                 'type' => 'group',    
                 'internal_type' => 'db',    
                 'allowed' => 'fe_users',
-				'prepend_tname' => 1,
                 'size' => 10,    
                 'minitems' => 0,
                 'maxitems' => 100,    
-                "MM" => "tx_icsoddatastore_feusers_tiers_mm",
+                'MM' => "tx_icsoddatastore_feusers_tiers_mm",
             )
         ),
     ),
