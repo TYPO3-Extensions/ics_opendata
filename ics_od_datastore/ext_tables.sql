@@ -141,6 +141,7 @@ CREATE TABLE tx_icsoddatastore_tiers (
 	country varchar(40) DEFAULT '' NOT NULL,	
 	latitude tinytext NOT NULL,
 	longitude tinytext NOT NULL,
+	fe_edit int(11) DEFAULT '0' NOT NULL,
    
     PRIMARY KEY (uid),
     KEY parent (pid)
@@ -233,4 +234,27 @@ CREATE TABLE tx_icsoddatastore_monthdownloads (
 #
 CREATE TABLE fe_groups (
 	tx_icsoddatastore_filemount  varchar(255) DEFAULT '' NOT NULL
+);
+
+
+#
+# Table structure for table 'fe_users'
+#
+CREATE TABLE fe_users (
+	tx_icsoddatastore_tiers  text
+);
+
+#
+# Table structure for table 'tx_icsoddatastore_feusers_tiers_mm'
+# 
+#
+CREATE TABLE tx_icsoddatastore_feusers_tiers_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  sorting_foreign int(11) DEFAULT '0' NOT NULL,
+  
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
 );

@@ -1,3 +1,6 @@
+2012-07-05 Emilie SAGNIEZ  <emilie@in-cite.net>
+	* Feature: Added fe_users/tiers bidirectionnal relation. 
+
 2012-06-29 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: Removed top download  hidden record.
 

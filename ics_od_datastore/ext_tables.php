@@ -192,7 +192,26 @@ t3lib_div::loadTCA('fe_groups');
 t3lib_extMgm::addTCAcolumns('fe_groups',$filemountCol,1);
 t3lib_extMgm::addToAllTCAtypes('fe_groups','tx_icsoddatastore_filemount');
 
-
+// Add fe_users tiers relation
+$tiersCol = array(
+	'tx_icsoddatastore_tiers' => array(
+		'exclude' => 0,
+		'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:fe_users.tx_icsoddatastore_tiers',
+		'config' => array (
+			'type' => 'select',
+			'foreign_table' => 'tx_icsoddatastore_tiers',
+			'foreign_table_where' => 'ORDER BY tx_icsoddatastore_tiers.uid',
+			'size' => 10,	
+			'minitems' => 0,
+			'maxitems' => 100,
+			'MM' => 'tx_icsoddatastore_feusers_tiers_mm',
+			'MM_opposite_field' => 'fe_edit',
+		)
+	),
+);
+t3lib_div::loadTCA('fe_users');
+t3lib_extMgm::addTCAcolumns('fe_users',$tiersCol,1);
+t3lib_extMgm::addToAllTCAtypes('fe_users','--div--;LLL:EXT:ics_od_datastore/locallang_db.xml:tab_datastore, tx_icsoddatastore_tiers');
 
 
 t3lib_div::loadTCA('tt_content');

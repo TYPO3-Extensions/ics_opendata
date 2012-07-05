@@ -653,7 +653,7 @@ $TCA['tx_icsoddatastore_downloads'] = array (
 $TCA['tx_icsoddatastore_tiers'] = array (
     'ctrl' => $TCA['tx_icsoddatastore_tiers']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,name,description,email,website,logo,address,zipcode,city,country,latitude,longitude'
+        'showRecordFieldList' => 'hidden,name,description,email,website,logo,address,zipcode,city,country,latitude,longitude,fe_edit'
     ),
     'feInterface' => $TCA['tx_icsoddatastore_tiers']['feInterface'],
     'columns' => array (
@@ -763,9 +763,23 @@ $TCA['tx_icsoddatastore_tiers'] = array (
                 'eval' => 'trim',
 			)
 		),
+		'fe_edit' => array (        
+            'exclude' => 0,        
+            'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_tiers.fe_edit',        
+            'config' => array (
+                'type' => 'group',    
+                'internal_type' => 'db',    
+                'allowed' => 'fe_users',
+				'prepend_tname' => 1,
+                'size' => 10,    
+                'minitems' => 0,
+                'maxitems' => 100,    
+                "MM" => "tx_icsoddatastore_feusers_tiers_mm",
+            )
+        ),
     ),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, email, website,logo,address,zipcode,city,country,latitude,longitude')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, email, website,logo,address,zipcode,city,country,latitude,longitude,fe_edit')
     ),
     'palettes' => array (
         '1' => array('showitem' => '')

@@ -60,6 +60,7 @@
             <label index="tx_icsoddatastore_tiers.country">Country</label>
             <label index="tx_icsoddatastore_tiers.latitude">Latitude</label>
             <label index="tx_icsoddatastore_tiers.longitude">Longitude</label>
+			<label index="tx_icsoddatastore_tiers.fe_edit">Edit right</label>
 			<label index="tx_icsoddatastore_filetypes">FileType (opendata)</label>
 			<label index="tx_icsoddatastore_filetypes.name">name</label>
 			<label index="tx_icsoddatastore_filetypes.description">Description</label>
@@ -70,6 +71,8 @@
 			<label index="tt_content.list_type_pi2">Data store RSS</label>
 			<label index="tt_content.list_type_pi3">Stats files download</label>
 			<label index="tx_icsoddatastore_filemount">DATASTORE filemount</label>
+			<label index="tab_datastore">Datastore</label>
+			<label index="fe_users.tx_icsoddatastore_tiers">Edit right</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="tx_icsoddatastore_filegroups">Groupe de fichier (opendata)</label>
@@ -125,6 +128,7 @@
             <label index="tx_icsoddatastore_tiers.country">Pays</label>
             <label index="tx_icsoddatastore_tiers.latitude">Latitude</label>
             <label index="tx_icsoddatastore_tiers.longitude">Longitude</label>
+			<label index="tx_icsoddatastore_tiers.fe_edit">Droit d'édition</label>
 			<label index="tx_icsoddatastore_filetypes">Type de fichier (opendata)</label>
 			<label index="tx_icsoddatastore_filetypes.name">Nom</label>
 			<label index="tx_icsoddatastore_filetypes.description">Description</label>
@@ -134,6 +138,8 @@
 			<label index="tt_content.list_type_pi2">Jeux de données RSS</label>
 			<label index="tt_content.list_type_pi3">Stats de técléchargements de fichiers</label>
 			<label index="tx_icsoddatastore_filemount">Point de montage du DATASTORE</label>
+			<label index="tab_datastore">Datastore</label>
+			<label index="fe_users.tx_icsoddatastore_tiers">Droit d'édition</label>
 		</languageKey>
 	</data>
 </T3locallang>
