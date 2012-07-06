@@ -8,9 +8,13 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="anyUser">Any user is logged.</label>
+			<label index="anyAllowedTiers">Any allowed tiers.</label>
+			<label index="notAllowedEditDataset">You are not allowed to edit dataset.</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="anyUser">Identifiez-vous avant de continuer.</label>
+			<label index="anyAllowedTiers">Aucun tiers autorisé.</label>
+			<label index="notAllowedEditDataset">Vous ne pouvez pas éditer le jeu de données.</label>
 		</languageKey>
 	</data>
 </T3locallang>

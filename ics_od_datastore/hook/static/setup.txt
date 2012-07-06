@@ -3,6 +3,17 @@ plugin.tx_icstcafeadmin_pi1 {
 	table {
 		showHidden = 0
 	}
+	renderConf {
+		tx_icsoddatastore_licences.link.viewList {
+			setContentToCurrent = 1
+			typolink.parameter.current = 1
+		}
+		tx_icsoddatastore_licences.logo.viewList {
+			setContentToCurrent = 1
+			typolink.parameter.current = 1
+		}
+	}
+
 	renderForm {
 		tx_icsoddatastore_files.file.cObject = TEXT
 		tx_icsoddatastore_files.file.cObject {
@@ -76,4 +87,51 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 	pidStorages = 
 	view.modes = LIST
 	table.tablename = tx_icsoddatastore_files
+
+	listActions {		
+		edit {
+			cObject = TEXT
+			cObject {
+				data = LLL:EXT:ics_tcafe_admin/pi1/locallang.xml:action_edit
+			}
+			typolink {
+				parameter.data = tsfe:id
+				parameter.override.field = PIDeditItem
+				additionalParams.cObject = COA
+				additionalParams.cObject {
+					10 = TEXT
+					10.value = &tx_icstcafeadmin_pi1[mode]=EDIT&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[showUid]={field:id}
+					20 = TEXT
+					20 {
+						if.isTrue.field = withDataEditItem
+						value = &tx_icstcafeadmin_pi1[fields]=hidden,record_type,file,url,format,type,md5
+					}
+				}
+				additionalParams.insertData = 1
+			}
+		}
+		
+		new {
+			cObject = TEXT
+			cObject {
+				data = LLL:EXT:ics_tcafe_admin/pi1/locallang.xml:action_new
+			}
+			typolink {
+				parameter.data = tsfe:id
+				parameter.override.field = PIDnewItem
+				additionalParams.cObject = COA
+				additionalParams.cObject {
+					10 = TEXT
+					10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}
+					20 = TEXT
+					20 {
+						if.isTrue.field = withDataNewItem
+						value = &tx_icstcafeadmin_pi1[fields]=hidden,record_type,file,url,format,type,md5&tx_icstcafeadmin_pi1[dataset]={field:dataset}
+					}
+				}
+
+				additionalParams.insertData = 1
+			}
+		}
+	}	
 }

@@ -1,4 +1,9 @@
-2012-07-05 Emilie SAGNIEZ  <emilie@in-cite.net>
+2012-07-06 Tsi YANG <tsi@in-cite.net>
+	* Feature: Implemented get_TCAFE_Admin_actions_data hook for table tx_icsoddatastore_files
+	* Feature: Added Typoscript for tx_icsoddatastore_files list view calling from tx_icsoddatastore_filegroups
+
+2012-07-05 Tsi YANG <tsi@in-cite.net>
+	* Feature: Optimized TCA.
 	* Feature: Added fe_users/tiers bidirectionnal relation. 
 
 2012-06-29 Emilie SAGNIEZ  <emilie@in-cite.net>
