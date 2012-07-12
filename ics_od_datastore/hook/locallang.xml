@@ -10,11 +10,17 @@
 			<label index="anyUser">Any user is logged.</label>
 			<label index="anyAllowedTiers">Any allowed tiers.</label>
 			<label index="notAllowedEditDataset">You are not allowed to edit dataset.</label>
+			<label index="notAllowedEditDatasetFiles">You are not allowed to edit dataset Files.</label>
+			<label index="action_edit">Edit dataset</label>
+			<label index="action_new">Upload new file</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="anyUser">Identifiez-vous avant de continuer.</label>
 			<label index="anyAllowedTiers">Aucun tiers autorisé.</label>
 			<label index="notAllowedEditDataset">Vous ne pouvez pas éditer le jeu de données.</label>
+			<label index="notAllowedEditDatasetFiles">Vous ne pouvez pas éditer les fichiers du jeu de données.</label>
+			<label index="action_edit">Editer le jeu de données</label>
+			<label index="action_new">Uploader un fichier</label>
 		</languageKey>
 	</data>
 </T3locallang>

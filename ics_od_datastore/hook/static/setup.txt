@@ -1,5 +1,5 @@
 plugin.tx_icstcafeadmin_pi1 {
-	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin.html
+	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin_datasets.html
 	table {
 		showHidden = 0
 	}
@@ -11,6 +11,14 @@ plugin.tx_icstcafeadmin_pi1 {
 		tx_icsoddatastore_licences.logo.viewList {
 			setContentToCurrent = 1
 			typolink.parameter.current = 1
+		}
+		actions {
+			edit < plugin.tx_icstcafeadmin_pi1.listActions.edit
+			edit.cObject.data >
+			edit.cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_edit
+			new < plugin.tx_icstcafeadmin_pi1.listActions.new
+			new.cObject.data >
+			new.cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_new
 		}
 	}
 
@@ -73,6 +81,10 @@ plugin.tx_icstcafeadmin_pi1 {
 			addParams.onchange = if(this.selectedIndex==0) { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'none'; } else { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'block';}
 			addParams._offset = 4
  		}
+		tx_icsoddatastore_files.filegroup = TEXT
+		tx_icsoddatastore_files.filegroup {
+			wrap = <input type="hidden" id="filegroup" name="tx_icstcafeadmin_pi1[filegroup]" value="|">
+		}
 	}
 	
 }
@@ -87,6 +99,8 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 	pidStorages = 
 	view.modes = LIST
 	table.tablename = tx_icsoddatastore_files
+
+	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin_files.html
 
 	listActions {		
 		edit {
@@ -104,7 +118,7 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 					20 = TEXT
 					20 {
 						if.isTrue.field = withDataEditItem
-						value = &tx_icstcafeadmin_pi1[fields]=hidden,record_type,file,url,format,type,md5
+						value = &tx_icstcafeadmin_pi1[fields]={field:fields}
 					}
 				}
 				additionalParams.insertData = 1
@@ -126,7 +140,7 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 					20 = TEXT
 					20 {
 						if.isTrue.field = withDataNewItem
-						value = &tx_icstcafeadmin_pi1[fields]=hidden,record_type,file,url,format,type,md5&tx_icstcafeadmin_pi1[dataset]={field:dataset}
+						value = &tx_icstcafeadmin_pi1[fields]={field:fields}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
 					}
 				}
 
