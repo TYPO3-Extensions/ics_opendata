@@ -7,6 +7,7 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $TYPO3_CONF_VARS['FE']['eID_include']['ics_od_api'] = 'EXT:ics_od_core_api/api/tx_icsodcoreapi_client.php';
+$TYPO3_CONF_VARS['FE']['eID_include']['ics_od_api2'] = 'EXT:ics_od_core_api/api2/tx_icsodcoreapi_api2_client.php';
 
 
 /// TEST

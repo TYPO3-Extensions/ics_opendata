@@ -1,3 +1,6 @@
+2012-07-13 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: New API implementation for faster result output.
+
 2012-06-22 Aurelien GRAYO  <aurelien@in-cite.net>
 	* Release ics_od_core_api 1.0.4
 
