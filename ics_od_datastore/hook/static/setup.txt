@@ -14,11 +14,18 @@ plugin.tx_icstcafeadmin_pi1 {
 		}
 		actions {
 			edit < plugin.tx_icstcafeadmin_pi1.listActions.edit
-			edit.cObject.data >
-			edit.cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_edit
+			edit{
+				cObject.data >
+				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_edit
+				outerWrap = <p class="dataset_menu">|</p>
+			}
 			new < plugin.tx_icstcafeadmin_pi1.listActions.new
-			new.cObject.data >
-			new.cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_new
+			new {
+				cObject.data >
+				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_new
+				typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
+				outerWrap = <p class="dataset_menu">|</p>
+			}
 		}
 	}
 
@@ -136,11 +143,11 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 				additionalParams.cObject = COA
 				additionalParams.cObject {
 					10 = TEXT
-					10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}
+					10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
 					20 = TEXT
 					20 {
 						if.isTrue.field = withDataNewItem
-						value = &tx_icstcafeadmin_pi1[fields]={field:fields}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
+						value = &tx_icstcafeadmin_pi1[fields]={field:fields}
 					}
 				}
 

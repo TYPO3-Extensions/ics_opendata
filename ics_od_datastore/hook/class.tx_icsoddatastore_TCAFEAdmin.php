@@ -288,12 +288,19 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if ($table!='tx_icsoddatastore_filegroups' || $field!='files')
 			return false;
 
+		// New file
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
-
-		$cObj->start($renderer->cObjDataActions(null), 'TCAFE_Admin_actions');
+		$data = $renderer->cObjDataActions(null);
+		$data['table'] = 'tx_icsoddatastore_files';
+		$GLOBALS['TSFE']->includeTCA();
+		t3lib_div::loadTCA('tx_icsoddatastore_files');
+		$data['fields'] = implode(',', array_keys($GLOBALS['TCA']['tx_icsoddatastore_files']['columns']));
+		$data['dataset'] = $row['uid'];
+		$cObj->start($data, 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 		$markers['NEW_FILE'] = $cObj->stdWrap('', $conf['renderConf.']['actions.']['new.']);
 
+		// Edit dataset
 		$cObj->start($renderer->cObjDataActions($row), 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 		$markers['EDIT_DATASET'] = $cObj->stdWrap('', $conf['renderConf.']['actions.']['edit.']);
