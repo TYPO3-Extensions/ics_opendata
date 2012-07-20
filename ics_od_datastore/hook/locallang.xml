@@ -20,7 +20,7 @@
 			<label index="notAllowedEditDataset">Vous ne pouvez pas éditer le jeu de données.</label>
 			<label index="notAllowedEditDatasetFiles">Vous ne pouvez pas éditer les fichiers du jeu de données.</label>
 			<label index="action_edit">Editer le jeu de données</label>
-			<label index="action_new">Uploader un fichier</label>
+			<label index="action_new">Télécharger un fichier</label>
 		</languageKey>
 	</data>
 </T3locallang>

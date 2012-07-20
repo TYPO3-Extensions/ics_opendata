@@ -234,7 +234,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'uid, agency, contact, publisher, creator, manager, owner',
 			'tx_icsoddatastore_filegroups',
-			'1 ' . $pi_base->cObj->enableFields('tx_icsoddatastore_filegroups') . ' AND uid=' . $dataset .
+			'1  AND uid=' . $dataset .
 				' AND (agency IN('.implode(',', $allowed_tiers).') OR contact IN('.implode(',', $allowed_tiers).')
 					OR publisher IN('.implode(',', $allowed_tiers).') OR creator IN('.implode(',', $allowed_tiers).')
 					OR manager IN('.implode(',', $allowed_tiers).') OR owner IN('.implode(',', $allowed_tiers).'))'
@@ -298,12 +298,12 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$data['dataset'] = $row['uid'];
 		$cObj->start($data, 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-		$markers['NEW_FILE'] = $cObj->stdWrap('', $conf['renderConf.']['actions.']['new.']);
+		$markers['NEW_FILE'] = $cObj->stdWrap('', $conf['optionList.']['singleDatasetOptionList.']['new.']);
 
 		// Edit dataset
 		$cObj->start($renderer->cObjDataActions($row), 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-		$markers['EDIT_DATASET'] = $cObj->stdWrap('', $conf['renderConf.']['actions.']['edit.']);
+		$markers['EDIT_DATASET'] = $cObj->stdWrap('', $conf['optionList.']['singleDatasetOptionList.']['edit.']);
 
 		return true;
 	}
@@ -644,7 +644,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				'tx_icsoddatastore_files',
 				'tx_icsoddatastore_files_filegroup_mm',
 				'tx_icsoddatastore_filegroups',
-				' AND ' . $whereClause . ' AND tx_icsoddatastore_files_filegroup_mm.uid_foreign='.$conf['table.']['dataset'] ,
+				' AND ' . $whereClause . ' AND tx_icsoddatastore_files_filegroup_mm.uid_foreign='.$conf['table.']['dataset'],
 				$groupBy,
 				$orderBy,
 				$limit
@@ -691,13 +691,13 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	array		$row: The record row
 	 * @param	array		$conf: The conf
 	 * @param	tx_icstcafeadmin_ListRenderer		$renderer: the renderer
-	 * @return	mixed		The data array
+	 * @return	boolean
 	 */
 	public function actions_additionnalDataArray(&$data, $table, $row, $conf, $renderer) {
 		if ($table != 'tx_icsoddatastore_files')
-			return;
+			return false;
 
 		$data['dataset'] = $conf['table.']['dataset'];
 	}
-
+	
 }
