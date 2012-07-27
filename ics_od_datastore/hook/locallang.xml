@@ -13,6 +13,8 @@
 			<label index="notAllowedEditDatasetFiles">You are not allowed to edit dataset Files.</label>
 			<label index="action_edit">Edit dataset</label>
 			<label index="action_new">Upload new file</label>
+			<label index="datastore_filemount">DATASTORE filemount</label>
+			<label index="dataset_form_info">Fill form with required entries * and give dataset's tiers.</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="anyUser">Identifiez-vous avant de continuer.</label>
@@ -21,6 +23,8 @@
 			<label index="notAllowedEditDatasetFiles">Vous ne pouvez pas éditer les fichiers du jeu de données.</label>
 			<label index="action_edit">Editer le jeu de données</label>
 			<label index="action_new">Télécharger un fichier</label>
+			<label index="datastore_filemount">Chemin de stockage</label>
+			<label index="dataset_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *, ainsi qu'en assignant au minimum un tiers au jeu de données</label>
 		</languageKey>
 	</data>
 </T3locallang>

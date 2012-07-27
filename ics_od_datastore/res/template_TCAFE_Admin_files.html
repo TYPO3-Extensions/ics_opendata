@@ -49,7 +49,7 @@
 <!-- ###TEMPLATE_RESULTS_LIST### start-->
 	<div class="###PREFIXID###_list">
 		<table class="###PREFIXID###_table ###TABLENAME###" id="###UNIQID###">
-				<caption>###CAPTION###</caption>
+				<!--<caption>###CAPTION###</caption>-->
 				<!-- ###HEADER### start -->
 				<thead>
 					<tr class="###PREFIXID###_header">
@@ -92,7 +92,7 @@
 
 <!-- ###TEMPLATE_RESULTS_ROW_ACTIONS### start-->
 	<td class="###PREFIXID###_actions">
-		<p>###SINGLE###</p>
+		<!--<p>###SINGLE###</p>-->
 		<p>###EDIT###</p>
 		<p>###DELETE###</p>
 		<p>###HIDE###</p>
@@ -174,7 +174,7 @@
 
 <!-- ###TEMPLATE_FORM_FIELDS### start-->
 	<fieldset class="###PREFIXID###_pidstorage" title="###FIELDSET_FIELDS###">
-		<legend>###FIELDS_TITLE###</legend>
+		<!--<legend>###FIELDS_TITLE###</legend>-->
 		###ENTRIES###
 	</fieldset>
 <!-- ###TEMPLATE_FORM_FIELDS### end-->
@@ -196,11 +196,7 @@
 		<input type="text" id="###ITEM_ID###" class="###PREFIXID###_value hasDatepicker" name="###ITEM_NAME###" value="###ITEM_VALUE###" ###SIZE### ###CONFORM###/>
 		###CTRL_MESSAGE###
 	</div>
-	<script>
-		jQuery(document).ready(function(){
-			jQuery('####ITEM_ID###').datepicker();
-		});
-	</script>
+
 <!-- ###TEMPLATE_FORM_TEXT_DATE### end-->
 
 
