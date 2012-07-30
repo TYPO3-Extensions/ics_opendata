@@ -10,6 +10,7 @@ plugin.tx_icstcafeadmin_pi1 {
 		single.typolink.additionalParams.cObject.20 >
 		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
 		new.typolink.additionalParams.cObject.20 >
+		# Render dataset option list on single view
 		singleDatasetOptionList {
 			edit < plugin.tx_icstcafeadmin_pi1.optionList.edit
 			edit{
