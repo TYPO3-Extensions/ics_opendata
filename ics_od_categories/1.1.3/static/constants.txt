@@ -1,9 +1,0 @@
-# $Id$
-
-config.tx_icsodcategories {
-	
-}
-
-config.tx_icsoddatastore_pi2 {
-	templateFile = EXT:ics_od_categories/res/rss2_tmplFile.tmpl
-}
