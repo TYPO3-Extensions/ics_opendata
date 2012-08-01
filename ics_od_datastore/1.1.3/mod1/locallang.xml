@@ -27,8 +27,22 @@
 			<label index="creator">Creator :</label>
 			<label index="manager">Manager :</label>
 			<label index="owner">Owner :</label>
+			<label index="keywords">Keywords: </label>
+			<label index="spatial_cover">Spatial Cover: </label>
+			<label index="language">Language: </label>
+			<label index="quality">Quality: </label>
+			<label index="granularity">Granularity: </label>
+			<label index="linked_references">References: </label>
+			<label index="taxonomy">Taxonomy: </label>
+			<label index="illustration">Illustration: </label>
+			<label index="has_dynamic_display">has dynamic display: </label>
+			<label index="param_dynamic_display">param for dynamic display: </label>
+			<label index="tx_icsodcategories_categories">Category: </label>
+			<label index="tx_smileicsoddatastore_highlight">highlighted filegroup: </label>
 			<label index="newFile">New file</label>
 			<label index="editFile">Edit filegroup</label>
+			<label index="yes">yes</label>
+			<label index="no">no</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="title">Entrepôt de fichiers</label>
@@ -46,13 +60,27 @@
 			<label index="release_date">Mise à disposition :</label>
 			<label index="update_date">Mise à jour :</label>
 			<label index="time_period">Période de validité :</label>
-			<label index="update_frequency">Fréquence :</label>
-			<label index="publisher">Editeur :</label>
+			<label index="update_frequency">Fréquence de mise à jour :</label>
+			<label index="publisher">Diffuseur :</label>
 			<label index="creator">Créateur :</label>
 			<label index="manager">Gestionnaire :</label>
 			<label index="owner">Propriétaire :</label>
+			<label index="keywords">Mots clefs : </label>
+			<label index="spatial_cover">Couverture spatiale : </label>
+			<label index="language">Langue : </label>
+			<label index="quality">Qualité : </label>
+			<label index="granularity">Granularité (géographique ou temporelle) : </label>
+			<label index="linked_references">Reference liée (ou documentation) : </label>
+			<label index="taxonomy">Vocabulaire de référence des thèmes : </label>
+			<label index="illustration">Illustration : </label>
+			<label index="has_dynamic_display">A une vue dynamique : </label>
+			<label index="param_dynamic_display">Paramètres pour la vue dynamique : </label>
+			<label index="tx_icsodcategories_categories">Catégorie :</label>
+			<label index="tx_smileicsoddatastore_highlight">Jeu de données mis en avant : </label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>
+			<label index="yes">oui</label>
+			<label index="no">non</label>
 		</languageKey>
 	</data>
 </T3locallang>

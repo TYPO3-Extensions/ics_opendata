@@ -785,10 +785,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###INTRO###' => $this->cObj->stdWrap($this->pi_getLL('detail_intro', 'Introduction', true), $this->conf['displaySingle.']['intro_stdWrap.']),
 			'###FORMAT###' => $this->cObj->stdWrap($this->pi_getLL('detail_formatavailable', 'Available format', true), $this->conf['displaySingle.']['formatavaillable_stdWrap.']),
-			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back', 'Back', true), $this->list_criteriaNav, 0, $this->piVars['returnID']),
+			'###BACKLINK###' => $this->pi_linkTP($this->pi_getLL('back'), $this->list_criteriaNav, 0, $this->conf['searchPid']),
 			'###OTHER_DATA###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_other_data', 'Other data', true), $this->conf['displaySingle.']['other_data_stdWrap.']),
-		);
+			'###UPDATE_TITLE###' => $this->cObj->stdWrap($this->pi_getLL('detail_update_title', 'Updates', true), $this->conf['displaySingle.']['update_title_stdWrap.']),
+			'###INSTITUTION_TITLE###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_institution_title', 'Institutions', true), $this->conf['displaySingle.']['institution_title_stdWrap.']),
+				
+			);
 
+		
 		foreach ($this->detailFields as $field) {
 			$markers['###' . strtoupper($field) . '_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_' . $field, $field, true), $this->conf['displaySingle.'][$field . '_label_stdWrap.']);
 
@@ -984,7 +988,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
-		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
+		$conf = $this->conf['displayList.']['pagebrowse.'] ? $this->conf['displayList.']['pagebrowse.'] : $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
 		$conf += array(
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
@@ -1017,6 +1021,26 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
+	
+	/**
+     * @return    string        The additionalParams variable in getPageLink from tx_pagebrowse_pi1
+	 * @author	GOYER Frederic <frederic.goyer@in-cite.net>
+     */
+    function getExtraQueryString() {
+        $gp = t3lib_div::_GP($this->prefixId);
+        foreach($gp as $key => $val) {
+            if(is_array($val)) {
+                $ind = 0;
+                foreach($val as $v)
+                    if(!empty($v))
+                        $str[] = $this->prefixId . '['. $key .'][' . $ind++ . ']=' . $v;
+            }else
+                if(!empty($val) && $key != 'page')
+                    $str[] = $this->prefixId . '['. $key .']=' . $val;
+        }
+        $str = '&' . implode('&', $str);
+        return $str;
+    }
 }
 
 

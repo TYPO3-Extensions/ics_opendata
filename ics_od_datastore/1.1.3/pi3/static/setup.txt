@@ -27,4 +27,8 @@ plugin.tx_icsoddatastore_pi3 {
 			count.noTrimWrap = || téléchargements|
 		}
 	}
+	
+	empty {
+		wrap = <p class="empty">|</p>
+	}
 }

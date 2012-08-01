@@ -6,8 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="statsEmpty">No statistics registered</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
+			<label index="statsEmpty">Aucune statistique enregistrée</label>
 		</languageKey>
 	</data>
 </T3locallang>

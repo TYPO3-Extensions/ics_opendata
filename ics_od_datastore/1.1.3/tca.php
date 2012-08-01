@@ -7,7 +7,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_filegroups']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner'
+        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display'
     ),
 	'feInterface' => $TCA['tx_icsoddatastore_filegroups']['feInterface'],
 	'columns' => array (
@@ -24,7 +24,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.title',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '30',	
+				'size' => '40',	
 				'eval' => 'required,trim',
 			)
 		),
@@ -33,8 +33,9 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.description',		
 			'config' => array (
 				'type' => 'text',
-				'cols' => '30',	
+				'cols' => '40',	
 				'rows' => '5',
+				'eval' => 'required',
 			)
 		),	
 		'technical_data' => array (		
@@ -42,7 +43,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.technical_data',		
 			'config' => array (
 				'type' => 'text',
-				'cols' => '30',	
+				'cols' => '40',	
 				'rows' => '5',
 			)
 		),	
@@ -154,7 +155,8 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 				'foreign_table_where' => 'ORDER BY tx_icsoddatastore_licences.uid',	
 				'size' => 1,	
 				'minitems' => 0,
-				'maxitems' => 1,	
+				'maxitems' => 1,
+				'eval' => 'required',
 				'wizards' => array(
 					'_PADDING'  => 2,
 					'_VERTICAL' => 1,
@@ -197,7 +199,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 				'type'     => 'input',
 				'size'     => '8',
 				'max'      => '20',
-				'eval'     => 'date',
+				'eval'     => 'date,required',
 				'checkbox' => '0',
 				'default'  => '0'
 			)
@@ -219,7 +221,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.time_period',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '30',	
+				'size' => '40',	
 				'eval' => 'trim',
 			)
 		),
@@ -228,8 +230,8 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.update_frequency',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '30',	
-				'eval' => 'trim',
+				'size' => '40',	
+				'eval' => 'trim,required',
 			)
 		),
         'publisher' => array (        
@@ -245,6 +247,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
                 'size' => 1,    
                 'minitems' => 0,
                 'maxitems' => 1,
+            	'eval' => 'required',
 				'wizards' => array(
 					'_PADDING'  => 2,
 					'_VERTICAL' => 1,
@@ -341,6 +344,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
                 'size' => 1,    
                 'minitems' => 0,
                 'maxitems' => 1,
+            	'eval' => 'required',
 				'wizards' => array(
 					'_PADDING'  => 2,
 					'_VERTICAL' => 1,
@@ -389,6 +393,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
                 'size' => 1,    
                 'minitems' => 0,
                 'maxitems' => 1,
+            	'eval' => 'required',
 				'wizards' => array(
 					'_PADDING'  => 2,
 					'_VERTICAL' => 1,
@@ -424,9 +429,105 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 				),
             )
         ),
+		'keywords' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.keywords',
+			'config' => array(
+				'type' => 'input',
+				'default' => '',
+				'max' => '40',
+			),
+		),
+		'spatial_cover' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.spatial_cover',
+			'config' => array(
+				'type' => 'text',
+				'default' => '',
+				'cols' => '40',
+				'rows' => '5',
+			),
+		),
+		'language' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.language',
+			'config' => array(
+				'type' => 'input',
+				'default' => 'français',
+				'max' => '40',
+				'eval' => 'required', 
+			),
+			
+		),
+		'quality' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.quality',
+			'config' => array(
+				'type' => 'input',
+				'default' => '',
+				'max' => '40',
+			),
+		),
+		'granularity' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.granularity',
+			'config' => array(
+				'type' => 'text',
+				'default' => '',
+				'cols' => '40',
+				'rows' => '5',
+			),
+		),
+		'linked_references' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.linked_references',
+			'config' => array(
+				'type' => 'text',
+				'default' => '',
+				'cols' => '40',
+				'rows' => '5',
+			),
+		),
+		'taxonomy' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.taxonomy',
+			'config' => array(
+				'type' => 'text',
+				'default' => '',
+				'cols' => '40',
+				'rows' => '5',
+			),
+		),
+		'illustration' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.illustration',
+			'config' => array(
+				'type' => 'text',
+				'default' => '',
+				'cols' => '40',
+				'rows' => '5',
+			),
+		),
+		'has_dynamic_display' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.has_dynamic_display',
+			'config' => array(
+				'type' => 'check',
+				'default' => '0',
+			),
+		),
+		'param_dynamic_display' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.param_dynamic_display',
+			'config' => array(
+				'type' => 'input',
+				'default' => '',
+				'max' => '40',
+			),
+		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references, taxonomy, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')

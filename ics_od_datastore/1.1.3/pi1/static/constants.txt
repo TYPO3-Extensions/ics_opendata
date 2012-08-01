@@ -52,7 +52,8 @@ config.tx_icsoddatastore_pi1 {
 	
 	displaySingle {
 		# cat=plugin.tx_icsoddatastore_pi1/other/a; type=string; label=Fields list: Fields list (separate with comma).
-		fields = uid,title,publisher,agency,time_period,update_date,update_frequency,description,technical_data,contact,files,licence,release_date,creator,manager,owner
+		fields = uid,title,publisher,agency,time_period,update_date,update_frequency,description,technical_data,contact,files,licence,release_date,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration
+    	fileField = files
 		
 		# cat=plugin.tx_icsoddatastore_pi1/other/a; type=string; label=Field of file: Field name of file.
 		fileField = files 

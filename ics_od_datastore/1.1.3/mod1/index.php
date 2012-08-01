@@ -563,13 +563,16 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['owner'] = $ownerValue;
 		
+		$this->filegroup['tx_smileicsoddatastore_highlight'] = $this->filegroup['tx_smileicsoddatastore_highlight'] ? $LANG->getLL('yes') : $LANG->getLL('no');
+		$this->filegroup['has_dynamic_display'] = $this->filegroup['has_dynamic_display'] ? $LANG->getLL('yes') : $LANG->getLL('no');
+		
 		$this->filegroup['release_date'] = $this->filegroup['release_date'] ? date('d/m/Y',$this->filegroup['release_date']) : '';
 		$this->filegroup['update_date'] = $this->filegroup['update_date'] ? date('d/m/Y',$this->filegroup['update_date']) : '';
 		
-		foreach ($beFields as $field) {
+		foreach ($beFields as $a_field) {
 			$sContent .= '<div style="clear:both;float:left;width:100%;">
-				<div style="float:left;width:15em;">' . $LANG->getLL($field) . '</div>
-				<div style="float:left;width:60%;">' . $this->filegroup[$field] . '</div>
+				<div style="float:left;width:15em;">' . $LANG->getLL($a_field) . '</div>
+				<div style="float:left;width:60%;">' . $this->filegroup[$a_field] . '</div>
 			</div>';
 		}
 		$sContent .= '<div style="clear:both;"></div>';

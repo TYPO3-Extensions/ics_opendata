@@ -24,7 +24,16 @@ CREATE TABLE tx_icsoddatastore_filegroups (
     creator int(11) DEFAULT '0' NOT NULL,
     manager int(11) DEFAULT '0' NOT NULL,
     owner int(11) DEFAULT '0' NOT NULL,
-	
+    keywords varchar(255) DEFAULT '' NOT NULL,
+    spatial_cover text, 
+    language varchar(255) DEFAULT '' NOT NULL,
+    quality varchar(255) DEFAULT '' NOT NULL,
+    granularity text,
+    linked_references text, 
+    taxonomy text,
+    illustration text,
+    has_dynamic_display	tinyint(4) DEFAULT '0' NOT NULL,
+    param_dynamic_display varchar(255) DEFAULT '' NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );

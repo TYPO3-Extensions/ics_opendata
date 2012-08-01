@@ -119,6 +119,63 @@ plugin.tx_icsoddatastore_pi1{
 			wrap = <p class="label owner">|</p>
 		}
 		
+		keywords_stdWrap.stdWrap {
+			wrap = <p class="listValue keywords">|</p>
+		}
+		keywords_label_stdWrap.stdWrap {
+			wrap = <p class="label keywords">|</p>
+		}
+		
+		spatial_cover_stdWrap.stdWrap {
+			wrap = <p class="listValue spatial_cover">|</p>
+		}
+		spatial_cover_label_stdWrap.stdWrap {
+			wrap = <p class="label spatial_cover">|</p>
+		}
+		
+		language_stdWrap.stdWrap {
+			wrap = <p class="listValue language">|</p>
+		}
+		language_label_stdWrap.stdWrap {
+			wrap = <p class="label language">|</p>
+		}
+		
+		quality_stdWrap.stdWrap {
+			wrap = <p class="listValue quality">|</p>
+		}
+		quality_label_stdWrap.stdWrap {
+			wrap = <p class="label quality">|</p>
+		}
+		
+		granularity_stdWrap.stdWrap {
+			wrap = <p class="listValue granularity">|</p>
+		}
+		granularity_label_stdWrap.stdWrap {
+			wrap = <p class="label granularity">|</p>
+		}
+		
+		linked_references_stdWrap.stdWrap {
+			wrap = <p class="listValue linked_references">|</p>
+		}
+		linked_references_label_stdWrap.stdWrap {
+			wrap = <p class="label linked_references">|</p>
+		}
+		
+		taxonomy_stdWrap.stdWrap {
+			wrap = <p class="listValue taxonomy">|</p>
+		}
+		taxonomy_label_stdWrap.stdWrap {
+			wrap = <p class="label taxonomy">|</p>
+		}
+
+		illustration_stdWrap.stdWrap {
+			wrap = <p class="listValue illustration">|</p>
+		}
+		illustration_label_stdWrap.stdWrap {
+			wrap = <p class="label illustration">|</p>
+		}
+
+    fileField = files
 		licence_stdWrap.stdWrap {
 			wrap = <p class="listValue owner">|</p>
 		}
@@ -148,6 +205,14 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		
 		renderOnlySearchedFileFormats = {$config.tx_icsoddatastore_pi1.displayList.renderOnlySearchedFileFormats}
+		pagebrowse < plugin.tx_pagebrowse_pi1
+		pagebrowse {
+			extraQueryString.cObject = COA
+			extraQueryString.cObject {
+				1 = TEXT
+				1.postUserFunc = tx_icsoddatastore_pi1->getExtraQueryString
+			}
+		}
 	}
 	
 	displaySingle {
@@ -263,6 +328,62 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		owner_label_stdWrap.stdWrap {
 			wrap = <p class="label owner">|</p>
+		}
+		
+		keywords_stdWrap.stdWrap {
+			wrap = <p class="listValue keywords">|</p>
+		}
+		keywords_label_stdWrap.stdWrap {
+			wrap = <p class="label keywords">|</p>
+		}
+		
+		spatial_cover_stdWrap.stdWrap {
+			wrap = <p class="listValue spatial_cover">|</p>
+		}
+		spatial_cover_label_stdWrap.stdWrap {
+			wrap = <p class="label spatial_cover">|</p>
+		}
+		
+		language_stdWrap.stdWrap {
+			wrap = <p class="listValue language">|</p>
+		}
+		language_label_stdWrap.stdWrap {
+			wrap = <p class="label language">|</p>
+		}
+		
+		quality_stdWrap.stdWrap {
+			wrap = <p class="listValue quality">|</p>
+		}
+		quality_label_stdWrap.stdWrap {
+			wrap = <p class="label quality">|</p>
+		}
+		
+		granularity_stdWrap.stdWrap {
+			wrap = <p class="listValue granularity">|</p>
+		}
+		granularity_label_stdWrap.stdWrap {
+			wrap = <p class="label granularity">|</p>
+		}
+		
+		linked_references_stdWrap.stdWrap {
+			wrap = <p class="listValue linked_references">|</p>
+		}
+		linked_references_label_stdWrap.stdWrap {
+			wrap = <p class="label linked_references">|</p>
+		}
+		
+		taxonomy_stdWrap.stdWrap {
+			wrap = <p class="listValue taxonomy">|</p>
+		}
+		taxonomy_label_stdWrap.stdWrap {
+			wrap = <p class="label taxonomy">|</p>
+		}
+
+		illustration_stdWrap.stdWrap {
+			wrap = <p class="listValue illustration">|</p>
+		}
+		illustration_label_stdWrap.stdWrap {
+			wrap = <p class="label illustration">|</p>
 		}
 		
 		licence_stdWrap.stdWrap {
