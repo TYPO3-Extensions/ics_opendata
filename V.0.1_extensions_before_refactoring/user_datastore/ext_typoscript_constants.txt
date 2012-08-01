@@ -1,6 +1,0 @@
-# $Id$
-
-plugin.ics_opendata_api {
-	# cat=plugin.ics_opendata_api//; type=string; label= Template file : The template file path
-	template = typo3conf/ext/user_datastore/hook/res/template.html
-}

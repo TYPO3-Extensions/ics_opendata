@@ -1,4 +1,0 @@
-# $Id$
-
-plugin.tx_icsopendataapi_pi2.user_datastore.categoryEmpty = 1
-plugin.tx_icsopendataapi_pi2.user_datastore.datasetEmpty = 1

@@ -1,7 +1,0 @@
-# $Id$
-
-plugin.tx_icsopendatastore_pi2{
-  # cat=plugin.ics_opendata_store//; type=int; label= Type Num : Page type number where the RSS feed will be generated
-  typeNum = 20
-  title = Latest dataset
-}

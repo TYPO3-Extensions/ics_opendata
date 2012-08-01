@@ -1,8 +1,0 @@
-# le pid
-plugin.tx_icsopendataapi_pi1.pid = 473
-plugin.tx_icsopendataapi_pi1.usergroup = 7
-plugin.tx_icsopendataapi_pi1.mail{
-	subject = Inscription à l'opendata
-	from_email = inscription@opendata.ic-s.org
-	from_name = opendata
-}

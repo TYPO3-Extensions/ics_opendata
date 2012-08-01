@@ -1,5 +1,0 @@
-# $Id$
-
-plugin.tx_icsopendatastore_pi1 {
-
-}
