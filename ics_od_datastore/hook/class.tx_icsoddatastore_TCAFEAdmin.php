@@ -413,7 +413,6 @@ class tx_icsoddatastore_TCAFEAdmin {
 			'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:dataset_form_info'),
 		);
 		$markers = array_merge($markers, $locMarckers);
-
 		return true;
 	}
 	/**

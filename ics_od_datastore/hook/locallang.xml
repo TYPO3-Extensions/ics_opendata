@@ -15,6 +15,7 @@
 			<label index="action_new">Upload new file</label>
 			<label index="datastore_filemount">DATASTORE filemount</label>
 			<label index="dataset_form_info">Fill form with required entries * and give dataset's tiers.</label>
+			<label index="previous">Previous</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="anyUser">Identifiez-vous avant de continuer.</label>
@@ -25,6 +26,7 @@
 			<label index="action_new">Télécharger un fichier</label>
 			<label index="datastore_filemount">Chemin de stockage</label>
 			<label index="dataset_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *, ainsi qu'en assignant au minimum un tiers au jeu de données</label>
+			<label index="previous">Retour</label>
 		</languageKey>
 	</data>
 </T3locallang>

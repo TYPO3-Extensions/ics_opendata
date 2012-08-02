@@ -1,8 +1,23 @@
 plugin.tx_icstcafeadmin_pi1 {
+	_LOCAL_LANG {
+		fr {
+			deleted_record = Le jeux de données "%2$s" a été supprimé.
+			hidden_record = Le jeux de données "%2$s" a été caché.
+			shown_record = Le jeux de données "%2$s" est visible.
+		}
+	}
+	
 	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin.html
 	table {
 		showHidden = 0
 	}
+	
+	defaultConf {
+		requireEntryLabel {
+			stdWrap.noTrimWrap = |<span class="required">*</span> ||
+		}
+	}
+	
 	optionList {
 		edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
 		edit.typolink.additionalParams.cObject.20 >
@@ -25,6 +40,14 @@ plugin.tx_icstcafeadmin_pi1 {
 				typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
 				outerWrap = <p class="dataset_menu">|</p>
 			}
+		}
+		delete {
+			addParams {
+				onclick.cObject.10.override = if (confirm('Etes-vous sûr de vouloir supprimer le jeu de données {field:label} '))
+			}
+		}
+		backlink {
+			cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:previous
 		}
 	}
 
@@ -113,9 +136,7 @@ plugin.tx_icstcafeadmin_pi1 {
 					fileTarget = _blank
 				}
 			}
-			viewForm {
-				label.stdWrap.noTrimWrap = || *|
-			}
+			viewForm.label < plugin.tx_icstcafeadmin_pi1.defaultConf.requireEntryLabel
 		}
 	}
 }
@@ -128,6 +149,15 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 	tx_icsoddatastore_files_list.from_otherTableView = 1
 	userFunc = tx_icstcafeadmin_pi1->user_TCAFEAdmin
 	pidStorages = 
+
+	_LOCAL_LANG {
+		fr {
+			deleted_record = Le fichier "%2$s" a été supprimé.
+			hidden_record = Le fichier "%2$s" a été caché.
+			shown_record = Le fichier "%2$s" est visible.
+		}
+	}
+
 	view.modes = LIST
 	table {
 		tablename = tx_icsoddatastore_files
@@ -142,5 +172,18 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 		single.typolink.additionalParams.cObject.20 >
 		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
 		new.typolink.additionalParams.cObject.20 >
+		delete {
+			addParams {
+				onclick.cObject {
+					10.override = if (confirm('Etes-vous sûr de vouloir supprimer la donnée {field:label} '))
+					30.override = javascript:document.location.href='index.php?id={tsfe:id}&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[showUid]={field:id}&tx_icstcafeadmin_pi1[mode]=DELETE&tx_icstcafeadmin_pi1[criteria][showUid]={field:crit_showUid}';
+				}
+			}
+		}
 	}
+}
+
+[globalVar = GP:tx_icstcafeadmin_pi1|table = tx_icsoddatastore_files]
+plugin.tx_icstcafeadmin_pi1 {
+	_LOCAL_LANG < tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1._LOCAL_LANG
 }
