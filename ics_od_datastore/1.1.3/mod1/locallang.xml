@@ -65,7 +65,7 @@
 			<label index="creator">Créateur :</label>
 			<label index="manager">Gestionnaire :</label>
 			<label index="owner">Propriétaire :</label>
-			<label index="keywords">Mots clefs : </label>
+			<label index="keywords">Mots clefs (séparés par une virgule) : </label>
 			<label index="spatial_cover">Couverture spatiale : </label>
 			<label index="language">Langue : </label>
 			<label index="quality">Qualité : </label>

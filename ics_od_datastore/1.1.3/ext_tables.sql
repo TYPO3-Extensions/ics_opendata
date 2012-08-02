@@ -32,6 +32,7 @@ CREATE TABLE tx_icsoddatastore_filegroups (
     linked_references text, 
     taxonomy text,
     illustration text,
+    html_from_csv_display text,
     has_dynamic_display	tinyint(4) DEFAULT '0' NOT NULL,
     param_dynamic_display varchar(255) DEFAULT '' NOT NULL,
 	PRIMARY KEY (uid),

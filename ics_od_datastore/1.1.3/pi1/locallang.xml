@@ -56,6 +56,7 @@
 			<label index="detail_contact">Contact</label>
 			<label index="detail_uid">Identifiant</label>
 			<label index="back">Back</label>
+			<label index="back_to_detail_view">Back to detail view</label>
 			<label index="groupfile_dynamic_display">Groupfile dynamic display</label>
 			<label index="search_keywords">Keyword</label>
 			<label index="search_submit">Submit</label>
@@ -118,6 +119,7 @@
 			<label index="detail_contact">Contact</label>
 			<label index="detail_uid">Identifiant</label>
 			<label index="back">Retour</label>
+			<label index="back_to_detail_view">Retour à la fiche détaillé</label>
 			<label index="groupfile_dynamic_display">Visualiser le jeu de données</label>
 			<label index="search_keywords">Rechercher par mots clés</label>
 			<label index="search_submit">Rechercher</label>

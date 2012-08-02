@@ -31,6 +31,7 @@
 			<label index="tx_icsoddatastore_filegroups.linked_references">References</label>
 			<label index="tx_icsoddatastore_filegroups.taxonomy">Taxonomy</label>
 			<label index="tx_icsoddatastore_filegroups.illustration">Illustration</label>
+			<label index="tx_icsoddatastore_filegroups.html_from_csv_display">html array from csv display</label>
 			<label index="tx_icsoddatastore_filegroups.has_dynamic_display">Has dynamic display</label>
 			<label index="tx_icsoddatastore_filegroups.param_dynamic_display">Param dynamic display</label>
 			<label index="tx_icsoddatastore_fileformats">FileFormat (opendata)</label>
@@ -105,6 +106,7 @@
 			<label index="tx_icsoddatastore_filegroups.linked_references">Reference liée (ou documentation)</label>
 			<label index="tx_icsoddatastore_filegroups.taxonomy">Vocabulaire de référence des thèmes</label>
 			<label index="tx_icsoddatastore_filegroups.illustration">Illustration</label>
+			<label index="tx_icsoddatastore_filegroups.html_from_csv_display">Tableau html provenant du csv pour la visualisation</label>
 			<label index="tx_icsoddatastore_filegroups.has_dynamic_display">A une visualisation dynamique</label>
 			<label index="tx_icsoddatastore_filegroups.param_dynamic_display">Paramètres pour la visualisation dynamique</label>
 			<label index="tx_icsoddatastore_fileformats">Format de fichier (opendata)</label>

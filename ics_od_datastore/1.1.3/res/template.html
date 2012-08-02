@@ -301,6 +301,58 @@
 
 
 
+
+<h2>The template for array visualization</h2>
+<div>
+	<p>###TITLE_VALUE### : The page title</p>
+	<p>###RELEASE_DATE_LABEL### : label of release field in groupfile</p>
+	<p>###RELEASE_DATE_VALUE### : value of release field in groupfile</p>
+	<p>###ADDTHIS### : insert the addthis fields</p>
+	<p>###BACKLINKLABEL### : insert a link to previews page visited</p>
+	<p>###HTML_FROM_CSV_DISPLAY### : insert an html array from associated field in groupfield</p>
+</div>
+<!-- ###TEMPLATE_VISUALIZATION### start -->
+	<div class="###PREFIXID###_single">
+		<div class="###PREFIXID###_left">
+			<h1>###TITLE_VALUE###</h1>
+			
+			<!-- ###SUBPART_RELEASE_DATE### begin -->
+			<div class="###PREFIXID###_releasedate separator">
+				<span class="value">###RELEASE_DATE_LABEL### ###RELEASE_DATE_VALUE###</span>
+			</div>
+			<!-- ###SUBPART_RELEASE_DATE### end -->
+			
+			<!-- Addthis start -->
+			###ADDTHIS###
+			<!-- Addthis end -->
+		</div>
+		<div class="###PREFIXID###_right">
+			<div class="top_right_column">
+				<div class="grey_background">
+					<div class="###PREFIXID###_backlink">
+						<span class="green_circle"></span><a class="js_activate" href="javascript:history.go(-1)">###BACKLINKLABEL###</a>
+						<noscript>
+							<style type="text/css">
+						        .###PREFIXID###_backlink .js_activate {display:none;}
+						    </style>
+							###BACKLINK###
+						</noscript> 
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="breaker"></div>
+		<div class="array_visualization">
+			<!-- ###HTML_FROM_CSV_DISPLAY### begin -->
+			###HTML_FROM_CSV_DISPLAY###
+			<!-- ###HTML_FROM_CSV_DISPLAY### end -->
+		</div>
+	</div>
+<!-- ###TEMPLATE_VISUALIZATION### end -->
+
+
+
+
 <h2>The template for RSS feed</h2>
 <div>
 	<p>###URL### : Link to RSS feed page</p>

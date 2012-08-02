@@ -791,6 +791,39 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###INSTITUTION_TITLE###' =>  $this->cObj->stdWrap($this->pi_getLL('detail_institution_title', 'Institutions', true), $this->conf['displaySingle.']['institution_title_stdWrap.']),
 				
 			);
+		
+		if (t3lib_div::_GP('visualization') === '1')
+		{
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_VISUALIZATION###');
+			$markers['###BACKLINK###'] = $this->pi_linkTP($this->pi_getLL('back_to_detail_view'), $this->list_criteriaNav, 0, $this->conf['searchPid']);
+			$markers['###BACKLINKLABEL###'] = $this->pi_getLL('back_to_detail_view');
+			$template = $this->cObj->substituteSubpart($template, '###HTML_FROM_CSV_DISPLAY###', $filegroup['html_from_csv_display']);
+		}
+		else
+		{
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SINGLE###');
+		}
+		
+		
+		if (isset($filegroup['html_from_csv_display']) && $filegroup['html_from_csv_display'] !== '')
+	{
+			$url_visualization = $this->pi_getPageLink(
+				$this->conf['singlePid'],
+				'',
+				array_merge(
+					$this->list_criteriaNav,
+					array(
+						$this->prefixId . '[uid]' => $id,
+						'visualization' => '1',
+					)
+				)
+			);
+			$markers['###DYNAMIC_DISPLAY_LINK###'] = $this->cObj->stdWrap('<a title="'.$this->pi_getLL('groupfile_dynamic_display').'" href="'.$url_visualization.'">'.$this->pi_getLL('groupfile_dynamic_display').'</a>', $this->conf['displaySingle.']['dynamic_display_link_stdWrap.']);
+		} 
+		else
+		{
+			$markers['###DYNAMIC_DISPLAY_LINK###'] = '';
+		}
 
 		
 		foreach ($this->detailFields as $field) {
