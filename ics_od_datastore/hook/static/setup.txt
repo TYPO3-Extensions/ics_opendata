@@ -12,42 +12,38 @@ plugin.tx_icstcafeadmin_pi1 {
 		showHidden = 0
 	}
 	
-	defaultConf {
-		requireEntryLabel {
-			stdWrap.noTrimWrap = |<span class="required">*</span> ||
+	renderOptions {
+		backlink {
+			cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:previous
 		}
-	}
-	
-	optionList {
-		edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
-		edit.typolink.additionalParams.cObject.20 >
-		single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
-		single.typolink.additionalParams.cObject.20 >
 		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
 		new.typolink.additionalParams.cObject.20 >
+		optionList {
+			edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			edit.typolink.additionalParams.cObject.20 >
+			single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			single.typolink.additionalParams.cObject.20 >
+			delete {
+				addParams {
+					onclick.cObject.10.override = if (confirm('Etes-vous sûr de vouloir supprimer le jeu de données {field:label} '))
+				}
+			}
+		}
 		# Render dataset option list on single view
 		singleDatasetOptionList {
-			edit < plugin.tx_icstcafeadmin_pi1.optionList.edit
+			edit < plugin.tx_icstcafeadmin_pi1.renderOptions.optionList.edit
 			edit{
 				cObject.data >
 				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_edit
 				outerWrap = <p class="dataset_menu">|</p>
 			}
-			new < plugin.tx_icstcafeadmin_pi1.optionList.new
+			new < plugin.tx_icstcafeadmin_pi1.renderOptions.new
 			new {
 				cObject.data >
 				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_new
 				typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
 				outerWrap = <p class="dataset_menu">|</p>
 			}
-		}
-		delete {
-			addParams {
-				onclick.cObject.10.override = if (confirm('Etes-vous sûr de vouloir supprimer le jeu de données {field:label} '))
-			}
-		}
-		backlink {
-			cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:previous
 		}
 	}
 
@@ -115,6 +111,8 @@ plugin.tx_icstcafeadmin_pi1 {
 			filegroup {
 				wrap = <input type="hidden" id="filegroup" name="tx_icstcafeadmin_pi1[filegroup]" value="|">
 			}
+			# datastore_filemount can be configured like renderConf.table.field.viewForm
+			datastore_filemount =
 		}
 	}
 
@@ -136,7 +134,9 @@ plugin.tx_icstcafeadmin_pi1 {
 					fileTarget = _blank
 				}
 			}
-			viewForm.label < plugin.tx_icstcafeadmin_pi1.defaultConf.requireEntryLabel
+			viewForm {
+				label.stdWrap.noTrimWrap = || *|
+			}
 		}
 	}
 }
@@ -165,18 +165,20 @@ tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
 	}
 
 	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin_files.html
-	optionList {
-		edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
-		edit.typolink.additionalParams.cObject.20 >
-		single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
-		single.typolink.additionalParams.cObject.20 >
+	renderOptions {
 		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
 		new.typolink.additionalParams.cObject.20 >
-		delete {
-			addParams {
-				onclick.cObject {
-					10.override = if (confirm('Etes-vous sûr de vouloir supprimer la donnée {field:label} '))
-					30.override = javascript:document.location.href='index.php?id={tsfe:id}&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[showUid]={field:id}&tx_icstcafeadmin_pi1[mode]=DELETE&tx_icstcafeadmin_pi1[criteria][showUid]={field:crit_showUid}';
+		optionList {
+			edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			edit.typolink.additionalParams.cObject.20 >
+			single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			single.typolink.additionalParams.cObject.20 >
+			delete {
+				addParams {
+					onclick.cObject {
+						10.override = if (confirm('Etes-vous sûr de vouloir supprimer la donnée {field:label} '))
+						30.override = javascript:document.location.href='index.php?id={tsfe:id}&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[showUid]={field:id}&tx_icstcafeadmin_pi1[mode]=DELETE&tx_icstcafeadmin_pi1[criteria][showUid]={field:crit_showUid}';
+					}
 				}
 			}
 		}

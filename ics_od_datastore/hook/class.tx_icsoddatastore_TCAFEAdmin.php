@@ -358,12 +358,12 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$data['dataset'] = $row['uid'];
 		$cObj->start($data, 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-		$markers['NEW_FILE'] = $cObj->stdWrap('', $conf['optionList.']['singleDatasetOptionList.']['new.']);
+		$markers['NEW_FILE'] = $cObj->stdWrap('', $conf['renderOptions.']['singleDatasetOptionList.']['new.']);
 
 		// Edit dataset
 		$cObj->start($renderer->cObjDataActions($row), 'TCAFE_Admin_actions');
 		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-		$markers['EDIT_DATASET'] = $cObj->stdWrap('', $conf['optionList.']['singleDatasetOptionList.']['edit.']);
+		$markers['EDIT_DATASET'] = $cObj->stdWrap('', $conf['renderOptions.']['singleDatasetOptionList.']['edit.']);
 
 		return true;
 	}
@@ -512,7 +512,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 
 		$markers = array(
 			'FILEMOUNT_ID' => 'tx_icsdatastore_filemount',
-			'FILEMOUNT_LABEL' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:datastore_filemount'),
+			'FILEMOUNT_LABEL' => $this->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:datastore_filemount'), $this->conf['renderForm.'][$this->table.'.']['datastore_filemount.']['label.']),
 			'FILEMOUNT_NAME' => $this->prefixId.'[tx_icsdatastore_filemount]',
 		);
 
