@@ -20,7 +20,8 @@ include_once(t3lib_extMgm::extPath('ics_od_datastore') . 'lib/class.tx_icsoddata
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups',		
-		'label'     => 'title',	
+		'label'     => 'title',
+		'label_userFunc' => 'tx_icsoddatastore_tcahelper->getRecordTitle',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',

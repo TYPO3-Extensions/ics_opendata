@@ -8,3 +8,10 @@ datasetFolder {
 	# cat=basic/datasetFolder/b; type=string; label=suffix: Suffix dataset folder name.
 	suffix=
 }
+
+tcahelper {
+	filegroups_title {
+		# cat=basic/tcahelper/0; type=string; label=prefix: Prefix filegroups title.
+		prefix=
+	}
+}
