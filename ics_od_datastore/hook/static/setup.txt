@@ -133,6 +133,7 @@ plugin.tx_icstcafeadmin_pi1 {
 					parameter.current = 1
 					fileTarget = _blank
 				}
+				label.stdWrap.wrap = |/Url
 			}
 			viewForm {
 				label.stdWrap.noTrimWrap = || *|

@@ -459,7 +459,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$filemounts = array_keys($rows);
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$data = array(
-					'filemounts' => $this->renderForm_filemount($filemounts),
+					'filemounts' => $pi_base->showUid? '': $this->renderForm_filemount($filemounts),
 					'file' => $this->renderer->handleFormField_typeGroup_file($field, $config, $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###')),
 					'record_type' => $this->row['record_type'],
 				);
