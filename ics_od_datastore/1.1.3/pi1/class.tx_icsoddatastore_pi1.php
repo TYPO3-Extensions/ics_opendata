@@ -128,6 +128,11 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 							$content .= $this->renderSearch();
 						}
 						break;
+					case 'SOLR':
+						if (!isset($this->piVars['uid'])) {
+							$content .= $this->renderSolr();
+						}
+						break;
 					case 'RSSFEED':
 						if ($pageId = $GLOBALS['TSFE']->tmpl->setup['datastore_rss.']['typeNum']) {
 							$content .= $this->renderRSS(
@@ -423,6 +428,163 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		return $item;
 	}
 
+	/**
+	 * Render solr view
+	 *
+	 * @return	$content
+	 */
+	function renderSolr()
+	{
+		$content ='';
+		
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SOLR###');
+		$markers = array(
+			'###PREFIXID###' => $this->prefixId,
+			'###H3_TITLE###' => $this->pi_getLL('Precise your research:', 'Affiner votre recherche part : ', true),
+			'###SUBMIT_VALUE###' => $this->pi_getLL('Submit', 'Valider', true),
+			'###DATA_SUGGESTION###' => $this->pi_getLL('Suggest a new dataset', 'Suggérer un nouveau jeu de données', true),
+			'###KEYWORDS_LABEL###' => $this->pi_getLL('Keywords:', 'Mots clés : ', true),
+			'###SORT_LABEL###' => $this->pi_getLL('Sort by:', 'Trier par : ', true),
+			'###SORT_PERTINENCE_LABEL###' => $this->pi_getLL('pertinence', 'pertinence', true),
+			'###SORT_RANK_LABEL###' => $this->pi_getLL('rank', 'note', true),
+			'###SORT_DATE_LABEL###' => $this->pi_getLL('date', 'date de publication / mise à jour', true),
+		);
+		
+		
+		
+		$request = "*:*";	//default request, return all results
+		$currentGetParam =t3lib_div::_GP('tx_icsoddatastore_pi1');
+		if (isset($currentGetParam[page]))
+		{
+// 			t3lib_div::debug($this->list_criteriaNav);
+			$first_item_place = $currentGetParam[page] * $this->nbFileGroupByPage;
+		}
+		else 
+		{
+			$first_item_place = 0;
+		}
+		
+		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&wt=phps');
+		$result = unserialize($serializedResult);
+		
+		$this->nbFileGroup = $result[response][numFound];
+		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
+
+		$last_item_place = $first_item_place + $this->nbFileGroupByPage;
+		$last_item_place = min($last_item_place, $this->nbFileGroup);
+		$markers['###RESULTS_RANGE###'] = ($first_item_place + 1) . ' ' . $this->pi_getLL('to', 'à', true) . ' ' . ($last_item_place + 1) . ' ' . $this->pi_getLL('on', 'sur', true) . ' ' . ($this->nbFileGroup + 1) . ' ' . $this->pi_getLL('results', 'résultats', true) . ' ';
+		
+		$subpartArray = array();
+		if ($result[response][numFound] > 0)
+		{
+			$subpartArray['###RESULT_LIST###'] = $this->renderSolrItems($template, $result);
+		}
+		else 
+		{
+			$subpartArray['###RESULT_LIST###'] = "";
+		}
+		
+		/*$headerItems = $this->renderListHeader($this->cObj->getSubpart($template, '###HEADER_ITEM###'));
+		$rowItems = $this->renderListRows($template);
+
+		$subpartArray = array();
+		$subpartArray['###HEADER_ITEM###'] = $headerItems;
+		$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
+		*/
+		
+		// Hook for add fields markers to solr view
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSolrFieldsMarkers'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSolrFieldsMarkers'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalSolrFieldsMarkers($markers, $subpartArray, $template, $this);
+			}
+		}
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $markers, $subpartArray);
+		return $content;
+	}
+	
+	
+	
+	/**
+	 * Render solr items list
+	 *
+ 	 * @param	string		$template	The template of the view
+	 * @param	array		$result		The result from solr
+	 * @return	$content
+	 */
+	function renderSolrItems($template, $result)
+	{
+		$content ='';
+			foreach ($result[response][docs] as $document)
+			{
+				$templateItem = $this->cObj->getSubpart($template, '###RESULT_LIST_ITEM###');
+
+				$markers = array(
+					'###RANK###' => '',
+					'###DATE_LABEL###' => $this->pi_getLL('Published:', 'Publié le : ', true),
+					'###CATEGORIE_LABEL###' => $this->pi_getLL('Categories:', 'Thématiques : ', true),
+					'###MANAGER_LABEL###' => $this->pi_getLL('Manager:', 'Gestionnaire : ', true),
+					'###OWNER_LABEL###' => $this->pi_getLL('Owner:', 'Propriétaire : ', true),
+					'###DESCRIPTION###' => $document[description],
+					'###TITLE###' => $document[title],
+					'###CATEGORIE###' => implode(', ',array_slice($document[categories],1)),
+					'###MANAGER###' => $document[manager],
+					'###OWNER###' => $document[owner],
+				);
+					 
+				$url_to_detail_page = $this->pi_getPageLink(
+					$this->conf['singlePid'],
+					'',
+					array_merge(
+						$this->list_criteriaNav,
+						array(
+							$this->prefixId . '[uid]' => $document[id],
+						)
+					)
+				);
+				
+				$markers['###URL###'] = $url_to_detail_page;
+				$markers['###DETAILS_LINK###'] = '<a href="'.$url_to_detail_page.'">'.$this->pi_getLL('Go to details card', 'Consulter la fiche détaillée', true).'</a>';
+				
+				if (isset($document[html_from_csv]) && $document[html_from_csv])
+				{
+					$url_to_visualization_page = $this->pi_getPageLink(
+						$this->conf['singlePid'],
+						'',
+						array_merge(
+							$this->list_criteriaNav,
+							array(
+								$this->prefixId . '[uid]' => $document[id],
+								'visualization' => '1',
+							)
+						)
+					);
+					$markers['###VISUALIZATION###'] = '<div class="background"><span class="green_circle"></span><a href="'.$url_to_visualization_page.'">' . $this->pi_getLL('Visualize', 'Visualiser le jeu de données', true) . '</a></div>';
+				}
+				else
+				{
+					$markers['###VISUALIZATION###'] = '';
+				}
+				$release_date = new DateTime($document[release_date]);
+				$markers['###DATE###'] = $release_date->format('d/m/Y');
+				
+				$picto_part = '';
+				foreach ($document[files_types_picto] as $file_type_picto)
+				{
+					$picto_part .= '<img src="'.$this->conf['displaySolr.']['pictoBaseURL'] . $file_type_picto . '" width="36" height="13" alt="' . substr($file_type_picto, 0, 3) . '">';
+				}
+				
+				$markers['###PICTO###'] = $picto_part;
+				
+				
+				$content .= $this->cObj->substituteMarkerArrayCached($templateItem, $markers, $subpartArray);
+				
+			}
+		
+		return $content;
+	}
+	
+	
 	/**
 	 * Render list view
 	 *
@@ -806,7 +968,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		
 		
 		if (isset($filegroup['html_from_csv_display']) && $filegroup['html_from_csv_display'] !== '')
-	{
+		{
 			$url_visualization = $this->pi_getPageLink(
 				$this->conf['singlePid'],
 				'',

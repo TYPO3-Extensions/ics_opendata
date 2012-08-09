@@ -68,6 +68,24 @@
 			<label index="rss_alt">Lien to RSS page</label>
 			<label index="rss_title">Lien to RSS page</label>
 			<label index="rss_text">RSS feed</label>
+			<label index="solr_precise_your_research">Precise your research:</label>
+			<label index="solr_suggest_new_data_set">Suggest a new dataset</label>
+			<label index="solr_keywords">Keywords:</label>
+			<label index="solr_sort_by">Sort by:</label>
+			<label index="solr_pertinence">pertinence</label>
+			<label index="solr_rank">rank</label>
+			<label index="solr_publication_date">publication date</label>
+			<label index="solr_published">Published:</label>
+			<label index="solr_categories">Categories:</label>
+			<label index="solr_manager">Manager:</label>
+			<label index="solr_owner">Owner:</label>
+			<label index="solr_published">Published:</label>
+			<label index="solr_go_to_details">Consulter la fiche détaillée</label>
+			<label index="solr_visualize">Visualize</label>
+			<label index="solr_to">to</label>
+			<label index="solr_on">on</label>
+			<label index="solr_results">results</label>
+			
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="th_title">Résultat de la recherche</label>
@@ -102,7 +120,7 @@
 			<label index="detail_creator">Auteur : </label>
 			<label index="detail_manager">Manager : </label>
 			<label index="detail_owner">Propriétaire : </label>
-			<label index="detail_keywords">Mots clefs : </label>
+			<label index="detail_keywords">Mots clés : </label>
 			<label index="detail_spatial_cover">Territoire concerné : </label>
 			<label index="detail_language">Langue : </label>
 			<label index="detail_quality">Qualité : </label>
@@ -135,6 +153,23 @@
 			<label index="sc_keywords">Mots-clés</label>
 			<label index="sc_tiers">Agences</label>
 			<label index="sc_formats">Formats</label>
+			<label index="solr_precise_your_research">Affiner votre recherche part : </label>
+			<label index="solr_suggest_new_data_set">Suggérer un nouveau jeu de données</label>
+			<label index="solr_keywords">Mots clés : </label>
+			<label index="solr_sort_by">Trier par : </label>
+			<label index="solr_pertinence">pertinence</label>
+			<label index="solr_rank">note</label>
+			<label index="solr_publication_date">date de pablication / mise à jour</label>
+			<label index="solr_published">Publié le : </label>
+			<label index="solr_categories">Thématiques : </label>
+			<label index="solr_manager">Gestionnaire : </label>
+			<label index="solr_owner">Propriétaire : </label>
+			<label index="solr_published">Publié le : </label>
+			<label index="solr_go_to_details">Go to details card</label>
+			<label index="solr_visualize">Visualiser le jeu de données</label>
+			<label index="solr_to">à</label>
+			<label index="solr_on">sur</label>
+			<label index="solr_results">résultats</label>
 		</languageKey>
 	</data>
 </T3locallang>

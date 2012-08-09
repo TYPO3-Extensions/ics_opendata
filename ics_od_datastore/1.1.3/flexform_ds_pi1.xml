@@ -33,6 +33,10 @@
 									<numIndex index="0">RSSFEED</numIndex>
 									<numIndex index="1">RSSFEED</numIndex>
 								</numIndex>
+								<numIndex index="4" type="array">
+									<numIndex index="0">SOLR</numIndex>
+									<numIndex index="1">SOLR</numIndex>
+								</numIndex>
 								</items>
 								<maxitems>100</maxitems>
 								<size>3</size>
