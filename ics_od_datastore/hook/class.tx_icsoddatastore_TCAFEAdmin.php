@@ -532,6 +532,107 @@ class tx_icsoddatastore_TCAFEAdmin {
 	}
 
 	/**
+	 * Generate Form field type "select"
+	 *
+	 * @param	tslib_pibase		$pi_base: Instance of tslib_pibase
+	 * @param	string		$table
+	 * @param	string		$field
+	 * @param	array		$fieldLabels: : Associative array of fields labels like field=>labelfield
+	 * @param	int			$recordId : The record id
+	 * @param	array		$conf: Typoscript conf array
+	 * @param	tx_icstcafeadmin_FormRenderer		$renderer: Instance of tx_icstcafeadmin_FormRenderer
+	 * @return	string		HTML form field content
+	 */
+	function handleFormField_typeSelect($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null) {
+		$fields = array('agency', 'contact', 'publisher', 'creator', 'manager', 'owner');
+		if ($table!='tx_icsoddatastore_filegroups' || !in_array($field, $fields) || !isset($renderer))
+			return null;
+
+		$this->init($pi_base, $table, null, $fieldLabels, $recordId, $conf);
+		$this->renderer = $renderer;
+			
+		$addWhere_tablenames = ' AND (`tx_icsoddatastore_feusers_tiers_mm`.`tablenames` = \'fe_users\' || `tx_icsoddatastore_feusers_tiers_mm`.`tablenames` = \'\')';
+		// Get records
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			'`tx_icsoddatastore_tiers`.`uid` as value, `tx_icsoddatastore_tiers`.`name` as label',
+			'tx_icsoddatastore_tiers',
+			'tx_icsoddatastore_feusers_tiers_mm',
+			'fe_users',
+			' AND `tx_icsoddatastore_feusers_tiers_mm`.`uid_foreign` = ' . $GLOBALS['TSFE']->fe_user->user['uid'] . $addWhere_tablenames,
+			'',
+			'sorting_foreign'
+		);
+		$feuser_tiers = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
+			$feuser_tiers[] = $row['value'];
+		}
+		$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
+		if (!$this->row[$field] || ($this->row[$field] && in_array($this->row[$field], $feuser_tiers))) {
+			$content = $renderer->handleFormField_typeSelect_single($renderer->getSelectItemArray($field, $config), $field, $config);
+		}
+		else {
+			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+				'name as label',
+				'tx_icsoddatastore_tiers',
+				'1' . $this->cObj->enableFields('tx_icsoddatastore_tiers') . ' AND uid='. $this->row[$field]
+			);
+			$template = $this->cObj->getSubpart($renderer->templateCode, '###TEMPLATE_FORM_TIERS_INFO###');
+			$markers = array(
+				'FIELDLABEL' => $this->cObj->stdWrap($fieldLabels[$field], $this->conf['renderConf.'][$this->table.'.'][$field.'.']['viewForm.']['label.']),
+				'FIELDVALUE' => $row['label'],
+				'HIDDEN_VALUE' => '<input type="hidden" name="tx_icstcafeadmin_pi1['.$field.']" value="'.$this->row[$field].'" />',
+			);
+			$content = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+		}
+		return $content;
+	}
+	
+	/**
+	 * Retrieves selector box items (pair of key/label)
+	 *
+	 * @param	tslib_pibase		$pi_base: Instance of tslib_pibase
+	 * @param	string		$table
+	 * @param	string		$field
+	 * @param	array		$fieldLabels: : Associative array of fields labels like field=>labelfield
+	 * @param	int		$recordId : The record id
+	 * @param	array		$conf: Typoscript conf array
+	 * @param	tx_icstcafeadmin_FormRenderer		$renderer: Instance of tx_icstcafeadmin_FormRenderer
+	 * @return	mixed		Item array where item is an associative array with value/label
+	 */
+	function getSelectItemArray($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null) {
+		$fields = array('agency', 'contact', 'publisher', 'creator', 'manager', 'owner');
+		if ($table!='tx_icsoddatastore_filegroups' || !in_array($field, $fields) || !isset($renderer))
+			return null;
+
+		$this->init($pi_base, $table, null, $fieldLabels, $recordId, $conf);
+		$this->renderer = $renderer;
+
+		$addWhere_tablenames = ' AND (`tx_icsoddatastore_feusers_tiers_mm`.`tablenames` = \'fe_users\' || `tx_icsoddatastore_feusers_tiers_mm`.`tablenames` = \'\')';
+		// Get records
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			'`tx_icsoddatastore_tiers`.`uid` as value, `tx_icsoddatastore_tiers`.`name` as label',
+			'tx_icsoddatastore_tiers',
+			'tx_icsoddatastore_feusers_tiers_mm',
+			'fe_users',
+			' AND `tx_icsoddatastore_feusers_tiers_mm`.`uid_foreign` = ' . $GLOBALS['TSFE']->fe_user->user['uid'] . $addWhere_tablenames,
+			'',
+			'sorting_foreign'
+		);
+		$items = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
+			$items[] = $row;
+			$values[] = $row['value'];
+			$labels[] = $row['label'];
+		}
+		array_multisort($labels, SORT_ASC, $values, SORT_ASC, $items);
+		$items = array_merge(
+			array('value'=>0),
+			$items
+		);
+		return $items;
+	}
+	
+	/**
 	 * Control entry
 	 *
 	 * @param	tx_icstcafeadmin_pi1		$pi_base: Instance of tx_icstcafeadmin_pi1
