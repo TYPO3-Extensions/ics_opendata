@@ -406,13 +406,24 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @return	boolean		“True” whether the value is processed, otherwise “False”
 	 */
 	function formRenderer_additionnalMarkers($template, &$markers, &$subpartArray, $table, $field, $row, $conf, $pi_base, $renderer) {
-		if ($table!='tx_icsoddatastore_filegroups')
+		if (!in_array($table, $this->oddatastore_tables))
 			return false;
 
-		$locMarckers = array(
-			'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:dataset_form_info'),
-		);
-		$markers = array_merge($markers, $locMarckers);
+			$locMarkers = array();
+		switch ($table) {
+			case 'tx_icsoddatastore_filegroups':
+				$locMarkers = array(
+					'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:dataset_form_info'),
+				);
+				break;
+			case 'tx_icsoddatastore_files':
+				$locMarkers = array(
+					'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:files_form_info'),
+				);
+				break;
+			default:
+		}
+		$markers = array_merge($markers, $locMarkers);
 		return true;
 	}
 	/**
