@@ -85,6 +85,10 @@
 			<label index="solr_to">to</label>
 			<label index="solr_on">on</label>
 			<label index="solr_results">results</label>
+			<label index="solr_facet_categories">categories</label>
+			<label index="solr_facet_files_types_id">File types</label>
+			<label index="solr_facet_manager">Manager</label>
+			<label index="solr_facet_owner">Owner</label>
 			
 		</languageKey>
 		<languageKey index="fr" type="array">
@@ -170,6 +174,10 @@
 			<label index="solr_to">à</label>
 			<label index="solr_on">sur</label>
 			<label index="solr_results">résultats</label>
+			<label index="solr_facet_categories">Thématique</label>
+			<label index="solr_facet_files_types_id">Type de fichiers</label>
+			<label index="solr_facet_manager">Gestionnaire</label>
+			<label index="solr_facet_owner">Propriétaire</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -435,14 +435,27 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 */
 	function renderSolr()
 	{
-		$content ='';
+		global $TYPO3_DB;
 		
+		//get picto, picto with text and label for all file format
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	                'uid, name, picto, tx_smileicsoddatastore_picto2 as picto_t',         // SELECT ...
+	                'tx_icsoddatastore_fileformats'		// FROM ...
+		);
+		$file_types = array();
+		while ( $row = $TYPO3_DB->sql_fetch_assoc($res) )
+		{
+			$file_types[$row['uid']] = $row;
+		}
+		
+		$content ='';
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SOLR###');
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
 			'###H3_TITLE###' => $this->pi_getLL('Precise your research:', 'Affiner votre recherche part : ', true),
 			'###SUBMIT_VALUE###' => $this->pi_getLL('Submit', 'Valider', true),
 			'###DATA_SUGGESTION###' => $this->pi_getLL('Suggest a new dataset', 'Suggérer un nouveau jeu de données', true),
+			'###DATA_SUGGESTION_LINK###' => $this->pi_getPageLink($this->conf['suggestion_link'],	'',	'' ),
 			'###KEYWORDS_LABEL###' => $this->pi_getLL('Keywords:', 'Mots clés : ', true),
 			'###SORT_LABEL###' => $this->pi_getLL('Sort by:', 'Trier par : ', true),
 			'###SORT_PERTINENCE_LABEL###' => $this->pi_getLL('pertinence', 'pertinence', true),
@@ -450,13 +463,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###SORT_DATE_LABEL###' => $this->pi_getLL('date', 'date de publication / mise à jour', true),
 		);
 		
-		
-		
-		$request = "*:*";	//default request, return all results
 		$currentGetParam =t3lib_div::_GP('tx_icsoddatastore_pi1');
 		if (isset($currentGetParam[page]))
 		{
-// 			t3lib_div::debug($this->list_criteriaNav);
 			$first_item_place = $currentGetParam[page] * $this->nbFileGroupByPage;
 		}
 		else 
@@ -464,25 +473,70 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$first_item_place = 0;
 		}
 		
-		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&wt=phps');
-		$result = unserialize($serializedResult);
+		$request = "*:*";	//default request, return all results
+		$keywords_request = t3lib_div::_GP('keywords');
+		if (isset($keywords_request) && ($keywords_request !== ''))
+		{
+			$request = "text:" . t3lib_div::_GP('keywords');
+		}
 		
+		$sort_search = t3lib_div::_GP('sort_search');
+		if (isset($sort_search) && ($sort_search !== ''))
+		{
+			if ($sort_search == 'date')
+			{
+				$sort_request = 'update_date+desc,release_date+desc';
+			}
+			elseif ($sort_search == 'rank')
+			{
+				$sort_request = 'rank_desc';
+			}
+			else 
+			{
+				$sort_request = '';
+			}
+		}
+		
+		$facet_request = '';
+		$facet_param = t3lib_div::_GP('facet');
+		foreach ($facet_param as $facet => $value)
+		{
+			if ($value === 'on')
+			{
+				$facet_request .= '&fq=' . $facet;
+			}
+		}
+//  		t3lib_div::debug('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
+		
+		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
+		$result = unserialize($serializedResult);
+// 		t3lib_div::debug($result);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
 
 		$last_item_place = $first_item_place + $this->nbFileGroupByPage;
 		$last_item_place = min($last_item_place, $this->nbFileGroup);
-		$markers['###RESULTS_RANGE###'] = ($first_item_place + 1) . ' ' . $this->pi_getLL('to', 'à', true) . ' ' . ($last_item_place + 1) . ' ' . $this->pi_getLL('on', 'sur', true) . ' ' . ($this->nbFileGroup + 1) . ' ' . $this->pi_getLL('results', 'résultats', true) . ' ';
+		$first_item_place = min($first_item_place + 1, $this->nbFileGroup);
+		$markers['###RESULTS_RANGE###'] = $first_item_place . ' ' . $this->pi_getLL('to', 'à', true) . ' ' . ($last_item_place) . ' ' . $this->pi_getLL('on', 'sur', true) . ' ' . ($this->nbFileGroup) . ' ' . $this->pi_getLL('results', 'résultats', true) . ' ';
 		
 		$subpartArray = array();
+		$subpartArray['###FACET_LIST###'] = $this->renderSolrFacets($template, $result, $file_types);
+	
 		if ($result[response][numFound] > 0)
 		{
-			$subpartArray['###RESULT_LIST###'] = $this->renderSolrItems($template, $result);
+			$subpartArray['###RESULT_LIST###'] = $this->renderSolrItems($template, $result, $file_types);
 		}
 		else 
 		{
 			$subpartArray['###RESULT_LIST###'] = "";
 		}
+		
+		$form_action = $this->pi_getPageLink(
+							$GLOBALS['TSFE']->id,
+							'',
+							$this->list_criteriaNav
+						);
+		 $subpartArray['###SOLR_FORM_ACTION###'] = $form_action;
 		
 		/*$headerItems = $this->renderListHeader($this->cObj->getSubpart($template, '###HEADER_ITEM###'));
 		$rowItems = $this->renderListRows($template);
@@ -510,9 +564,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 *
  	 * @param	string		$template	The template of the view
 	 * @param	array		$result		The result from solr
+	 * @param	array		$file_types	All file types referenced by id
 	 * @return	$content
 	 */
-	function renderSolrItems($template, $result)
+	function renderSolrItems($template, $result, $file_types)
 	{
 		$content ='';
 			foreach ($result[response][docs] as $document)
@@ -571,7 +626,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$picto_part = '';
 				foreach ($document[files_types_picto] as $file_type_picto)
 				{
-					$picto_part .= '<img src="'.$this->conf['displaySolr.']['pictoBaseURL'] . $file_type_picto . '" width="36" height="13" alt="' . substr($file_type_picto, 0, 3) . '">';
+					$picto_part .= '<img src="'.$this->conf['displaySolr.']['picto2BaseURL'] . $file_types[$file_type_id][picto_t] . '" width="36" height="13" alt="' . $file_types[$file_type_id][name] . '">';
 				}
 				
 				$markers['###PICTO###'] = $picto_part;
@@ -584,6 +639,52 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		return $content;
 	}
 	
+	/**
+	 * Render solr items facets
+	 *
+	 * @param	string		$template	The template of the view
+	 * @param	array		$result		The result from solr
+	 * @param	array		$file_types	All file types referenced by id
+	 * @return	$content
+	 */
+	function renderSolrFacets($template, $result, $file_types)
+	{
+		$content ='';
+
+		foreach ($result[facet_counts][facet_fields] as $facet_name => $facet)
+		{
+			$templateItem = $this->cObj->getSubpart($template, '###FACET_LIST_ITEM###');
+
+			$markers = array(
+					'###FACET_NAME###' => $this->pi_getLL('solr_facet_'.$facet_name),
+					'###FACETS###' => '',
+			);
+			
+			if ( $facet_name === 'files_types_id' )
+			{
+				foreach ($facet as $facet_value => $facet_count)
+				{
+					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']" />';;
+					$temp_facet .= '<label for="' . $facet_name . '_' . $facet_value . '">' . $file_types[$facet_value][name] .' (' . $facet_count .')' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label><br /></div>';
+					$markers['###FACETS###'] .= $temp_facet;
+				}
+			}
+			else
+			{
+				foreach ($facet as $facet_value => $facet_count)
+				{
+					$temp_facet = '<input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']" />';
+					$temp_facet .= '<label for="' . $facet_name . '_' . $facet_value . '">' . $facet_value . ' (' . $facet_count .')' . '</label><br />';
+					$markers['###FACETS###'] .= $temp_facet;
+				}
+			}
+			
+			$content .= $this->cObj->substituteMarkerArrayCached($templateItem, $markers, $subpartArray);
+		}
+		
+		
+		return $content;
+	}
 	
 	/**
 	 * Render list view
