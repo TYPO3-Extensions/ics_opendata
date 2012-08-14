@@ -457,11 +457,31 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###DATA_SUGGESTION###' => $this->pi_getLL('Suggest a new dataset', 'Suggérer un nouveau jeu de données', true),
 			'###DATA_SUGGESTION_LINK###' => $this->pi_getPageLink($this->conf['suggestion_link'],	'',	'' ),
 			'###KEYWORDS_LABEL###' => $this->pi_getLL('Keywords:', 'Mots clés : ', true),
+			'###KEYWORDS_VALUE###' => t3lib_div::_GP('keywords') ? t3lib_div::_GP('keywords') : '',
 			'###SORT_LABEL###' => $this->pi_getLL('Sort by:', 'Trier par : ', true),
 			'###SORT_PERTINENCE_LABEL###' => $this->pi_getLL('pertinence', 'pertinence', true),
 			'###SORT_RANK_LABEL###' => $this->pi_getLL('rank', 'note', true),
 			'###SORT_DATE_LABEL###' => $this->pi_getLL('date', 'date de publication / mise à jour', true),
 		);
+		$get_param_sort_search = t3lib_div::_GP('sort_search');
+		if ( isset ($get_param_sort_search) && $get_param_sort_search === date)
+		{
+			$markers['###PERTINENCE_CHECK###'] = '';
+// 			$markers['###RANK_CHECK###'] = '';
+			$markers['###DATE_CHECK###'] = 'checked="checked"';
+		}
+// 		elseif ( isset ($get_param_sort_search) && $get_param_sort_search === rank)
+// 		{
+// 			$markers['###PERTINENCE_CHECK###'] = '';
+// 			$markers['###RANK_CHECK###'] = 'checked="checked"';
+// 			$markers['###DATE_CHECK###'] = '';
+// 		}
+		else
+		{
+			$markers['###PERTINENCE_CHECK###'] = 'checked="checked"';
+// 			$markers['###RANK_CHECK###'] = '';
+			$markers['###DATE_CHECK###'] = '';
+		}
 		
 		$currentGetParam =t3lib_div::_GP('tx_icsoddatastore_pi1');
 		if (isset($currentGetParam[page]))
@@ -477,7 +497,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$keywords_request = t3lib_div::_GP('keywords');
 		if (isset($keywords_request) && ($keywords_request !== ''))
 		{
-			$request = "text:" . t3lib_div::_GP('keywords');
+			$request = "text:" . urlencode(t3lib_div::_GP('keywords'));
 		}
 		
 		$sort_search = t3lib_div::_GP('sort_search');
@@ -503,14 +523,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		{
 			if ($value === 'on')
 			{
-				$facet_request .= '&fq=' . $facet;
+				$facet_request .= '&fq=' . str_replace(array(' ', ':'), array('+',':"'), $facet) . '"';
 			}
 		}
-//  		t3lib_div::debug('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		
 		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
-// 		t3lib_div::debug($result);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
 
@@ -650,7 +668,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderSolrFacets($template, $result, $file_types)
 	{
 		$content ='';
-
+		$get_param_facet=t3lib_div::_GP('facet');
+		
 		foreach ($result[facet_counts][facet_fields] as $facet_name => $facet)
 		{
 			$templateItem = $this->cObj->getSubpart($template, '###FACET_LIST_ITEM###');
@@ -664,7 +683,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			{
 				foreach ($facet as $facet_value => $facet_count)
 				{
-					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']" />';;
+					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']" ' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';;
 					$temp_facet .= '<label for="' . $facet_name . '_' . $facet_value . '">' . $file_types[$facet_value][name] .' (' . $facet_count .')' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label><br /></div>';
 					$markers['###FACETS###'] .= $temp_facet;
 				}
@@ -673,7 +692,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			{
 				foreach ($facet as $facet_value => $facet_count)
 				{
-					$temp_facet = '<input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']" />';
+					$temp_facet = '<input type="checkbox" id="' . $facet_name . '_' . $facet_value . '" name="facet[' . $facet_name . ':' . $facet_value . ']"' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';
 					$temp_facet .= '<label for="' . $facet_name . '_' . $facet_value . '">' . $facet_value . ' (' . $facet_count .')' . '</label><br />';
 					$markers['###FACETS###'] .= $temp_facet;
 				}
