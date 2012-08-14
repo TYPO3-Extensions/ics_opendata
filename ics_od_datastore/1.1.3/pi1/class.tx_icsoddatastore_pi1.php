@@ -644,7 +644,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$picto_part = '';
 				foreach ($document[files_types_picto] as $file_type_picto)
 				{
-					$picto_part .= '<img src="'.$this->conf['displaySolr.']['picto2BaseURL'] . $file_types[$file_type_id][picto_t] . '" width="36" height="13" alt="' . $file_types[$file_type_id][name] . '">';
+					$picto_part .= '<img src="'.$this->conf['displaySolr.']['picto2BaseURL'] . $file_types[$file_type_id][picto_t] . '" width="36" alt="' . $file_types[$file_type_id][name] . '">';
 				}
 				
 				$markers['###PICTO###'] = $picto_part;
