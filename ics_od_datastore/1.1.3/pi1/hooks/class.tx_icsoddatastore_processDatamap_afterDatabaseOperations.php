@@ -429,6 +429,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		$oldDoc = $oldDocResponse[0];
 		
 		t3lib_div::debug('solr get old doc end');
+		t3lib_div::debug($oldDoc);
 		return $oldDoc;
 	}
 	
@@ -449,6 +450,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		}
 
 		t3lib_div::debug('solr convert doc end');
+		t3lib_div::debug($doc);
 		return $doc;
 	}
 }
