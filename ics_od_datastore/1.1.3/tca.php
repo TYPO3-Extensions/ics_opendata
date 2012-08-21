@@ -7,7 +7,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_filegroups']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display'
+        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,tx_icsodcategories_categories,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display'
     ),
 	'feInterface' => $TCA['tx_icsoddatastore_filegroups']['feInterface'],
 	'columns' => array (
