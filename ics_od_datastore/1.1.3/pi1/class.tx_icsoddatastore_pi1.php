@@ -527,7 +527,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			}
 		}
 		
-		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
+		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
@@ -600,7 +600,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					'###OWNER_LABEL###' => $this->pi_getLL('Owner:', 'Propriétaire : ', true),
 					'###DESCRIPTION###' => $document[description],
 					'###TITLE###' => $document[title],
-					'###CATEGORIE###' => implode(', ',array_slice($document[categories],1)),
+					'###CATEGORIE###' => implode(', ',array_slice($document[categories],0)),
 					'###MANAGER###' => $document[manager],
 					'###OWNER###' => $document[owner],
 				);
