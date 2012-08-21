@@ -537,7 +537,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references, taxonomy, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display, html_from_csv_display')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references, taxonomy, tx_icsodcategories_categories, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display, html_from_csv_display')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')
