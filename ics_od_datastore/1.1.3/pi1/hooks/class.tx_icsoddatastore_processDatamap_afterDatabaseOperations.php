@@ -148,7 +148,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			{
 				t3lib_div::debug('update filegroups start');
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[uid]);
+				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
 				
 				//Convert old doc to input doc
 				$doc = $this->solrDocToSolrInputDoc($oldDoc);
@@ -294,7 +294,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			{
 				t3lib_div::debug('new files start');
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[filegroup]);
+				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[filegroup], $solrClient);
 				
 				//Convert old doc to input doc
 				$doc = $this->solrDocToSolrInputDoc($oldDoc);
@@ -333,7 +333,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				t3lib_div::debug('update files start');
 // 				t3lib_div::debug($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup]);
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup]);
+				$oldDoc = $this->getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
 				
 				//Convert old doc to input doc
 				$doc = $this->solrDocToSolrInputDoc($oldDoc);
@@ -415,16 +415,16 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		return new SolrClient($options);;
 	}
 	
-	function getOldDoc($oldDocId)
+	function getOldDoc($oldDocId, $solrClient)
 	{
 		t3lib_div::debug('solr get old doc start');
-		$solrClient = $this->initSolrClient();
 		
 		$query = new SolrQuery();
 		$query->setQuery("id:" . $oldDocId);
 		$query_response = $solrClient->query($query);
 		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_DOC);
 		$response = $query_response->getResponse();
+		t3lib_div::debug($response);
 		$oldDocResponse = $response->offsetGet('response')->offsetGet('docs');
 		$oldDoc = $oldDocResponse[0];
 		
