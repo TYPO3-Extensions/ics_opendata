@@ -36,7 +36,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 	
 	function processDatamap_afterDatabaseOperations($status, $table, $id, $tabChamps, $pObj) {
 		
-		t3lib_div::debug('solr php client hook start');
 		global $TYPO3_DB;
 	
 		$createFieldLabelArray = array('keywords', 'spatial_cover', 'language', 
@@ -50,15 +49,11 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		
 		if ($table === 'tx_icsoddatastore_filegroups')
 		{
-			t3lib_div::debug('filegroups start');
-			t3lib_div::debug($tabChamps);
-			t3lib_div::debug($pObj);
 			//creation of solr client
 			$solrClient = $this->initSolrClient();
 			
 			if ($status === 'new' && !$tabChamps[hidden])
 			{
-				t3lib_div::debug('new filegroups start');
 				$doc = new SolrInputDocument();
 				
 				foreach ($createFieldLabelArray as $fieldLabel)
@@ -125,7 +120,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				if ($addDocResponse->success())
 				{
 					$solrClient->commit();
-					t3lib_div::debug('new filegroups end');
 				}
 				else
 				{
@@ -134,19 +128,16 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
-						t3lib_div::debug('new filegroups end');
 					}
 					else
 					{
 						$solrClient->rollback();
-						t3lib_div::debug('new filegroups end error');
 					}
 				}
 				
 			}
 			elseif ($status === 'update')
 			{
-				t3lib_div::debug('update filegroups start');
 				//get old doc
 				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
 				
@@ -158,10 +149,8 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				{
 					if($doc->fieldExists($fieldLabel))
 					{
-// 						t3lib_div::debug('delete '.$fieldLabel);
 						$doc->deleteField($fieldLabel);
 					}
-// 					t3lib_div::debug('add '.$fieldLabel);
 					$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
 				}
 				
@@ -169,12 +158,9 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				{
 					if($doc->fieldExists('release_date'))
 					{
-// 						t3lib_div::debug('delete release_date');
-						
 						$doc->deleteField('release_date');
 					}
 					$doc->addField('release_date', date("Y-m-d",$tabChamps[release_date]) . 'T' . date("H:i:s", $tabChamps[release_date]) . 'Z');
-// 					t3lib_div::debug('add release_date');
 				}
 
 				if (isset($tabChamps['release_date']))
@@ -226,7 +212,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 						$doc->deleteField('categories');
 					}
 					$whereclause = '1=0';
-// 					t3lib_div::debug(explode(',', $pObj->datamap[tx_icsoddatastore_filegroups][$pObj->checkValue_currentRecord[uid]][tx_icsodcategories_categories]));
 					foreach (explode(',', $pObj->datamap[tx_icsoddatastore_filegroups][$pObj->checkValue_currentRecord[uid]][tx_icsodcategories_categories]) as $categorieId)
 					{
 						if ($categorieId !== '')
@@ -234,7 +219,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 							$whereclause .= ' OR uid=' . $categorieId;
 						}
 					}
-// 					t3lib_div::debug($whereclause);
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 							'name categories',         // SELECT ...
 							'tx_icsodcategories_categories',   // FROM ...
@@ -253,7 +237,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				if ($addDocResponse->success())
 				{
 					$solrClient->commit();
-					t3lib_div::debug('update filegroups end');
 				}
 				else
 				{
@@ -262,19 +245,16 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
-						t3lib_div::debug('update filegroups end');
 					}
 					else
 					{
 						$solrClient->rollback();
-						t3lib_div::debug('update filegroups end error');
 					}
 				}
 			}
 // 			hook à trouver
 // 			elseif ($status === 'delete')
 // 			{
-// 				t3lib_div::debug('delete filegroups');
 // // 			function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
 // // 			processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $pObj)
 				
@@ -283,16 +263,11 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 	
 		if ($table === 'tx_icsoddatastore_files')
 		{
-			t3lib_div::debug('files start');
 			//creation of solr client
 			$solrClient = $this->initSolrClient();
 			
-			t3lib_div::debug($tabChamps);
-			t3lib_div::debug($pObj);
-			
 			if ($status === 'new')
 			{
-				t3lib_div::debug('new files start');
 				//get old doc
 				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[filegroup], $solrClient);
 				
@@ -309,7 +284,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				if ($addDocResponse->success())
 				{
 					$solrClient->commit();
-					t3lib_div::debug('new files end');
 				}
 				else
 				{
@@ -318,20 +292,16 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
-						t3lib_div::debug('new files end');
 					}
 					else
 					{
 						$solrClient->rollback();
-						t3lib_div::debug('new files end error');
 					}
 				}
 				
 			}
 			elseif ($status === 'update')
 			{
-				t3lib_div::debug('update files start');
-// 				t3lib_div::debug($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup]);
 				//get old doc
 				$oldDoc = $this->getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
 				
@@ -340,9 +310,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			
 			
 				//delete old file format
-				t3lib_div::debug($tabChamps[format]);
-				t3lib_div::debug($doc->getField('files_types_id'));
-				
 				if( in_array( $pObj->historyRecords['tx_icsoddatastore_files:' . $pObj->checkValue_currentRecord[uid]][oldRecord][format], $doc->getField('files_types_id')->values ) )
 				{
 					$formats = $doc->getField('files_types_id')->values;
@@ -363,7 +330,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				if ($addDocResponse->success())
 				{
 					$solrClient->commit();
-				t3lib_div::debug('update files end');
 				}
 				else
 				{
@@ -372,12 +338,10 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
-						t3lib_div::debug('update files end');
 					}
 					else
 					{
 						$solrClient->rollback();
-					t3lib_div::debug('update files end error');
 					}
 				}
 		}
@@ -388,12 +352,10 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 // 				fwrite($file, "supprime le fichier\n");
 // 			}
 		}
-		t3lib_div::debug('solr php client hook end');
 	}
 	
 	function initSolrClient()
 	{
-		t3lib_div::debug('init solr start');
 		/* Nom de domaine du serveur Solr */
 		define('SOLR_SERVER_HOSTNAME', 'localhost');
 			
@@ -411,32 +373,26 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				'port'     => SOLR_SERVER_PORT,
 		);
 
-		t3lib_div::debug('init solr end');
 		return new SolrClient($options);;
 	}
 	
 	function getOldDoc($oldDocId, $solrClient)
 	{
-		t3lib_div::debug('solr get old doc start');
 		
 		$query = new SolrQuery();
 		$query->setQuery("id:" . $oldDocId);
 		$query_response = $solrClient->query($query);
 		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_DOC);
 		$response = $query_response->getResponse();
-		t3lib_div::debug($response);
 		$oldDocResponse = $response->offsetGet('response')->offsetGet('docs');
 		$oldDoc = $oldDocResponse[0];
 		
-		t3lib_div::debug('solr get old doc end');
-		t3lib_div::debug($oldDoc);
 		return $oldDoc;
 	}
 	
 	
 	function solrDocToSolrInputDoc($solrDoc)
 	{
-		t3lib_div::debug('solr convert doc start');
 		$doc = new SolrInputDocument();
 		
 		$solrDocFieldNames = $solrDoc->getFieldNames();
@@ -445,12 +401,8 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			foreach ($solrDoc->getField($field)->values as $value)
 			{
 				$doc->addField($field,$value);
-// 				t3lib_div::debug($field . ":" . $value);
 			}
 		}
-
-		t3lib_div::debug('solr convert doc end');
-		t3lib_div::debug($doc);
 		return $doc;
 	}
 }
