@@ -25,6 +25,8 @@
  * $Id$
 */
 
+require_once('solrTools.php');
+
 /**
  * Hook of the core for the 'ics_od_datastore' extension.
  *
@@ -50,7 +52,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		if ($table === 'tx_icsoddatastore_filegroups')
 		{
 			//creation of solr client
-			$solrClient = $this->initSolrClient();
+			$solrClient = SolrTools::initSolrClient();
 			
 			if ($status === 'new' && !$tabChamps[hidden])
 			{
@@ -117,32 +119,39 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 
 				$addDocResponse = $solrClient->addDocument($doc);
 				
-				if ($addDocResponse->success())
+				try 
 				{
-					$solrClient->commit();
-				}
-				else
-				{
-					$addDocResponse = $solrClient->addDocument($doc);
-					
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
 					}
 					else
 					{
-						$solrClient->rollback();
+						$addDocResponse = $solrClient->addDocument($doc);
+						
+						if ($addDocResponse->success())
+						{
+							$solrClient->commit();
+						}
+						else
+						{
+							$solrClient->rollback();
+						}
 					}
+				}
+				catch (SolrException $e)
+				{
+					$e->getMessage();
 				}
 				
 			}
 			elseif ($status === 'update')
 			{
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
+				$oldDoc = SolrTools::getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
 				
 				//Convert old doc to input doc
-				$doc = $this->solrDocToSolrInputDoc($oldDoc);
+				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
 
 				// add new fields to doc
 				foreach ($updateFieldLabelArray as $fieldLabel)
@@ -252,27 +261,20 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					}
 				}
 			}
-// 			hook à trouver
-// 			elseif ($status === 'delete')
-// 			{
-// // 			function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
-// // 			processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $pObj)
-				
-// 			}
 		}
 	
 		if ($table === 'tx_icsoddatastore_files')
 		{
 			//creation of solr client
-			$solrClient = $this->initSolrClient();
+			$solrClient = SolrTools::initSolrClient();
 			
 			if ($status === 'new')
 			{
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->checkValue_currentRecord[filegroup], $solrClient);
+				$oldDoc = SolrTools::getOldDoc($pObj->checkValue_currentRecord[filegroup], $solrClient);
 				
 				//Convert old doc to input doc
-				$doc = $this->solrDocToSolrInputDoc($oldDoc);
+				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
 				
 				// add format to doc
 				$doc->addField('files_types_id',$tabChamps[format]);
@@ -303,10 +305,10 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			elseif ($status === 'update')
 			{
 				//get old doc
-				$oldDoc = $this->getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
+				$oldDoc = SolrTools::getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
 				
 				//Convert old doc to input doc
-				$doc = $this->solrDocToSolrInputDoc($oldDoc);
+				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
 			
 			
 				//delete old file format
@@ -344,65 +346,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 						$solrClient->rollback();
 					}
 				}
-		}
-
-// 			elseif ($status === 'delete')
-// 			{
-// 				$file = fopen('/tmp/solrdebug', "a+");
-// 				fwrite($file, "supprime le fichier\n");
-// 			}
-		}
-	}
-	
-	function initSolrClient()
-	{
-		/* Nom de domaine du serveur Solr */
-		define('SOLR_SERVER_HOSTNAME', 'localhost');
-			
-		/* Si l'on doit exécuter en mode sécurisé ou non */
-		define('SOLR_SECURE', false);
-			
-		/* Port HTTP de connexion */
-		define('SOLR_SERVER_PORT', ((SOLR_SECURE) ? 8443 : 8983));
-			
-		$options = array
-		(
-				'hostname' => SOLR_SERVER_HOSTNAME,
-// 					'login'    => SOLR_SERVER_USERNAME,
-// 					'password' => SOLR_SERVER_PASSWORD,
-				'port'     => SOLR_SERVER_PORT,
-		);
-
-		return new SolrClient($options);;
-	}
-	
-	function getOldDoc($oldDocId, $solrClient)
-	{
-		
-		$query = new SolrQuery();
-		$query->setQuery("id:" . $oldDocId);
-		$query_response = $solrClient->query($query);
-		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_DOC);
-		$response = $query_response->getResponse();
-		$oldDocResponse = $response->offsetGet('response')->offsetGet('docs');
-		$oldDoc = $oldDocResponse[0];
-		
-		return $oldDoc;
-	}
-	
-	
-	function solrDocToSolrInputDoc($solrDoc)
-	{
-		$doc = new SolrInputDocument();
-		
-		$solrDocFieldNames = $solrDoc->getFieldNames();
-		foreach ($solrDocFieldNames as $field)
-		{
-			foreach ($solrDoc->getField($field)->values as $value)
-			{
-				$doc->addField($field,$value);
 			}
 		}
-		return $doc;
 	}
 }
