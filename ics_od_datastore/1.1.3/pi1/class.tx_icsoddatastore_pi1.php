@@ -493,11 +493,11 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$first_item_place = 0;
 		}
 		
-		$request = "*:*";	//default request, return all results
+		$request = "deleted:0+AND+hidden:0";	//default request, return all visible results
 		$keywords_request = t3lib_div::_GP('keywords');
 		if (isset($keywords_request) && ($keywords_request !== ''))
 		{
-			$request = "text:" . urlencode(t3lib_div::_GP('keywords'));
+			$request = "text:" . urlencode(t3lib_div::_GP('keywords')) . "+AND+deleted:0+AND+hidden:0";
 		}
 		
 		$sort_search = t3lib_div::_GP('sort_search');
@@ -509,7 +509,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			}
 			elseif ($sort_search == 'rank')
 			{
-				$sort_request = 'rank_desc';
+				$sort_request = 'rank+desc';
 			}
 			else 
 			{
@@ -526,7 +526,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$facet_request .= '&fq=' . str_replace(array(' ', ':'), array('+',':"'), $facet) . '"';
 			}
 		}
-		
 		$serializedResult = file_get_contents('http://localhost:8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
 		$this->nbFileGroup = $result[response][numFound];
