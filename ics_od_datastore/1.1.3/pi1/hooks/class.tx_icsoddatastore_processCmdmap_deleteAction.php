@@ -74,25 +74,6 @@ class tx_icsoddatastore_processCmdmap_deleteAction {
 		
 		if ($table === 'tx_icsoddatastore_files')
 		{
-			$file = fopen('/tmp/solrdebug', "a+");
-			fwrite($file, "\n\n\n");
-			ob_start();
-			echo ' debug start ';
-			echo $table;
-			echo ' ';
-			echo($id);
-			echo ' ';
-			print_r($recordToDelete);
-			echo ' ';
-			echo($recordWasDeleted);
-// 			echo ' ';
-// 			print_r($pObj);
-			echo ' ';
-			echo ' debug end ';
-			$tab_debug=ob_get_contents();
-			ob_end_clean();
-			fwrite($file, $tab_debug);
-			
 			//get old doc id
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'uid_foreign',         // SELECT ...

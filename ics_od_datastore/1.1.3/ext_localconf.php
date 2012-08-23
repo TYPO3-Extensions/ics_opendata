@@ -53,6 +53,7 @@ $TYPO3_CONF_VARS['EXTCONF']['ics_od_core_api']['command']['1.0']['datastore_sear
 $TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['dataset'] = 'EXT:ics_od_datastore/opendata/datasource/class.tx_icsoddatastore_dataset_datasource.php:tx_icsoddatastore_dataset_datasource';
 
 $GLOBALS [ 'TYPO3_CONF_VARS' ][ 'SC_OPTIONS' ][ 't3lib/class.t3lib_tcemain.php' ][ 'processDatamapClass' ][] = 'EXT:ics_od_datastore/pi1/hooks/class.tx_icsoddatastore_processDatamap_afterDatabaseOperations.php:tx_icsoddatastore_processDatamap_afterDatabaseOperations' ;
+$GLOBALS [ 'TYPO3_CONF_VARS' ][ 'SC_OPTIONS' ][ 't3lib/class.t3lib_tcemain.php' ][ 'processCmdmapClass' ][] = 'EXT:ics_od_datastore/pi1/hooks/class.tx_icsoddatastore_processCmdmap_deleteAction.php:tx_icsoddatastore_processCmdmap_deleteAction' ;
 
 // * End user inclusions typo3db_opendatapkg connexion
 
