@@ -452,16 +452,16 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SOLR###');
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
-			'###H3_TITLE###' => $this->pi_getLL('Precise your research:', 'Affiner votre recherche part : ', true),
-			'###SUBMIT_VALUE###' => $this->pi_getLL('Submit', 'Valider', true),
-			'###DATA_SUGGESTION###' => $this->pi_getLL('Suggest a new dataset', 'Suggérer un nouveau jeu de données', true),
+			'###H3_TITLE###' => $this->pi_getLL('solr_precise_your_research', 'Affiner votre recherche part : ', true),
+			'###SUBMIT_VALUE###' => $this->pi_getLL('solr_submit', 'Valider', true),
+			'###DATA_SUGGESTION###' => $this->pi_getLL('solr_suggest_new_data_set', 'Suggérer un nouveau jeu de données', true),
 			'###DATA_SUGGESTION_LINK###' => $this->pi_getPageLink($this->conf['suggestion_link'],	'',	'' ),
-			'###KEYWORDS_LABEL###' => $this->pi_getLL('Keywords:', 'Mots clés : ', true),
+			'###KEYWORDS_LABEL###' => $this->pi_getLL('solr_keywords', 'Mots clés : ', true),
 			'###KEYWORDS_VALUE###' => t3lib_div::_GP('keywords') ? t3lib_div::_GP('keywords') : '',
-			'###SORT_LABEL###' => $this->pi_getLL('Sort by:', 'Trier par : ', true),
-			'###SORT_PERTINENCE_LABEL###' => $this->pi_getLL('pertinence', 'pertinence', true),
-			'###SORT_RANK_LABEL###' => $this->pi_getLL('rank', 'note', true),
-			'###SORT_DATE_LABEL###' => $this->pi_getLL('date', 'date de publication / mise à jour', true),
+			'###SORT_LABEL###' => $this->pi_getLL('solr_sort_by', 'Trier par : ', true),
+			'###SORT_PERTINENCE_LABEL###' => $this->pi_getLL('solr_pertinence', 'pertinence', true),
+			'###SORT_RANK_LABEL###' => $this->pi_getLL('solr_rank', 'note', true),
+			'###SORT_DATE_LABEL###' => $this->pi_getLL('solr_publication_date', 'date de publication / mise à jour', true),
 		);
 		$get_param_sort_search = t3lib_div::_GP('sort_search');
 		if ( isset ($get_param_sort_search) && $get_param_sort_search === date)

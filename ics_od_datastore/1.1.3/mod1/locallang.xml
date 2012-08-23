@@ -37,7 +37,6 @@
 			<label index="illustration">Illustration: </label>
 			<label index="has_dynamic_display">has dynamic display: </label>
 			<label index="param_dynamic_display">param for dynamic display: </label>
-			<label index="tx_icsodcategories_categories">Category: </label>
 			<label index="tx_smileicsoddatastore_highlight">highlighted filegroup: </label>
 			<label index="newFile">New file</label>
 			<label index="editFile">Edit filegroup</label>
@@ -54,7 +53,7 @@
 			<label index="description">Description :</label>
 			<label index="technical_data">Données technique :</label>
 			<label index="agency">Agence :</label>
-			<label index="tx_icsodcategories_categories">Catégorie :</label>
+			<label index="tx_icsodcategories_categories">Thématique(s) :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
 			<label index="release_date">Mise à disposition :</label>
@@ -75,7 +74,6 @@
 			<label index="illustration">Illustration : </label>
 			<label index="has_dynamic_display">A une vue dynamique : </label>
 			<label index="param_dynamic_display">Paramètres pour la vue dynamique : </label>
-			<label index="tx_icsodcategories_categories">Catégorie :</label>
 			<label index="tx_smileicsoddatastore_highlight">Jeu de données mis en avant : </label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>
