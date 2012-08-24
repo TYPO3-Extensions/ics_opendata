@@ -387,11 +387,33 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		
 		licence_stdWrap.stdWrap {
-			wrap = <p class="value owner">|</p>
+			wrap = <p class="value licence">|</p>
 		}
 		licence_label_stdWrap.stdWrap {
-			wrap = <p class="label owner">|</p>
+			wrap = <p class="label licence">|</p>
 		}
+		
+		similitudes_stdWrap.stdWrap {
+			wrap = | <br />
+		}
+		similitudes_label_stdWrap.stdWrap {
+			wrap = |
+		}
+		dynamic_display_link_stdWrap.stdWrap {
+      		wrap = <div class="grey_background"><div class="dynamic_display_in"><span class='dynamic_display_picto'><i class="icon-eye-open"></i></span><span class="dynamic_display_link"><span class="green_circle"></span> | </span><span class="end_dynamic_display_block">&nbsp;</span></div></div>
+    	}
+	    categories_stdWrap.stdWrap {
+	      wrap = |
+	    }
+	    categories_label_stdWrap.stdWrap {
+	      wrap = |
+	    }
+	    categories.stdWrap {
+	      wrap = |
+	    }
+	    categories.label.stdWrap {
+	      wrap = |
+	    }
 	}
 	
 	displaySearch {

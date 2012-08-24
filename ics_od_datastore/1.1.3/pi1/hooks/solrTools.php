@@ -71,6 +71,22 @@ class SolrTools {
 		return $oldDoc;
 	}
 	
+	public static function getSimilarDocs($refDocId, $solrClient, $nbOfDoc = 5, $searchField = 'keywords')
+	{
+		$query = new SolrQuery();
+		$query->setQuery("id:" . $refDocId);
+		$query->setMlt(TRUE);
+		$query->setMltCount($nbOfDoc);
+		$query->addMltField($searchField);
+		$query->setMltMinTermFrequency(1);
+		$query->setMltMinDocFrequency(1);
+		$query_response = $solrClient->query($query);
+		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_OBJ);
+		$response = $query_response->getResponse();
+		foreach ($response[moreLikeThis] as $value)
+			$docsArray = $value[docs];
+		return $docsArray;
+	}
 	
 	public static function solrDocToSolrInputDoc($solrDoc)
 	{

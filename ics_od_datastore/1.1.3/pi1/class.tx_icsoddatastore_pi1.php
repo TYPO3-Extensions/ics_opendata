@@ -59,6 +59,7 @@
  */
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once ('hooks/solrTools.php');
 
 if (t3lib_extMgm::isLoaded('ratings'))
 	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
@@ -452,7 +453,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SOLR###');
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
-			'###H3_TITLE###' => $this->pi_getLL('solr_precise_your_research', 'Affiner votre recherche part : ', true),
+			'###H3_TITLE###' => $this->pi_getLL('solr_precise_your_research', 'Affiner votre recherche par : ', true),
 			'###SUBMIT_VALUE###' => $this->pi_getLL('solr_submit', 'Valider', true),
 			'###DATA_SUGGESTION###' => $this->pi_getLL('solr_suggest_new_data_set', 'Suggérer un nouveau jeu de données', true),
 			'###DATA_SUGGESTION_LINK###' => $this->pi_getPageLink($this->conf['suggestion_link'],	'',	'' ),
@@ -1170,6 +1171,27 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$filesContent = $this->renderFiles('SINGLE', $id, $this->cObj->getSubpart($template, '###SECTION_FILE###'));
 		$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);
 
+		//similitudes from solr
+		$markers['###SIMILITUDES_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_similitudes_label', 'Voir ausss', true), $this->conf['displaySingle.']['similitudes_label_stdWrap.']);
+		
+		$solrClient = SolrTools::initSolrClient();
+		$similarDocs = SolrTools::getSimilarDocs($id, $solrClient);
+		$markers['###SIMILITUDES_VALUE###'] = '';
+		foreach ($similarDocs as $doc)
+		{
+			$url_similitude = $this->pi_getPageLink(
+					$this->conf['singlePid'],
+					'',
+					array_merge(
+							$this->list_criteriaNav,
+							array(
+									$this->prefixId . '[uid]' => $doc[id],
+							)
+					)
+			);
+			$markers['###SIMILITUDES_VALUE###'] .= $this->cObj->stdWrap('<a href="' . $url_similitude . '" title="' . $doc[title] . '">' . $doc[title] . '</a>' , $this->conf['displaySingle.']['similitudes_stdWrap.']);
+		}
+		
 		$subpartArray = array();
 		// Hook for add fields markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsMarkers'])) {
