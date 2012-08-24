@@ -141,7 +141,7 @@
 			<label index="detail_update_title">Mises à jour</label>
 			<label index="detail_institution_title">Collectivités et organismes</label>
 			<label index="detail_formatavailable">Accéder aux données</label>
-<label index="detail_other_data">Autre informations de la base de données</label>
+			<label index="detail_other_data">Autre informations de la base de données</label>
 			<label index="detail_contact">Contact</label>
 			<label index="detail_uid">Identifiant</label>
 			<label index="detail_similitudes_label">Voir aussi</label>
