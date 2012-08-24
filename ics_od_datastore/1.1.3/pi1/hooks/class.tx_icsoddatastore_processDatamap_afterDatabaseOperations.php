@@ -40,11 +40,11 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		
 		global $TYPO3_DB;
 	
-		$createFieldLabelArray = array('keywords', 'spatial_cover', 'language', 
+		$createFieldLabelArray = array('hidden', 'deleted', 'keywords', 'spatial_cover', 'language', 
 				'quality', 'granularity', 'linked_references', 'taxonomy', 'illustration',
 				'html_from_csv_display', 'has_dynamic_display', 'param_dynamic_display', 'title', 'description', 
 				'technical_data', 'licence', 'time_period', 'update_frequency');
-		$updateFieldLabelArray = array('keywords', 'spatial_cover', 'language', 
+		$updateFieldLabelArray = array('hidden', 'deleted', 'keywords', 'spatial_cover', 'language', 
 				'quality', 'granularity', 'linked_references', 'taxonomy', 'illustration',
 				'html_from_csv_display', 'has_dynamic_display', 'param_dynamic_display',
 				'technical_data', 'licence', 'time_period', 'update_frequency');
@@ -54,7 +54,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			//creation of solr client
 			$solrClient = SolrTools::initSolrClient();
 			
-			if ($status === 'new' && !$tabChamps[hidden])
+			if ($status === 'new')
 			{
 				$doc = new SolrInputDocument();
 				
@@ -153,14 +153,14 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				//Convert old doc to input doc
 				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
 
-				// add new fields to doc
+				// update fields
 				foreach ($updateFieldLabelArray as $fieldLabel)
 				{
-					if($doc->fieldExists($fieldLabel))
+					if (isset($tabChamps[$fieldLabel]))
 					{
 						$doc->deleteField($fieldLabel);
+						$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
 					}
-					$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
 				}
 				
 				if (isset($tabChamps['release_date']))
@@ -172,7 +172,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 					$doc->addField('release_date', date("Y-m-d",$tabChamps[release_date]) . 'T' . date("H:i:s", $tabChamps[release_date]) . 'Z');
 				}
 
-				if (isset($tabChamps['release_date']))
+				if (isset($tabChamps['update_date']))
 				{
 					if($doc->fieldExists('update_date'))
 					{
