@@ -44,6 +44,7 @@
 			<label index="no">no</label>
 			<label index="publisher_filter">publisher_filter</label>
 			<label index="select_publisher">publisher to select</label>
+			<label index="all">all</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="title">Entrepôt de fichiers</label>
@@ -83,6 +84,7 @@
 			<label index="no">non</label>
 			<label index="publisher_filter">Filtrer par diffuseur : </label>
 			<label index="select_publisher">Sélectionner un diffuseur</label>
+			<label index="all">tous</label>
 		</languageKey>
 	</data>
 </T3locallang>

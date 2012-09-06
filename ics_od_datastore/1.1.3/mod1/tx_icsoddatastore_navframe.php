@@ -200,7 +200,7 @@ class  tx_icsoddatastore_navframe {
 		{
 			$selectList .= '<option value="' . $aRow['uid'] . '">' . $aRow['name'] . '</option>';
 		}
-		$selectList .= '</select>';
+		$selectList .= '<option value="">' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:all', 1) . '</option></select>';
 		$this->markers['FILTER']= $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:publisher_filter', 1) . $selectList;
 // 				'<a href="'.htmlspecialchars(t3lib_div::linkThisScript(array('unique' => uniqid('tx_web_navframe'), 'publisher' => '0'))).'">'.
 // 				'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif','width="14" height="14"').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.refresh',1).'" alt="" /></a>';
