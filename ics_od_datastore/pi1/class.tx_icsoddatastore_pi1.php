@@ -661,6 +661,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					else
 						$markers['###' . strtoupper($field) . '###'] = '';
 					break;
+				case 'licence':
+					$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+						'name',
+						'tx_icsoddatastore_licences',
+						'uid=' . $row['licence']
+					);
+					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($licence['name'], $this->conf['displayList.'][$field . '_stdWrap.']);
+					break;
 				default:
 					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
 			}
