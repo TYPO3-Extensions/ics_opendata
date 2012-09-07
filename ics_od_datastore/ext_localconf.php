@@ -73,4 +73,7 @@ $TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['dataset'] = 'EXT:
 // * End user inclusions typo3db_opendatapkg connexion
 
 
+// --- Hook
+
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsMarkers'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
 ?>

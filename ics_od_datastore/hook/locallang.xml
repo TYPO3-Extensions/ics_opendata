@@ -17,6 +17,7 @@
 			<label index="dataset_form_info">Fill form with required entries * and give dataset's tiers.</label>
 			<label index="files_form_info">Fill form with required entries *.</label>
 			<label index="previous">Previous</label>
+			<label index="stat_dl">Stats download</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="anyUser">Identifiez-vous avant de continuer.</label>
@@ -29,6 +30,7 @@
 			<label index="dataset_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *, ainsi qu'en assignant au minimum un tiers au jeu de données.</label>
 			<label index="files_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *.</label>
 			<label index="previous">Retour</label>
+			<label index="stat_dl">Téléchargements</label>
 		</languageKey>
 	</data>
 </T3locallang>
