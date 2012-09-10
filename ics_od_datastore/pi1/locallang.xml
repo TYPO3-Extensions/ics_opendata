@@ -51,10 +51,15 @@
 			<label index="search_agencyTitle">Search by agency</label>
 			<label index="search_tiersTitle">Search by agency</label>
 			<label index="search_fileFormatOther">Other</label>
+			<label index="search_licencesTitle">Licences</label>
 			<label index="fileformat">File format</label>
 			<label index="rss_alt">Lien to RSS page</label>
 			<label index="rss_title">Lien to RSS page</label>
 			<label index="rss_text">RSS feed</label>
+			<label index="sort_title">Sort by</label>
+			<label index="sort_update_date">Update date</label>
+			<label index="sort_crdate">On line</label>
+			<label index="sort_alpha">Alpha</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="th_title">Résultat de la recherche</label>
@@ -101,6 +106,7 @@
 			<label index="search_agencyTitle">Rechercher par département</label>
 			<label index="search_tiersTitle">Rechercher par département</label>
 			<label index="search_fileFormatOther">Autre</label>
+			<label index="search_licencesTitle">Licences</label>
 			<label index="fileformat">Format de fichier</label>
 			<label index="rss_alt">Lien vers la page RSS</label>
 			<label index="rss_title">Lien vers la page RSS</label>
@@ -109,6 +115,10 @@
 			<label index="sc_keywords">Mots-clés</label>
 			<label index="sc_tiers">Agences</label>
 			<label index="sc_formats">Formats</label>
+			<label index="sort_title">Trier par</label>
+			<label index="sort_update_date">Date de mise à jour</label>
+			<label index="sort_crdate">Date de mise en ligne</label>
+			<label index="sort_alpha">Alphabétique</label>
 		</languageKey>
 	</data>
 </T3locallang>

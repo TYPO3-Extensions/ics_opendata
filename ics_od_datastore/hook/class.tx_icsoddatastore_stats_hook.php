@@ -32,12 +32,12 @@ class tx_icsoddatastore_stats_hook {
 	 * @param	string		$template		Template HTML
 	 * @param	array		$dataset		The dataset
 	 * @param	array		$conf		configuration array
-	 * @param	array		$object		object
+	 * @param	array		$pObj		pObj
 	 * @return	void
 	 */
-	function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $dataset, $conf, $object) {
-		$markers['###STAT_DL_LABEL###'] = $object->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:stat_dl'), $conf['count.']['label.']);
-		$markers['###STAT_DL_VALUE###'] = $object->cObj->stdWrap($this->getDatasetDL($dataset['uid']), $conf['stat_dl.']);
+	function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $dataset, $conf, $pObj) {
+		$markers['###STAT_DL_LABEL###'] = $pObj->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:stat_dl'), $conf['count.']['label.']);
+		$markers['###STAT_DL_VALUE###'] = $pObj->cObj->stdWrap($this->getDatasetDL($dataset['uid']), $conf['stat_dl.']);
 	}
 	
 	/**
@@ -55,4 +55,19 @@ class tx_icsoddatastore_stats_hook {
 		);
 		return $row['total'];
 	}
+	
+	function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $pObj) {
+		if ($pObj->piVars['sort']['column']!='stat_dl')
+			return;
+		$queryJoin = ' LEFT OUTER JOIN `tx_icsoddatastore_statistics`
+			ON `tx_icsoddatastore_statistics`.`filegroup` = `tx_icsoddatastore_filegroups`.`uid` ';
+	}
+	
+	function selectQuery_extraColumnSorting($column, $sortOrder, &$fields, &$orderBy, $conf, $pObj) {
+		if ($column!='stat_dl')
+			return;
+		$fields[] = 'SUM(`tx_icsoddatastore_statistics`.`count`) as stat_dl';
+		$orderBy = 'stat_dl DESC';
+	}
+	
 }

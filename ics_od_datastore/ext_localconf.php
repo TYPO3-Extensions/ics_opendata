@@ -21,6 +21,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatasto
     'description'      => 'Logs file download',
 );
 
+// --- Hook
+
 if (t3lib_extMgm::isLoaded('ics_tcafe_admin')) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['startOff'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['process_afterInit'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
@@ -39,6 +41,12 @@ if (t3lib_extMgm::isLoaded('ics_tcafe_admin')) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['deleteRecord'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_tcafe_admin']['getRecords'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php:tx_icsoddatastore_TCAFEAdmin';
 }
+
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsMarkers'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['addSearchRestriction'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['selectQuery_extraColumnSorting'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
+
+
 //--- API commands ---
 
 
@@ -73,7 +81,4 @@ $TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['dataset'] = 'EXT:
 // * End user inclusions typo3db_opendatapkg connexion
 
 
-// --- Hook
-
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsMarkers'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
 ?>

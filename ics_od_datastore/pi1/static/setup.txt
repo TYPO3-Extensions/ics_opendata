@@ -285,6 +285,41 @@ plugin.tx_icsoddatastore_pi1{
 		tiers =
 		formats =		
 	}
+	
+	displaySorting {
+		update_date.cObject = TEXT
+		update_date.cObject {
+			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_update_date
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=update_date&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+		}
+		crdate.cObject = TEXT
+		crdate.cObject {
+			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_crdate
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=crdate&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+		}
+		title.cObject = TEXT
+		title.cObject {
+			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_alpha
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=title&tx_icsoddatastore_pi1[sort][order]=ASC
+			}
+		}
+		stat_dl.cObject = TEXT
+		stat_dl.cObject {
+			data = LLL:EXT:ics_od_datastore/hook/locallang.xml:sort_stat_dl
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=stat_dl&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+		}
+	}	
 }
 
 
