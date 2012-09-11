@@ -299,6 +299,15 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###TITLE_TIERS###' => htmlspecialchars($this->pi_getLL('search_tiersTitle', 'Tiers', true)),
 			'###TITLE_FILEFORMAT###' => htmlspecialchars($this->pi_getLL('search_fileformatTitle', 'File format', true)),
 			'###TITLE_LICENCES###' => htmlspecialchars($this->pi_getLL('search_licencesTitle', 'Licences', true)),
+			'###TITLE_UPDATE###' => htmlspecialchars($this->pi_getLL('search_update', 'Update from', true)),
+			'###UPDATE_DAY_LABEL###' => htmlspecialchars($this->pi_getLL('search_update_day', 'Update from a day', true)),
+			'###CHECKED_UPDATE_DAY###' => $this->list_criteria['update']=='day'? 'checked="checked"': '',
+			'###UPDATE_WEEK_LABEL###' => htmlspecialchars($this->pi_getLL('search_update_week', 'Update from a week', true)),
+			'###CHECKED_UPDATE_WEEK###' => $this->list_criteria['update']=='week'? 'checked="checked"': '',
+			'###UPDATE_MONTH_LABEL###' => htmlspecialchars($this->pi_getLL('search_update_month', 'Update from a month', true)),
+			'###CHECKED_UPDATE_MONTH###' => $this->list_criteria['update']=='month'? 'checked="checked"': '',
+			'###UPDATE_NONE_LABEL###' => htmlspecialchars($this->pi_getLL('search_update_none', 'None', true)),
+			'###CHECKED_UPDATE_NONE###' => !in_array($this->list_criteria['update'], array('day', 'week', 'month'))? 'checked="checked"': '',
 		);
 
 		$fileformatItems = $this->renderFileformatItems($template, $this->getFileformats(true));
@@ -356,6 +365,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			);
 			$formats = array_keys($rows);
 		}
+		$licences = '';
+		if (is_array($this->list_criteria['licences']) && !empty($this->list_criteria['licences'])) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'name',
+				$this->tables['licences'],
+				'1' .  $this->cObj->enableFields($this->tables['licences']) .  ' AND uid in (' . implode(',', $this->list_criteria['licences']) . ')',
+				'',
+				'name',
+				'',
+				'name'
+			);
+			$licences = array_keys($rows);
+		}
 		
 		$markers = array(
 			'###SC_TITLE###' => $this->pi_getLL('selectedCriteria', 'Selected Criteria', true),
@@ -365,6 +387,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###SC_TIERS_VALUE###' => $this->cObj->stdWrap(implode(',', $tiers), $this->conf['displaySearch.']['tiers.']),
 			'###SC_FORMATS_LABEL###' => $this->pi_getLL('sc_formats', 'Formats', true),
 			'###SC_FORMATS_VALUE###' => $this->cObj->stdWrap(implode(',', $formats), $this->conf['displaySearch.']['formats.']),
+			'###SC_LICENCES_LABEL###' => $this->pi_getLL('sc_licences', 'Licences', true),
+			'###SC_LICENCES_VALUE###' => $this->cObj->stdWrap(implode(',', $licences), $this->conf['displaySearch.']['licences.']),
 		);
 		$subpartArray = array();
 		// Hook for add fields markers
@@ -594,6 +618,20 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if (isset($this->list_criteria['licences']) && count($this->list_criteria['licences'])) {
 			$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`licence` IN (' . implode(',', $this->list_criteria['licences']) . '))';
 		}
+		if ($this->list_criteria['update'] && in_array($this->list_criteria['update'], array('day','week','month'))) {
+			switch ($this->list_criteria['update']) {
+				case 'day':
+					$period = 1;
+					break;
+				case 'week':
+					$period = 7;
+					break;
+				case 'month':
+					$period = date('t', mktime(0,0,0,date('n')-1));
+					break;
+			}
+			$whereClause .= ' AND DATEDIFF(CURDATE(), FROM_UNIXTIME(update_date, \'%Y-%m-%d\'))<=' . $period;
+		}
 		$whereClause .= $this->cObj->enableFields($this->tables['filegroups']);
 		
 		// Hook for add fields markers
@@ -614,7 +652,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$this->nbFileGroup = count($filegroups);
 
 		// Set sort and order and get filegroups for a page number
-		// if ( in_array($this->list_criteria['sort']['column'], $this->listFields) && ($this->list_criteria['sort']['column'] != 'files') ) {
 		t3lib_div::loadTCA($this->tables['filegroups']);
 		$columns = $GLOBALS['TCA'][$this->tables['filegroups']]['columns'];
 		$columns = array_keys($columns);

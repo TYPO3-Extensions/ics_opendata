@@ -19,8 +19,29 @@
 				<h3 class="###PREFIXID###_keywords">###KEYWORDS_LABEL###</h3>
 				<input type="text" name="###PREFIXID###[keywords]" value="###KEYWORDS_VALUE###" size="50" id="###PREFIXID###_keywords"/>
 			</div>
+			###SORTING###
+			<h3 class="###PREFIXID###_titleUpdate">###TITLE_UPDATE###</h3>
+			<div>
+				<input type="radio" name="###PREFIXID###[update]" value="day" id="###PREFIXID###_update_day" ###CHECKED_UPDATE_DAY### />
+				<label for="###PREFIXID###_update_day">###UPDATE_DAY_LABEL###</label>
+				<input type="radio" name="###PREFIXID###[update]" value="week" id="###PREFIXID###_update_week" ###CHECKED_UPDATE_WEEK### />
+				<label for="###PREFIXID###_update_week">###UPDATE_WEEK_LABEL###</label>
+				<input type="radio" name="###PREFIXID###[update]" value="month" id="###PREFIXID###_update_month" ###CHECKED_UPDATE_MONTH### />
+				<label for="###PREFIXID###_update_month">###UPDATE_MONTH_LABEL###</label>
+				<input type="radio" name="###PREFIXID###[update]" value="none" id="###PREFIXID###_update_none" ###CHECKED_UPDATE_NONE### />
+				<label for="###PREFIXID###_update_none">###UPDATE_NONE_LABEL###</label>
+			</div>
 		</div>
 		<div class="###PREFIXID###_right">
+			<h3 class="###PREFIXID###_categoriesType">###TITLE_CATEGORIES###</h3>
+			<div class="###PREFIXID###_categories">
+				<!-- ###CATEGORIES_ITEM### start -->
+				<div class="###PREFIXID###_categoriesItem">
+					<input id="###PREFIXID###_categories###CATEGORIES_VALUE###" name="###PREFIXID###[categories][]" type="checkbox" ###CHECKED### value="###CATEGORIES_VALUE###">
+					<label for="###PREFIXID###_categories###CATEGORIES_VALUE###">###CATEGORIES_LABEL###</label>	
+				</div>
+				<!-- ###CATEGORIES_ITEM### end -->
+			</div>
 			<div class="###PREFIXID###_fileformatBlock">
 				<h3 class="###PREFIXID###_titleFileType">###TITLE_FILEFORMAT###</h3>
 				<div class="###PREFIXID###_fileformat">
@@ -45,13 +66,13 @@
 			<div class="###PREFIXID###_licences">
 				<!-- ###LICENCES_ITEM### start -->
 				<div class="###PREFIXID###_licencesItem">
-					<input id="###PREFIXID###_licences###LICENCE_VALUE###" name="###PREFIXID###[licences][]" type="checkbox" ###CHECKED### value="###LICENCE_VALUE###">
 					<label for="###PREFIXID###_licences###LICENCE_VALUE###">###LICENCE_LABEL###</label>
+					<input id="###PREFIXID###_licences###LICENCE_VALUE###" name="###PREFIXID###[licences][]" type="checkbox" ###CHECKED### value="###LICENCE_VALUE###">
 				</div>
 				<!-- ###LICENCES_ITEM### end -->
 			</div>
 		</div>
-		
+		###SELECTED_CRITERIA###	
 		<div class="button">
 			<input type="submit" name="###PREFIXID###[submit]" value="###SEARCHBUTTON_VALUE###" id="###PREFIXID###_submitSearch"/>
 		</div>
@@ -84,8 +105,28 @@
 			<p class="###PREFIXID###_sc_value">###SC_FORMATS_VALUE###</p>
 		</div>
 		<!-- ###SUBPART_SC_FORMATS### end-->
+		<!-- ###SUBPART_SC_LICENCES### start-->
+		<div class="###PREFIXID###_sc_licences">
+			<p class="###PREFIXID###_sc_label">###SC_LICENCES_LABEL###</p>
+			<p class="###PREFIXID###_sc_value">###SC_LICENCES_VALUE###</p>
+		</div>
+		<!-- ###SUBPART_SC_LICENCES### end-->		
 	</div>
 <!-- ###TEMPLATE_SELECTED_CRITERIA### end-->
+
+
+
+
+<!-- ###TEMPLATE_SORTING### start-->
+<div class="sortBy">
+	<h3 class="###PREFIXID###_sortings">###SORTING_TITLE###</h3>
+	<ul>
+		<!-- ###SORTING_ITEM### start-->
+		<li>###SORTING_NAME###</li>
+		<!-- ###SORTING_ITEM### end-->
+	</ul>
+</div>
+<!-- ###TEMPLATE_SORTING### end-->
 
 
 

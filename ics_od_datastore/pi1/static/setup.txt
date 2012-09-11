@@ -283,7 +283,8 @@ plugin.tx_icsoddatastore_pi1{
 	
 	displaySearch {
 		tiers =
-		formats =		
+		formats =
+		licences =
 	}
 	
 	displaySorting {
