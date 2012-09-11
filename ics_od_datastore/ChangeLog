@@ -1,4 +1,5 @@
 2012-09-11 Tsi YANG <tsi@in-cite.net>
+	* Comments: Completed pi1 comments.
 	* Feature: Added format's name to file's data on renderFiles.
 	* Feature: Added licences selecetde crietria.
 	* Fearure: Added filter on update date.

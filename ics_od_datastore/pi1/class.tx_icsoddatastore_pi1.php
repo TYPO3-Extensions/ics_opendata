@@ -29,31 +29,36 @@
  *
  *
  *
- *   74: class tx_icsoddatastore_pi1 extends tslib_pibase
+ *   79: class tx_icsoddatastore_pi1 extends tslib_pibase
  *
- *              SECTION: < Default search criteria 
- *  100:     function main($content, $conf)
- *  150:     function controlVars(&$content)
- *  164:     function init()
- *  281:     function renderSearch()
- *  319:     function renderFileformatItems($template, $aFileformats)
- *  351:     function renderTiersItems($template, $aTiers)
- *  376:     function renderList()
- *  401:     function renderListHeader($template)
- *  432:     function renderListRows($template)
- *  555:     function renderListRow($template, $row)
- *  619:     function renderFiles($view, $filegroup, $template)
- *  710:     function renderSingle($id)
- *  809:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
- *  831:     function getFiles_mm($filegroup)
- *  849:     function getFileSize($file)
- *  864:     function getFileformats($searchable = false)
- *  887:     function getFiletypes()
- *  904:     function getTiersAgencies()
- *  922:     protected function getListGetPageBrowser($numberOfPages)
- *  944:     function renderRSS($rssLink, $imgSrc)
+ *              SECTION: < Default search criteria
+ *  105:     function main($content, $conf)
+ *  155:     function controlVars(&$content)
+ *  169:     function init()
+ *  289:     function renderSearch()
+ *  343:     function renderSelectedCriteria()
+ *  415:     function renderSorting()
+ *  442:     function renderFileformatItems($template, $aFileformats)
+ *  474:     function renderTiersItems($template, $aTiers)
+ *  501:     function renderLicenceItems($template, array $aLicences)
+ *  524:     function renderList()
+ *  558:     function renderListHeader($template)
+ *  589:     function renderListRows($template)
+ *  762:     function renderListRow($template, $row)
+ *  834:     function renderFiles($view, $filegroup, $template)
+ *  926:     function renderSingle($id)
+ * 1026:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ * 1048:     function getFiles_mm($filegroup)
+ * 1066:     function getFileSize($file)
+ * 1081:     function getFileformats($searchable = false)
+ * 1104:     function getFiletypes()
+ * 1121:     function getTiersAgencies()
+ * 1137:     function getLicences()
+ * 1151:     protected function getListGetPageBrowser($numberOfPages)
+ * 1174:     function renderRSS($rssLink, $imgSrc)
+ * 1191:     function getExtraQueryString()
  *
- * TOTAL FUNCTIONS: 20
+ * TOTAL FUNCTIONS: 25
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -288,7 +293,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###SORTING###' => $this->renderSorting(),
 		);
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers);
-		
+
 		$markers = array(
 			'###FORM_ACTION###' => '#',
 			'###PREFIXID###' => $this->prefixId,
@@ -329,15 +334,15 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $markers, $subpartArray);
 		return $content;
 	}
-	
+
 	/**
 	 * Render seleceted Criteria
 	 *
-	 * @return	string	Selected criteria HTML content
+	 * @return	string		Selected criteria HTML content
 	 */
 	function renderSelectedCriteria() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SELECTED_CRITERIA###');
-		
+
 		$tiers = '';
 		if (is_array($this->list_criteria['tiers']) && !empty($this->list_criteria['tiers'])) {
 			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -351,7 +356,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			);
 			$tiers = array_keys($rows);
 		}
-		
+
 		$formats = '';
 		if (is_array($this->list_criteria['fileformat']) && !empty($this->list_criteria['fileformat'])) {
 			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -378,7 +383,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			);
 			$licences = array_keys($rows);
 		}
-		
+
 		$markers = array(
 			'###SC_TITLE###' => $this->pi_getLL('selectedCriteria', 'Selected Criteria', true),
 			'###SC_KEYWORDS_LABEL###' => $this->pi_getLL('sc_keywords', 'Keywords', true),
@@ -402,15 +407,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
 
-	
+	/**
+	 * Render sorting
+	 *
+	 * @return	string		The sorting HTML code
+	 */
 	function renderSorting() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SORTING###');
-		
+
 		$markers = array(
 			'###PREFIXID###' => $this->prefixId,
 			'###SORTING_TITLE###' => $this->pi_getLL('sort_title', 'Sort By', true),
 		);
-		
+
 		$sortNames = t3lib_div::trimExplode(',', $this->conf['displaySorting.']['sortNames'], true);
 		$itemTemplate = $this->cObj->getSubpart($template, '###SORTING_ITEM###');
 		foreach ($sortNames as $sortName) {
@@ -422,7 +431,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->substituteSubpart($template, '###SORTING_ITEM###', $items);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
-	
+
 	/**
 	 * Render file formats
 	 *
@@ -506,7 +515,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}
 		return $item;
 	}
-	
+
 	/**
 	 * Render list view
 	 *
@@ -527,7 +536,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$subpartArray = array();
 		$subpartArray['###HEADER_ITEM###'] = $headerItems;
 		$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
-		
+
 		// Hook for add fields markers to list view
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'] as $_classRef) {
@@ -535,7 +544,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$_procObj->additionalListFieldsMarkers($markers, $subpartArray, $template, $this);
 			}
 		}
-		
+
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $markers, $subpartArray);
 		return $content;
 	}
@@ -633,7 +642,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$whereClause .= ' AND DATEDIFF(CURDATE(), FROM_UNIXTIME(update_date, \'%Y-%m-%d\'))<=' . $period;
 		}
 		$whereClause .= $this->cObj->enableFields($this->tables['filegroups']);
-		
+
 		// Hook for add fields markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'] as $_classRef) {
@@ -641,7 +650,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$_procObj->addSearchRestriction($whereClause, $queryJoin, $this->conf, $this);
 			}
 		}
-		
+
 		// Get all filegroups
 		$filegroups = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'DISTINCT `' . $this->tables['filegroups'] . '`.`uid`',
@@ -693,9 +702,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		foreach ($fields as $idx=>$field) {
 			$fields[$idx] = '`' . $this->tables['filegroups'] . '`.`' . $field . '`';
 		}
-		
+
 		$groupBy = '`'.$this->tables['filegroups'] . '`.`uid`, ' . implode(',', $fields);
-		
+
 		// Hook on extra column and sorting query
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraColumnSorting'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraColumnSorting'] as $_classRef) {
@@ -703,7 +712,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$_procObj->selectQuery_extraColumnSorting($this->list_criteria['sort']['column'], $order, $fields, $orderBy, $this->conf, $this);
 			}
 		}
-		
+
 		// Hook on extra group by query
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraGroupBy'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraGroupBy'] as $_classRef) {
@@ -711,7 +720,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$_procObj->selectQuery_extraGroupBy($this->list_criteria['sort']['column'], $groupBy, $this->conf, $this);
 			}
 		}
-		
+
 		$selectFields =  '`'.$this->tables['filegroups'] . '`.`uid`, ' . implode(',', $fields);
 
 		// Executing query
@@ -723,7 +732,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$orderBy,
 			$start . ',' . $this->nbFileGroupByPage
 		);
-		
+
 		$i=0;
 		foreach ($filegroups as $filegroup) {
 			if ($i%2 == 0) {
@@ -1122,7 +1131,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 	/**
 	 * Retrieves licences
-	 * @return	mixed	Licences
+	 *
+	 * @return	mixed		Licences
 	 */
 	function getLicences() {
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -1131,7 +1141,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'1' .  $this->cObj->enableFields($this->tables['licences'])
 		);
 	}
-	
+
 	/**
 	 * Get page bowser
 	 *
@@ -1173,11 +1183,11 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
-	
+
 	/**
-     * @return    string        The additionalParams variable in getPageLink from tx_pagebrowse_pi1
+	 * @return	string		The additionalParams variable in getPageLink from tx_pagebrowse_pi1
 	 * @author	GOYER Frederic <frederic.goyer@in-cite.net>
-     */
+	 */
     function getExtraQueryString() {
         $gp = t3lib_div::_GP($this->prefixId);
         foreach($gp as $key => $val) {
