@@ -890,12 +890,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				if (is_array($formats) && !empty($formats)) {
 					$format = $formats[0];
 					$file['picto'] = $format['picto'];
+					$file['format_title'] = $format['name'];
 				}
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$cObj->start($file, $this->tables['files']);
 				$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 				$markers['###PICTO###'] =  $cObj->stdWrap('', $this->conf['datasetFile.']);
-				$markers['###FILEEXT###'] = htmlspecialchars($format['name']);
+				$markers['###FILEEXT###'] = htmlspecialchars($file['format_title']);
 
 				$pictoItem = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($template, '###PICTO_ITEM###'), $markers);
 				$pictoItems .= $pictoItem;

@@ -1,4 +1,5 @@
 2012-09-11 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added format's name to file's data on renderFiles.
 	* Feature: Added licences selecetde crietria.
 	* Fearure: Added filter on update date.
 
