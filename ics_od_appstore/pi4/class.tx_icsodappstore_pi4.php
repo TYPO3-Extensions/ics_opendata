@@ -437,13 +437,14 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			$sort_content = '';
 			$separator ='';
 			foreach($orderAvailable as $k=>$v){
-				$label = str_replace('LLL:EXT:ics_od_appstore/locallang_db.xml:','',$TCA[$table]['columns'][$v]['label']);
+				// $label = str_replace('LLL:EXT:ics_od_appstore/locallang_db.xml:','',$TCA[$table]['columns'][$v]['label']);
+				$label = 'sort_' . $v;
 				if($k == $this->piVars['sort']) {
 
 					$sort_content .= $separator . '<span class="current">'.htmlspecialchars($this->pi_getLL($label)) . '</span>';
 					}
 				else {
-					$sort_content .= $separator . '<a href="'.$GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id,array($this->prefixId.'[page]'=> $this->piVars['page'],$this->prefixId.'[sort]'=> $k)) . '">' . htmlspecialchars($this->pi_getLL($label)) . '</a>';
+					$sort_content .= $separator . '<span><a href="'.$GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id,array($this->prefixId.'[page]'=> $this->piVars['page'],$this->prefixId.'[sort]'=> $k)) . '">' . htmlspecialchars($this->pi_getLL($label)) . '</a></span>';
 				}
 				$separator = '<span class="separator">/</span>';
 			}

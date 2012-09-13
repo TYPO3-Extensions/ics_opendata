@@ -63,6 +63,8 @@
 			<label index="tx_icsodappstore_applications.lock_publication.I.0">Ouvert</label>
 			<label index="tx_icsodappstore_applications.lock_publication.I.1">Fermé</label>
 			<label index="tx_icsodappstore_applications.lock_publication">Verrou de publication</label>
+			<label index="sort_countcall">Les plus téléchargées</label>
+			<label index="sort_release_date">Les plus récentes</label>
 		</languageKey>
 	</data>
 	<orig_hash type="array">
