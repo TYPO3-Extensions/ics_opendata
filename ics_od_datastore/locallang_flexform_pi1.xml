@@ -15,9 +15,12 @@
 			<label index="fileLink">File link</label>
 			<label index="selectParams">Select params</label>
 			<label index="sortName">Sort name</label>
-			<label index="sortName_tstamp">Update date</label>
+			<label index="sortName_tstamp">Tstamp</label>
 			<label index="sortName_release">Release date</label>
 			<label index="sortName_title">Title</label>
+			<label index="sortName_update_date">Update</label>
+			<label index="sortName_crdate">Crdate</label>
+			<label index="sortName_stat_dl">Popularity</label>
 			<label index="sortOrder">Sort order</label>
 			<label index="sortOrder_asc">Ascendant</label>
 			<label index="sortOrder_desc">Descendant</label>
@@ -32,9 +35,12 @@
 			<label index="fileLink">Lien vers fichiers</label>
 			<label index="selectParams">Paramètre de sélection</label>
 			<label index="sortName">Trier par</label>
-			<label index="sortName_tstamp">Date de mise à jour</label>
+			<label index="sortName_tstamp">Actualisation de l'enregistrement</label>
 			<label index="sortName_release">Date de publication</label>
 			<label index="sortName_title">Nom</label>
+			<label index="sortName_update_date">Date de mise à jour</label>
+			<label index="sortName_crdate">Date de mise en ligne</label>
+			<label index="sortName_stat_dl">Popularité</label>
 			<label index="agencies">Agences</label>
 			<label index="sortOrder">Ordre de tri</label>
 			<label index="sortOrder_asc">Ascendant</label>

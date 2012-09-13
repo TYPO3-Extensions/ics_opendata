@@ -288,38 +288,84 @@ plugin.tx_icsoddatastore_pi1{
 	}
 	
 	displaySorting {
+		sortNames = update_date,crdate,title,stat_dl,tstamp,release_date
+		class_active {
+			class =
+			class.cObject = COA_INT
+			class.cObject {
+				# Ajoute le tag class="active" au <li>
+				1 = TEXT
+				1.value = active
+				1.if.value.field = sortName
+				1.if.equals.field = active
+			
+				# Ajoute le tag class="sorting" au <li>
+				2 = TEXT
+				2.if < .1.if
+				2.if.negate = 1
+				2.value = sorting
+			}
+		}
 		update_date.cObject = TEXT
 		update_date.cObject {
-			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_update_date
+			value = Date de mise à jour
 			typolink {
 				parameter.data = tsfe:id
 				additionalParams=&tx_icsoddatastore_pi1[sort][column]=update_date&tx_icsoddatastore_pi1[sort][order]=DESC
 			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
 		}
 		crdate.cObject = TEXT
 		crdate.cObject {
-			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_crdate
+			value = Date de mise en ligne
 			typolink {
 				parameter.data = tsfe:id
 				additionalParams=&tx_icsoddatastore_pi1[sort][column]=crdate&tx_icsoddatastore_pi1[sort][order]=DESC
 			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
 		}
 		title.cObject = TEXT
 		title.cObject {
-			data = LLL:EXT:ics_od_datastore/pi1/locallang.xml:sort_alpha
+			value = Alphabétique
 			typolink {
 				parameter.data = tsfe:id
 				additionalParams=&tx_icsoddatastore_pi1[sort][column]=title&tx_icsoddatastore_pi1[sort][order]=ASC
 			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
 		}
 		stat_dl.cObject = TEXT
 		stat_dl.cObject {
-			data = LLL:EXT:ics_od_datastore/hook/locallang.xml:sort_stat_dl
+			value = Popularité
 			typolink {
 				parameter.data = tsfe:id
 				additionalParams=&tx_icsoddatastore_pi1[sort][column]=stat_dl&tx_icsoddatastore_pi1[sort][order]=DESC
 			}
-		}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
+		tstamp.cObject = TEXT
+		tstamp.cObject {
+			value = Date de modification
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=tstamp&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
+		release_date.cObject = TEXT
+		release_date.cObject {
+			value = Date de publication
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=release_date&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
 	}	
 }
 

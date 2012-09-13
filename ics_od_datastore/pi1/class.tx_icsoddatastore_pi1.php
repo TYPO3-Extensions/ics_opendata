@@ -422,10 +422,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		$sortNames = t3lib_div::trimExplode(',', $this->conf['displaySorting.']['sortNames'], true);
 		$itemTemplate = $this->cObj->getSubpart($template, '###SORTING_ITEM###');
+
 		foreach ($sortNames as $sortName) {
-			$locMarkers = array(
-				'###SORTING_NAME###' => $this->cObj->stdWrap($sortName, $this->conf['displaySorting.'][$sortName . '.']),
+			$locMarkers = array();
+
+			$data = array(
+				'sortName' => $sortName,
+				'active' => $this->list_criteria['sort']['column']? $this->list_criteria['sort']['column']: $this->conf['sorting.']['name'],
 			);
+			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$cObj->start($data, 'Sorting');
+			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+			$locMarkers['###SORTING_NAME###'] = $cObj->stdWrap('', $this->conf['displaySorting.'][$sortName . '.']);
+
 			$items .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers);
 		}
 		$template = $this->cObj->substituteSubpart($template, '###SORTING_ITEM###', $items);
@@ -590,15 +599,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$queryJoin = '';
 		$whereClause = '';
 		$groupBy = '';
-
-		if ($this->conf['sorting.']['name']) {
-			if (($this->conf['sorting.']['name'] == 'tstamp') && $this->conf['displayList.']['sort.']['tstamp.']['day']) {
-				// Group dataset by day: retrieves dataset order by day, dataset updated or created the same day are sorted by title
-				$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`tstamp`, "%Y%m%d") ' . $this->conf['sorting.']['order'] . ', `' . $this->tables['filegroups'] . '`.`title` ASC';
-			} else {
-				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->conf['sorting.']['name'] . '` ' . $this->conf['sorting.']['order'];
-			}
-		}
+					
 		// Set where clause with junture
 		if (isset($this->list_criteria['keywords']) && !empty($this->list_criteria['keywords'])) {
 			$whereClause .= ' AND (
@@ -668,7 +669,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$columns[] = 'crdate';
 		if ($GLOBALS['TCA'][$this->tables['filegroups']]['ctrl']['tstamp'])
 			$columns[] = 'tstamp';
-		if ( in_array($this->list_criteria['sort']['column'], $columns) && ($this->list_criteria['sort']['column'] != 'files') ) {
+		
+		$sorting['column'] = $this->conf['sorting.']['name'];
+		$sorting['order'] = $this->conf['sorting.']['order'];
+		if ($this->list_criteria['sort']['column'])
+			$sorting = $this->list_criteria['sort'];
+
+		if ( in_array($sorting['column'], $columns) && ($sorting['column'] != 'files') ) {
 			$tiers = array(
 				'agency',
 				'contact',
@@ -677,19 +684,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				'manager',
 				'owner',
 			);
-			$order = ($this->list_criteria['sort']['order'])? $this->list_criteria['sort']['order']: 'ASC';
-			if ( ($this->list_criteria['sort']['column'] == 'tstamp') && ($this->conf['displayList.']['sort.']['tstamp.']['day']) ) {
-				$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '`, "%Y%m%d") ' . $order;
+			$order = ($sorting['order'])? $sorting['order']: 'ASC';
+			if ( ($sorting['column'] == 'tstamp') && ($this->conf['displayList.']['sort.']['tstamp.']['day']) ) {
+				$orderBy = 'FROM_UNIXTIME(`' . $this->tables['filegroups'] . '`.`' . $sorting['column'] . '`, "%Y%m%d") ' . $order . ', `' . $this->tables['filegroups'] . '`.`title` ASC';
 			}
-			elseif ( in_array($this->list_criteria['sort']['column'], $tiers) ) {
-				$queryJoin .= ' LEFT OUTER JOIN `' . $this->tables['tiers'] . '` ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '`';
+			elseif ( in_array($sorting['column'], $tiers) ) {
+				$queryJoin .= ' LEFT OUTER JOIN `' . $this->tables['tiers'] . '` ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups'] . '`.`' . $sorting['column'] . '`';
 				$orderBy = '`' . $this->tables['tiers'] . '`.`name` ' . $order;
 			}
 			else	{
-				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $this->list_criteria['sort']['column'] . '` ' . $order;
+				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $sorting['column'] . '` ' . $order;
 			}
 
-			if ( $this->list_criteria['sort']['column'] != 'title')
+			if ( $sorting['column'] != 'title') 
 				$orderBy .= ', `' . $this->tables['filegroups'] . '`.`title` ASC';
 		}
 
@@ -709,7 +716,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraColumnSorting'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraColumnSorting'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
-				$_procObj->selectQuery_extraColumnSorting($this->list_criteria['sort']['column'], $order, $fields, $orderBy, $this->conf, $this);
+				$_procObj->selectQuery_extraColumnSorting($sorting['column'], $order, $fields, $orderBy, $this->conf, $this);
 			}
 		}
 
@@ -717,7 +724,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraGroupBy'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['selectQuery_extraGroupBy'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
-				$_procObj->selectQuery_extraGroupBy($this->list_criteria['sort']['column'], $groupBy, $this->conf, $this);
+				$_procObj->selectQuery_extraGroupBy($sorting['column'], $groupBy, $this->conf, $this);
 			}
 		}
 

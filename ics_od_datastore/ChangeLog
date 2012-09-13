@@ -1,3 +1,7 @@
+2012-09-13 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added plugin pi1 new sorting.
+	* Feature: Added sorting configuration.
+
 2012-09-11 Tsi YANG <tsi@in-cite.net>
 	* Comments: Completed pi1 comments.
 	* Feature: Added format's name to file's data on renderFiles.
