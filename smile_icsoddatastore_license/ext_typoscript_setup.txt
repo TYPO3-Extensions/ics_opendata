@@ -1,5 +1,9 @@
 plugin.tx_icsoddatastore_pi1 {
-	cguLink = {$plugin.smile_icsoddatastore_license.cguLink}
+	datasetFileNotLinked < .datasetFile
+	datasetFileNotLinked {
+		typolink >
+	}
+	
 	_LOCAL_LANG.fr {
 		btn_registration = valider
 		cgu_label = En cochant cette case pour télécharger le fichier, j’accepte les CGU et les conditions de la licence

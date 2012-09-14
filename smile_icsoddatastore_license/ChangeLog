@@ -1,7 +1,9 @@
 2012-09-14 Emilie SAGNIEZ <emilie@in-cite.net>
 	* Add possibility to enable/disable CGU to appstore/datastore
 	* Add datastore template exemple
-	* Add checkbox to licences records for activate CGU only for this licences
+	* Add checkbox to licences records for activate CGU only for this licences (only datastore, not appstore)
+	* Use licence file for CGU Link (only datastore, not appstore)
+	* When CGU is enable, data file picto is added but not linked (only datastore, not appstore)
 
 2011-08-31   <>
 

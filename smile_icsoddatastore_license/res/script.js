@@ -25,9 +25,9 @@ function valid_application_form(){
 	return true;
 }
 
-function valid_data_form(){
+function valid_data_form(cguId){
 	// Verifies that the cgu is checked
-	if(document.getElementById('cgu').checked == false){
+	if(document.getElementById(cguId).checked == false){
 		alert('Veuillez accepter les conditions générales d\'utilisation.');
 		return false;
 	}
