@@ -1,5 +1,7 @@
 2012-09-14 Emilie SAGNIEZ <emilie@in-cite.net>
 	* Add possibility to enable/disable CGU to appstore/datastore
+	* Add datastore template exemple
+	* Add checkbox to licences records for activate CGU only for this licences
 
 2011-08-31   <>
 

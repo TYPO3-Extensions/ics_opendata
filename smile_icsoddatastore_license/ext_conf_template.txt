@@ -1,0 +1,7 @@
+enable {
+	# cat=Basic//b; type=boolean; label=Activate CGU to appstore: Activate CGU to appstore.
+	appstore = 1
+	
+	# cat=Basic//b; type=boolean; label=Activate CGU to datastore: Activate CGU to datastore.
+	datastore = 1
+}

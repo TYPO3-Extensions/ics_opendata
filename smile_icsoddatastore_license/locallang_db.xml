@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <type>database</type>
+        <description>Language labels for database tables/fields belonging to extension 'smile_icsoddatastore_license'</description>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="tx_icsoddatastore_licences.tx_smileicsoddatastorelicense_acceptcgu">Accept CGU before download files</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+            <label index="tx_icsoddatastore_licences.tx_smileicsoddatastorelicense_acceptcgu">Accepter les CGU afin de pouvoir télécharger les fichiers de données</label>
+        </languageKey>
+    </data>
+</T3locallang>
