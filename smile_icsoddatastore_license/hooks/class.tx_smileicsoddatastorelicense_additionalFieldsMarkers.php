@@ -1,6 +1,7 @@
 <?php
 class tx_smileicsoddatastorelicense_additionalFieldsMarkers{
 	function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, &$row, &$conf, &$pObj){
+		var_dump('test emilie');
 		$this->pObj = $pObj;
 		$GLOBALS['TSFE']->additionalHeaderData[$this->pObj->extKey]='<script src="typo3conf/ext/smile_icsoddatastore_license/res/script.js" type="text/javascript"></script>';
 		if($GLOBALS["TSFE"]->fe_user->user){
