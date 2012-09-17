@@ -21,3 +21,14 @@ plugin.tx_icsodappstore_pi2 {
 		accept_license_to_download = Acceptez les conditions générales d’utilisation et la licence afin d'accéder aux données
 	}
 }
+
+page.includeCSS {
+	odlightbox = EXT:smile_icsoddatastore_license/res/lightbox/ODLightbox.css
+}
+
+page.includeJSFooter {
+	smile_icsoddatastore_license_jquery = https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js
+	smile_icsoddatastore_license_jquery.external = 1
+	odlightbox = EXT:smile_icsoddatastore_license/res/lightbox/ODLightbox.js
+	smile_icsoddatastore_license_lightbox = EXT:smile_icsoddatastore_license/res/lightbox/lightbox_cgu.js
+}

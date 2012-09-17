@@ -38,10 +38,14 @@ class tx_smileicsoddatastorelicense_additionalFieldsMarkers{
 				// Render data files not linked
 				$confPicto = $pObj->conf['datasetFile.'];
 				$pObj->conf['datasetFile.'] = $pObj->conf['datasetFileNotLinked.'];
-				$filesContent = $this->pObj->renderFiles('SINGLE', $row['uid'], $this->pObj->cObj->getSubpart($template, '###SECTION_FILE_NOTLINKED###'));
+				
+				$subpartNotLinked = $this->pObj->cObj->getSubpart($template, '###SECTION_FILE_NOTLINKED###');
+				$subpartNotLinked = $this->pObj->cObj->substituteMarkerArray($subpartNotLinked, array('###PREFIXID###' => $markers['###PREFIXID###']));
+				$filesContent = $this->pObj->renderFiles('SINGLE', $row['uid'], $subpartNotLinked);
 				$pObj->conf['datasetFile.'] = $confPicto;
 				
 				$markersCGU = array(
+					'###PREFIXID###' => $markers['###PREFIXID###'],
 					'###URL_LICENSE###' => t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'),
 					'###BTN_REGISTRATION###' => $this->pObj->prefixId.'[btn_registration]',
 					'###BTN_REGISTRATION_VALUE###' => htmlspecialchars($this->pObj->pi_getLL('btn_registration')),
