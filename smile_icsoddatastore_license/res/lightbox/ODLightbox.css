@@ -11,7 +11,6 @@
 	z-index:99990;
 }
 .od-lightbox-box {
-
 	position:fixed;
 	display:none;
 	width:400px;
@@ -38,7 +37,7 @@
 	right:10px;
 	bottom:10px;
 	overflow:hidden;
-	padding: 30px;
+	padding:  50px 30px 0;
 }
 .od-lightbox-close {
 	position:absolute;

@@ -1,7 +1,35 @@
 plugin.tx_icsoddatastore_pi1 {
+	datasetFileLink {
+		typolink < plugin.tx_icsoddatastore_pi1.datasetFile.typolink
+		typolink.returnLast = url
+	}
+	
 	datasetFileNotLinked < .datasetFile
 	datasetFileNotLinked {
 		typolink >
+		typolink {
+			parameter.data = tsfe:id
+			addQueryString = 1
+			addQueryString {
+				method = get
+				exclude = uid
+			}
+			
+			ATagParams {
+				append = TEXT
+				append {
+					typolink {
+						parameter.data = tsfe:id
+						additionalParams {
+							field = uid
+							wrap = &eID=smile_icsoddatastore_license&tx_icsoddatastore_pi1[file]=|
+						}
+						returnLast=url
+					}
+				}
+				wrap3 = rel="|"
+			}
+		}
 	}
 	
 	_LOCAL_LANG.fr {

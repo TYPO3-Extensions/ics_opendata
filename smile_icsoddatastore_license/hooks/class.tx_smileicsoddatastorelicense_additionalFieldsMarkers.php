@@ -2,7 +2,7 @@
 class tx_smileicsoddatastorelicense_additionalFieldsMarkers{
 	function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, &$row, &$conf, &$pObj){
 		$this->pObj = $pObj;
-		
+		$subpartArray['###CGU_FIELD###'] = '';
 		// Get data licence
 		$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
 			'`name`, `tx_smileicsoddatastorelicense_acceptcgu`, `link`',
@@ -25,6 +25,7 @@ class tx_smileicsoddatastorelicense_additionalFieldsMarkers{
 				
 				// Hide data files linked
 				$pictoItem = htmlspecialchars($this->pObj->pi_getLL('accept_license_to_download')) ;
+				$pictoItem = '';
 				$subpartArray['###SECTION_FILE_HIDE###'] = $this->pObj->cObj->substituteMarkerArray($pictoItem, $markers);
 
 				// CGU Subpart
@@ -58,8 +59,6 @@ class tx_smileicsoddatastorelicense_additionalFieldsMarkers{
 				
 				$subpartArray['###CGU_FIELD###'] = $this->pObj->cObj->substituteMarkerArrayCached($cguField, $markersCGU, $subpartsCGU);
 			}
-		} else {
-			$subpartArray['###CGU_FIELD###'] = '';
 		}
 	}
 

@@ -7,5 +7,7 @@ if ($confArr['enable.']['appstore']) {
 }
 if ($confArr['enable.']['datastore']) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsMarkers'][] = 'EXT:smile_icsoddatastore_license/hooks/class.tx_smileicsoddatastorelicense_additionalFieldsMarkers.php:tx_smileicsoddatastorelicense_additionalFieldsMarkers';
+	
+	$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/Classes/tx_smileicsoddatastorelicense_filelink.php';
 }
 ?>

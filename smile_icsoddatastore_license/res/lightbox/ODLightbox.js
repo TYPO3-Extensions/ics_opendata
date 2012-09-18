@@ -7,7 +7,7 @@ ODLightbox = function() {
     this._options = {};
     var lightbox = this._lightbox = {
         width : 400,
-        height : 400,
+        height : 200,
         initialized : false,
         init : function() {
             if ( lightbox.initialized ) {
@@ -47,9 +47,9 @@ ODLightbox = function() {
                 height = Math.min( $( window ).height()-60, lightbox.height ),
                 ratio = Math.min( width / lightbox.width, height / lightbox.height ),
                 // destWidth = Math.round( lightbox.width * ratio ) + 40,
-                destWidth = Math.round( lightbox.width * ratio ) + 20,
+                destWidth = Math.round( lightbox.width * ratio ) + 60,
                 // destHeight = Math.round( lightbox.height * ratio ) + 60,
-                destHeight = Math.round( lightbox.height * ratio ) + 20,
+                destHeight = Math.round( lightbox.height * ratio ) + 120,
                 to = {
                     width: destWidth,
                     height: destHeight,
