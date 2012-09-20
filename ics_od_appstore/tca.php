@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsodappstore_applications'] = array (
 	'ctrl' => $TCA['tx_icsodappstore_applications']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,apikey,fe_cruser_id,title,description,platform,platforms,countcall,maxcall,release_date,logo,screenshot,link,update_date,lock_publication'
+		'showRecordFieldList' => 'hidden,apikey,fe_cruser_id,title,description,platform,platforms,countcall,maxcall,release_date,logo,screenshot,link,update_date,lock_publication,label'
 	),
 	'feInterface' => $TCA['tx_icsodappstore_applications']['feInterface'],
 	'columns' => array (
@@ -155,7 +155,7 @@ $TCA['tx_icsodappstore_applications'] = array (
 		),
 		'lock_publication' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_applications.lock_publication',		
+			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_applications.lock_publication',
 			'config' => array (
 				'type' => 'radio',
 				'items' => array (
@@ -164,9 +164,17 @@ $TCA['tx_icsodappstore_applications'] = array (
 				),
 			)
 		),
+		'label' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_applications.label',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, apikey, fe_cruser_id, title, description, platform, platforms, countcall, maxcall, release_date, publish, logo, screenshot, link, update_date, lock_publication')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, apikey, fe_cruser_id, title, description, platform, platforms, countcall, maxcall, release_date, publish, logo, screenshot, link, update_date, lock_publication,label')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

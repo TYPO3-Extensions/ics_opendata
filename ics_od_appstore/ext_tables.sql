@@ -24,6 +24,7 @@ CREATE TABLE tx_icsodappstore_applications (
 	update_date int(11) DEFAULT '0' NOT NULL,
 	lock_publication int(11) DEFAULT '0' NOT NULL,
 	publish tinyint(4) DEFAULT '0' NOT NULL,
+	label tinyint(4) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

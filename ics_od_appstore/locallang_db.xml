@@ -23,6 +23,7 @@
 			<label index="tx_icsodappstore_applications.lock_publication.I.0">Open</label>
 			<label index="tx_icsodappstore_applications.lock_publication.I.1">Closed</label>
 			<label index="tx_icsodappstore_applications.lock_publication">Lock publication</label>
+			<label index="tx_icsodappstore_applications.label">Label</label>
 			<label index="tx_icsodappstore_logs">Open Data logs</label>
 			<label index="tx_icsodappstore_logs.application">Application</label>
 			<label index="tx_icsodappstore_logs.ip">IP</label>
@@ -61,6 +62,7 @@
 			<label index="tx_icsodappstore_applications.lock_publication.I.0">Débloquer</label>
 			<label index="tx_icsodappstore_applications.lock_publication.I.1">Bloquer</label>
 			<label index="tx_icsodappstore_applications.lock_publication">Vérrou de publication</label>
+			<label index="tx_icsodappstore_applications.label">Labellisé</label>
 			<label index="tx_icsodappstore_logs">Logs d'Open data</label>
 			<label index="tx_icsodappstore_logs.application">Application</label>
 			<label index="tx_icsodappstore_logs.ip">IP</label>
