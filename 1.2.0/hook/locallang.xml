@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- $Id$ -->
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_icsoddatastore_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="anyUser">Any user is logged.</label>
+			<label index="anyAllowedTiers">Any allowed tiers.</label>
+			<label index="notAllowedEditDataset">You are not allowed to edit dataset.</label>
+			<label index="notAllowedEditDatasetFiles">You are not allowed to edit dataset Files.</label>
+			<label index="action_edit">Edit dataset</label>
+			<label index="action_new">Upload new file</label>
+			<label index="datastore_filemount">DATASTORE filemount</label>
+			<label index="dataset_form_info">Fill form with required entries * and give dataset's tiers.</label>
+			<label index="files_form_info">Fill form with required entries *.</label>
+			<label index="previous">Previous</label>
+			<label index="stat_dl">Stats download</label>
+			<label index="sort_stat_dl">Most downloaded</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="anyUser">Identifiez-vous avant de continuer.</label>
+			<label index="anyAllowedTiers">Aucun tiers autorisé.</label>
+			<label index="notAllowedEditDataset">Vous ne pouvez pas éditer le jeu de données.</label>
+			<label index="notAllowedEditDatasetFiles">Vous ne pouvez pas éditer les fichiers du jeu de données.</label>
+			<label index="action_edit">Editer le jeu de données</label>
+			<label index="action_new">Télécharger un fichier</label>
+			<label index="datastore_filemount">Chemin de stockage</label>
+			<label index="dataset_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *, ainsi qu'en assignant au minimum un tiers au jeu de données.</label>
+			<label index="files_form_info">Veuillez remplir le formulaire en complétant les champs obligatoires *.</label>
+			<label index="previous">Retour</label>
+			<label index="stat_dl">Téléchargements</label>
+			<label index="sort_stat_dl">Popularité</label>
+		</languageKey>
+	</data>
+</T3locallang>

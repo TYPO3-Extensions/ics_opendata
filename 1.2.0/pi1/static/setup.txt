@@ -1,0 +1,380 @@
+# $Id$
+
+plugin.tx_icsoddatastore_pi1{
+	templateFile = {$config.tx_icsoddatastore_pi1.templateFile}
+	fileFormatPictoMaxW = {$config.tx_icsoddatastore_pi1.fileFormatPictoMaxW}
+	fileFormatPictoMaxH = {$config.tx_icsoddatastore_pi1.fileFormatPictoMaxH}
+	nbFileGroupByPage = {$config.tx_icsoddatastore_pi1.nbFileGroupByPage}
+	singlePid = {$config.tx_icsoddatastore_pi1.singlePid}
+
+	#Link to file
+	datasetFile {
+		cObject = IMAGE
+		cObject {
+			file.import = uploads/tx_icsoddatastore/
+			file.import.field = picto
+			file.width < fileFormatPictoMaxW
+		}
+		typolink {
+			parameter.cObject = USER
+			parameter.cObject.userFunc = tx_icsoddatastore_makelink->main
+		}
+	}
+	
+	# File type title for marker ###SECTION_NAME###
+	dataset.fileSectionTitle.field = name
+	
+	displayList {
+		fields = {$config.tx_icsoddatastore_pi1.displayList.fields}
+		fileField = {$config.tx_icsoddatastore_pi1.displayList.fileField}
+		
+		title_stdWrap.stdWrap {
+			wrap = <h3>|</h3>
+		}
+		
+		description_stdWrap.stdWrap {
+			br = 1
+			wrap = <p class="description">|</p>
+		}
+		
+		agency_stdWrap.stdWrap {
+			wrap = <p class="listValue agency">|</p>
+		}
+		agency_label_stdWrap.stdWrap {
+			wrap = <p class="label agency">|</p>
+		}
+		
+		publisher_stdWrap.stdWrap {
+			wrap = <p class="listValue publisher">|</p>
+		}
+		publisher_label_stdWrap.stdWrap {
+			wrap = <p class="label publisher">|</p>
+		}
+		
+		crdate_stdWrap.stdWrap {
+			wrap = <p class="crdate_date">|</p>
+			strftime = %d %B %Y
+		}
+		
+		update_date_stdWrap.stdWrap {
+			wrap = <p class="update_date">|</p>
+			strftime = %d %B %Y
+		}
+		update_date_label_stdWrap.stdWrap {
+			wrap = <p class="label update_date">|</p>
+		}
+		
+		update_frequency_stdWrap.stdWrap {
+			wrap = <p class="listValue update_frequency">|</p>
+		}
+		update_frequency_label_stdWrap.stdWrap {
+			wrap = <p class="label update_frequency">|</p>
+		}
+		
+		time_period_stdWrap.stdWrap {
+			wrap = <p class="listValue time_period">|</p>
+		}
+		time_period_label_stdWrap.stdWrap {
+			wrap = <p class="label time_period">|</p>
+		}
+		
+		intro_stdWrap.stdWrap {
+			wrap = <p class="label intro">|</p>
+		}
+		
+		formatavaillable_stdWrap.stdWrap {
+			wrap = <p class="label intro">|</p>
+		}
+		
+		contact_stdWrap.stdWrap {
+			wrap = <p class="listValue contact">|</p>
+		}
+		contact_label_stdWrap.stdWrap {
+			wrap = <p class="label contact">|</p>
+		}
+		
+		release_date_stdWrap.stdWrap {
+			wrap = <p class="listValue release_date">|</p>
+			strftime = %d %B %Y
+		}
+		release_date_label_stdWrap.stdWrap {
+			wrap = <p class="label release_date">|</p>
+		}
+		
+		creator_stdWrap.stdWrap {
+			wrap = <p class="listValue creator">|</p>
+		}
+		creator_label_stdWrap.stdWrap {
+			wrap = <p class="label creator">|</p>
+		}
+		
+		manager_stdWrap.stdWrap {
+			wrap = <p class="listValue manager">|</p>
+		}
+		manager_label_stdWrap.stdWrap {
+			wrap = <p class="label manager">|</p>
+		}
+		
+		owner_stdWrap.stdWrap {
+			wrap = <p class="listValue owner">|</p>
+		}
+		owner_label_stdWrap.stdWrap {
+			wrap = <p class="label owner">|</p>
+		}
+		
+		licence_stdWrap.stdWrap {
+			wrap = <p class="listValue owner">|</p>
+		}
+		licence_label_stdWrap.stdWrap {
+			wrap = <p class="label owner">|</p>
+		}
+		
+		tstamp_stdWrap.stdWrap {
+			wrap = <p class="tstamp">|</p>
+			strftime = %d %B %Y
+		}
+		tstamp_label_stdWrap.stdWrap {
+			wrap = <p class="label tstamp">|</p>
+		}
+				
+		# Link to file for data type
+		fileLink = {$config.tx_icsoddatastore_pi1.displayList.fileLink}
+		 
+		# Sort on record's update day
+		sort {
+			tstamp.day = {$config.tx_icsoddatastore_pi1.displayList.sort.tstamp.day}
+			sortImg {
+				inactive = {$config.tx_icsoddatastore_pi1.displayList.sort.sortImg.inactive}
+				asc = {$config.tx_icsoddatastore_pi1.displayList.sort.sortImg.asc}
+				desc = {$config.tx_icsoddatastore_pi1.displayList.sort.sortImg.desc}
+			} 
+		}
+		
+		renderOnlySearchedFileFormats = {$config.tx_icsoddatastore_pi1.displayList.renderOnlySearchedFileFormats}
+		pagebrowse < plugin.tx_pagebrowse_pi1
+		pagebrowse {
+			extraQueryString.cObject = COA
+			extraQueryString.cObject {
+				1 = TEXT
+				1.postUserFunc = tx_icsoddatastore_pi1->getExtraQueryString
+			}
+		}
+	}
+	
+	displaySingle {
+		fields = {$config.tx_icsoddatastore_pi1.displaySingle.fields}
+		fileField = {$config.tx_icsoddatastore_pi1.displaySingle.fileField}
+		
+		title_stdWrap.stdWrap {
+			wrap = <h3>|</h3>
+		}
+		
+		uid_stdWrap.stdWrap {
+			wrap = <p class="value uid">|</p>
+		}
+		uid_label_stdWrap.stdWrap {
+			wrap = <p class="label dui">|</p>
+		}
+		
+		description_stdWrap.stdWrap {
+			wrap = <p class="value description">|</p>
+			br = 1
+		}
+		description_label_stdWrap.stdWrap {
+			wrap = <p class="label description">|</p>
+		}
+		
+		technical_data_stdWrap.stdWrap {
+			wrap = <p class="value technical_data">|</p>
+		}
+		technical_data_label_stdWrap.stdWrap {
+			wrap = <p class="label technical_data">|</p>
+		}
+		
+		agency_stdWrap.stdWrap {
+			wrap = <p class="value agency">|</p>
+		}
+		agency_label_stdWrap.stdWrap {
+			wrap = <p class="label agency">|</p>
+		}
+		
+		publisher_stdWrap.stdWrap {
+			wrap = <p class="value publisher">|</p>
+		}
+		publisher_label_stdWrap.stdWrap {
+			wrap = <p class="label publisher">|</p>
+		}
+		
+		update_date_stdWrap.stdWrap {
+			wrap = <p class="value update_date">|</p>
+			strftime = %d %B %Y
+			#if.isTrue.field = update_date
+		}
+		update_date_label_stdWrap.stdWrap {
+			wrap = <p class="label update_date">|</p>
+		}
+		
+		update_frequency_stdWrap.stdWrap {
+			wrap = <p class="value update_frequency">|</p>
+		}
+		update_frequency_label_stdWrap.stdWrap {
+			wrap = <p class="label update_frequency">|</p>
+		}
+		
+		time_period_stdWrap.stdWrap {
+			wrap = <p class="value time_period">|</p>
+		}
+		time_period_label_stdWrap.stdWrap {
+			wrap = <p class="label time_period">|</p>
+		}
+		
+		intro_stdWrap.stdWrap {
+			wrap = <p class="label intro">|</p>
+		}
+
+		other_data_stdWrap.stdWrap {
+			wrap = <p class="label intro">|</p>
+		}
+		
+		formatavaillable_stdWrap.stdWrap {
+			wrap = <p class="label intro">|</p>
+		}
+		
+		contact_stdWrap.stdWrap {
+			wrap = <p class="value contact">|</p>
+		}
+		contact_label_stdWrap.stdWrap {
+			wrap = <p class="label contact">|</p>
+		}
+		
+		release_date_stdWrap.stdWrap {
+			wrap = <p class="value release_date">|</p>
+			strftime = %d %B %Y
+		}
+		release_date_label_stdWrap.stdWrap {
+			wrap = <p class="label release_date">|</p>
+		}
+		
+		creator_stdWrap.stdWrap {
+			wrap = <p class="value creator">|</p>
+		}
+		creator_label_stdWrap.stdWrap {
+			wrap = <p class="label creator">|</p>
+		}
+		
+		manager_stdWrap.stdWrap {
+			wrap = <p class="value manager">|</p>
+		}
+		manager_label_stdWrap.stdWrap {
+			wrap = <p class="label manager">|</p>
+		}
+		
+		owner_stdWrap.stdWrap {
+			wrap = <p class="value owner">|</p>
+		}
+		owner_label_stdWrap.stdWrap {
+			wrap = <p class="label owner">|</p>
+		}
+		
+		licence_stdWrap.stdWrap {
+			wrap = <p class="value owner">|</p>
+		}
+		licence_label_stdWrap.stdWrap {
+			wrap = <p class="label owner">|</p>
+		}
+	}
+	
+	displaySearch {
+		tiers =
+		formats =
+		licences =
+	}
+	
+	displaySorting {
+		sortNames = update_date,crdate,title,stat_dl,tstamp,release_date
+		class_active {
+			class =
+			class.cObject = COA_INT
+			class.cObject {
+				# Ajoute le tag class="active" au <li>
+				1 = TEXT
+				1.value = active
+				1.if.value.field = sortName
+				1.if.equals.field = active
+			
+				# Ajoute le tag class="sorting" au <li>
+				2 = TEXT
+				2.if < .1.if
+				2.if.negate = 1
+				2.value = sorting
+			}
+		}
+		update_date.cObject = TEXT
+		update_date.cObject {
+			value = Date de mise à jour
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=update_date&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}
+		crdate.cObject = TEXT
+		crdate.cObject {
+			value = Date de mise en ligne
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=crdate&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}
+		title.cObject = TEXT
+		title.cObject {
+			value = Alphabétique
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=title&tx_icsoddatastore_pi1[sort][order]=ASC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}
+		stat_dl.cObject = TEXT
+		stat_dl.cObject {
+			value = Popularité
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=stat_dl&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
+		tstamp.cObject = TEXT
+		tstamp.cObject {
+			value = Date de modification
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=tstamp&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
+		release_date.cObject = TEXT
+		release_date.cObject {
+			value = Date de publication
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icsoddatastore_pi1[sort][column]=release_date&tx_icsoddatastore_pi1[sort][order]=DESC
+			}
+			outerWrap = <li >|</li>
+			outerWrap.addParams < plugin.tx_icsoddatastore_pi1.displaySorting.class_active
+		}	
+	}	
+}
+
+
+# Comments
+plugin.tx_comments_pi1.prefixToTableMap.tx_icsoddatastore_pi1 = tx_icsoddatastore_filegroups
+plugin.tx_comments_pi1.showUidMap.tx_icsoddatastore_pi1 = uid
+# Ratings
+plugin.tx_icsoddatastore_pi1.ratings = 1

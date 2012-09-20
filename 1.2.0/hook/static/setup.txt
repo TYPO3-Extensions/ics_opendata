@@ -1,0 +1,192 @@
+plugin.tx_icstcafeadmin_pi1 {
+	_LOCAL_LANG {
+		fr {
+			deleted_record = Le jeux de données "%2$s" a été supprimé.
+			hidden_record = Le jeux de données "%2$s" a été caché.
+			shown_record = Le jeux de données "%2$s" est visible.
+		}
+	}
+	
+	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin.html
+	table {
+		showHidden = 0
+	}
+	
+	renderOptions {
+		backlink {
+			cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:previous
+		}
+		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
+		new.typolink.additionalParams.cObject.20 >
+		optionList {
+			edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			edit.typolink.additionalParams.cObject.20 >
+			single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			single.typolink.additionalParams.cObject.20 >
+			delete {
+				addParams {
+					onclick.cObject.10.override = if (confirm('Etes-vous sûr de vouloir supprimer le jeu de données {field:label} '))
+				}
+			}
+		}
+		# Render dataset option list on single view
+		singleDatasetOptionList {
+			edit < plugin.tx_icstcafeadmin_pi1.renderOptions.optionList.edit
+			edit{
+				cObject.data >
+				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_edit
+				outerWrap = <p class="dataset_menu">|</p>
+			}
+			new < plugin.tx_icstcafeadmin_pi1.renderOptions.new
+			new {
+				cObject.data >
+				cObject.data = LLL:EXT:ics_od_datastore/hook/locallang.xml:action_new
+				typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[mode]=NEW&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[newUid]={field:newId}&tx_icstcafeadmin_pi1[dataset]={field:dataset}
+				outerWrap = <p class="dataset_menu">|</p>
+			}
+		}
+	}
+
+	renderForm {
+		tx_icsoddatastore_files {
+			file.cObject = TEXT
+			file.cObject {
+				cObject = CASE
+				cObject {
+					key.field = record_type
+					1 = COA_INT
+					1 {
+						10 = TEXT
+						10 {
+							field = filemounts
+							addParams.style = display: none
+							addParams.id = tx_icsoddatastore_files_filemounts
+						}
+						20 = TEXT
+						20 {
+							field = file
+							addParams.style = display: none
+							addParams.id = tx_icsoddatastore_files_file
+						}
+					}
+					default = COA_INT
+					default {
+						10 = TEXT
+						10 {
+							field = filemounts
+							addParams.id = tx_icsoddatastore_files_filemounts
+						}
+						20 = TEXT
+						20 {
+							field = file
+							addParams.id = tx_icsoddatastore_files_file
+						}
+					}
+				}
+			}
+			url.cObject = TEXT
+			url.cObject {
+				cObject = CASE
+				cObject {
+					key.field = record_type
+					1 = TEXT
+					1 {
+						field = url
+						addParams.id = tx_icsoddatastore_files_url
+					}
+					default = TEXT
+					default {
+						field = url
+						addParams.style = display: none
+						addParams.id = tx_icsoddatastore_files_url
+					}
+				}
+			}
+			record_type = TEXT
+			record_type {
+				addParams.onchange = if(this.selectedIndex==0) { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'block'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'none'; } else { document.getElementById('tx_icsoddatastore_files_filemounts').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_file').style.display = 'none'; document.getElementById('tx_icsoddatastore_files_url').style.display = 'block';}
+				addParams._offset = 4
+			}
+			filegroup = TEXT
+			filegroup {
+				wrap = <input type="hidden" id="filegroup" name="tx_icstcafeadmin_pi1[filegroup]" value="|">
+			}
+			# datastore_filemount can be configured like renderConf.table.field.viewForm
+			datastore_filemount =
+		}
+	}
+
+	renderConf {
+		tx_icsoddatastore_files.url {
+			viewList {
+				setContentToCurrent = 1
+				typolink {
+					parameter.current = 1
+					extTarget = _blank
+				}
+			}
+		}
+		tx_icsoddatastore_files.file {
+			viewList {
+				setContentToCurrent = 1
+				typolink {
+					parameter.current = 1
+					fileTarget = _blank
+				}
+				label.stdWrap.wrap = |/Url
+			}
+			viewForm {
+				label.stdWrap.noTrimWrap = || *|
+			}
+		}
+	}
+}
+
+plugin.tx_icstcafeadmin_pi1.controlEntries.tx_icsoddatastore_files.file.eval = filemount
+
+# TS configuration for tx_icsoddatastore_files list view call from tx_icsoddatastore_filegroups single view
+tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 < plugin.tx_icstcafeadmin_pi1
+tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1 {
+	tx_icsoddatastore_files_list.from_otherTableView = 1
+	userFunc = tx_icstcafeadmin_pi1->user_TCAFEAdmin
+	pidStorages = 
+
+	_LOCAL_LANG {
+		fr {
+			deleted_record = Le fichier "%2$s" a été supprimé.
+			hidden_record = Le fichier "%2$s" a été caché.
+			shown_record = Le fichier "%2$s" est visible.
+		}
+	}
+
+	view.modes = LIST
+	table {
+		tablename = tx_icsoddatastore_files
+		fields = record_type,file,type,format,hidden
+	}
+
+	template = typo3conf/ext/ics_od_datastore/res/template_TCAFE_Admin_files.html
+	renderOptions {
+		new.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[newUid]={field:newId}
+		new.typolink.additionalParams.cObject.20 >
+		optionList {
+			edit.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			edit.typolink.additionalParams.cObject.20 >
+			single.typolink.additionalParams.cObject.10.value = &tx_icstcafeadmin_pi1[showUid]={field:id}
+			single.typolink.additionalParams.cObject.20 >
+			delete {
+				addParams {
+					onclick.cObject {
+						10.override = if (confirm('Etes-vous sûr de vouloir supprimer la donnée {field:label} '))
+						30.override = javascript:document.location.href='index.php?id={tsfe:id}&tx_icstcafeadmin_pi1[table]={field:table}&tx_icstcafeadmin_pi1[showUid]={field:id}&tx_icstcafeadmin_pi1[mode]=DELETE&tx_icstcafeadmin_pi1[criteria][showUid]={field:crit_showUid}';
+					}
+				}
+			}
+		}
+	}
+}
+
+[globalVar = GP:tx_icstcafeadmin_pi1|table = tx_icsoddatastore_files]
+plugin.tx_icstcafeadmin_pi1 {
+	_LOCAL_LANG < tx_icsoddatastore_files.config.tx_icstcafeadmin_pi1._LOCAL_LANG
+}
