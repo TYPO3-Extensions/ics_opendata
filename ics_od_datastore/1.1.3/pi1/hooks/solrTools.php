@@ -83,8 +83,16 @@ class SolrTools {
 		$query_response = $solrClient->query($query);
 		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_OBJ);
 		$response = $query_response->getResponse();
-		foreach ($response[moreLikeThis] as $value)
-			$docsArray = $value[docs];
+		foreach ($response['moreLikeThis'] as $value)
+		{
+			foreach ($value['docs'] as $doc)
+			{
+				if($doc['deleted'] === 0 && $doc['hidden'] === 0)
+				{
+					$docsArray[] =  $doc;
+				}
+			}
+		}
 		return $docsArray;
 	}
 	
