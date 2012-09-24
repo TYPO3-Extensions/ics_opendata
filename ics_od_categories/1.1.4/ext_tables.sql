@@ -10,11 +10,13 @@ CREATE TABLE tx_icsodcategories_categories (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	name tinytext,
+	identifier varchar(31) DEFAULT '' NOT NULL,
 	description text,
 	parent int(11) DEFAULT '0' NOT NULL,
 	relation int(11) DEFAULT '0' NOT NULL,
 	picto text,
 	
+	UNIQUE (identifier),
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );

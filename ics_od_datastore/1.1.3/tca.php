@@ -7,7 +7,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_filegroups']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,title,description,technical_data,files,agency,contact,licence,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display'
+        'showRecordFieldList' => 'hidden,title,identifier,description,technical_data,files,agency,contact,licence,theme_inspire,creation_date,release_date,update_date,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display,updateobject'
     ),
 	'feInterface' => $TCA['tx_icsoddatastore_filegroups']['feInterface'],
 	'columns' => array (
@@ -25,6 +25,15 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '40',	
+				'eval' => 'required,trim',
+			)
+		),
+		'identifier' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.identifier',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '31',	
 				'eval' => 'required,trim',
 			)
 		),
@@ -190,6 +199,66 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
 					),
 				),
+			)
+		),
+		'theme_inspire' => array (
+				'exclude' => 0,
+				'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.theme_inspire',
+				'config' => array (
+						'type' => 'select',
+						'items' => array (
+								array('',0),
+						),
+						'foreign_table' => 'tx_icsoddatastore_themeinspire',
+						'foreign_table_where' => 'ORDER BY tx_icsoddatastore_themeinspire.uid',
+						'size' => 1,
+						'minitems' => 0,
+						'maxitems' => 1,
+						'wizards' => array(
+								'_PADDING'  => 2,
+								'_VERTICAL' => 1,
+								'add' => array(
+										'type'   => 'script',
+										'title'  => 'Create new record',
+										'icon'   => 'add.gif',
+										'params' => array(
+												'table'    => 'tx_icsoddatastore_themeinspire',
+												'pid'      => '###CURRENT_PID###',
+												'setValue' => 'prepend'
+										),
+										'script' => 'wizard_add.php',
+								),
+								'list' => array(
+										'type'   => 'script',
+										'title'  => 'List',
+										'icon'   => 'list.gif',
+										'params' => array(
+												'table' => 'tx_icsoddatastore_themeinspire',
+												'pid'   => '###CURRENT_PID###',
+										),
+										'script' => 'wizard_list.php',
+								),
+								'edit' => array(
+										'type'                     => 'popup',
+										'title'                    => 'Edit',
+										'script'                   => 'wizard_edit.php',
+										'popup_onlyOpenIfSelected' => 1,
+										'icon'                     => 'edit2.gif',
+										'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+								),
+						),
+				)
+		),
+		'creation_date' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.creation_date',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0'
 			)
 		),
 		'release_date' => array (		
@@ -537,7 +606,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3,technical_data, files, agency, contact, licence, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references, taxonomy, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display, html_from_csv_display')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, identifier, description;;;;3-3-3,technical_data, files, agency, contact, licence, theme_inspire, creation_date, release_date, update_date, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references, taxonomy, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display, html_from_csv_display, updateobject')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -549,7 +618,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 $TCA['tx_icsoddatastore_fileformats'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_fileformats']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,name,description,mimetype,extension,searchable,picto'
+		'showRecordFieldList' => 'hidden,name,identifier,description,mimetype,extension,searchable,picto'
 	),
 	'feInterface' => $TCA['tx_icsoddatastore_fileformats']['feInterface'],
 	'columns' => array (
@@ -569,6 +638,15 @@ $TCA['tx_icsoddatastore_fileformats'] = array (
 				'size' => '30',    
 				'eval' => 'required,trim',
 			)
+		),
+		'identifier' => array (
+				'exclude' => 0,
+				'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_fileformats.identifier',
+				'config' => array (
+						'type' => 'input',
+						'size' => '30',
+						'eval' => 'required,trim',
+				)
 		),
 		'description' => array (        
 			'exclude' => 0,        
@@ -624,7 +702,7 @@ $TCA['tx_icsoddatastore_fileformats'] = array (
         ),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, mimetype, extension, searchable, picto')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, identifier, description, mimetype, extension, searchable, picto')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -637,7 +715,7 @@ $TCA['tx_icsoddatastore_fileformats'] = array (
 $TCA['tx_icsoddatastore_licences'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_licences']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,name,link,logo'
+		'showRecordFieldList' => 'hidden,name,identifier,link,logo'
 	),
 	'feInterface' => $TCA['tx_icsoddatastore_licences']['feInterface'],
 	'columns' => array (
@@ -652,6 +730,15 @@ $TCA['tx_icsoddatastore_licences'] = array (
 		'name' => array (		
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_licences.name',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',	
+				'eval' => 'required,trim',
+			)
+		),
+		'identifier' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_licences.identifier',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
@@ -678,7 +765,49 @@ $TCA['tx_icsoddatastore_licences'] = array (
         ),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, name,link,logo')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, name,identifier,link,logo')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => '')
+	)
+);
+
+$TCA['tx_icsoddatastore_themeinspire'] = array (
+	'ctrl' => $TCA['tx_icsoddatastore_themeinspire']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'hidden,name,identifier'
+	),
+	'feInterface' => $TCA['tx_icsoddatastore_licences']['feInterface'],
+	'columns' => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'name' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_themeinspire.name',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '40',	
+				'eval' => 'required,trim',
+			)
+		),
+		'identifier' => array (
+				'exclude' => 0,
+				'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_themeinspire.identifier',
+				'config' => array (
+						'type' => 'input',
+						'size' => '30',
+						'eval' => 'required,trim',
+				)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, name,identifier')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -1037,4 +1166,100 @@ $TCA['tx_icsoddatastore_filetypes'] = array (
         '1' => array('showitem' => '')
     )
 );
+
+$TCA['tx_icsoddatastore_updateobject'] = array (
+		'ctrl' => $TCA['tx_icsoddatastore_updateobject']['ctrl'],
+		'interface' => array (
+				'showRecordFieldList' => 'hidden','title', 'update_date', 'modification', 'description'
+		),
+		'feInterface' => $TCA['tx_icsoddatastore_updateobject']['feInterface'],
+		'columns' => array (
+				'hidden' => array (
+						'exclude' => 1,
+						'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+						'config'  => array (
+								'type'    => 'check',
+								'default' => '0'
+						)
+				),
+				'title' => array(
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_updateobject.title',
+						'config' => array (
+							'type' => 'input',
+							'size' => '30', 
+							'eval' => 'trim',
+						)
+				),
+				'update_date' => array (
+						'exclude' => 0,		
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_updateobject.update_date',		
+						'config' => array (
+							'type'     => 'input',
+							'size'     => '8',
+							'max'      => '20',
+							'eval'     => 'date',
+							'checkbox' => '0',
+							'default'  => '0'
+						),
+				),
+				'modification' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_updateobject.modification',
+						'config' => array (
+								'type' => 'input',
+								'cols' => '100',
+								'rows' => '1',
+								'eval' => 'trim',
+						)
+				),
+				'description' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_updateobject.description',
+						'config' => array(
+								'type' => 'text',
+								'default' => '',
+								'cols' => '40',
+								'rows' => '5',
+						),
+				),
+				'filegroup' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_updateobject.filegroup',
+						'config' => array (
+								'type' => 'select',
+								'items' => array (
+										array('',0),
+								),
+								'foreign_table' => 'tx_icsoddatastore_filegroups',
+								'foreign_table_where' => 'ORDER BY tx_icsoddatastore_filegroups.uid',
+								'size' => 1,
+								'minitems' => 0,
+								'maxitems' => 1,
+								"MM" => "tx_icsoddatastore_updateobject_filegroup_mm",
+								'wizards' => array(
+										'_PADDING'  => 2,
+										'_VERTICAL' => 1,
+										'list' => array(
+												'type'   => 'script',
+												'title'  => 'List',
+												'icon'   => 'list.gif',
+												'params' => array(
+														'table' => 'tx_icsoddatastore_filegroups',
+														'pid'   => '###CURRENT_PID###',
+												),
+												'script' => 'wizard_list.php',
+										),
+								),
+						)
+				),
+		),
+		'types' => array (
+				'0' => array('showitem' => 'hidden;;;;1-1-1, title, update_date, modification, description'),
+		),
+		'palettes' => array (
+				'1' => array('showitem' => '')
+		)
+);
+
 ?>

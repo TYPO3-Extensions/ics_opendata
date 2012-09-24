@@ -8,6 +8,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Datastore group files</label>
+			<label index="identifier">Identifier</label>
 			<label index="new_filegroup">New filegroup</label>
 			<label index="error_nofilegroup">The selected filegroup is not a valid filegroup. Please, select one is the left pane.</label>
 			<label index="info_selectfilegroup">Please, select a filegroup in the left pane.</label>
@@ -19,6 +20,8 @@
 			<label index="tx_icsodcategories_categories">Category :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
+			<label index="theme_inspire">theme_inspire :</label>
+			<label index="creation_date">Creation date :</label>
 			<label index="release_date">Release date :</label>
 			<label index="update_date">Update :</label>
 			<label index="time_period">Time period :</label>
@@ -37,6 +40,12 @@
 			<label index="illustration">Illustration: </label>
 			<label index="has_dynamic_display">has dynamic display: </label>
 			<label index="param_dynamic_display">param for dynamic display: </label>
+			<label index="html_from_csv_display">html_from_csv_display: </label>
+			<label index="updateobject">Update history: </label>
+			<label index="updateobject.title">Title: </label>
+			<label index="updateobject.update_date">Date</label>
+			<label index="updateobject.modification">Modification</label>
+			<label index="updateobject.description">Description</label>
 			<label index="tx_smileicsoddatastore_highlight">highlighted filegroup: </label>
 			<label index="newFile">New file</label>
 			<label index="editFile">Edit filegroup</label>
@@ -48,6 +57,7 @@
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="title">Entrepôt de fichiers</label>
+			<label index="identifier">Identifiant</label>
 			<label index="new_filegroup">Nouvelle fiche</label>
 			<label index="error_nofilegroup">La fiche sélectionné n'est pas valide. Veuillez en sélectioner une dans la panneau de gauche.</label>
 			<label index="info_selectfilegroup">Veuillez sélectionner une fiche dans le panneau de gauche.</label>
@@ -59,6 +69,8 @@
 			<label index="tx_icsodcategories_categories">Thématique(s) :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
+			<label index="theme_inspire">Theme Inspire :</label>
+			<label index="creation_date">Date de création :</label>
 			<label index="release_date">Mise à disposition :</label>
 			<label index="update_date">Mise à jour :</label>
 			<label index="time_period">Période de validité :</label>
@@ -77,6 +89,12 @@
 			<label index="illustration">Illustration : </label>
 			<label index="has_dynamic_display">A une vue dynamique : </label>
 			<label index="param_dynamic_display">Paramètres pour la vue dynamique : </label>
+			<label index="html_from_csv_display">Tableau html des données : </label>
+			<label index="updateobject">Historique des mises à jour : </label>
+			<label index="updateobject.title">Titre</label>
+			<label index="updateobject.update_date">Date</label>
+			<label index="updateobject.modification">Modification</label>
+			<label index="updateobject.description">Description</label>
 			<label index="tx_smileicsoddatastore_highlight">Jeu de données mis en avant : </label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>

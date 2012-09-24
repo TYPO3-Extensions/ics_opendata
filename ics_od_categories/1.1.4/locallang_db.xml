@@ -8,17 +8,20 @@
 		<languageKey index="default" type="array">
 			<label index="tx_icsodcategories_categories">Categories data</label>
 			<label index="tx_icsodcategories_categories.name">Name</label>
+			<label index="tx_icsodcategories_categories.identifier">Identifier</label>
 			<label index="tx_icsodcategories_categories.description">Description</label>
 			<label index="tx_icsodcategories_categories.parent">Parent category</label>
 			<label index="tx_icsodcategories_categories.relation">Relation</label>
 			<label index="tx_icsodcategories_categories.relation_opposite">Categories</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
-			<label index="tx_icsodcategories_categories">Catégories des données</label>
+			<label index="tx_icsodcategories_categories">Thème des données</label>
 			<label index="tx_icsodcategories_categories.name">Nom</label>
+			<label index="tx_icsodcategories_categories.identifier">Identifiant</label>
 			<label index="tx_icsodcategories_categories.description">Description</label>
+			<label index="tx_icsodcategories_categories.parent">Thème parent</label>
 			<label index="tx_icsodcategories_categories.relation">Relation</label>
-			<label index="tx_icsodcategories_categories.relation_opposite">Catégories</label>
+			<label index="tx_icsodcategories_categories.relation_opposite">Thèmes</label>
 		</languageKey>
 	</data>
 </T3locallang>

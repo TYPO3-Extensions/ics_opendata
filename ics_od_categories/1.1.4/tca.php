@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsodcategories_categories'] = array (
 	'ctrl' => $TCA['tx_icsodcategories_categories']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,name,description,parent'
+		'showRecordFieldList' => 'hidden,name,identifier,description,parent'
 	),
 	'feInterface' => $TCA['tx_icsodcategories_categories']['feInterface'],
 	'columns' => array (
@@ -24,6 +24,15 @@ $TCA['tx_icsodcategories_categories'] = array (
 				'size' => '30',	
 				'eval' => 'required',
 			)
+		),
+		'identifier' => array (
+				'exclude' => 0,
+				'label' => 'LLL:EXT:ics_od_categories/locallang_db.xml:tx_icsodcategories_categories.identifier',
+				'config' => array (
+						'type' => 'input',
+						'size' => '30',
+						'eval' => 'required,trim',
+				)
 		),
 		'description' => array (		
 			'exclude' => 0,		
@@ -78,7 +87,7 @@ $TCA['tx_icsodcategories_categories'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, picto, parent,relation')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, name, identifier, description, picto, parent,relation')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
