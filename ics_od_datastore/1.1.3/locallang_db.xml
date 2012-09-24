@@ -51,6 +51,7 @@
 			<label index="tx_icsoddatastore_licences.link">Link to licence</label>
 			<label index="tx_icsoddatastore_licences.logo">Link to licence logo</label>
 			<label index="tx_icsoddatastore_themeinspire">Themeinspire</label>
+			<label index="tx_icsoddatastore_themeinspire.name">Theme inspire name</label>
 			<label index="tx_icsoddatastore_themeinspire.identifier">Identifier</label>
 			<label index="tx_icsoddatastore_downloads">Download log entry (opendata)</label>
 			<label index="tx_icsoddatastore_downloads.filegroup">File group</label>
@@ -139,6 +140,7 @@
 			<label index="tx_icsoddatastore_licences.link">Lien vers la licence</label>
 			<label index="tx_icsoddatastore_licences.logo">Lien vers le logo de la licence</label>
 			<label index="tx_icsoddatastore_themeinspire">Theme Inspire</label>
+			<label index="tx_icsoddatastore_themeinspire.name">Nom du thème inspire</label>
 			<label index="tx_icsoddatastore_themeinspire.identifier">Identifiant</label>
 			<label index="tx_icsoddatastore_downloads">Logs de téléchargement des fichiers</label>
 			<label index="tx_icsoddatastore_downloads.filegroup">Groupe de fichiers</label>
