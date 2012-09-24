@@ -54,7 +54,7 @@ class SolrTools {
 				'port'     => SOLR_SERVER_PORT,
 		);
 
-		return new SolrClient($options);;
+		return new SolrClient($options);
 	}
 	
 	public static function getOldDoc($oldDocId, $solrClient)
