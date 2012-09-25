@@ -468,20 +468,29 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		if ( isset ($get_param_sort_search) && $get_param_sort_search === date)
 		{
 			$markers['###PERTINENCE_CHECK###'] = '';
+			$markers['###PERTINENCE_CURRENT_LI###'] = '';
 // 			$markers['###RANK_CHECK###'] = '';
+// 			$markers['###RANK_CURRENT_LI###'] = '';
 			$markers['###DATE_CHECK###'] = 'checked="checked"';
+			$markers['###DATE_CURRENT_LI###'] = 'class="current"';
 		}
 // 		elseif ( isset ($get_param_sort_search) && $get_param_sort_search === rank)
 // 		{
 // 			$markers['###PERTINENCE_CHECK###'] = '';
+// 			$markers['###PERTINENCE_CURRENT_LI###'] = '';
 // 			$markers['###RANK_CHECK###'] = 'checked="checked"';
+// 			$markers['###RANK_CURRENT_LI###'] = 'class="current"';
 // 			$markers['###DATE_CHECK###'] = '';
+// 			$markers['###DATE_CURRENT_LI###'] = '';
 // 		}
 		else
 		{
 			$markers['###PERTINENCE_CHECK###'] = 'checked="checked"';
+			$markers['###PERTINENCE_CURRENT_LI###'] = 'class="current"';
 // 			$markers['###RANK_CHECK###'] = '';
+// 			$markers['###RANK_CURRENT_LI###'] = '';
 			$markers['###DATE_CHECK###'] = '';
+			$markers['###DATE_CURRENT_LI###'] = '';
 		}
 		
 		$currentGetParam =t3lib_div::_GP('tx_icsoddatastore_pi1');
@@ -695,8 +704,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$i = 0;
 				foreach ($facet as $facet_value => $facet_count)
 				{
-					$temp_facet = '<input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']"' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . $facet_value . ' (' . $facet_count .')' . '</label></span><br />';
+					$temp_facet = '<span><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']"' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . $facet_value . ' (' . $facet_count .')' . '</label></span></span><br />';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
