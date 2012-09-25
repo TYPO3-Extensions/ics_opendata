@@ -694,7 +694,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				foreach ($facet as $facet_value => $facet_count)
 				{
 					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']" ' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';;
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span>' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span><br /></div>';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span>' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span></div>';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
@@ -705,7 +705,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				foreach ($facet as $facet_value => $facet_count)
 				{
 					$temp_facet = '<span><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']"' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . $facet_value . ' (' . $facet_count .')' . '</label></span></span><br />';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . $facet_value . ' (' . $facet_count .')' . '</label></span></span>';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
