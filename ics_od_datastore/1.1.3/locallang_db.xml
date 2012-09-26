@@ -19,6 +19,8 @@
 			<label index="tx_icsoddatastore_filegroups.creation_date">Date created</label>
 			<label index="tx_icsoddatastore_filegroups.release_date">Date released</label>
 			<label index="tx_icsoddatastore_filegroups.update_date">Date updated</label>
+			<label index="tx_icsoddatastore_filegroups.update_modification">Last udate modification</label>
+			<label index="tx_icsoddatastore_filegroups.update_description">Last udate description</label>
 			<label index="tx_icsoddatastore_filegroups.time_period">Time period</label>
 			<label index="tx_icsoddatastore_filegroups.update_frequency">Frequency</label>
 			<label index="tx_icsoddatastore_filegroups.publisher">Publisher</label>
@@ -107,7 +109,9 @@
 			<label index="tx_icsoddatastore_filegroups.theme_inspire">Theme Inspire</label>
 			<label index="tx_icsoddatastore_filegroups.creation_date">Date de creation</label>
 			<label index="tx_icsoddatastore_filegroups.release_date">Date de publication</label>
-			<label index="tx_icsoddatastore_filegroups.update_date">Date de mise à jour</label>
+			<label index="tx_icsoddatastore_filegroups.update_date">Date de la dernière mise à jour</label>
+			<label index="tx_icsoddatastore_filegroups.update_modification">Modification de la dernière mise à jour</label>
+			<label index="tx_icsoddatastore_filegroups.update_description">Description de la dernière mise à jour</label>
 			<label index="tx_icsoddatastore_filegroups.time_period">Couverture temporelle</label>
 			<label index="tx_icsoddatastore_filegroups.update_frequency">Fréquence de mise à jour</label>
 			<label index="tx_icsoddatastore_filegroups.publisher">Diffuseur</label>

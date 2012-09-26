@@ -21,6 +21,8 @@ CREATE TABLE tx_icsoddatastore_filegroups (
 	creation_date int(11) DEFAULT '0' NOT NULL,
 	release_date int(11) DEFAULT '0' NOT NULL,
 	update_date int(11) DEFAULT '0' NOT NULL,
+	update_modification varchar(255) DEFAULT '' NOT NULL,
+	update_description varchar(255) DEFAULT '' NOT NULL,
 	time_period varchar(255) DEFAULT '' NOT NULL,
 	update_frequency varchar(255) DEFAULT '' NOT NULL,
     publisher int(11) DEFAULT '0' NOT NULL,

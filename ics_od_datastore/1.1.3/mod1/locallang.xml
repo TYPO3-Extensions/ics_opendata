@@ -72,7 +72,9 @@
 			<label index="theme_inspire">Theme Inspire :</label>
 			<label index="creation_date">Date de création :</label>
 			<label index="release_date">Mise à disposition :</label>
-			<label index="update_date">Mise à jour :</label>
+			<label index="update_date">Date de la mise à jour :</label>
+			<label index="update_modification">Modification de la mise à jour : </label>
+			<label index="update_description">Description de la mise à jour : </label>
 			<label index="time_period">Période de validité :</label>
 			<label index="update_frequency">Fréquence de mise à jour :</label>
 			<label index="publisher">Diffuseur :</label>
