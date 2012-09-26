@@ -400,7 +400,7 @@ plugin.tx_icsoddatastore_pi1{
 			wrap = |
 		}
 		dynamic_display_link_stdWrap.stdWrap {
-      		wrap = <div class="grey_background"><div class="dynamic_display_in"><span class='dynamic_display_picto'><i class="icon-eye-open"></i></span><span class="dynamic_display_link"><span class="green_circle"></span> | </span><span class="end_dynamic_display_block">&nbsp;</span></div></div>
+      		wrap = <div class="background"><div class="dynamic_display_in"><span class='dynamic_display_picto'><i class="icon-eye-open"></i></span><span class="dynamic_display_link"><span class="green_circle"></span> | </span><span class="end_dynamic_display_block">&nbsp;</span></div></div>
     	}
 	    categories_stdWrap.stdWrap {
 	      wrap = |
