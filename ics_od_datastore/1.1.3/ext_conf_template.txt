@@ -1,2 +1,4 @@
 # cat=Basic//a; type=int; label=Stats method: Activate the stats download. Methods : 1 => method 302, 2 => method readfile, other => no stats
 stats=0
+# cat=Basic//a; type=input; label=Solr hostname: Default : localhost.
+solr_hostname=localhost

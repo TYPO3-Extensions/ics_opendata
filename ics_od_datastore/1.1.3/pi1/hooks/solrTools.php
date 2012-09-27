@@ -38,8 +38,15 @@ class SolrTools {
 	public static function initSolrClient()
 	{
 		/* Nom de domaine du serveur Solr */
-		define('SOLR_SERVER_HOSTNAME', 'localhost');
-			
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
+		if(isset($extConf['solr_hostname'])) 
+		{
+			define('SOLR_SERVER_HOSTNAME', $extConf['solr_hostname']);
+		}
+		else {
+			define('SOLR_SERVER_HOSTNAME', 'localhost');
+		}
+		
 		/* Si l'on doit exécuter en mode sécurisé ou non */
 		define('SOLR_SECURE', false);
 			
