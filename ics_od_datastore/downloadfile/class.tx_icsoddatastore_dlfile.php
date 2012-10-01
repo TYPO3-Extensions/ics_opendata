@@ -87,6 +87,7 @@ class tx_icsoddatastore_dlfile {
 			header('Content-Length: ' . filesize($filePath));
 
 			header('Content-Disposition: inline; filename="' .  basename($filePath) . '"');
+			header('Content-Disposition: attachment; filename="' .  basename($filePath) . '"');
 
 			readfile($filePath);
 			
