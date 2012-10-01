@@ -173,7 +173,7 @@
 			<label index="solr_categories">Thématiques : </label>
 			<label index="solr_manager">Gestionnaire : </label>
 			<label index="solr_owner">Propriétaire : </label>
-			<label index="solr_published">Publié le : </label>
+			<label index="solr_published">Publié le </label>
 			<label index="solr_go_to_details">Go to details card</label>
 			<label index="solr_visualize">Visualiser le jeu de données</label>
 			<label index="solr_to">à</label>

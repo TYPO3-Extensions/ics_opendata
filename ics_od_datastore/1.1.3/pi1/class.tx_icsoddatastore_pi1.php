@@ -604,10 +604,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 				$markers = array(
 					'###RANK###' => '',
-					'###DATE_LABEL###' => $this->pi_getLL('Published:', 'Publié le : ', true),
-					'###CATEGORIE_LABEL###' => $this->pi_getLL('Categories:', 'Thématiques : ', true),
-					'###MANAGER_LABEL###' => $this->pi_getLL('Manager:', 'Gestionnaire : ', true),
-					'###OWNER_LABEL###' => $this->pi_getLL('Owner:', 'Propriétaire : ', true),
+					'###DATE_LABEL###' => $this->pi_getLL('solr_published', 'Publié le ', true),
+					'###CATEGORIE_LABEL###' => $this->pi_getLL('solr_categories', 'Thématiques : ', true),
+					'###MANAGER_LABEL###' => $this->pi_getLL('solr_manager', 'Gestionnaire : ', true),
+					'###OWNER_LABEL###' => $this->pi_getLL('solr_owner', 'Propriétaire : ', true),
 					'###DESCRIPTION###' => $document[description],
 					'###TITLE###' => $document[title],
 					'###CATEGORIE###' => implode(', ',array_slice($document[categories],0)),
@@ -695,7 +695,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				foreach ($facet as $facet_value => $facet_count)
 				{
 					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']" ' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';;
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span>' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span></div>';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span title="' . $file_types[$facet_value][name] . '">' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span></div>';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
