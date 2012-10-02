@@ -186,6 +186,7 @@ plugin.tx_icsoddatastore_pi1{
 		
 		technical_data_stdWrap.stdWrap {
 			wrap = <p class="value technical_data">|</p>
+			br = 1
 		}
 		technical_data_label_stdWrap.stdWrap {
 			wrap = <p class="label technical_data">|</p>
@@ -281,6 +282,19 @@ plugin.tx_icsoddatastore_pi1{
 		}
 		licence_label_stdWrap.stdWrap {
 			wrap = <p class="label owner">|</p>
+		}
+		providerImg {
+			setContentToCurrent = 1
+			split {
+				token = ,
+				cObjNum = 1
+				1.current = 1
+				1.cObject = IMAGE
+				1.cObject {
+					file.import.current = 1
+				}
+				wrap = <div class="picto">|</div>
+			}
 		}
 	}
 	

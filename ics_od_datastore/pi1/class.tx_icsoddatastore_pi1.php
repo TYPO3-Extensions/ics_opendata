@@ -31,32 +31,32 @@
  *
  *   79: class tx_icsoddatastore_pi1 extends tslib_pibase
  *
- *              SECTION: < Default search criteria
+ *              SECTION: < Default search criteria */
  *  105:     function main($content, $conf)
  *  155:     function controlVars(&$content)
  *  169:     function init()
  *  289:     function renderSearch()
  *  343:     function renderSelectedCriteria()
  *  415:     function renderSorting()
- *  442:     function renderFileformatItems($template, $aFileformats)
- *  474:     function renderTiersItems($template, $aTiers)
- *  501:     function renderLicenceItems($template, array $aLicences)
- *  524:     function renderList()
- *  558:     function renderListHeader($template)
- *  589:     function renderListRows($template)
- *  762:     function renderListRow($template, $row)
- *  834:     function renderFiles($view, $filegroup, $template)
- *  926:     function renderSingle($id)
- * 1026:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
- * 1048:     function getFiles_mm($filegroup)
- * 1066:     function getFileSize($file)
- * 1081:     function getFileformats($searchable = false)
- * 1104:     function getFiletypes()
- * 1121:     function getTiersAgencies()
- * 1137:     function getLicences()
- * 1151:     protected function getListGetPageBrowser($numberOfPages)
- * 1174:     function renderRSS($rssLink, $imgSrc)
- * 1191:     function getExtraQueryString()
+ *  451:     function renderFileformatItems($template, $aFileformats)
+ *  483:     function renderTiersItems($template, $aTiers)
+ *  510:     function renderLicenceItems($template, array $aLicences)
+ *  533:     function renderList()
+ *  567:     function renderListHeader($template)
+ *  598:     function renderListRows($template)
+ *  769:     function renderListRow($template, $row)
+ *  841:     function renderFiles($view, $filegroup, $template)
+ *  933:     function renderSingle($id)
+ * 1062:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ * 1084:     function getFiles_mm($filegroup)
+ * 1102:     function getFileSize($file)
+ * 1117:     function getFileformats($searchable = false)
+ * 1140:     function getFiletypes()
+ * 1157:     function getTiersAgencies()
+ * 1173:     function getLicences()
+ * 1187:     protected function getListGetPageBrowser($numberOfPages)
+ * 1210:     function renderRSS($rssLink, $imgSrc)
+ * 1227:     function getExtraQueryString()
  *
  * TOTAL FUNCTIONS: 25
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -599,7 +599,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$queryJoin = '';
 		$whereClause = '';
 		$groupBy = '';
-					
+
 		// Set where clause with junture
 		if (isset($this->list_criteria['keywords']) && !empty($this->list_criteria['keywords'])) {
 			$whereClause .= ' AND (
@@ -669,7 +669,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$columns[] = 'crdate';
 		if ($GLOBALS['TCA'][$this->tables['filegroups']]['ctrl']['tstamp'])
 			$columns[] = 'tstamp';
-		
+
 		$sorting['column'] = $this->conf['sorting.']['name'];
 		$sorting['order'] = $this->conf['sorting.']['order'];
 		if ($this->list_criteria['sort']['column'])
@@ -696,7 +696,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$orderBy = '`' . $this->tables['filegroups'] . '`.`' . $sorting['column'] . '` ' . $order;
 			}
 
-			if ( $sorting['column'] != 'title') 
+			if ( $sorting['column'] != 'title')
 				$orderBy .= ', `' . $this->tables['filegroups'] . '`.`title` ASC';
 		}
 
@@ -931,12 +931,18 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	string		content
 	 */
 	function renderSingle($id) {
+		$tiersIds = array();
+		$tiersFields = array('publisher', 'agency', 'contact', 'creator', 'manager', 'owner');
+
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SINGLE###');
 
 		$filegroups = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'*',
 			'`' . $this->tables['filegroups'] . '`',
-			'`uid` = ' . $id . $this->cObj->enableFields($this->tables['filegroups'])
+			'`uid` = ' . $id . $this->cObj->enableFields($this->tables['filegroups']),
+			'',
+			'',
+			'1'
 		);
 		$filegroup = $filegroups[0];
 
@@ -957,8 +963,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			if (!$filegroup[$field])
 				$tmp_subpart = '';
 
-
 			$template = $this->cObj->substituteSubpart($template, '###SUBPART_'. strtoupper($field) .'###', $tmp_subpart);
+
+			if (in_array($field, $tiersFields) && $filegroup[$field])
+				$tiersIds[] = $filegroup[$field];
 
 			switch($field) {
 				case 'publisher':
@@ -1005,8 +1013,29 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					$markers['###' . strtoupper($field) . '_VALUE###'] = $this->cObj->stdWrap($filegroup[$field], $this->conf['displaySingle.'][$field . '_stdWrap.']);
 			}
 		}
+		// Render files content
 		$filesContent = $this->renderFiles('SINGLE', $id, $this->cObj->getSubpart($template, '###SECTION_FILE###'));
 		$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);
+
+		// Render providers icons
+		$tiersIds = array_unique($tiersIds);
+		$resProvider = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			'uid_local, uid_foreign, fe_users.image as providerImg',
+			'tx_icsoddatastore_tiers',
+			'tx_icsoddatastore_feusers_tiers_mm',
+			'fe_users',
+			' AND uid_local IN(' . implode(',', $tiersIds) . ') AND fe_users.image!=\'\'',
+			'',
+			'tx_icsoddatastore_feusers_tiers_mm.sorting ASC'
+		);
+		$GLOBALS['TSFE']->includeTCA(0);
+		$imagePath = $GLOBALS['TCA']['fe_users']['columns']['image']['config']['uploadfolder'] . '/';
+		$providerImg = array();
+		while ($provider = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resProvider))
+		{
+			$providerImg[] = $imagePath.$provider['providerImg'];
+		}
+		$markers['###PROVIDER_IMG###'] = $this->cObj->stdWrap(implode(',', $providerImg), $this->conf['displaySingle.']['providerImg.']);
 
 		$subpartArray = array();
 		// Hook for add fields markers
