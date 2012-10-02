@@ -1,4 +1,5 @@
 2012-10-02 Tsi YANG <tsi@in-cite.net>
+	* Fix: Comments error code on pi1.
 	* Feature: Added fe_users logo on datastore signle view.
 
 2012-10-01 Tsi YANG <tsi@in-cite.net>

@@ -31,7 +31,7 @@
  *
  *   79: class tx_icsoddatastore_pi1 extends tslib_pibase
  *
- *              SECTION: < Default search criteria */
+ *              SECTION: < Default search criteria
  *  105:     function main($content, $conf)
  *  155:     function controlVars(&$content)
  *  169:     function init()
