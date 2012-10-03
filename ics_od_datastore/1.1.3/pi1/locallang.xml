@@ -92,6 +92,10 @@
 			<label index="solr_facet_files_types_id">File types</label>
 			<label index="solr_facet_manager">Manager</label>
 			<label index="solr_facet_owner">Owner</label>
+			<label index="solr_available_in">Available in</label>
+			<label index="go_to_details_card">Go to details card</label>
+			<label index="go_to_details_card_of_dataset">Go to details card of dataset</label>
+			<label index="visualize_dataset">Visualize dataset </label>
 			
 		</languageKey>
 		<languageKey index="fr" type="array">
@@ -183,6 +187,10 @@
 			<label index="solr_facet_files_types_id">Type de fichiers</label>
 			<label index="solr_facet_manager">Gestionnaire</label>
 			<label index="solr_facet_owner">Propriétaire</label>
+			<label index="solr_available_in">Disponible au format </label>
+			<label index="go_to_details_card">Consulter la fiche détaillée</label>
+			<label index="go_to_details_card_of_dataset">Consulter la fiche détaillée du jeu de données </label>
+			<label index="visualize_dataset">Visualiser le jeu de données </label>
 		</languageKey>
 	</data>
 </T3locallang>

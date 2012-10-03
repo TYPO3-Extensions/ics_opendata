@@ -627,7 +627,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				);
 				
 				$markers['###URL###'] = $url_to_detail_page;
-				$markers['###DETAILS_LINK###'] = '<a href="'.$url_to_detail_page.'">'.$this->pi_getLL('Go to details card', 'Consulter la fiche détaillée', true).'</a>';
+				$markers['###URL_TITLE###'] = $this->pi_getLL('go_to_details_card_of_dataset', 'Consulter la fiche détaillée du jeu de données ', true) . $document[title];
+				$markers['###DETAILS_LINK###'] = '<a href="'.$url_to_detail_page.'" title="' . $this->pi_getLL('go_to_details_card_of_dataset', 'Consulter la fiche détaillée du jeu de données ', true) . $document[title] . '">'.$this->pi_getLL('go_to_details_card', 'Consulter la fiche détaillée', true).'</a>';
 				
 				if (isset($document[html_from_csv]) && $document[html_from_csv])
 				{
@@ -642,7 +643,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 							)
 						)
 					);
-					$markers['###VISUALIZATION###'] = '<div class="background"><span class="green_circle"></span><a href="'.$url_to_visualization_page.'">' . $this->pi_getLL('Visualize', 'Visualiser le jeu de données', true) . '</a></div>';
+					$markers['###VISUALIZATION###'] = '<div class="background"><span class="green_circle"></span><a href="'.$url_to_visualization_page.'" title ="' . $this->pi_getLL('visualize_dataset', 'Visualiser le jeu de données ', true) . $document[title]. '">' . $this->pi_getLL('Visualize', 'Visualiser le jeu de données', true) . '</a></div>';
 				}
 				else
 				{
@@ -695,7 +696,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				foreach ($facet as $facet_value => $facet_count)
 				{
 					$temp_facet = '<div class="facet_element"><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']" ' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';;
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span title="' . $file_types[$facet_value][name] . '">' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span></div>';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '"><span alt = "' . $this->pi_getLL('solr_available_in', 'Disponible au format ', true) . $file_types[$facet_value][name] . '" title="' . $this->pi_getLL('solr_available_in', 'Disponible au format ', true) . $file_types[$facet_value][name] . '">' . $file_types[$facet_value][name] .' (<span>' . $facet_count .'</span>)</span>' . '<img src="' . $this->conf['displaySolr.']['pictoBaseURL'] . $file_types[$facet_value][picto] . '" alt="'. $file_types[$facet_value][name] . '">' . '</label></span></div>';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
