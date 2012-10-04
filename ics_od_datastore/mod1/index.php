@@ -433,6 +433,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		$hiddenFields = array('hidden', 'title', 'files');
 		$beFields = array_diff($beFields, $hiddenFields);
 		
+		// Retrieves licence
 		$licenceValue = '';
 		if(in_array('licence', $beFields) && !empty($this->filegroup['licence'])) {
 			$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -449,6 +450,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['licence'] = $licenceValue;
 		
+		// Retrieves categories
 		$categoriesValue = '';
 		if(in_array('tx_icsodcategories_categories', $beFields) && !empty($this->filegroup['tx_icsodcategories_categories'])) {
 			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -467,6 +469,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['tx_icsodcategories_categories'] = $categoriesValue;
 		
+		// Retrieves agency
 		$agencyValue = '';
 		if(in_array('agency', $beFields) && !empty($this->filegroup['agency'])) {
 			$agency = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -483,6 +486,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['agency'] = $agencyValue;
 		
+		//Retrieves contact
 		$contactValue = '';
 		if(in_array('contact', $beFields) && !empty($this->filegroup['contact'])) {
 			$contact = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -499,6 +503,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['contact'] = $contactValue;
 		
+		//Retrieves publisher
 		$publisherValue = '';
 		if(in_array('publisher', $beFields) && !empty($this->filegroup['publisher'])) {
 			$publisher = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -515,6 +520,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['publisher'] = $publisherValue;
 
+		// Retrieves author
 		$creatorValue = '';
 		if(in_array('creator', $beFields) && !empty($this->filegroup['creator'])) {
 			$creator = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -531,6 +537,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['creator'] = $creatorValue;
 		
+		// Retrieves manager
 		$managerValue = '';
 		if(in_array('manager', $beFields) && !empty($this->filegroup['manager'])) {
 			$manager = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -547,6 +554,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		}
 		$this->filegroup['manager'] = $managerValue;
 		
+		//Retrieves owner
 		$ownerValue = '';
 		if(in_array('owner', $beFields) && !empty($this->filegroup['owner'])) {
 			$owner = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -566,11 +574,22 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 		$this->filegroup['release_date'] = $this->filegroup['release_date'] ? date('d/m/Y',$this->filegroup['release_date']) : '';
 		$this->filegroup['update_date'] = $this->filegroup['update_date'] ? date('d/m/Y',$this->filegroup['update_date']) : '';
 		
-		foreach ($beFields as $field) {
-			$sContent .= '<div style="clear:both;float:left;width:100%;">
-				<div style="float:left;width:15em;">' . $LANG->getLL($field) . '</div>
-				<div style="float:left;width:60%;">' . $this->filegroup[$field] . '</div>
-			</div>';
+		$sContent  = '';
+		foreach ($beFields as $key=>$theField) {
+			unset($field);
+			$field = $beFields[$key];
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$process = $_procObj->renderFilegroupExtraFields($field, $this->filegroup, $sContent, $this);
+				}
+			}
+			if (!$process) {
+				$sContent .= '<div style="clear:both;float:left;width:100%;">
+					<div style="float:left;width:15em;">' . $LANG->getLL($field) . '</div>
+					<div style="float:left;width:60%;">' . $this->filegroup[$field] . '</div>
+				</div>';
+			}
 		}
 		$sContent .= '<div style="clear:both;"></div>';
 		return $sContent;

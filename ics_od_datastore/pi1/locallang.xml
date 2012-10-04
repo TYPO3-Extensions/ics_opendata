@@ -76,7 +76,7 @@
 			<label index="th_description">Description</label>
 			<label index="th_technical_data">Données techniques</label>
 			<label index="th_files">Fichiers</label>
-			<label index="th_agency">Département</label>
+			<label index="th_agency">Agence</label>
 			<label index="th_content">Contact</label>
 			<label index="th_licence">Licence</label>
 			<label index="th_release_date">Mise à disposition</label>
@@ -93,7 +93,7 @@
 			<label index="detail_description">Description : </label>
 			<label index="detail_technical_data">Données techniques : </label>
 			<label index="detail_files">Fichiers : </label>
-			<label index="detail_agency">Département : </label>
+			<label index="detail_agency">Agence : </label>
 			<label index="detail_content">Contact : </label>
 			<label index="detail_licence">Licence : </label>
 			<label index="detail_release_date">Mise à disposition : </label>

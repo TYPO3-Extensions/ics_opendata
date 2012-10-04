@@ -87,8 +87,8 @@
 			<label index="tx_icsoddatastore_filegroups.time_period">Période de validité</label>
 			<label index="tx_icsoddatastore_filegroups.update_frequency">Fréquence</label>
 			<label index="tx_icsoddatastore_filegroups.publisher">Editeur</label>
-			<label index="tx_icsoddatastore_filegroups.creator">Créateur</label>
-			<label index="tx_icsoddatastore_filegroups.manager">Gestionnaire</label>
+			<label index="tx_icsoddatastore_filegroups.creator">Auteur</label>
+			<label index="tx_icsoddatastore_filegroups.manager">Manager</label>
 			<label index="tx_icsoddatastore_filegroups.owner">Propriétaire</label>
 			<label index="tx_icsoddatastore_filegroups.technical_data">Données technique</label>
 			<label index="tx_icsoddatastore_fileformats">Format de fichier (opendata)</label>

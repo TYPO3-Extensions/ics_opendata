@@ -40,7 +40,7 @@
 			<label index="description">Description :</label>
 			<label index="technical_data">Données technique :</label>
 			<label index="agency">Agence :</label>
-			<label index="tx_icsodcategories_categories">Catégorie :</label>
+			<label index="tx_icsodcategories_categories">Catégories :</label>
 			<label index="contact">Contact :</label>
 			<label index="licence">Licence :</label>
 			<label index="release_date">Mise à disposition :</label>
@@ -48,8 +48,8 @@
 			<label index="time_period">Période de validité :</label>
 			<label index="update_frequency">Fréquence :</label>
 			<label index="publisher">Editeur :</label>
-			<label index="creator">Créateur :</label>
-			<label index="manager">Gestionnaire :</label>
+			<label index="creator">Auteur :</label>
+			<label index="manager">Manager :</label>
 			<label index="owner">Propriétaire :</label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>
