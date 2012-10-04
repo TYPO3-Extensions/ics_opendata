@@ -35,6 +35,7 @@ if (t3lib_extMgm::isLoaded('ics_od_datastore')) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalSelectedCriteriaMarkers'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_datastore.php:tx_icsodcategories_datastore';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['addSearchRestriction'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_datastore.php:tx_icsodcategories_datastore';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsRSSMarkers'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_datastore.php:tx_icsodcategories_datastore';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_datastore.php:tx_icsodcategories_datastore';
 }
 
 if (t3lib_extMgm::isLoaded('ics_od_appstore')) {

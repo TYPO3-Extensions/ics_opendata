@@ -29,13 +29,15 @@
  *
  *
  *
- *   52: class tx_icsodcategories_datastore
- *   63:     function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $object)
- *   84:     function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $filegroup, $conf, $object)
- *  119:     function additionalFieldsSearchMarkers(&$markers, &$subpartArray, &$template, $conf, $object)
- *  164:     function additionalFieldsRSSMarkers(&$markersDataset, &$subpartArray, $template, $filegroup, $conf, $object)
+ *   54: class tx_icsodcategories_datastore
+ *   65:     function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $object)
+ *   86:     function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $filegroup, $conf, $object)
+ *  141:     function additionalFieldsSearchMarkers(&$markers, &$subpartArray, &$template, $conf, $object)
+ *  185:     function additionalSelectedCriteriaMarkers(&$markers, &$subpartArray, &$template, $conf, $object)
+ *  213:     function additionalFieldsRSSMarkers(&$markersDataset, &$subpartArray, $template, $filegroup, $conf, $object)
+ *  247:     function renderFilegroupExtraFields($field, $dataArray, &$content, $object)
  *
- * TOTAL FUNCTIONS: 4
+ * TOTAL FUNCTIONS: 6
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -95,7 +97,7 @@ class tx_icsodcategories_datastore {
 			default:
 				$orderBy = '';
 		}
-		
+
 		$categories = $tools->getCategoriesElement($filegroup['uid'], $orderBy);
 		$output = '';
 
@@ -196,7 +198,7 @@ class tx_icsodcategories_datastore {
 		$markers['###SC_CATEGORIES_LABEL###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:sc_categories_label');
 		$markers['###SC_CATEGORIES_VALUE###'] = $object->cObj->stdWrap(implode(',', $categories), $conf['displaySearch.']['categories.']);
 	}
-	
+
 	/**
 	 * Render RSS categories fields markers
 	 *
@@ -231,6 +233,27 @@ class tx_icsodcategories_datastore {
 			$subpartArray['###SUBPART_CATEGORIES###'] = '';
 		}
 		$markersDataset['###CATEGORIES_VALUE###'] = $output;
+	}
+
+	/**
+	 * Render filegroup extra fields
+	 *
+	 * @param	string		$field		The field name
+	 * @param	array		$dataArray	The data array
+	 * @param	&string		$content	The content
+	 * @param	object		$object		object
+	 * @return	boolean
+	 */
+	function renderFilegroupExtraFields($field, $dataArray, &$content, $object) {
+		if ($field != 'tx_icsodcategories_categories')
+			return false;
+
+		$content .= '<div style="clear:both;float:left;width:100%;">
+			<div style="float:left;width:15em;">' . $GLOBALS['LANG']->sL('LLL:EXT:ics_od_categories/locallang_hook.xml:'.$field) . '</div>
+			<div style="float:left;width:60%;">' . $dataArray[$field] . '</div>
+		</div>';
+
+		return true;
 	}
 }
 

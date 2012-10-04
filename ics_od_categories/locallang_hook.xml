@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language to extension 'ics_od_categories'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_icsodcategories_categories">Categories</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="tx_icsodcategories_categories">Catégories</label>
+		</languageKey>
+	</data>
+</T3locallang>
