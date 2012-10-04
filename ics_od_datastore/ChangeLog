@@ -1,6 +1,7 @@
 2012-10-04 Tsi YANG <tsi@in-cite.net>
+	* Refactor: Externalised categories process.
 	* Refactor: Added hook renderFilegroupExtraFields.
-	* Refactor: Coordinates BE and FE dataset's locallang.
+	* Refactor: Coordinated BE and FE dataset's locallang.
 
 2012-10-02 Tsi YANG <tsi@in-cite.net>
 	* Fix: Comments error code on pi1.

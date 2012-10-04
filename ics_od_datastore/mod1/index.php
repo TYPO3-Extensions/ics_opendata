@@ -449,26 +449,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 			}
 		}
 		$this->filegroup['licence'] = $licenceValue;
-		
-		// Retrieves categories
-		$categoriesValue = '';
-		if(in_array('tx_icsodcategories_categories', $beFields) && !empty($this->filegroup['tx_icsodcategories_categories'])) {
-			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'`name`',
-				'`tx_icsodcategories_categories`
-					INNER JOIN `tx_icsodcategories_categories_relation_mm`
-					ON `tx_icsodcategories_categories_relation_mm`.`uid_local` = `tx_icsodcategories_categories`.`uid`',
-				'`tx_icsodcategories_categories_relation_mm`.`uid_foreign` = ' . $this->filegroup['uid'] . ''
-			);
-			if(is_array($categories) && count($categories)) {
-				foreach($categories as $category) {
-					$aCat[] = $category['name'];
-				}
-				$categoriesValue = implode(', ', $aCat);
-			}
-		}
-		$this->filegroup['tx_icsodcategories_categories'] = $categoriesValue;
-		
+				
 		// Retrieves agency
 		$agencyValue = '';
 		if(in_array('agency', $beFields) && !empty($this->filegroup['agency'])) {
@@ -581,7 +562,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'] as $_classRef) {
 					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$process = $_procObj->renderFilegroupExtraFields($field, $this->filegroup, $sContent, $this);
+					$process = $_procObj->renderFilegroupExtraFields($field,  $this->filegroup['uid'], $this->filegroup, $sContent, $this);
 				}
 			}
 			if (!$process) {
