@@ -239,18 +239,36 @@ class tx_icsodcategories_datastore {
 	 * Render filegroup extra fields
 	 *
 	 * @param	string		$field		The field name
+	 * @param	int			$dataset	Dataset's uid
 	 * @param	array		$dataArray	The data array
 	 * @param	&string		$content	The content
 	 * @param	object		$object		object
 	 * @return	boolean
 	 */
-	function renderFilegroupExtraFields($field, $dataArray, &$content, $object) {
+	function renderFilegroupExtraFields($field, $dataset, $dataArray, &$content, $object) {
 		if ($field != 'tx_icsodcategories_categories')
 			return false;
 
+		$categoriesValue = '';
+		if(!empty($dataArray['tx_icsodcategories_categories'])) {
+			$categories = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'`name`',
+				'`tx_icsodcategories_categories`
+					INNER JOIN `tx_icsodcategories_categories_relation_mm`
+					ON `tx_icsodcategories_categories_relation_mm`.`uid_local` = `tx_icsodcategories_categories`.`uid`',
+				'`tx_icsodcategories_categories_relation_mm`.`uid_foreign` = ' . $dataset
+			);
+			if(is_array($categories) && count($categories)) {
+				foreach($categories as $category) {
+					$aCat[] = $category['name'];
+				}
+				$categoriesValue = implode(', ', $aCat);
+			}
+		}
+
 		$content .= '<div style="clear:both;float:left;width:100%;">
 			<div style="float:left;width:15em;">' . $GLOBALS['LANG']->sL('LLL:EXT:ics_od_categories/locallang_hook.xml:'.$field) . '</div>
-			<div style="float:left;width:60%;">' . $dataArray[$field] . '</div>
+			<div style="float:left;width:60%;">' . $categoriesValue . '</div>
 		</div>';
 
 		return true;

@@ -6,10 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tx_icsodcategories_categories">Categories</label>
+			<label index="tx_icsodcategories_categories">Categories :</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
-			<label index="tx_icsodcategories_categories">Catégories</label>
+			<label index="tx_icsodcategories_categories">Catégories :</label>
 		</languageKey>
 	</data>
 </T3locallang>
