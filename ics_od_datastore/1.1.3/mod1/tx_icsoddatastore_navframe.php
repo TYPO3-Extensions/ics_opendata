@@ -193,17 +193,21 @@ class  tx_icsoddatastore_navframe {
 		$this->markers['NEW_PAGE'] = '<a href="#" onclick="' . htmlspecialchars($sOnclickNewFilegroup) . '"><img' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/new_el.gif') . ' title="' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:new_filegroup', 1) . '" alt="" /></a>';
 		
 		// add new publisher filter
-		$selectList = '<select onchange="window.location.href =\''.htmlspecialchars(t3lib_div::linkThisScript(array('unique' => uniqid('tx_web_navframe')))).'&publisher=\'+value">
-		<option value="">' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:select_publisher', 1) . '</option>';
-		$res = $TYPO3_DB->exec_SELECTquery('*', 'tx_icsoddatastore_tiers', '1' . t3lib_BEfunc::deleteClause($sTable));
-		while ($aRow = $TYPO3_DB->sql_fetch_assoc($res))
+		if(!isset($GLOBALS['BE_USER']->userTS['institution']))
 		{
-			$selectList .= '<option value="' . $aRow['uid'] . '">' . $aRow['name'] . '</option>';
+			$selectList = '<select onchange="window.location.href =\''.htmlspecialchars(t3lib_div::linkThisScript(array('unique' => uniqid('tx_web_navframe')))).'&publisher=\'+value">
+			<option value="">' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:select_publisher', 1) . '</option>';
+			$res = $TYPO3_DB->exec_SELECTquery('*', 'tx_icsoddatastore_tiers', '1' . t3lib_BEfunc::deleteClause($sTable));
+			
+			while ($aRow = $TYPO3_DB->sql_fetch_assoc($res))
+			{
+				$selectList .= '<option value="' . $aRow['uid'] . '">' . $aRow['name'] . '</option>';
+			}
+			$selectList .= '<option value="">' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:all', 1) . '</option></select>';
+			$this->markers['FILTER']= $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:publisher_filter', 1) . $selectList;
+	// 				'<a href="'.htmlspecialchars(t3lib_div::linkThisScript(array('unique' => uniqid('tx_web_navframe'), 'publisher' => '0'))).'">'.
+	// 				'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif','width="14" height="14"').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.refresh',1).'" alt="" /></a>';
 		}
-		$selectList .= '<option value="">' . $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:all', 1) . '</option></select>';
-		$this->markers['FILTER']= $LANG->sL('LLL:EXT:ics_od_datastore/mod1/locallang.xml:publisher_filter', 1) . $selectList;
-// 				'<a href="'.htmlspecialchars(t3lib_div::linkThisScript(array('unique' => uniqid('tx_web_navframe'), 'publisher' => '0'))).'">'.
-// 				'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif','width="14" height="14"').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.refresh',1).'" alt="" /></a>';
 
 			// Adding highlight - JavaScript
 		if ($this->doHighlight)	$this->content .= $this->doc->wrapScriptTags('
@@ -235,13 +239,18 @@ class  tx_icsoddatastore_navframe {
 	 */
 	function getFilegroupsElements($pid)
 	{
-		global $TYPO3_DB;
+		global $TYPO3_DB, $GLOBALS;
 		$sTable = 'tx_icsoddatastore_filegroups';
 		$publisherWhereClause = '';
 		$publisher = t3lib_div::_GP('publisher');
 		if (isset($publisher) && $publisher !== '')
 		{
 			$publisherWhereClause = 'AND publisher=' . $publisher;
+		}
+		//if special user overide of filter condition
+		if(isset($GLOBALS['BE_USER']->userTS['institution']) && $GLOBALS['BE_USER']->userTS['institution'] !== '')
+		{
+			$publisherWhereClause = 'AND publisher=' . $GLOBALS['BE_USER']->userTS['institution'];
 		}
 		$res = $TYPO3_DB->exec_SELECTquery('*', $sTable, '1' . t3lib_BEfunc::deleteClause($sTable) . ' AND pid = ' . $TYPO3_DB->fullQuoteStr($pid, $sTable) . $publisherWhereClause , '', 'title'); 	// à utiliser pour filtrer . 'AND publisher=0'
 		$aList = array();
