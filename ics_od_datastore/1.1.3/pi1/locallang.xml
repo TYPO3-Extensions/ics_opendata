@@ -97,7 +97,7 @@
 			<label index="go_to_details_card_of_dataset">Go to details card of dataset</label>
 			<label index="visualize_dataset">Visualize dataset </label>
 			<label index="available"> available</label>
-			
+			<label index="download_in">Download in </label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="th_title">Résultat de la recherche</label>
@@ -193,6 +193,7 @@
 			<label index="go_to_details_card_of_dataset">Consulter la fiche détaillée du jeu de données </label>
 			<label index="visualize_dataset">Visualiser le jeu de données </label>
 			<label index="available"> disponible(s)</label>
+			<label index="download_in">Télécharger au format </label>
 		</languageKey>
 	</data>
 </T3locallang>

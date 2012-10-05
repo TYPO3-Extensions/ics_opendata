@@ -238,7 +238,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		if (!$this->conf['fileformatPictoMaxW'])
 			$this->conf['fileformatPictoMaxW'] = 62;
-		if (!$this->conf['fileformatPictoMaxW'])
+		if (!$this->conf['fileformatPictoMaxH'])
 			$this->conf['fileformatPictoMaxH'] = 20;
 		if (!$this->conf['licences']['logo.']['maxW'])
 			$this->conf['licences']['logo.']['maxW'] = 20;
