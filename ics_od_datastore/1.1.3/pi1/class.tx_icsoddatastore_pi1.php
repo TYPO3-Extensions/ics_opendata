@@ -465,14 +465,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###SORT_DATE_LABEL###' => $this->pi_getLL('solr_publication_date', 'date de publication / mise à jour', true),
 		);
 		$get_param_sort_search = t3lib_div::_GP('sort_search');
-		if ( isset ($get_param_sort_search) && $get_param_sort_search === date)
+		if ( isset ($get_param_sort_search) && $get_param_sort_search === pertinence)
 		{
-			$markers['###PERTINENCE_CHECK###'] = '';
-			$markers['###PERTINENCE_CURRENT_LI###'] = '';
+			$markers['###PERTINENCE_CHECK###'] = 'checked="checked"';
+			$markers['###PERTINENCE_CURRENT_LI###'] = 'class="current"';
 // 			$markers['###RANK_CHECK###'] = '';
 // 			$markers['###RANK_CURRENT_LI###'] = '';
-			$markers['###DATE_CHECK###'] = 'checked="checked"';
-			$markers['###DATE_CURRENT_LI###'] = 'class="current"';
+			$markers['###DATE_CHECK###'] = '';
+			$markers['###DATE_CURRENT_LI###'] = '';
 		}
 // 		elseif ( isset ($get_param_sort_search) && $get_param_sort_search === rank)
 // 		{
@@ -485,12 +485,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 // 		}
 		else
 		{
-			$markers['###PERTINENCE_CHECK###'] = 'checked="checked"';
-			$markers['###PERTINENCE_CURRENT_LI###'] = 'class="current"';
-// 			$markers['###RANK_CHECK###'] = '';
-// 			$markers['###RANK_CURRENT_LI###'] = '';
-			$markers['###DATE_CHECK###'] = '';
-			$markers['###DATE_CURRENT_LI###'] = '';
+			$markers['###PERTINENCE_CHECK###'] = '';
+			$markers['###PERTINENCE_CURRENT_LI###'] = '';
+			// 			$markers['###RANK_CHECK###'] = '';
+			// 			$markers['###RANK_CURRENT_LI###'] = '';
+			$markers['###DATE_CHECK###'] = 'checked="checked"';
+			$markers['###DATE_CURRENT_LI###'] = 'class="current"';
 		}
 		
 		$currentGetParam =t3lib_div::_GP('tx_icsoddatastore_pi1');
