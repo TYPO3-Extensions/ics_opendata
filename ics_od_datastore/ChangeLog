@@ -1,3 +1,7 @@
+2012-10-16 Tsi YANG <tsi@in-cite.net>
+	* Feature: Added emtpy list.
+	* Feature: Added the possibility to define list view section name.
+
 2012-10-04 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Externalised categories process.
 	* Refactor: Added hook renderFilegroupExtraFields.

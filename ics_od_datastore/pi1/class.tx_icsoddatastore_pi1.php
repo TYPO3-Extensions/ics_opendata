@@ -543,14 +543,24 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
 		);
 		$subpartArray = array();
-		$subpartArray['###HEADER_ITEM###'] = $headerItems;
-		$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
 
-		// Hook for add fields markers to list view
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
-				$_procObj->additionalListFieldsMarkers($markers, $subpartArray, $template, $this);
+		if (!$this->nbFileGroup) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_EMPTY_LIST###');
+			$markers = array(
+				'###PREFIXID###' => $this->prefixId,
+				'###ANY_DATASET###' => $this->pi_getLL('any_dataset', 'There is any dataset', true),
+			);
+		} 
+		else {
+			$subpartArray['###HEADER_ITEM###'] = $headerItems;
+			$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
+
+			// Hook for add fields markers to list view
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalListFieldsMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj->additionalListFieldsMarkers($markers, $subpartArray, $template, $this);
+				}
 			}
 		}
 
@@ -918,8 +928,17 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$pictoItems .= $pictoItem;
 			}
 			$sectionContent = $this->cObj->substituteSubpart($template, '###PICTO_ITEM###', $pictoItems);
-			if (!empty($files))
-				$content .= $this->cObj->substituteMarkerArray($sectionContent, array('###SECTION_NAME###' => $type['name']));
+			// if (!empty($files))
+				// $content .= $this->cObj->substituteMarkerArray($sectionContent, array('###SECTION_NAME###' => $type['name']));
+			if (!empty($files)) {
+				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$cObj->start($type, $this->tables['filetypes']);
+				$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+				$content .= $this->cObj->substituteMarkerArray(
+					$sectionContent, 
+					array('###SECTION_NAME###' => $cObj->stdWrap('', $this->conf['dataset.']['fileSectionTitle.']))
+				);
+			}
 		}
 		return $content;
 	}

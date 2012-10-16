@@ -70,6 +70,7 @@
 			<label index="sort_update_date">Update date</label>
 			<label index="sort_crdate">On line</label>
 			<label index="sort_alpha">Alpha</label>
+			<label index="any_dataset">There is any dataset</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="th_title">Résultat de la recherche</label>
@@ -135,6 +136,7 @@
 			<label index="sort_update_date">Date de mise à jour</label>
 			<label index="sort_crdate">Date de mise en ligne</label>
 			<label index="sort_alpha">Alphabétique</label>
+			<label index="any_dataset">Il n'y a aucun jeu de données.</label>
 		</languageKey>
 	</data>
 </T3locallang>
