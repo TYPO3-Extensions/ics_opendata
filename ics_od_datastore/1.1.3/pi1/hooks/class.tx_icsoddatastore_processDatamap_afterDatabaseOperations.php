@@ -304,7 +304,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				}
 				
 			}
-			elseif ($status === 'update')
+			elseif ($status === 'update' && isset($tabChamps[format]) && $tabChamps[format] !== '')
 			{
 				//get old doc
 				$oldDoc = SolrTools::getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
