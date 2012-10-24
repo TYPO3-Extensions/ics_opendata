@@ -528,14 +528,21 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}
 		
 		$facet_request = '';
+		$facet_file_type = '&fq=';
 		$facet_param = t3lib_div::_GP('facet');
 		foreach ($facet_param as $facet => $value)
 		{
-			if ($value === 'on')
+			if ($value === 'on' && strstr($facet, 'files_types_id') === false)
 			{
 				$facet_request .= '&fq=' . str_replace(array(' ', ':'), array('+',':"'), $facet) . '"';
 			}
+			elseif ($value === 'on')
+			{
+				$facet_file_type .= str_replace(array(' ', ':'), array('+',':"'), $facet) . '"+OR+';
+			}
 		}
+		$facet_request .= substr($facet_file_type, 0, -4);
+		
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
 		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
