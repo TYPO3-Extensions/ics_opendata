@@ -46,7 +46,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				'technical_data', 'licence', 'time_period', 'update_frequency');
 		$updateFieldLabelArray = array('hidden', 'deleted', 'keywords', 'spatial_cover', 'language', 
 				'quality', 'granularity', 'linked_references', 'taxonomy', 'illustration',
-				'html_from_csv_display', 'has_dynamic_display', 'param_dynamic_display',
+				'html_from_csv_display', 'has_dynamic_display', 'param_dynamic_display', 'title', 'description', 
 				'technical_data', 'licence', 'time_period', 'update_frequency');
 		
 		if ($table === 'tx_icsoddatastore_filegroups')
