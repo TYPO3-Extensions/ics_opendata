@@ -625,7 +625,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, identifier, description;;;;3-3-3,technical_data, files, agency, contact, licence, theme_inspire, creation_date, release_date, update_date, update_modification, update_description, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], taxonomy, illustration;;;nowrap:richtext[*]:rte_transform[flag=rte_enabled|mode=ts_images], has_dynamic_display, param_dynamic_display, html_from_csv_display')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, identifier, description;;;;3-3-3,technical_data, files, agency, contact, licence, theme_inspire, creation_date, release_date, update_date, update_modification, update_description, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], taxonomy, illustration;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], has_dynamic_display, param_dynamic_display, html_from_csv_display')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')
