@@ -1190,8 +1190,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->substituteSubpart($template, '###SECTION_FILE###', $filesContent);
 
 		//similitudes from solr
-		$markers['###SIMILITUDES_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_similitudes_label', 'Voir ausss', true), $this->conf['displaySingle.']['similitudes_label_stdWrap.']);
-		
 		$solrClient = SolrTools::initSolrClient();
 		$similarDocs = SolrTools::getSimilarDocs($id, $solrClient);
 		$markers['###SIMILITUDES_VALUE###'] = '';
@@ -1208,6 +1206,16 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					)
 			);
 			$markers['###SIMILITUDES_VALUE###'] .= $this->cObj->stdWrap('<a href="' . $url_similitude . '" title="' . $doc[title] . '">' . $doc[title] . '</a>' , $this->conf['displaySingle.']['similitudes_stdWrap.']);
+		}
+		if(count($similarDocs))
+		{
+			$markers['###SIMILITUDES_LABEL###'] = $this->cObj->stdWrap($this->pi_getLL('detail_similitudes_label', 'Voir aussi', true), $this->conf['displaySingle.']['similitudes_label_stdWrap.']);
+		}
+		else
+		{
+			$tmp_subpart = $this->cObj->getSubpart($template, '###SUBPART_SIMILITUDES###');
+			$tmp_subpart = '';
+			$template = $this->cObj->substituteSubpart($template, '###SUBPART_SIMILITUDES###', $tmp_subpart);
 		}
 		
 		$subpartArray = array();
