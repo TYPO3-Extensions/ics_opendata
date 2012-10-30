@@ -895,7 +895,7 @@ $TCA['tx_icsoddatastore_downloads'] = array (
 $TCA['tx_icsoddatastore_tiers'] = array (
     'ctrl' => $TCA['tx_icsoddatastore_tiers']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,name,description,email,website,logo,address,zipcode,city,country,latitude,longitude'
+        'showRecordFieldList' => 'hidden,name,identifier,description,email,website,logo,address,zipcode,city,country,latitude,longitude'
     ),
     'feInterface' => $TCA['tx_icsoddatastore_tiers']['feInterface'],
     'columns' => array (
@@ -916,6 +916,15 @@ $TCA['tx_icsoddatastore_tiers'] = array (
                 'eval' => 'required,trim',
             )
         ),
+    	'identifier' => array (
+    			'exclude' => 0,
+   				'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.identifier',
+   				'config' => array (
+   						'type' => 'input',
+   						'size' => '31',
+   						'eval' => 'required,trim',
+    			)
+   		),
         'description' => array (        
             'exclude' => 0,        
             'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_tiers.description',        
@@ -1007,7 +1016,7 @@ $TCA['tx_icsoddatastore_tiers'] = array (
 		),
     ),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, description, email, website,logo,address,zipcode,city,country,latitude,longitude')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, identifier, description, email, website,logo,address,zipcode,city,country,latitude,longitude')
     ),
     'palettes' => array (
         '1' => array('showitem' => '')
@@ -1147,7 +1156,7 @@ $TCA['tx_icsoddatastore_files'] = array (
 $TCA['tx_icsoddatastore_filetypes'] = array (
     'ctrl' => $TCA['tx_icsoddatastore_filetypes']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,name,description'
+        'showRecordFieldList' => 'hidden,name,identifier,description'
     ),
     'feInterface' => $TCA['tx_icsoddatastore_filetypes']['feInterface'],
     'columns' => array (
@@ -1168,6 +1177,15 @@ $TCA['tx_icsoddatastore_filetypes'] = array (
                 'eval' => 'required,trim',
             )
         ),
+    	'identifier' => array (
+    			'exclude' => 0,
+    			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.identifier',
+    			'config' => array (
+    					'type' => 'input',
+    					'size' => '31',
+    					'eval' => 'required,trim',
+    			)
+    	),
         'description' => array (        
             'exclude' => 0,        
             'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filetypes.description',        
@@ -1179,7 +1197,7 @@ $TCA['tx_icsoddatastore_filetypes'] = array (
         ),
     ),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, description')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, name, identifier, description')
     ),
     'palettes' => array (
         '1' => array('showitem' => '')

@@ -183,8 +183,10 @@ CREATE TABLE tx_icsoddatastore_filetypes (
     deleted tinyint(4) DEFAULT '0' NOT NULL,
     hidden tinyint(4) DEFAULT '0' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
+	identifier varchar(31) DEFAULT '' NOT NULL,
     description text,
     
+    UNIQUE (identifier),
     PRIMARY KEY (uid),
     KEY parent (pid)
 );
