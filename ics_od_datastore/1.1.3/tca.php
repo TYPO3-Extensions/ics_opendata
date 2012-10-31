@@ -7,7 +7,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_icsoddatastore_filegroups'] = array (
 	'ctrl' => $TCA['tx_icsoddatastore_filegroups']['ctrl'],
     'interface' => array (
-        'showRecordFieldList' => 'hidden,title,identifier,description,technical_data,files,agency,contact,licence,theme_inspire,creation_date,release_date,update_date,update_modification,update_description,time_period,update_frequency,publisher,creator,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display'
+        'showRecordFieldList' => 'hidden,title,identifier,description,files,licence,theme_inspire,creation_date,release_date,update_date,update_modification,update_description,time_period,update_frequency,publisher,manager,owner,keywords,spatial_cover,language,quality,granularity,linked_references,taxonomy,illustration,has_dynamic_display,param_dynamic_display,html_from_csv_display'
     ),
 	'feInterface' => $TCA['tx_icsoddatastore_filegroups']['feInterface'],
 	'columns' => array (
@@ -625,7 +625,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 		),
 	),
     'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, identifier, description;;;;3-3-3,technical_data, files, agency, contact, licence, theme_inspire, creation_date, release_date, update_date, update_modification, update_description, time_period, update_frequency, publisher, creator, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], taxonomy, illustration;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], has_dynamic_display, param_dynamic_display, html_from_csv_display')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, identifier, description;;;;3-3-3, files, licence, theme_inspire, creation_date, release_date, update_date, update_modification, update_description, time_period, update_frequency, publisher, manager, owner, keywords, spatial_cover, language, quality, granularity, linked_references;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], taxonomy, illustration;;;richtext[cut|copy|paste|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[flag=rte_enabled], has_dynamic_display, param_dynamic_display, html_from_csv_display')
     ),
 	'palettes' => array (
 		'1' => array('showitem' => '')
