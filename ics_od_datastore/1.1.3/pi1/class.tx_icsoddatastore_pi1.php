@@ -521,10 +521,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			{
 				$sort_request = 'rank+desc';
 			}
-			else 
+			else
 			{
 				$sort_request = '';
 			}
+		}
+		else 
+		{
+			$sort_request = 'update_date+desc,release_date+desc';
 		}
 		
 		$facet_request = '';
