@@ -1299,4 +1299,129 @@ $TCA['tx_icsoddatastore_updateobject'] = array (
 		)
 );
 
+$TCA['tx_icsoddatastore_monthdownloads'] = array (
+		'ctrl' => $TCA['tx_icsoddatastore_monthdownloads']['ctrl'],
+		'interface' => array (
+				'showRecordFieldList' => 'hidden,filegroup,ip,file'
+		),
+		'feInterface' => $TCA['tx_icsoddatastore_monthdownloads']['feInterface'],
+		'columns' => array (
+				'hidden' => array (
+						'exclude' => 1,
+						'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+						'config'  => array (
+								'type'    => 'check',
+								'default' => '0'
+						)
+				),
+				'filegroup' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_monthdownloads.filegroup',
+						'config' => array (
+								'type' => 'select',
+								'foreign_table' => 'tx_icsoddatastore_filegroups',
+								'foreign_table_where' => 'ORDER BY tx_icsoddatastore_filegroups.uid',
+								'size' => 1,
+								'minitems' => 0,
+								'maxitems' => 1,
+						)
+				),
+				'ip' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_monthdownloads.ip',
+						'config' => array (
+								'type' => 'input',
+								'size' => '30',
+								'max' => '40',
+								'eval' => 'trim',
+						)
+				),
+				'file' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_monthdownloads.file',
+						'config' => array (
+								'type' => 'select',
+								'foreign_table' => 'tx_icsoddatastore_files',
+								'foreign_table_where' => 'ORDER BY tx_icsoddatastore_files.uid',
+								'size' => 1,
+								'minitems' => 0,
+								'maxitems' => 1,
+						)
+				),
+		),
+		'types' => array (
+				'0' => array('showitem' => 'hidden;;1;;1-1-1, filegroup, ip, file')
+		),
+		'palettes' => array (
+				'1' => array('showitem' => '')
+		)
+);
+
+$TCA['tx_icsoddatastore_statistics'] = array (
+		'ctrl' => $TCA['tx_icsoddatastore_statistics']['ctrl'],
+		'interface' => array (
+				'showRecordFieldList' => 'hidden,filegroup,ip,file'
+		),
+		'feInterface' => $TCA['tx_icsoddatastore_statistics']['feInterface'],
+		'columns' => array (
+				'hidden' => array (
+						'exclude' => 1,
+						'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+						'config'  => array (
+								'type'    => 'check',
+								'default' => '0'
+						)
+				),
+				'date' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_statistics.date',
+						'config' => array (
+								'type'     => 'input',
+								'size'     => '8',
+								'max'      => '20',
+								'eval'     => 'date',
+								'default'  => '0'
+						)
+				),
+				'filegroup' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_statistics.filegroup',
+						'config' => array (
+								'type' => 'select',
+								'foreign_table' => 'tx_icsoddatastore_filegroups',
+								'foreign_table_where' => 'ORDER BY tx_icsoddatastore_filegroups.uid',
+								'size' => 1,
+								'minitems' => 0,
+								'maxitems' => 1,
+						)
+				),
+				'file' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_statistics.file',
+						'config' => array (
+								'type' => 'select',
+								'foreign_table' => 'tx_icsoddatastore_files',
+								'foreign_table_where' => 'ORDER BY tx_icsoddatastore_files.uid',
+								'size' => 1,
+								'minitems' => 0,
+								'maxitems' => 1,
+						)
+				),
+				'count' => array (
+						'exclude' => 0,
+						'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_statistics.count',
+						'config' => array (
+								'type'     => 'input',
+								'size'     => '10',
+								'eval'     => 'int',
+						)
+				),
+		),
+		'types' => array (
+				'0' => array('showitem' => 'hidden;;1;;1-1-1, filegroup, ip, file')
+		),
+		'palettes' => array (
+				'1' => array('showitem' => '')
+		)
+);
 ?>
