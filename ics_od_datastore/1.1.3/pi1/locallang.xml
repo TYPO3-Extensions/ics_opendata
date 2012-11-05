@@ -151,7 +151,7 @@
 			<label index="detail_uid">Identifiant</label>
 			<label index="detail_similitudes_label">Voir aussi</label>
 			<label index="back">Retour</label>
-			<label index="back_to_detail_view">Retour à la fiche détaillé</label>
+			<label index="back_to_detail_view">Retour à la fiche détaillée</label>
 			<label index="groupfile_dynamic_display">Visualiser le jeu de données</label>
 			<label index="search_keywords">Rechercher par mots clés</label>
 			<label index="search_submit">Rechercher</label>
