@@ -24,7 +24,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.title',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '40',	
+				'size' => '100',	
 				'eval' => 'required,trim',
 			)
 		),
@@ -290,7 +290,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.update_modification',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '40',	
+				'size' => '250',	
 				'eval' => 'trim',
 			)
 		),
@@ -309,7 +309,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.time_period',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '40',	
+				'size' => '100',	
 				'eval' => 'trim',
 			)
 		),
@@ -318,7 +318,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.update_frequency',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '40',	
+				'size' => '100',	
 				'eval' => 'trim,required',
 			)
 		),
@@ -523,7 +523,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array(
 				'type' => 'input',
 				'default' => '',
-				'max' => '40',
+				'max' => '250',
 			),
 		),
 		'spatial_cover' => array(
@@ -542,7 +542,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array(
 				'type' => 'input',
 				'default' => 'français',
-				'max' => '40',
+				'max' => '100',
 				'eval' => 'required', 
 			),
 			
@@ -553,7 +553,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array(
 				'type' => 'input',
 				'default' => '',
-				'max' => '40',
+				'max' => '100',
 			),
 		),
 		'granularity' => array(
@@ -620,7 +620,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array(
 				'type' => 'input',
 				'default' => '',
-				'max' => '40',
+				'max' => '100',
 			),
 		),
 	),
