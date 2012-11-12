@@ -1,3 +1,7 @@
+2012-10-16 Tsi YANG <tsi.yang@plan-net.fr>
+	* Feature: Added TS configuration to display licence's logo.
+	* Fix: Default order on update_date.
+
 2012-11-02 Pierrick Caillon <pierrick.caillon@plan-net.fr>
 	* Bug fix: Issue with categories #42423.
 

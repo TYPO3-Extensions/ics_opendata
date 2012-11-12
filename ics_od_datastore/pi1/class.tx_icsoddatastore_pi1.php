@@ -31,32 +31,32 @@
  *
  *   79: class tx_icsoddatastore_pi1 extends tslib_pibase
  *
- *              SECTION: < Default search criteria
+ *              SECTION: < Default search criteria 
  *  105:     function main($content, $conf)
  *  155:     function controlVars(&$content)
  *  169:     function init()
- *  289:     function renderSearch()
- *  343:     function renderSelectedCriteria()
- *  415:     function renderSorting()
- *  451:     function renderFileformatItems($template, $aFileformats)
- *  483:     function renderTiersItems($template, $aTiers)
- *  510:     function renderLicenceItems($template, array $aLicences)
- *  533:     function renderList()
- *  567:     function renderListHeader($template)
- *  598:     function renderListRows($template)
- *  769:     function renderListRow($template, $row)
- *  841:     function renderFiles($view, $filegroup, $template)
- *  933:     function renderSingle($id)
- * 1062:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
- * 1084:     function getFiles_mm($filegroup)
- * 1102:     function getFileSize($file)
- * 1117:     function getFileformats($searchable = false)
- * 1140:     function getFiletypes()
- * 1157:     function getTiersAgencies()
- * 1173:     function getLicences()
- * 1187:     protected function getListGetPageBrowser($numberOfPages)
- * 1210:     function renderRSS($rssLink, $imgSrc)
- * 1227:     function getExtraQueryString()
+ *  287:     function renderSearch()
+ *  341:     function renderSelectedCriteria()
+ *  413:     function renderSorting()
+ *  449:     function renderFileformatItems($template, $aFileformats)
+ *  481:     function renderTiersItems($template, $aTiers)
+ *  508:     function renderLicenceItems($template, array $aLicences)
+ *  531:     function renderList()
+ *  576:     function renderListHeader($template)
+ *  607:     function renderListRows($template)
+ *  778:     function renderListRow($template, $row)
+ *  857:     function renderFiles($view, $filegroup, $template)
+ *  956:     function renderSingle($id)
+ * 1085:     function getImgResource($resource, $desc, $width = 62, $height = 20, $external = false)
+ * 1107:     function getFiles_mm($filegroup)
+ * 1125:     function getFileSize($file)
+ * 1140:     function getFileformats($searchable = false)
+ * 1163:     function getFiletypes()
+ * 1180:     function getTiersAgencies()
+ * 1196:     function getLicences()
+ * 1210:     protected function getListGetPageBrowser($numberOfPages)
+ * 1232:     function renderRSS($rssLink, $imgSrc)
+ * 1249:     function getExtraQueryString()
  *
  * TOTAL FUNCTIONS: 25
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -257,11 +257,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$sortOrder = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortOrder', 'selectParams');
 		$this->conf['sorting.']['order'] = $sortOrder? $sortOrder: $this->conf['sorting.']['order'];
 		if (!$this->conf['sorting.']['name'] && !$this->conf['sorting.']['order']) {
-			$this->conf['sorting.']['name'] = 'tstamp';
+			$this->conf['sorting.']['name'] = 'update_date';
 			$this->conf['sorting.']['order'] = 'DESC';
 		}
-
-
 		$agencies = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'agencies', 'selectParams'), true);
 		if (!empty($agencies)) {
 			$this->conf['select.']['agencies'] = implode(',', $agencies);
@@ -542,6 +540,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###PREFIXID###' => $this->prefixId,
 			'###PAGE_BROWSER###' => $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage))),
 		);
+
 		$subpartArray = array();
 
 		if (!$this->nbFileGroup) {
@@ -550,7 +549,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				'###PREFIXID###' => $this->prefixId,
 				'###ANY_DATASET###' => $this->pi_getLL('any_dataset', 'There is any dataset', true),
 			);
-		} 
+		}
 		else {
 			$subpartArray['###HEADER_ITEM###'] = $headerItems;
 			$subpartArray['###GROUP_ROW_CONTENT###'] = $rowItems;
@@ -817,11 +816,18 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					break;
 				case 'licence':
 					$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-						'name',
+						'name, link, logo',
 						'tx_icsoddatastore_licences',
 						'uid=' . $row['licence']
 					);
-					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($licence['name'], $this->conf['displayList.'][$field . '_stdWrap.']);
+					if (!empty($licence['logo'])) {
+						$logo = $this->getImgResource($licence['logo'], $licence['name'], $this->conf['licences']['logo.']['maxW'], $this->conf['licences']['logo.']['maxH'], true);
+					}
+					$licence_value = $logo . $licence['name'];
+					if (!empty($licence['link'])) {
+						$licence_value = '<a href="' . $licence['link'] . '" target="_blank">' . $licence_value . '</a>';
+					}
+					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($licence_value, $this->conf['displayList.'][$field . '_stdWrap.']);
 					break;
 				default:
 					$markers['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap($row[$field], $this->conf['displayList.'][$field . '_stdWrap.']);
@@ -928,14 +934,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				$pictoItems .= $pictoItem;
 			}
 			$sectionContent = $this->cObj->substituteSubpart($template, '###PICTO_ITEM###', $pictoItems);
-			// if (!empty($files))
-				// $content .= $this->cObj->substituteMarkerArray($sectionContent, array('###SECTION_NAME###' => $type['name']));
 			if (!empty($files)) {
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$cObj->start($type, $this->tables['filetypes']);
 				$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 				$content .= $this->cObj->substituteMarkerArray(
-					$sectionContent, 
+					$sectionContent,
 					array('###SECTION_NAME###' => $cObj->stdWrap('', $this->conf['dataset.']['fileSectionTitle.']))
 				);
 			}
@@ -1209,7 +1213,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
 		);
-
 
 		// Get page browser
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
