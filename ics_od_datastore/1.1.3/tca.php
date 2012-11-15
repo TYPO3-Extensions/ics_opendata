@@ -158,7 +158,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'config' => array (
 				'type' => 'select',	
 				'items' => array (
-					array('',0),
+					
 				),
 				'foreign_table' => 'tx_icsoddatastore_licences',	
 				'foreign_table_where' => 'ORDER BY tx_icsoddatastore_licences.uid',	
@@ -280,7 +280,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 				'type'     => 'input',
 				'size'     => '8',
 				'max'      => '20',
-				'eval'     => 'date',
+				'eval'     => 'date,required',
 				'checkbox' => '0',
 				'default'  => '0'
 			)
@@ -328,7 +328,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
             'config' => array (
                 'type' => 'select',
                 'items' => array (
-                    array('',0),
+                    
                 ),
                 'foreign_table' => 'tx_icsoddatastore_tiers',    
                 'foreign_table_where' => 'ORDER BY tx_icsoddatastore_tiers.uid',    
@@ -425,7 +425,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
             'config' => array (
                 'type' => 'select',
                 'items' => array (
-                    array('',0),
+                    
                 ),
                 'foreign_table' => 'tx_icsoddatastore_tiers',    
                 'foreign_table_where' => 'ORDER BY tx_icsoddatastore_tiers.uid',    
@@ -474,7 +474,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
             'config' => array (
                 'type' => 'select', 
                 'items' => array (
-                    array('',0),
+                    
                 ),
                 'foreign_table' => 'tx_icsoddatastore_tiers',    
                 'foreign_table_where' => 'ORDER BY tx_icsoddatastore_tiers.uid',    
