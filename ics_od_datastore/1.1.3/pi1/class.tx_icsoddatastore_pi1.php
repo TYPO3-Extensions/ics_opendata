@@ -615,7 +615,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 				$markers = array(
 					'###RANK###' => '',
-					'###DATE_LABEL###' => $this->pi_getLL('solr_published', 'Publié le ', true),
+					'###DATE_LABEL###' => $this->pi_getLL('solr_update_date', 'Mis à jour le ', true),
 					'###CATEGORIE_LABEL###' => $this->pi_getLL('solr_categories', 'Thématiques : ', true),
 					'###MANAGER_LABEL###' => $this->pi_getLL('solr_manager', 'Gestionnaire : ', true),
 					'###OWNER_LABEL###' => $this->pi_getLL('solr_owner', 'Propriétaire : ', true),
@@ -660,8 +660,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				{
 					$markers['###VISUALIZATION###'] = '';
 				}
-				$release_date = new DateTime($document[release_date]);
-				$markers['###DATE###'] = $release_date->format('d/m/Y');
+				$update_date = new DateTime($document[update_date]);
+				$markers['###DATE###'] = $update_date->format('d/m/Y');
 				
 				$picto_part = '';
 				foreach ($document[files_types_picto] as $file_type_picto)

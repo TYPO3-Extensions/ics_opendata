@@ -126,7 +126,7 @@
 			<label index="detail_content">Contact : </label>
 			<label index="detail_licence">Licence : </label>
 			<label index="detail_release_date">Publié</label>
-			<label index="detail_update_date">Dernière mise à jour : </label>
+			<label index="detail_update_date">Mis à jour le : </label>
 			<label index="detail_time_period">Période couverte :</label>
 			<label index="detail_update_frequency">Fréquence : </label>
 			<label index="detail_publisher">Diffuseur : </label>
@@ -179,6 +179,7 @@
 			<label index="solr_manager">Gestionnaire : </label>
 			<label index="solr_owner">Propriétaire : </label>
 			<label index="solr_published">Publié le </label>
+			<label index="solr_update_date">Mis à jour le </label>
 			<label index="solr_go_to_details">Go to details card</label>
 			<label index="solr_visualize">Visualiser le jeu de données</label>
 			<label index="solr_to">à</label>
