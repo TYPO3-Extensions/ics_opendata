@@ -36,7 +36,8 @@ require_once('solrTools.php');
  */
 class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 	
-	function processDatamap_afterDatabaseOperations($status, $table, $id, $tabChamps, $pObj) {
+	
+	public function processDatamap_afterDatabaseOperations($status, $table, $id, $tabChamps, $pObj) {
 		
 		global $TYPO3_DB;
 	
@@ -56,212 +57,11 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			
 			if ($status === 'new')
 			{
-				$doc = new SolrInputDocument();
-				
-				foreach ($createFieldLabelArray as $fieldLabel)
-				{
-					$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
-				}
-				
-				$doc->addField('deleted', '0');
-				
-				$doc->addField('release_date', date("Y-m-d",$tabChamps[release_date]) . 'T' . date("H:i:s", $tabChamps[release_date]) . 'Z');
-				$doc->addField('update_date', date("Y-m-d",$tabChamps[update_date]) . 'T' . date("H:i:s", $tabChamps[update_date]) . 'Z');
-				
-				// id field
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'uid',         // SELECT ...
-						'tx_icsoddatastore_filegroups',    // FROM ...
-						'title="'.$tabChamps[title].'"'	// WHERE
-				);
-				$row = $TYPO3_DB->sql_fetch_assoc($res);
-				$doc->addField('id', $row['uid']);
-				$filegroup_id = $row['uid'];
-				
-				if(isset($tabChamps[manager]))
-				{
-					// manager field
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name manager',         // SELECT ...
-							'tx_icsoddatastore_tiers',    // FROM ...
-							'uid="'.$tabChamps[manager].'"'	// WHERE
-					);
-					$row = $TYPO3_DB->sql_fetch_assoc($res);
-					$doc->addField('manager', $row['manager']);
-				}
-				
-				if(isset($tabChamps[owner]))
-				{
-					// owner field
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name owner',         // SELECT ...
-							'tx_icsoddatastore_tiers',    // FROM ...
-							'uid="'.$tabChamps[owner].'"'	// WHERE
-					);
-					$row = $TYPO3_DB->sql_fetch_assoc($res);
-					$doc->addField('owner', $row['owner']);
-				}
-				
-				if(intval($tabChamps[tx_icsodcategories_categories]) > 0)
-				{
-					// categories field
-					$whereclause = '1=0';
-					foreach ($pObj->dbAnalysisStore[0][0]->tableArray[tx_icsodcategories_categories] as $categorieId)
-					{
-						$whereclause .= ' OR uid=' . $categorieId;
-					}
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name categories',         // SELECT ...
-							'tx_icsodcategories_categories',   // FROM ...
-							$whereclause	// WHERE
-					);
-					while($row = $TYPO3_DB->sql_fetch_assoc($res))
-						$doc->addField('categories', $row['categories']);
-				}
-
-				$addDocResponse = $solrClient->addDocument($doc);
-				
-				try 
-				{
-					if ($addDocResponse->success())
-					{
-						$solrClient->commit();
-					}
-					else
-					{
-						$addDocResponse = $solrClient->addDocument($doc);
-						
-						if ($addDocResponse->success())
-						{
-							$solrClient->commit();
-						}
-						else
-						{
-							$solrClient->rollback();
-						}
-					}
-				}
-				catch (SolrException $e)
-				{
-					$e->getMessage();
-				}
-				
+				$this->solrCreateDataset($solrClient, $createFieldLabelArray, $tabChamps, $pObj);
 			}
 			elseif ($status === 'update')
 			{
-				//get old doc
-				$oldDoc = SolrTools::getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
-				
-				//Convert old doc to input doc
-				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
-
-				// update fields
-				foreach ($updateFieldLabelArray as $fieldLabel)
-				{
-					if (isset($tabChamps[$fieldLabel]))
-					{
-						$doc->deleteField($fieldLabel);
-						$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
-					}
-				}
-				
-				if (isset($tabChamps['release_date']))
-				{
-					if($doc->fieldExists('release_date'))
-					{
-						$doc->deleteField('release_date');
-					}
-					$doc->addField('release_date', date("Y-m-d",$tabChamps[release_date]) . 'T' . date("H:i:s", $tabChamps[release_date]) . 'Z');
-				}
-
-				if (isset($tabChamps['update_date']))
-				{
-					if($doc->fieldExists('update_date'))
-					{
-						$doc->deleteField('update_date');
-					}
-					$doc->addField('update_date', date("Y-m-d",$tabChamps[update_date]) . 'T' . date("H:i:s", $tabChamps[update_date]) . 'Z');
-				}
-				
-				// manager field
-				if(isset($tabChamps[manager]))
-				{
-					if($doc->fieldExists('manager'))
-					{
-						$doc->deleteField('manager');
-					}
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name manager',         // SELECT ...
-							'tx_icsoddatastore_tiers',    // FROM ...
-							'uid="'.$tabChamps[manager].'"'	// WHERE
-					);
-					$row = $TYPO3_DB->sql_fetch_assoc($res);
-					$doc->addField('manager', $row['manager']);
-				}
-				
-				// owner field
-				if(isset($tabChamps[owner]))
-				{
-					if($doc->fieldExists('owner'))
-					{
-						$doc->deleteField('owner');
-					}
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name owner',         // SELECT ...
-							'tx_icsoddatastore_tiers',    // FROM ...
-							'uid="'.$tabChamps[owner].'"'	// WHERE
-					);
-					$row = $TYPO3_DB->sql_fetch_assoc($res);
-					$doc->addField('owner', $row['owner']);
-				}
-				
-				// categories field
-				if(intval($tabChamps[tx_icsodcategories_categories]) > 0)
-				{
-					if($doc->fieldExists('categories'))
-					{
-						$doc->deleteField('categories');
-					}
-					$whereclause = '1=0';
-					foreach (explode(',', $pObj->datamap[tx_icsoddatastore_filegroups][$pObj->checkValue_currentRecord[uid]][tx_icsodcategories_categories]) as $categorieId)
-					{
-						if ($categorieId !== '')
-						{
-							$whereclause .= ' OR uid=' . $categorieId;
-						}
-					}
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-							'name categories',         // SELECT ...
-							'tx_icsodcategories_categories',   // FROM ...
-							$whereclause	// WHERE
-					);
-					while($row = $TYPO3_DB->sql_fetch_assoc($res))
-					{
-						$doc->addField('categories', $row['categories']);
-					}
-				}
-				
-				
-				//update doc
-				$addDocResponse = $solrClient->addDocument($doc);
-				
-				if ($addDocResponse->success())
-				{
-					$solrClient->commit();
-				}
-				else
-				{
-					$addDocResponse = $solrClient->addDocument($doc);
-				
-					if ($addDocResponse->success())
-					{
-						$solrClient->commit();
-					}
-					else
-					{
-						$solrClient->rollback();
-					}
-				}
+				$this->solrUpdateDataset($solrClient, $updateFieldLabelArray, $tabChamps, $pObj);
 			}
 		}
 	
@@ -274,79 +74,309 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			{
 				//get old doc
 				$oldDoc = SolrTools::getOldDoc($pObj->checkValue_currentRecord[filegroup], $solrClient);
-				
-				//Convert old doc to input doc
-				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
-				
-				// add format to doc
-				$doc->addField('files_types_id',$tabChamps[format]);
-				
-				//update doc
-				$addDocResponse = $solrClient->addDocument($doc);
-				
-				
-				if ($addDocResponse->success())
+				if(isset($oldDoc) && is_object($oldDoc))
 				{
-					$solrClient->commit();
-				}
-				else
-				{
+					//Convert old doc to input doc
+					$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
+					
+					// add format to doc
+					$doc->addField('files_types_id',$tabChamps['format']);
+					
+					//update doc
 					$addDocResponse = $solrClient->addDocument($doc);
-						
+					
+					
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
 					}
 					else
 					{
-						$solrClient->rollback();
+						$addDocResponse = $solrClient->addDocument($doc);
+							
+						if ($addDocResponse->success())
+						{
+							$solrClient->commit();
+						}
+						else
+						{
+							$solrClient->rollback();
+						}
 					}
 				}
-				
 			}
-			elseif ($status === 'update' && isset($tabChamps[format]) && $tabChamps[format] !== '')
+			elseif ($status === 'update' && isset($tabChamps['format']) && $tabChamps['format'] !== '')
 			{
 				//get old doc
 				$oldDoc = SolrTools::getOldDoc($pObj->datamap[tx_icsoddatastore_files][$pObj->checkValue_currentRecord[uid]][filegroup], $solrClient);
 				
-				//Convert old doc to input doc
-				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
-			
-			
-				//delete old file format
-				if( in_array( $pObj->historyRecords['tx_icsoddatastore_files:' . $pObj->checkValue_currentRecord[uid]][oldRecord][format], $doc->getField('files_types_id')->values ) )
+				if(isset($oldDoc) && is_object($oldDoc))
 				{
-					$formats = $doc->getField('files_types_id')->values;
-					$doc->deleteField('files_types_id');
-					unset($formats[array_search($pObj->historyRecords['tx_icsoddatastore_files:' . $pObj->checkValue_currentRecord[uid]][oldRecord][format], $formats)]);
-					foreach ($formats as $format)
+					//Convert old doc to input doc
+					$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
+				
+				
+					//delete old file format
+					if( in_array( $pObj->historyRecords['tx_icsoddatastore_files:' . $pObj->checkValue_currentRecord[uid]][oldRecord][format], $doc->getField('files_types_id')->values ) )
 					{
-						$doc->addField('files_types_id',$format);
+						$formats = $doc->getField('files_types_id')->values;
+						$doc->deleteField('files_types_id');
+						unset($formats[array_search($pObj->historyRecords['tx_icsoddatastore_files:' . $pObj->checkValue_currentRecord[uid]][oldRecord][format], $formats)]);
+						foreach ($formats as $format)
+						{
+							$doc->addField('files_types_id',$format);
+						}
 					}
-				}
-				// add new format to doc
-				$doc->addField('files_types_id',$tabChamps[format]);
-				
-				//update doc
-				$addDocResponse = $solrClient->addDocument($doc);
-				
-				
-				if ($addDocResponse->success())
-				{
-					$solrClient->commit();
-				}
-				else
-				{
+					// add new format to doc
+					$doc->addField('files_types_id',$tabChamps['format']);
+					
+					//update doc
 					$addDocResponse = $solrClient->addDocument($doc);
-				
+					
+					
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
 					}
 					else
 					{
-						$solrClient->rollback();
+						$addDocResponse = $solrClient->addDocument($doc);
+					
+						if ($addDocResponse->success())
+						{
+							$solrClient->commit();
+						}
+						else
+						{
+							$solrClient->rollback();
+						}
 					}
+				}
+			}
+		}
+	}
+	
+	private function solrCreateDataset($solrClient, $createFieldLabelArray, $tabChamps, $pObj)
+	{
+		global $TYPO3_DB;
+		$doc = new SolrInputDocument();
+		
+		foreach ($createFieldLabelArray as $fieldLabel)
+		{
+			$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
+		}
+		
+		$doc->addField('deleted', '0');
+		
+		$doc->addField('release_date', date("Y-m-d",$tabChamps['release_date']) . 'T' . date("H:i:s", $tabChamps['release_date']) . 'Z');
+		$doc->addField('update_date', date("Y-m-d",$tabChamps['update_date']) . 'T' . date("H:i:s", $tabChamps['update_date']) . 'Z');
+		
+		// id field
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid',         // SELECT ...
+				'tx_icsoddatastore_filegroups',    // FROM ...
+				'identifier="'. $tabChamps['identifier'] .'"'	// WHERE
+		);
+		$row = $TYPO3_DB->sql_fetch_assoc($res);
+		$doc->addField('id', $row['uid']);
+		$filegroup_id = $row['uid'];
+		
+		if(isset($tabChamps['manager']))
+		{
+			// manager field
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'name manager',         // SELECT ...
+					'tx_icsoddatastore_tiers',    // FROM ...
+					'uid="'.$tabChamps['manager'].'"'	// WHERE
+			);
+			$row = $TYPO3_DB->sql_fetch_assoc($res);
+			$doc->addField('manager', $row['manager']);
+		}
+		
+		if(isset($tabChamps['owner']))
+		{
+			// owner field
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'name owner',         // SELECT ...
+					'tx_icsoddatastore_tiers',    // FROM ...
+					'uid="'.$tabChamps['owner'].'"'	// WHERE
+			);
+			$row = $TYPO3_DB->sql_fetch_assoc($res);
+			$doc->addField('owner', $row['owner']);
+		}
+		
+		if(intval($tabChamps['tx_icsodcategories_categories']) > 0)
+		{
+			// categories field
+			$whereclause = '1=0';
+			foreach ($pObj->dbAnalysisStore[0][0]->tableArray[tx_icsodcategories_categories] as $categorieId)
+			{
+				$whereclause .= ' OR uid=' . $categorieId;
+			}
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'name categories',         // SELECT ...
+					'tx_icsodcategories_categories',   // FROM ...
+					$whereclause	// WHERE
+			);
+			while($row = $TYPO3_DB->sql_fetch_assoc($res))
+				$doc->addField('categories', $row['categories']);
+		}
+		
+		$addDocResponse = $solrClient->addDocument($doc);
+		
+		try
+		{
+			if ($addDocResponse->success())
+			{
+				$solrClient->commit();
+			}
+			else
+			{
+				$addDocResponse = $solrClient->addDocument($doc);
+		
+				if ($addDocResponse->success())
+				{
+					$solrClient->commit();
+				}
+				else
+				{
+					$solrClient->rollback();
+				}
+			}
+		}
+		catch (SolrException $e)
+		{
+			$e->getMessage();
+		}
+	}
+	
+	
+	private function solrUpdateDataset($solrClient, $updateFieldLabelArray, $tabChamps, $pObj)
+	{
+		global $TYPO3_DB;
+		//get old doc
+		$oldDoc = SolrTools::getOldDoc($pObj->checkValue_currentRecord[uid], $solrClient);
+		if(isset($oldDoc) && is_object($oldDoc))
+		{
+			//Convert old doc to input doc
+			$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
+			// update fields
+			foreach ($updateFieldLabelArray as $fieldLabel)
+			{
+				if (isset($tabChamps[$fieldLabel]))
+				{
+					$doc->deleteField($fieldLabel);
+					$doc->addField($fieldLabel, $tabChamps[$fieldLabel]);
+				}
+			}
+			
+			if (isset($tabChamps['release_date']))
+			{
+				if($doc->fieldExists('release_date'))
+				{
+					$doc->deleteField('release_date');
+				}
+				$doc->addField('release_date', date("Y-m-d",$tabChamps['release_date']) . 'T' . date("H:i:s", $tabChamps['release_date']) . 'Z');
+			}
+			
+			if (isset($tabChamps['update_date']))
+			{
+				if($doc->fieldExists('update_date'))
+				{
+					$doc->deleteField('update_date');
+				}
+				$doc->addField('update_date', date("Y-m-d",$tabChamps['update_date']) . 'T' . date("H:i:s", $tabChamps['update_date']) . 'Z');
+			}
+			
+			// manager field
+			if(isset($tabChamps['manager']))
+			{
+				if($doc->fieldExists('manager'))
+				{
+					$doc->deleteField('manager');
+				}
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'name manager',         // SELECT ...
+						'tx_icsoddatastore_tiers',    // FROM ...
+						'uid="'.$tabChamps['manager'].'"'	// WHERE
+				);
+				$row = $TYPO3_DB->sql_fetch_assoc($res);
+				$doc->addField('manager', $row['manager']);
+			}
+			
+			// owner field
+			if(isset($tabChamps['owner']))
+			{
+				if($doc->fieldExists('owner'))
+				{
+					$doc->deleteField('owner');
+				}
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'name owner',         // SELECT ...
+						'tx_icsoddatastore_tiers',    // FROM ...
+						'uid="'.$tabChamps['owner'].'"'	// WHERE
+				);
+				$row = $TYPO3_DB->sql_fetch_assoc($res);
+				$doc->addField('owner', $row['owner']);
+			}
+			
+			// categories field
+			if(intval($tabChamps['tx_icsodcategories_categories']) > 0)
+			{
+				if($doc->fieldExists('categories'))
+				{
+					$doc->deleteField('categories');
+				}
+				$whereclause = '1=0';
+				foreach (explode(',', $pObj->datamap[tx_icsoddatastore_filegroups][$pObj->checkValue_currentRecord[uid]][tx_icsodcategories_categories]) as $categorieId)
+				{
+					if ($categorieId !== '')
+					{
+						$whereclause .= ' OR uid=' . $categorieId;
+					}
+				}
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'name categories',         // SELECT ...
+						'tx_icsodcategories_categories',   // FROM ...
+						$whereclause	// WHERE
+				);
+				while($row = $TYPO3_DB->sql_fetch_assoc($res))
+				{
+					$doc->addField('categories', $row['categories']);
+				}
+			}
+			
+			//check if not deleted
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'deleted',         // SELECT ...
+					'tx_icsoddatastore_filegroups',   // FROM ...
+					'uid =' . $pObj->checkValue_currentRecord[uid]	// WHERE
+			);
+			$row = $TYPO3_DB->sql_fetch_assoc($res);
+			if(!$row['deleted'])
+			{
+				$doc->deleteField('deleted');
+				$doc->addField('deleted', 0);
+			}
+			
+			//update doc
+			$addDocResponse = $solrClient->addDocument($doc);
+			
+			if ($addDocResponse->success())
+			{
+				$solrClient->commit();
+			}
+			else
+			{
+				$addDocResponse = $solrClient->addDocument($doc);
+			
+				if ($addDocResponse->success())
+				{
+					$solrClient->commit();
+				}
+				else
+				{
+					$solrClient->rollback();
 				}
 			}
 		}

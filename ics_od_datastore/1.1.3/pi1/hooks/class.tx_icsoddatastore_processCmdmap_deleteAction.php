@@ -40,35 +40,48 @@ class tx_icsoddatastore_processCmdmap_deleteAction {
 	{
 
 		global $TYPO3_DB;
-
+		$solrClient = SolrTools::initSolrClient();
+		
 		if ($table === 'tx_icsoddatastore_filegroups')
 		{
-			$solrClient = SolrTools::initSolrClient();
+			$oldDoc = SolrTools::getOldDoc($id, $solrClient);
 			
-			$updateResponse = $solrClient->deleteById($id);
-			
-			try 
+			if(isset($oldDoc) && is_object($oldDoc))
 			{
-				if ($updateResponse->success())
+				//Convert old doc to input doc
+				$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
+			
+				if($doc->fieldExists('deleted'))
 				{
-					$solrClient->commit();
+					$doc->deleteField('deleted');
 				}
-				else
+				$doc->addField('deleted', '1');
+					
+				$updateResponse = $solrClient->addDocument($doc);
+				
+				try 
 				{
-					$updateResponse = $solrClient->deleteById($id);
 					if ($updateResponse->success())
 					{
 						$solrClient->commit();
 					}
 					else
 					{
-						$solrClient->rollback();
+						$updateResponse = $solrClient->addDocument($doc);
+						if ($updateResponse->success())
+						{
+							$solrClient->commit();
+						}
+						else
+						{
+							$solrClient->rollback();
+						}
 					}
 				}
-			}
-			catch (SolrException $e)
-			{
-				t3lib_div::sysLog($e->getMessage(), 'ics_od_datastore');
+				catch (SolrException $e)
+				{
+					t3lib_div::sysLog($e->getMessage(), 'ics_od_datastore');
+				}
 			}
 		}
 		
@@ -83,50 +96,51 @@ class tx_icsoddatastore_processCmdmap_deleteAction {
 			$row = $TYPO3_DB->sql_fetch_assoc($res);
 
 			//get old doc
-			$solrClient = SolrTools::initSolrClient();
 			$oldDoc = SolrTools::getOldDoc($row['uid_foreign'], $solrClient);
 			
+			if(isset($oldDoc) && is_object($oldDoc))
+			{	
 			//Convert old doc to input doc
 			$doc = SolrTools::solrDocToSolrInputDoc($oldDoc);
 				
-				
-			//delete selected file format
-			$formats = $doc->getField('files_types_id')->values;
-			$doc->deleteField('files_types_id');
-			unset($formats[array_search($recordToDelete[format], $formats)]);
-			foreach ($formats as $format)
-			{
-				$doc->addField('files_types_id',$format);
-			}
-			
-			//update doc
-			$addDocResponse = $solrClient->addDocument($doc);
-			
-			
-			try 
-			{
-				if ($addDocResponse->success())
+				//delete selected file format
+				$formats = $doc->getField('files_types_id')->values;
+				$doc->deleteField('files_types_id');
+				unset($formats[array_search($recordToDelete[format], $formats)]);
+				foreach ($formats as $format)
 				{
-					$solrClient->commit();
+					$doc->addField('files_types_id',$format);
 				}
-				else
-				{
-					$addDocResponse = $solrClient->addDocument($doc);
 				
+				//update doc
+				$addDocResponse = $solrClient->addDocument($doc);
+				
+				
+				try 
+				{
 					if ($addDocResponse->success())
 					{
 						$solrClient->commit();
 					}
 					else
 					{
-						$solrClient->rollback();
+						$addDocResponse = $solrClient->addDocument($doc);
+					
+						if ($addDocResponse->success())
+						{
+							$solrClient->commit();
+						}
+						else
+						{
+							$solrClient->rollback();
+						}
 					}
 				}
-			}
-			catch (SolrException $e)
-			{
-				t3lib_div::sysLog($e->getMessage(), 'ics_od_datastore');
-			}
+				catch (SolrException $e)
+				{
+					t3lib_div::sysLog($e->getMessage(), 'ics_od_datastore');
+				}
+			}	
 		}
 	}
 }
