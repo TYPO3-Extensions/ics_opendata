@@ -568,7 +568,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
 		
-		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner' . $facet_request . '&wt=phps');
+// 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner' . $facet_request . '&wt=phps');
 		
 		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
