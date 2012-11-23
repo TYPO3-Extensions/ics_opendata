@@ -569,7 +569,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		
 // 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		
-		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
+		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=0&facet=true&facet.field=categories&facet.field=files_types_id&facet.field=manager&facet.field=owner' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
