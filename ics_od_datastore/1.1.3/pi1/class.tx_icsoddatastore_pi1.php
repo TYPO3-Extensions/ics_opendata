@@ -156,7 +156,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function controlVars(&$content) {
 		$error = false;
 		if (isset($this->piVars['uid']) && !is_numeric($this->piVars['uid'])) {
-			$content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+// 			$content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+			$content .= $this->pi_getLL('error_param_uid');
 			$error = true;
 		}
 		return $error ? false : true;
