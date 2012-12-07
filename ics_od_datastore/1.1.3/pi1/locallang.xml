@@ -59,7 +59,8 @@
 			<label index="detail_similitudes_label">See also</label>
 			<label index="detail_table_label">Table:</label>
 			<label index="detail_url_label">URL:</label>
-			<label index="detail_api_table_attribute">Attribute</label>
+            <label index="detail_api_table_attribute_name">Attribut name</label>
+            <label index="detail_api_table_attribute_code">Attribut code</label>
 			<label index="detail_api_table_type">Type</label>
 			<label index="detail_api_table_description">Description</label>
 			<label index="detail_api_table_possible_values">Possible values</label>
@@ -160,7 +161,8 @@
 			<label index="detail_similitudes_label">Voir aussi</label>
 			<label index="detail_table_label">Table :</label>
             <label index="detail_url_label">URL :</label>
-            <label index="detail_api_table_attribute">Attribut</label>
+            <label index="detail_api_table_attribute_name">Nom de l'attribut</label>
+            <label index="detail_api_table_attribute_code">Code de l'attribut</label>
             <label index="detail_api_table_type">Type</label>
             <label index="detail_api_table_description">Description</label>
             <label index="detail_api_table_possible_values">Valeurs possibles</label>
