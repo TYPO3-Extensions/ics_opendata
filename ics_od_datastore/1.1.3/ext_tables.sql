@@ -10,7 +10,7 @@ CREATE TABLE tx_icsoddatastore_filegroups (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title varchar(255) DEFAULT '' NOT NULL,
-	identifier varchar(31) DEFAULT '' NOT NULL,
+	identifier varchar(63) DEFAULT '' NOT NULL,
 	description text,
 	technical_data text,
 	files int(11) DEFAULT '0' NOT NULL,

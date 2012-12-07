@@ -33,7 +33,7 @@ $TCA['tx_icsoddatastore_filegroups'] = array (
 			'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_filegroups.identifier',		
 			'config' => array (
 				'type' => 'input',	
-				'size' => '31',	
+				'size' => '63',	
 				'eval' => 'required,trim',
 			)
 		),
