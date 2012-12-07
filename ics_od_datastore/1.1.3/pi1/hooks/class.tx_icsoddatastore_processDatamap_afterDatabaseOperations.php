@@ -171,8 +171,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		$doc->addField('release_date', date("Y-m-d",$tabChamps['release_date']) . 'T' . date("H:i:s", $tabChamps['release_date']) . 'Z');
 		$doc->addField('update_date', date("Y-m-d",$tabChamps['update_date']) . 'T' . date("H:i:s", $tabChamps['update_date']) . 'Z');
 		
-		t3lib_div::debug($tabChamps);
-		
 		// id field
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',         // SELECT ...
@@ -182,7 +180,6 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		$row = $TYPO3_DB->sql_fetch_assoc($res);
 		$doc->addField('id', $row['uid']);
 		$filegroup_id = $row['uid'];
-		t3lib_div::debug($filegroup_id);
 		
 		if(isset($tabChamps['manager']))
 		{
