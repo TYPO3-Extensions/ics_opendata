@@ -29,7 +29,7 @@
 			<label index="error_publish">Error publish, application doesn't exist</label>
 			<label index="success_publish">Application %1$s published.</label>
 			<label index="success_unpublish">Application %1$s unpublished.</label>
-			<label index="message_empty">Pas encore d'application ?</label>
+			<label index="message_empty">Not yet application?</label>
 			<label index="error_param_publish">Error: publish param incorrect</label>
 			<label index="error_param_unpublish">Error: unpublish param incorrect</label>
 		</languageKey>
@@ -53,6 +53,9 @@
 			<label index="error_publish">Une erreur s'est produite lors de la publication, l'application n'existe pas.</label>
 			<label index="success_publish">L'application %1$s a bien été publiée.</label>
 			<label index="success_unpublish">L'application %1$s a bien été dépubliée.</label>
+			<label index="message_empty">Pas encore d'application ?</label>
+			<label index="error_param_publish">Erreur: paramètre incorrectes</label>
+			<label index="error_param_unpublish">Erreur: paramètre incorrectes</label>
 		</languageKey>
 	</data>
 	<orig_hash type="array">

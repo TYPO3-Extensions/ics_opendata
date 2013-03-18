@@ -237,6 +237,59 @@ $TCA['tx_icsodappstore_logs'] = array (
 
 
 
+$TCA['tx_icsodappstore_month_logs'] = array (
+	'ctrl' => $TCA['tx_icsodappstore_month_logs']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'hidden,application,ip,cmd'
+	),
+	'feInterface' => $TCA['tx_icsodappstore_month_logs']['feInterface'],
+	'columns' => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'application' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_month_logs.application',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',	
+				'eval' => 'int',
+			)
+		),
+		'ip' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_month_logs.ip',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',	
+				'eval' => 'trim',
+			)
+		),
+		'cmd' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:ics_od_appstore/locallang_db.xml:tx_icsodappstore_month_logs.cmd',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',	
+				'eval' => 'trim',
+			)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, application, ip, cmd')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => '')
+	)
+);
+
+
+
 $TCA['tx_icsodappstore_statistics'] = array (
 	'ctrl' => $TCA['tx_icsodappstore_statistics']['ctrl'],
 	'interface' => array (
