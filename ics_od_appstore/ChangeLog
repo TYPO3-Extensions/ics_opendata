@@ -1,3 +1,6 @@
+2013-03-18 Tsi YANG  <tsi.yang@plan-net.fr>
+	* Feature: Added filter on favorite applications
+
 2013-03-14 Tsi YANG  <tsi@in-cite.net>
 	* Feature: Added tx_icsodappstore_month_logs TCA
 	* Feature: Added locallang key fr version

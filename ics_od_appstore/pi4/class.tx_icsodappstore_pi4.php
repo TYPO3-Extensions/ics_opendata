@@ -77,6 +77,7 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_initPIflexForm();
 		$this->init();
 		
 		if( $this->confValidator() ){
@@ -153,6 +154,13 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		if(!isset($this->piVars['uid']) || !is_numeric($this->piVars["uid"])){
 			$this->piVars['uid'] = null;
 		}
+		
+		// Gets sorting
+		$sortAvailable = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortAvailable', 'sortAndFilter');
+		$this->conf['list.']['orderAvailable'] = $sortAvailable? $sortAvailable: $this->conf['list.']['orderAvailable'];
+		$sortDefault = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortDefault', 'sortAndFilter');
+		$this->conf['list.']['orderDefault'] = $sortDefault? $sortDefault: $this->conf['list.']['orderDefault'];
+		
 		$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
 		if(!array_key_exists($this->piVars['sort'],$orderAvailable)){
 			foreach($orderAvailable as $k => $v){
@@ -160,7 +168,12 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					$this->piVars['sort'] = $k;
 			}
 		}
+
 		$this->piVars['maxRows'] = $this->piVars['page'] * $rows_by_page;
+		
+		// Gets favorite applications list
+		$fav_applis = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'applications', 'main');
+		$this->conf['fav_applis'] = $fav_applis? $fav_applis: $this->conf['fav_applis'];		
 	}
 
 	/**
@@ -183,12 +196,13 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 
 			//Validator TCA field
 			if( !in_array($this->conf['list.']['orderDefault'],$orderAvailable) ||
-				!$this->existInApplicationTCA($this->conf['list.']['orderDefault']) ){
+				(!$this->existInApplicationTCA($this->conf['list.']['orderDefault']) && $this->conf['list.']['orderDefault']!='favorite')){
 				$ret = false;
 			}
 			else
 				foreach($orderAvailable as $k=>$v){
-					if(!$this->existInApplicationTCA($v)) $ret = false;
+					if(!$this->existInApplicationTCA($v) && $this->conf['list.']['orderDefault']!='favorite') 
+						$ret = false;
 				}
 		}
 		return $ret;

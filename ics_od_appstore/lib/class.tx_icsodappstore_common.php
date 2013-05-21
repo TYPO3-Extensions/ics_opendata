@@ -95,8 +95,11 @@ class tx_icsodappstore_common extends tslib_pibase {
 		if (is_array($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icsodappstore.'])) {
 			$this->conf = array_merge($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_icsodappstore.'], $this->conf);
 		}
-		if ($this->conf['template'])
-			$this->templateFile = $this->conf['template'];
+
+		$templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template', 'main');
+		$templateFile = $templateFile? $templateFile: $this->conf['template'];
+		$this->templateFile = $templateFile ? $templateFile : $this->templateFile;
+
 		return true;
 	}
 
@@ -134,12 +137,20 @@ class tx_icsodappstore_common extends tslib_pibase {
 
 		switch($mode) {
 			case self::APPMODE_ALL:
+				$fav_applis = t3lib_div::intExplode(',', $this->conf['fav_applis'], true);
 				if ($parameter && is_array($parameter) && !empty($parameter)) {
 					// limit
 					$rows_by_page = $this->conf['list.']['colNum'] * $this->conf['list.']['rowsByCol'];
 					$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
+					// $sortOrder = $this->conf['list.']['sortOrder']? $this->conf['list.']['sortOrder']: 'DESC';
 
-					$order = $orderAvailable[$parameter['sort']]. ' DESC';
+					if ($parameter['sort'] == 'favorite') {
+						$order = 'FIND_IN_SET(' . '`'.$this->tables['applications'].'`.`uid`' . ', ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(implode(',', $fav_applis), $this->tables['applications']) . ')';
+					}
+					else {
+						// $order = $orderAvailable[$parameter['sort']]. $sortOrder;
+						$order = $orderAvailable[$parameter['sort']]. ' DESC';
+					}
 					$limit = ($parameter['page'] * $rows_by_page) . ',' . $rows_by_page;
 				}
 
@@ -148,6 +159,10 @@ class tx_icsodappstore_common extends tslib_pibase {
 				$addWhere[] = '`'.$this->tables['applications'].'`.`lock_publication` = 0';
 				$addWhere[] = '`'.$this->tables['applications'].'`.`publish` = 1 ';
 				$addWhere[] = '1 '.$this->cObj->enableFields($this->tables['applications']);
+				
+				if (!empty($fav_applis)) {
+					$addWhere[] = '`'.$this->tables['applications'].'`.`uid` IN (' . implode(',', $fav_applis) . ')';
+				}
 			break;
 
 			case self::APPMODE_USER:
@@ -258,16 +273,6 @@ class tx_icsodappstore_common extends tslib_pibase {
 			$limit
 		);
 
-		// var_dump($GLOBALS['TYPO3_DB']->SELECTquery(
-			// $select,
-			// '`'.$this->tables['applications'].'`
-				// INNER JOIN `'.$this->tables['users'].'`
-				// ON `'.$this->tables['users'].'`.`uid` = `'.$this->tables['applications'].'`.`fe_cruser_id`',
-			// '`'.$this->tables['applications'].'`.`deleted` = 0  '.$where,
-			// $groupby,
-			// $order,
-			// $limit
-		// ));
 		if (is_array($apllications) && !empty($apllications))
 			return $apllications;
 		return false;
