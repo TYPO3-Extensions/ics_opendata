@@ -47,6 +47,9 @@
 			<label index="updateobject.modification">Modification</label>
 			<label index="updateobject.description">Description</label>
 			<label index="tx_smileicsoddatastore_highlight">highlighted filegroup: </label>
+			<label index="tx_smileicsoddatastore_dataviz_link_param">Parameters for link to dataviz view: </label>
+            <label index="tx_smileicsoddatastore_downloads_number">Downloads number: </label>
+            <label index="tx_smileicsoddatastore_has_real_time_data">Has real time data: </label>
 			<label index="newFile">New file</label>
 			<label index="editFile">Edit filegroup</label>
 			<label index="yes">yes</label>
@@ -98,6 +101,9 @@
 			<label index="updateobject.modification">Modification</label>
 			<label index="updateobject.description">Description</label>
 			<label index="tx_smileicsoddatastore_highlight">Jeu de données mis en avant : </label>
+			<label index="tx_smileicsoddatastore_dataviz_link_param">Paramètres pour le lien de datavisualisation : </label>
+			<label index="tx_smileicsoddatastore_downloads_number">Nombre de téléchargements : </label>
+            <label index="tx_smileicsoddatastore_has_real_time_data">Jeux de données en temps réel : </label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>
 			<label index="yes">oui</label>
