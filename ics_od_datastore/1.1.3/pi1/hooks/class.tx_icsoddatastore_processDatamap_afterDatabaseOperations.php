@@ -222,6 +222,11 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				$doc->addField('categories', $row['categories']);
 		}
 		
+		if(isset($tabChamps['param_dynamic_display']) && $tabChamps['param_dynamic_display'] != '')
+		{
+			$doc->addField('api_present', true);
+		}
+		
 		$addDocResponse = $solrClient->addDocument($doc);
 		
 		try
@@ -344,6 +349,24 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				{
 					$doc->addField('categories', $row['categories']);
 				}
+			}
+			
+			//api_present field
+			if(isset($tabChamps['param_dynamic_display']) && $tabChamps['param_dynamic_display'] != '')
+			{
+				if($doc->fieldExists('api_present'))
+				{
+					$doc->deleteField('api_present');
+				}
+				$doc->addField('api_present', true);
+			}
+			elseif(isset($tabChamps['param_dynamic_display']) && $tabChamps['param_dynamic_display'] == '')
+			{
+				if($doc->fieldExists('api_present'))
+				{
+					$doc->deleteField('api_present');
+				}
+				$doc->addField('api_present', false);
 			}
 			
 			//check if not deleted

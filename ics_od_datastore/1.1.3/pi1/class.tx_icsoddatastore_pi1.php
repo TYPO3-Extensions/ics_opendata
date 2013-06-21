@@ -550,7 +550,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		$facet_param = t3lib_div::_GP('facet');
 		$facet_request = '';
-		foreach (array('categories', 'files_types_id', 'manager', 'owner') as $facet_field)
+		foreach (array('categories', 'files_types_id', 'manager', 'owner', 'has_dynamic_display', 'api_present') as $facet_field)
 		{
 			$facet_temp_request = '&fq={!tag=' . substr($facet_field, 0, 3) . '}';
 			foreach ($facet_param as $facet => $value)
@@ -568,9 +568,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
 		
-// 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner' . $facet_request . '&wt=phps');
+// 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps'); //debug
 		
-		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner' . $facet_request . '&wt=phps');
+		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
@@ -714,6 +714,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$content ='';
 		$get_param_facet=t3lib_div::_GP('facet');
 		
+		//t3lib_div::debug($result); //debug
+		
 		foreach ($result[facet_counts][facet_fields] as $facet_name => $facet)
 		{
 			$templateItem = $this->cObj->getSubpart($template, '###FACET_LIST_ITEM###');
@@ -740,7 +742,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				foreach ($facet as $facet_value => $facet_count)
 				{
 					$temp_facet = '<span><input type="checkbox" id="' . $facet_name . '_' . $i . '" name="facet[' . $facet_name . ':' . $facet_value . ']"' . ($get_param_facet[$facet_name .  ':' . $facet_value] ? 'checked="checked"' : '' ) . ' />';
-					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . $facet_value . ' (' . $facet_count .')' . '</label></span></span>';
+					$temp_facet .= '<span><label for="' . $facet_name . '_' . $i . '">' . (($facet_value === 'true' || $facet_value === 'false') ? $this->pi_getLL($facet_value, 'tititoto', true) : $facet_value) . ' (' . $facet_count .')' . '</label></span></span>';
 					$markers['###FACETS###'] .= $temp_facet;
 					$i++;
 				}
