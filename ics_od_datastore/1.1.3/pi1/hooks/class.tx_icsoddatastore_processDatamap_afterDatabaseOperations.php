@@ -205,6 +205,18 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			$doc->addField('owner', $row['owner']);
 		}
 		
+		if(isset($tabChamps['publisher']))
+		{
+			// publisher field
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'name publisher',         // SELECT ...
+					'tx_icsoddatastore_tiers',    // FROM ...
+					'uid="'.$tabChamps['publisher'].'"'	// WHERE
+			);
+			$row = $TYPO3_DB->sql_fetch_assoc($res);
+			$doc->addField('publisher', $row['publisher']);
+		}
+		
 		if(intval($tabChamps['tx_icsodcategories_categories']) > 0)
 		{
 			// categories field
@@ -323,6 +335,22 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 				);
 				$row = $TYPO3_DB->sql_fetch_assoc($res);
 				$doc->addField('owner', $row['owner']);
+			}
+			
+			// publisher field
+			if(isset($tabChamps['publisher']))
+			{
+				if($doc->fieldExists('publisher'))
+				{
+					$doc->deleteField('publisher');
+				}
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'name publisher',         // SELECT ...
+						'tx_icsoddatastore_tiers',    // FROM ...
+						'uid="'.$tabChamps['publisher'].'"'	// WHERE
+				);
+				$row = $TYPO3_DB->sql_fetch_assoc($res);
+				$doc->addField('publisher', $row['publisher']);
 			}
 			
 			// categories field

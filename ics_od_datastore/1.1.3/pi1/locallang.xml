@@ -102,6 +102,7 @@
 			<label index="solr_facet_manager">Manager</label>
 			<label index="solr_facet_owner">Owner</label>
 			<label index="solr_facet_api_present">Has API</label>
+			<label index="solr_facet_solr_manager">Manager</label>
 			<label index="solr_facet_has_dynamic_display">Has dataviz</label>
 			<label index="solr_available_in">Available in</label>
 			<label index="go_to_details_card">Go to details card</label>
@@ -213,6 +214,7 @@
 			<label index="solr_facet_owner">Propriétaire</label>
 			<label index="solr_facet_api_present">API</label>
             <label index="solr_facet_has_dynamic_display">Visualisation</label>
+            <label index="solr_facet_solr_manager">Gestionnaire</label>
 			<label index="solr_available_in">Disponible au format </label>
 			<label index="go_to_details_card">Consulter la fiche détaillée</label>
 			<label index="go_to_details_card_of_dataset">Consulter la fiche détaillée du jeu de données </label>

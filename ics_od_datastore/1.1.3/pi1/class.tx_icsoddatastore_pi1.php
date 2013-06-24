@@ -550,7 +550,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		$facet_param = t3lib_div::_GP('facet');
 		$facet_request = '';
-		foreach (array('categories', 'files_types_id', 'manager', 'owner', 'has_dynamic_display', 'api_present') as $facet_field)
+		foreach (array('categories', 'files_types_id', 'solr_manager', 'has_dynamic_display', 'api_present') as $facet_field)
 		{
 			$facet_temp_request = '&fq={!tag=' . substr($facet_field, 0, 3) . '}';
 			foreach ($facet_param as $facet => $value)
@@ -568,9 +568,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_od_datastore']);
 		
-// 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps'); //debug
+// 		t3lib_div::debug('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=sol}solr_manager&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps'); //debug
 		
-		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=man}manager&facet.field={!ex=own}owner&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps');
+		$serializedResult = file_get_contents('http://' . $extConf['solr_hostname'] . ':8983/solr/select?q='.$request.'&sort=' . $sort_request . '&start=' . $first_item_place . '&rows='.$this->nbFileGroupByPage.'&facet.mincount=1&facet=true&facet.field={!ex=cat}categories&facet.field={!ex=fil}files_types_id&facet.field={!ex=sol}solr_manager&facet.field={!ex=api}api_present&facet.field={!ex=has}has_dynamic_display' . $facet_request . '&wt=phps');
 		$result = unserialize($serializedResult);
 		$this->nbFileGroup = $result[response][numFound];
 		$markers['###PAGE_BROWSER###'] = $this->getListGetPageBrowser(intval(ceil($this->nbFileGroup/$this->nbFileGroupByPage)));
