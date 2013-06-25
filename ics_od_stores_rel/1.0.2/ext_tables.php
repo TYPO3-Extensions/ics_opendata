@@ -11,7 +11,7 @@ $tempColumns = array (
 			'foreign_table' => 'tx_icsoddatastore_filegroups',	
 			'foreign_table_where' => 'ORDER BY tx_icsoddatastore_filegroups.uid',	
 			'size' => 5,	
-			'minitems' => 0,
+			'minitems' => 1,
 			'maxitems' => 100,	
 			"MM" => "tx_icsodstoresrel_apps_filegroups_mm",
 		)
