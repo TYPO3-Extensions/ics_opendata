@@ -42,6 +42,7 @@ $TCA['tx_icsodappstore_applications'] = array (
 				'type' => 'text',
 				'cols' => '30',	
 				'rows' => '15',
+				'eval' => 'required',
 			)
 		),
 		'platform' => array (		
@@ -61,7 +62,7 @@ $TCA['tx_icsodappstore_applications'] = array (
 				'foreign_table' => 'tx_icsodappstore_platforms',	
 				'foreign_table_where' => 'ORDER BY tx_icsodappstore_platforms.uid',	
 				'size' => '10',	
-				'minitems' => 0,
+				'minitems' => 1,
 				'maxitems' => 100,	
 				"MM" => "tx_icsodappstore_apps_platforms_mm",
 			)
