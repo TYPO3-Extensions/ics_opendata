@@ -373,7 +373,7 @@ class tx_icsodappstore_common extends tslib_pibase {
 	 */
 	function getAppPlatforms($application) {
 		return $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-			'`'.$this->tables['platforms'].'`.`uid`,`'.$this->tables['platforms'].'`.`title`',
+			'`'.$this->tables['platforms'].'`.`uid`,`'.$this->tables['platforms'].'`.`title`,`'.$this->tables['platforms'].'`.`ux_tx_icsodappstore_picto`',
 			$this->tables['applications'],
 			$this->tables['apps_platforms_mm'],
 			$this->tables['platforms'],
