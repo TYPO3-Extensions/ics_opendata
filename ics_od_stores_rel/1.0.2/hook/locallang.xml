@@ -8,12 +8,12 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="datasets">Datasets</label>
-			<label index="dataset_separator">, </label>
+			<label index="dataset_separator"><![CDATA[<br />]]></label>
 			<label index="datasets_notExists">These datasets do not exist.</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="datasets">Jeux de données</label>
-			<label index="dataset_separator">, </label>
+			<label index="dataset_separator"><![CDATA[<br />]]></label>
 			<label index="datasets_notExists">Les jeux de données n'existent pas.</label>
 		</languageKey>
 	</data>
