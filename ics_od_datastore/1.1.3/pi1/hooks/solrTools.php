@@ -68,7 +68,7 @@ class SolrTools {
 	{
 		
 		$query = new SolrQuery();
-		$query->setQuery("id:" . $oldDocId);
+		$query->setQuery("id:" . $oldDocId . " AND type:1");
 		$query_response = $solrClient->query($query);
 		$query_response->setParseMode(SolrQueryResponse::PARSE_SOLR_DOC);
 		$response = $query_response->getResponse();
@@ -81,7 +81,7 @@ class SolrTools {
 	public static function getSimilarDocs($refDocId, $solrClient, $nbOfDoc = 5, $searchField = 'keywords')
 	{
 		$query = new SolrQuery();
-		$query->setQuery("id:" . $refDocId);
+		$query->setQuery("id:" . $refDocId . " AND type:1");
 		$query->setMlt(TRUE);
 		$query->setMltCount($nbOfDoc);
 		$query->addMltField($searchField);
