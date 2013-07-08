@@ -167,6 +167,7 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 		}
 		
 		$doc->addField('deleted', '0');
+		$doc->addField('type', '1');
 		
 		$doc->addField('release_date', date("Y-m-d",$tabChamps['release_date']) . 'T' . date("H:i:s", $tabChamps['release_date']) . 'Z');
 		$doc->addField('update_date', date("Y-m-d",$tabChamps['update_date']) . 'T' . date("H:i:s", $tabChamps['update_date']) . 'Z');

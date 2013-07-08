@@ -94,7 +94,7 @@ class SolrTools {
 		{
 			foreach ($value['docs'] as $doc)
 			{
-				if($doc['deleted'] === 0 && $doc['hidden'] === 0)
+				if($doc['deleted'] === 0 && $doc['hidden'] === 0 && $doc['type'] === 1)
 				{
 					$docsArray[] =  $doc;
 				}
