@@ -504,11 +504,11 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$first_item_place = 0;
 		}
 		
-		$request = "deleted:0+AND+hidden:0";	//default request, return all visible results
+		$request = "deleted:0+AND+hidden:0+AND+type:1";	//default request, return all visible results
 		$keywords_request = t3lib_div::_GP('keywords');
 		if (isset($keywords_request) && ($keywords_request !== ''))
 		{
-			$request = "text:" . urlencode(t3lib_div::_GP('keywords')) . "+AND+deleted:0+AND+hidden:0";
+			$request = "text:" . urlencode(t3lib_div::_GP('keywords')) . "+AND+deleted:0+AND+hidden:0+AND+type:1";
 		}
 		
 		$sort_search = t3lib_div::_GP('sort_search');
