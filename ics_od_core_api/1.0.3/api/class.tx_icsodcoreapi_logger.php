@@ -61,7 +61,7 @@ class tx_icsodcoreapi_logger {
 	 * @return	void
 	 */
 	function logCall() {
-		$this->insertCall();
+		//$this->insertCall();	//unused stat
 		$this->incrementsUsage();
 	}
 
