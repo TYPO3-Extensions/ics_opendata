@@ -9,5 +9,6 @@ return array(
 	'tx_icsodcategories_tools' => $extensionPath . 'lib/class.tx_icsodcategories_tools.php',
 	'tx_icsodcategories_od_getcategories_command' => $extensionPath . 'opendata/class.tx_icsodcategories_od_getcategories_command.php',
 	'tx_icsodcategories_category_datasource' => $extensionPath . 'opendata/datasource/class.tx_icsodcategories_category_datasource.php',
+	'tx_icsodcategories_appstore_RSS' => $extensionPath . 'class.tx_icsodcategories_appstore_RSS.php',
 );
 ?>

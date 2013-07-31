@@ -43,4 +43,8 @@ if (t3lib_extMgm::isLoaded('ics_od_appstore')) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_appstore']['applicationFieldsRenderLabel'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_appstore.php:tx_icsodcategories_appstore';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_appstore']['applicationFieldsRenderControls'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_appstore.php:tx_icsodcategories_appstore';
 }
+
+if (t3lib_extMgm::isLoaded('smile_icsodappstore')) {
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['smile_icsodappstore']['additionalFieldsRSSMarkers'][] = 'EXT:ics_od_categories/class.tx_icsodcategories_appstore_RSS.php:tx_icsodcategories_appstore_RSS';
+}
 ?>
