@@ -33,10 +33,10 @@
  * @package	TYPO3
  * @subpackage	tx_icsodcoreapi
  */
-class tx_icsodcoreapi_command{
+class tx_icsodcoreapi_command extends tslib_pibase{
 
 	private $name = '', $cmd  = '', $description  = '', $brief = '';
-	private $parameters = array();
+	public $parameters = array();
 
 	/**
 	 * Loads a document xml
