@@ -256,4 +256,7 @@ class tx_icsoddatastore_datastore_searchdatasets_command extends tx_icsodcoreapi
 		$xmlwriter->endElement();
 	}
 
-} // End of class tx_icsoddatastore_datastore_searchdatasets_command
+}
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_od_datastore/opendata/class.tx_icsoddatastore_datastore_searchdatasets_command.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_od_datastore/opendata/class.tx_icsoddatastore_datastore_searchdatasets_command.php']);
+}// End of class tx_icsoddatastore_datastore_searchdatasets_command
