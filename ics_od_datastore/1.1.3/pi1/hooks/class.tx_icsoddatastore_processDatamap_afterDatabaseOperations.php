@@ -240,6 +240,8 @@ class tx_icsoddatastore_processDatamap_afterDatabaseOperations {
 			$doc->addField('api_present', true);
 		}
 		
+		$doc->addField('key', $filegroup_id.'1');
+		
 		$addDocResponse = $solrClient->addDocument($doc);
 		
 		try
