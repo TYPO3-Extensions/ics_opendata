@@ -152,7 +152,7 @@
 			<label index="detail_language">Langue : </label>
 			<label index="detail_quality">Qualité : </label>
 			<label index="detail_granularity">Granularité (géographique ou temporelle) : </label>
-			<label index="detail_linked_references">Documentation : </label>
+			<label index="detail_linked_references">Documentation</label>
 			<label index="detail_taxonomy">Vocabulaire de référence des thèmes : </label>
 			<label index="detail_illustration">Illustration</label>
 			<label index="detail_licence_disclaimer">Consulter les conditions générales d'utilisation et la licence</label>
