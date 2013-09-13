@@ -227,7 +227,7 @@ class tx_icsodcategories_tools extends tslib_pibase {
 	 */
 	function addCategoriesToElement($uid, $listCategories) {
 		if (is_array($listCategories) && !empty($listCategories))  {
-			foreach ($listCategories as $category) {
+			foreach ($listCategories as $category => $checked) {
 				if ($category) {
 					$data = array(
 						'`uid_local`' => $category,
