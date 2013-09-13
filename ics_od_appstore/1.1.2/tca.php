@@ -112,7 +112,7 @@ $TCA['tx_icsodappstore_applications'] = array (
 				'type' => 'group',
 				'internal_type' => 'file',
 				'allowed' => 'gif,png,jpeg,jpg',	
-				'max_size' => 20,	
+				'max_size' => 400,	
 				'uploadfolder' => 'uploads/tx_icsodappstore',
 				'size' => 1,	
 				'minitems' => 0,
@@ -128,9 +128,9 @@ $TCA['tx_icsodappstore_applications'] = array (
 				'allowed' => 'gif,png,jpeg,jpg',	
 				'max_size' => 400,	
 				'uploadfolder' => 'uploads/tx_icsodappstore',
-				'size' => 3,	
+				'size' => 4,	
 				'minitems' => 0,
-				'maxitems' => 3,
+				'maxitems' => 4,
 			)
 		),
 		'link' => array (		
