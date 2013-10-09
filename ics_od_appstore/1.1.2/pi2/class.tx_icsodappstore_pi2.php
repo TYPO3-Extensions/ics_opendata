@@ -731,7 +731,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 	 * @param	string	$template		Le gabarit des plateformes
 	 * @return	string	Le gabarit
 	 */
-	private function renderPlatforms($application = null, $template) {
+	public function renderPlatforms($application = null, $template) {
 		if (isset($application)) {
 			$resAppPlatforms = $this->getAppPlatforms($application);
 			$appPlatformIDs = array();
