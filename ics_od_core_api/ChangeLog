@@ -1,3 +1,6 @@
+2013-12-02 Pierrick Caillon <pcaillon@plan-net.fr>
+	* Bug fix: Missing is_object test before get_class usage in xml2json.
+
 2012-06-22 Aurelien GRAYO  <aurelien@in-cite.net>
 	* Release ics_od_core_api 1.0.4
 
