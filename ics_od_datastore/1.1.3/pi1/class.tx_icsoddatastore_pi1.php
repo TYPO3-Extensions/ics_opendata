@@ -355,9 +355,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'###SC_KEYWORDS_LABEL###' => $this->pi_getLL('sc_keywords', 'Keywords', true),
 			'###SC_KEYWORDS_VALUE###' => $this->list_criteria['keywords'],
 			'###SC_TIERS_LABEL###' => $this->pi_getLL('sc_tiers', 'Tiers', true),
-			'###SC_TIERS_VALUE###' => $this->cObj->stdWrap(implode(',', $tiers), $this->conf['displaySearch.']['tiers.']),
+			'###SC_TIERS_VALUE###' => $this->cObj->stdWrap((is_array($tiers) ? implode(',', $tiers) : $tiers ), $this->conf['displaySearch.']['tiers.']),
 			'###SC_FORMATS_LABEL###' => $this->pi_getLL('sc_formats', 'Formats', true),
-			'###SC_FORMATS_VALUE###' => $this->cObj->stdWrap(implode(',', $formats), $this->conf['displaySearch.']['formats.']),
+			'###SC_FORMATS_VALUE###' => $this->cObj->stdWrap((is_array($formats) ? implode(',', $formats) : $formats ), $this->conf['displaySearch.']['formats.']),
 		);
 		$subpartArray = array();
 		// Hook for add fields markers
@@ -442,7 +442,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		//get picto, picto with text and label for all file format
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 	                'uid, name, picto, tx_smileicsoddatastore_picto2 as picto_t',         // SELECT ...
-	                'tx_icsoddatastore_fileformats'		// FROM ...
+	                'tx_icsoddatastore_fileformats',		// FROM ...
+	                ''
 		);
 		$file_types = array();
 		while ( $row = $TYPO3_DB->sql_fetch_assoc($res) )
@@ -553,11 +554,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		foreach (array('categories', 'files_types_id', 'solr_manager', 'has_dynamic_display', 'api_present') as $facet_field)
 		{
 			$facet_temp_request = '&fq={!tag=' . substr($facet_field, 0, 3) . '}';
-			foreach ($facet_param as $facet => $value)
+			if( is_array( $facet_param ) )
 			{
-				if ($value === 'on' && strstr($facet, $facet_field) !== false)
+				foreach ($facet_param as $facet => $value)
 				{
-					$facet_temp_request .= str_replace(array(' ', ':'), array('+',':"'), $facet) . '"+OR+';
+					if ($value === 'on' && strstr($facet, $facet_field) !== false)
+					{
+						$facet_temp_request .= str_replace(array(' ', ':'), array('+',':"'), $facet) . '"+OR+';
+					}
 				}
 			}
 			if(strlen($facet_temp_request) > 14)
@@ -1064,7 +1068,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					'###FILEMD5###' => '',
 				);
 				if ($file['record_type'] == 0) {
-					$markers['###FILESIZE###'] = $this->getFileSize($uploadPaths['file'] . $file['file']);
+					$markers['###FILESIZE###'] = $this->getFileSize($uploadPaths['file'] . $file['file']) . "#" . $file['format'] . "$";
 					$markers['###FILEMD5###'] = md5_file($uploadPaths['file'] . $file['file']);
 				} else {
 					$markers['###FILEMD5###'] = md5_file($file['url']);
@@ -1309,12 +1313,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	document		size with unit
 	 */
 	function getFileSize($file) {
-		if (filesize($file)>(1024*1024))
-			return round(filesize($file)/(1024*1024),1) . ' M';
-		if (filesize($file)>(1024))
-			return round(filesize($file)/(1024)) . ' kb';
+		if(is_file($file))
+		{
+			if (filesize($file)>(1024*1024))
+				return round(filesize($file)/(1024*1024),1) . ' M';
+			if (filesize($file)>(1024))
+				return round(filesize($file)/(1024)) . ' kb';
+			else
+				return round(filesize($file)) . ' octets';
+		}
 		else
-			return round(filesize($file)) . ' octets';
+		{
+			return false;
+		}
 	}
 
 	/**

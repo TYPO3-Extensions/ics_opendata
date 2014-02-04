@@ -160,7 +160,7 @@ class tx_icsoddatastore_dataset_datasource
 					// Get file's path and file size
 					$makeLink = t3lib_div::makeInstance('tx_icsoddatastore_makelink');
 					$file['url'] = $makeLink->generateUrl($file);
-					if ($file['record_type'] == 0)
+					if ($file['record_type'] == 0 && is_file($uploadPath . '/' . $file['file']))
 					{
 						$file['size'] = filesize($uploadPath . '/' . $file['file']);
 					}
