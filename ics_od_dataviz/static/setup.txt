@@ -1,0 +1,10 @@
+[PIDinRootline = {$contentpage.donnee_detail}]
+page.includeJSFooter {
+	dataviz = EXT:ics_od_dataviz/res/js/dataviz.js
+	dataTables = EXT:ics_od_dataviz/res/js/jquery.dataTables.min.js
+}
+page.includeCSS {
+	dataviz = EXT:ics_od_dataviz/res/css/dataviz.css
+	dataTables = EXT:ics_od_dataviz/res/css/jquery.dataTables.css
+}
+[global]

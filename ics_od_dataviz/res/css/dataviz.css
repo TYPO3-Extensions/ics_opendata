@@ -1,0 +1,102 @@
+#content .tx_icsoddatastore_pi1_single .ics_od_dataviz,
+.ics_od_dataviz {
+	/*height: 500px;
+	overflow: scroll;*/
+	margin: 10px 0;
+	border-right: 0 none;
+	border-bottom: 0 none;
+}
+	.ics_od_dataviz .over {
+		overflow: scroll;
+		width: 590px;
+		height: 300px;
+		margin-top: 20px;
+	}
+	.ics_od_dataviz table th a,
+	.ics_od_dataviz table td a,
+	.ics_od_dataviz table {
+		font-family: Arial;
+		font-size: 11px;
+		color: #000;
+	}
+		.ics_od_dataviz table caption {
+			border: 0 none;
+			display: none;
+		}
+			.ics_od_dataviz table th {
+				background-image:-moz-linear-gradient(white, #E8E8EA);
+				background-image:-webkit-linear-gradient(white, #E8E8EA);
+				background-image:-o-linear-gradient(white, #E8E8EA);
+				background-image:linear-gradient(white, #E8E8EA);
+				text-align: left;
+			}
+				.ics_od_dataviz table td span,
+				.ics_od_dataviz table td a,
+				.ics_od_dataviz table th a,
+				.ics_od_dataviz table th span {
+					display: block;
+					width: 100px;
+					height: 25px;
+					line-height: 25px;
+					overflow: hidden;
+				}			
+			.ics_od_dataviz table th,
+			.ics_od_dataviz table td { 
+				border: solid 1px #E7E7E7;
+				padding: 0 5px;
+				
+			}
+			.ics_od_dataviz table th a,
+			.ics_od_dataviz table td a {
+				cursor: inherit;
+				text-decoration: none;
+			}
+			.ics_od_dataviz table th a:hover,
+			.ics_od_dataviz table td a:hover {
+				text-decoration: none;
+			}
+	/*
+		.ics_od_dataviz table thead {
+			color: #3B3B3B;
+			background: #FFBF00;
+			text-align: left;
+		}
+			.ics_od_dataviz table thead th{
+				border: solid 1px #3B3B3B;
+				padding: 5px 10px;
+			}
+			
+	.ics_od_dataviz table tr {
+	
+	}
+		.ics_od_dataviz table td {
+			border: solid 1px #3B3B3B;
+				padding: 5px 10px;
+		}
+		
+		.ics_od_dataviz table.dataTable tr.odd {
+			background: #EAEAEA;
+		}
+		*/
+	.ics_od_dataviz .progressContainer{
+		width: 300px;
+		border: 1px solid #3B3B3B;
+		border-radius: 5px;
+		overflow: hidden;
+		/*display: inline-block;*/
+		margin: 20px 10px 5px 5px;
+		vertical-align: top;
+	}
+		.ics_od_dataviz .progressBar {
+			color: #fff;
+			text-align: right;
+			height: 25px;
+			width: 0;
+			background-color: #FFBF00;
+			border-radius: 3px;
+		}
+		
+.dataTables_wrapper input,
+.dataTables_wrapper select {
+	margin: 0;
+}
