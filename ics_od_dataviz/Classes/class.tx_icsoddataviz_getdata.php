@@ -31,7 +31,7 @@
 /**
  * Eid to return data of filegroups for the 'ics_od_dataviz' extension.
  *
- * @author	Emilie SAGNIEZ <emilie@in-cite.net>
+ * @author	Emilie SAGNIEZ <emilie.sagniez@plan-net.fr>
  * @package	TYPO3
  * @subpackage	tx_icsoddataviz
  */
