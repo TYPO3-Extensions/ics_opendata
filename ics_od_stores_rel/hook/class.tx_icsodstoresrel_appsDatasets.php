@@ -157,7 +157,9 @@ class tx_icsodstoresrel_appsDatasets {
 	private function getApplicationsDatasets($applications) {
 		if (!is_array($applications) || empty($applications))
 			return false;
-			
+		if (!implode(',', $applications))
+			return false;
+		
 		$applicationsDatasets = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'DISTINCT `tx_icsodstoresrel_apps_filegroups_mm`.`uid_foreign`',
 			'`tx_icsodappstore_applications`
