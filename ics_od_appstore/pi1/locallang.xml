@@ -20,10 +20,13 @@
 			<label index="view">View</label>
 			<label index="link_publish">Publish</label>
 			<label index="link_unpublish">Unpublish</label>
+			<label index="publish_status_on">Publish</label>
+			<label index="publish_status_off">Unpublish</label>
 			<label index="publish">Published</label>
 			<label index="publication_status_no">No</label>
 			<label index="publication_status_yes">Yes</label>
 			<label index="publication_status_lock">Application bloquée</label>
+			<label index="publication_status_deleted">Application supprimée</label>
 			<label index="stat">Stat</label>
 			<label index="actions">Actions</label>
 			<label index="error_publish">Error publish, application doesn't exist</label>
@@ -32,6 +35,9 @@
 			<label index="message_empty">Not yet application?</label>
 			<label index="error_param_publish">Error: publish param incorrect</label>
 			<label index="error_param_unpublish">Error: unpublish param incorrect</label>
+			<label index="delete">Delete</label>
+			<label index="error_delete">Error delete, application doesn't exist</label>
+			<label index="success_delete">Application %1$s deleted.</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="titre">Liste des applications</label>
@@ -45,6 +51,8 @@
 			<label index="create">Créer une nouvelle application</label>
 			<label index="link_publish">Publier</label>
 			<label index="link_unpublish">Dépublier</label>
+			<label index="publish_status_on">Publiée</label>
+			<label index="publish_status_off">Dépubliée</label>
 			<label index="view">Voir</label>
 			<label index="publish">Publiée</label>
 			<label index="publication_status_no">Non</label>
@@ -56,6 +64,9 @@
 			<label index="message_empty">Pas encore d'application ?</label>
 			<label index="error_param_publish">Erreur: paramètre incorrectes</label>
 			<label index="error_param_unpublish">Erreur: paramètre incorrectes</label>
+			<label index="delete">Supprimer</label>
+			<label index="error_delete">Une erreur s'est produite lors de la suppression, l'application n'existe pas.</label>
+			<label index="success_delete">L'application %1$s a bien été supprimée.</label>
 		</languageKey>
 	</data>
 	<orig_hash type="array">

@@ -140,6 +140,8 @@ if (TYPO3_MODE == 'BE') {
 
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi4']='layout,select_key';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi4']='pi_flexform';
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi4', 'FILE:EXT:' . $_EXTKEY . '/flexform_ds_pi4.xml');
 
 
 t3lib_extMgm::addPlugin(array(

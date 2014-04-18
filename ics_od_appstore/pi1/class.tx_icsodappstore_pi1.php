@@ -77,6 +77,8 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 					$succes = $this->publish($this->piVars['publish'], false, $errors);
 				}elseif ( isset($this->piVars['unpublish'])) {
 					$succes = $this->publish($this->piVars['unpublish'], true, $errors);
+				}elseif (isset($this->piVars['delete'])) {
+					$succes = $this->delete($this->piVars['delete'], $errors);
 				}
 				$content .= $this->getContent($errors);
 			}
@@ -195,7 +197,8 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 		if ($applications) {
 			foreach ($applications as $application) {
 				$subpart = $template;
-
+				$subpartArray = array();
+				
 				$prefixId = $this->prefixId;
 				$this->prefixId = 'tx_icsodappstore_pi2';
 				$link_edit = $this->pi_linkTP_keepPIvars_url(array('keyuid' => $application['uid']), 0, 1, $this->conf['edit']);
@@ -207,26 +210,38 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 				$link_view = $this->pi_linkTP_keepPIvars_url(array('uid' => $application['uid']), 0, 1, $this->conf['view']);
 
 				$this->prefixId = $prefixId;
-
+				
+				$link_delete = $this->pi_linkTP_keepPIvars_url(array('delete' => $application['uid']), 0, 1);
+				
 				// PUBLICATION
 				$link_publish = '';
 				$label_publish = '';
-
-				if (!$application['lock_publication']) {
-					$publish = $this->pi_getLL('publication_status_no');
-					$link_publish = $this->pi_linkTP_keepPIvars_url(array('publish' => $application['uid']), 0, 1);
-					$label_publish = $this->pi_getLL('link_publish');
-					if ($application['release_date'] > 0 && $application['publish']) {
-						$publish = date('d-m-Y', $application['release_date']);
-						$link_publish = $this->pi_linkTP_keepPIvars_url(array('unpublish' => $application['uid']), 0, 1);
-						$label_publish = $this->pi_getLL('link_unpublish');
-					}
-				}else{
-					$publish = $this->pi_getLL('publication_status_lock');
-
-					$subpart = $this->cObj->substituteSubpart($subpart, '###APPLICATION_PUBLISH###', '');
-				}
 				
+				if ($application['hidden']) {
+					$subpartArray['###APPLICATION_PUBLISH###'] = '';
+					$subpartArray['###APPLICATION_VIEW###'] = '';
+					$subpartArray['###APPLICATION_EDIT###'] = '';
+					$subpartArray['###APPLICATION_DELETE###'] = '';
+					$publish = $this->pi_getLL('publication_status_deleted');
+				} else {
+					if (!$application['lock_publication']) {
+						$publish = $this->pi_getLL('publication_status_no');
+						$link_publish = $this->pi_linkTP_keepPIvars_url(array('publish' => $application['uid']), 0, 1);
+						$label_publish = $this->pi_getLL('link_publish');
+						$publish_status = $this->pi_getLL('publish_status_off', 'Unpublished', true);
+						if ($application['release_date'] > 0 && $application['publish']) {
+							// $publish = date('d-m-Y', $application['release_date']);
+							$publish = '';
+							$publish_date = date('d-m-Y', $application['release_date']);
+							$publish_status = $this->pi_getLL('publish_status_on', 'Published', true);
+							$link_publish = $this->pi_linkTP_keepPIvars_url(array('unpublish' => $application['uid']), 0, 1);
+							$label_publish = $this->pi_getLL('link_unpublish');
+						}
+					}else{
+						$publish = $this->pi_getLL('publication_status_lock');
+						$subpartArray['###APPLICATION_PUBLISH###'] = '';
+					}
+				}
 				$resAppPlatforms = $this->getAppPlatforms($application);
 				$appPlatforms = array();
 				while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
@@ -249,8 +264,11 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 					'###LINK_STAT###' => $link_statistic,
 					'###LABEL_STAT###' => htmlspecialchars($this->pi_getLL('stat')),
 					'###PUBLISH###' => htmlspecialchars($publish),
+					'###PUBLISH_STATUS###' => $publish_status,
+					'###PUBLISH_DATE###' => $publish_date,
+					'###LABEL_DELETE###' => htmlspecialchars($this->pi_getLL('delete')),
+					'###LINK_DELETE###' => $link_delete,
 				);
-				$subpartArray = array();
 				// Hook for extra markers
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['applicationFieldsRenderControls'] as $_classRef) {
@@ -316,6 +334,40 @@ class tx_icsodappstore_pi1 extends tx_icsodappstore_common {
 
 			$errors[] = sprintf($this->pi_getLL('success_unpublish'), $application['title']);
 		}
+		return true;
+	}
+	
+	/**
+	 * Publish application
+	 *
+	 * @param	int			$uid: application uid
+	 * @param	boolean		$unpublish: unpublish is true, or publish
+	 * @param	array		$errors: errors messages
+	 * @return	boolean
+	 */
+	function delete($uid, &$errors = array()) {
+		$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_SINGLEUSER, null, $uid);
+
+		if (!$applications) {
+			$errors[] = $this->pi_getLL('error_delete');
+			return false;
+		}
+		$application = $applications[0];
+		
+		$fields = 'hidden';
+		$update = array(
+			'hidden' => 1,
+		);
+		$req = $this->cObj->DBgetUpdate(
+			$this->tables['applications'],
+			$uid,
+			$update,
+			$fields,
+			true
+		);
+
+		$errors[] = sprintf($this->pi_getLL('success_delete'), $application['title']);
+		
 		return true;
 	}
 

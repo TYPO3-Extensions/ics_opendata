@@ -34,6 +34,12 @@
 			<label index="tx_icsodappstore_applications.lock_publication.I.0">unlock</label>
 			<label index="tx_icsodappstore_applications.lock_publication.I.1">lock</label>
 			<label index="tx_icsodappstore_applications.lock_publication">lock a publication</label>
+			<label index="filter_platforms">platforms</label>
+			<label index="search_submit">Search</label>
+			<label index="search_searchW">Keyword</label>
+			<label index="selectedCriteria">Summary of your research</label>
+			<label index="sc_searchW">Keyword</label>
+			<label index="sc_platforms">Platforms</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="user_connect">Veuillez vous identifier</label>
@@ -65,6 +71,12 @@
 			<label index="tx_icsodappstore_applications.lock_publication">Verrou de publication</label>
 			<label index="sort_countcall">Les plus téléchargées</label>
 			<label index="sort_release_date">Les plus récentes</label>
+			<label index="filter_platforms">Plateformes</label>
+			<label index="search_submit">Rechercher</label>
+			<label index="search_searchW">Rechercher par mots clés</label>
+			<label index="selectedCriteria">Récapitulatif de votre recherche</label>
+			<label index="sc_searchW">Mots-clés</label>
+			<label index="sc_platforms">Plateformes</label>
 		</languageKey>
 	</data>
 	<orig_hash type="array">

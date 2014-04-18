@@ -130,12 +130,14 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 					$content = $this->listView($content,$rows);
 				else
 					$content .= '<p>' . htmlspecialchars($this->pi_getLL('application_not_exist')) . '</p>';
+				
+				$content = $this->renderSearch() . $content;
 			}
 		}
 		else
 			$content .= '<p>' . htmlspecialchars($this->pi_getLL('bad_ts')) . '</p>';
 
-			return $this->pi_wrapInBaseClass($content);
+		return $this->pi_wrapInBaseClass($content);
 	}
 
 	/**
@@ -162,20 +164,47 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		$this->conf['list.']['orderDefault'] = $sortDefault? $sortDefault: $this->conf['list.']['orderDefault'];
 		
 		$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
-		if(!array_key_exists($this->piVars['sort'],$orderAvailable)){
-			foreach($orderAvailable as $k => $v){
-				if($this->conf['list.']['orderDefault']==$v)
-					$this->piVars['sort'] = $k;
+		if (!in_array($this->piVars['sort'], $orderAvailable) ) {
+			if (in_array($this->conf['list.']['orderDefault'], $orderAvailable) ) {
+				$this->piVars['sort'] = $this->conf['list.']['orderDefault'];
 			}
 		}
-
 		$this->piVars['maxRows'] = $this->piVars['page'] * $rows_by_page;
 		
 		// Gets favorite applications list
 		$fav_applis = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'applications', 'main');
-		$this->conf['fav_applis'] = $fav_applis? $fav_applis: $this->conf['fav_applis'];		
+		$this->conf['fav_applis'] = $fav_applis? $fav_applis: $this->conf['fav_applis'];
+		
+		$this->initCriteria();
 	}
 
+	/**
+	 * Initalizes criteria
+	 *
+	 * @return	void
+	 */
+	function initCriteria() {
+		$criteria = $this->piVars;
+		unset($criteria['sort']);
+		unset($criteria['page']);
+		unset($criteria['deleted']);
+		
+		$this->criteria = $criteria;
+
+		if (is_array($this->piVars['deleted']['platforms']) && !empty($this->piVars['deleted']['platforms'])) {
+			$this->criteria['platforms'] = array_diff($this->criteria['platforms'], $this->piVars['deleted']['platforms']);
+		}
+
+		// Hook for additionnal init
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addInitCriteria'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addInitCriteria'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->addInitCriteria($this->piVars, $this->criteria, $this->conf, $this);
+			}
+		}
+
+	}
+	
 	/**
 	 * Configuration validation
 	 *
@@ -245,11 +274,21 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		$pObj = t3lib_div::makeInstance("tslib_cObj");
 		$backID = $this->piVars['returnID'] ? $this->piVars['returnID'] : $GLOBALS['TSFE']->id;
 		
+		if(strpos($row['link'], 'http') === false) $row['link'] = 'http://' . $row['link'];
 		$vLink = $row['link'] ? '<a href="' . $row['link'] . '">' . htmlspecialchars($this->pi_getLL('download_api')) .' '.tslib_cObj::crop( $row['link'], 29) . '</a>' : '';
 		$vDescription = $row['description'] ? $this->pi_RTEcssText($row['description']) : '';
 		$vPublishDate = $row['release_date'] ? strftime("%d/%m/%Y",$row['release_date']) : '';
-		$vPublisher = $row['name'] ? htmlspecialchars($row['name']) : '';
-		$vPlatforms = implode(',', $appPlatforms);
+		$vPublisher = '';
+		$aPublisher = array();
+		if($row['name']) {
+			if($row['first_name']) $aPublisher[] = htmlspecialchars($row['first_name']);
+			$aPublisher[] = htmlspecialchars($row['name']);
+		} else {
+			if($row['first_name']) $aPublisher[] = htmlspecialchars($row['first_name']);
+			if($row['last_name']) $aPublisher[] = htmlspecialchars($row['last_name']);			
+		}
+		if(count($aPublisher)) $vPublisher = implode(' ', $aPublisher);
+		$vPlatforms = implode(', ', $appPlatforms);
 		
 		$subpartArray = array();
 		$markerArray = array(
@@ -316,14 +355,15 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 	function getListContent(){
 		global $TCA;
 
-		$number_applications = $this->getApplications(tx_icsodappstore_common::APPMODE_ALL, 'count');
+		$parameter = $this->criteria;
+		$number_applications = $this->getApplications(tx_icsodappstore_common::APPMODE_ALL, 'count', $parameter);
 
 		if($number_applications && isset($number_applications[0]['count']) && $number_applications[0]['count']>0){
 			$this->piVars['maxRows'] = $number_applications[0]['count'];
-			$parameter = array(
-				'sort' => $this->piVars['sort'],
-				'page' => $this->piVars['page'],
-			);
+			if ($this->piVars['sort'])
+				$parameter['sort'] = $this->piVars['sort'];
+			if ($this->piVars['page'])
+				$parameter['page'] = $this->piVars['page'];
 			$applications = $this->getApplications(tx_icsodappstore_common::APPMODE_ALL, null, $parameter);
 		}
 		else
@@ -371,11 +411,22 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 				while ($platform = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resAppPlatforms) ) {
 					$appPlatforms[] = $platform['title'];
 				}
+				
+				$vPublisher = '';
+				$aPublisher = array();
+				if($row['name']) {
+					if($row['first_name']) $aPublisher[] = htmlspecialchars($row['first_name']);
+					$aPublisher[] = htmlspecialchars($row['name']);
+				} else {
+					if($row['first_name']) $aPublisher[] = htmlspecialchars($row['first_name']);
+					if($row['last_name']) $aPublisher[] = htmlspecialchars($row['last_name']);			
+				}
+				if(count($aPublisher)) $vPublisher = implode(' ', $aPublisher);
 				$markerArray = array(
 					'###NUM_ROW###' => $count_rows,
 					'###LOGO###' => $this->renderLogo('logo', $TCA[$table]['columns']['logo'], $row['logo'] ),
 					'###APPLICATION###' => htmlspecialchars($row['title']),
-					'###PUBLISHER###' => htmlspecialchars($row['name']),
+					'###PUBLISHER###' => $vPublisher,
 					'###DOWNLOAD###' => $row['countcall'],
 					'###PUBLISH_DATE###' => strftime("%d/%m/%Y",$row['release_date']),
 					'###DESCRIPTION###' => tslib_cObj::crop( $row['description'],$this->conf['list.']['descSize']),
@@ -453,23 +504,33 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 			foreach($orderAvailable as $k=>$v){
 				// $label = str_replace('LLL:EXT:ics_od_appstore/locallang_db.xml:','',$TCA[$table]['columns'][$v]['label']);
 				$label = 'sort_' . $v;
-				if($k == $this->piVars['sort']) {
-
+				// if($k == $this->piVars['sort']) {
+				if($v == $this->piVars['sort']) {
 					$sort_content .= $separator . '<span class="current">'.htmlspecialchars($this->pi_getLL($label)) . '</span>';
 					}
 				else {
-					$sort_content .= $separator . '<span><a href="'.$GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id,array($this->prefixId.'[page]'=> $this->piVars['page'],$this->prefixId.'[sort]'=> $k)) . '">' . htmlspecialchars($this->pi_getLL($label)) . '</a></span>';
+					// $sort_content .= $separator . '<span><a href="'.$GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id,array($this->prefixId.'[page]'=> $this->piVars['page'],$this->prefixId.'[sort]'=> $k)) . '">' . htmlspecialchars($this->pi_getLL($label)) . '</a></span>';
+					$sort_content .= $separator . '<span><a href="'.$GLOBALS['TSFE']->cObj->getTypoLink_URL($GLOBALS['TSFE']->id,array($this->prefixId.'[page]'=> $this->piVars['page'],$this->prefixId.'[sort]'=> $v)) . '">' . htmlspecialchars($this->pi_getLL($label)) . '</a></span>';
 				}
 				$separator = '<span class="separator">/</span>';
 			}
 			$markerArray = array(
+				'###PREFIXID###' => $this->prefixId,
+				'###SEARCHW###' => $this->piVars['searchW'],
 				'###SORT###' => $sort_content,
+				'###TOTAL_APPLIS###' => count($rows),
 				'###PAGES###' => $pagebrowser,
 			);
 			$subpartArray = array(
 				'###COLS###' => $content_cols,
 				'###HIDE_FIRST_PAGE###' => $template['FIRST_PAGE'],
-				'###HIDE_LAST_PAGE###' => $template['LAST_PAGE']
+				'###HIDE_LAST_PAGE###' => $template['LAST_PAGE'],
+				'###FILTER_PLATFORMS###' => $this->getFilter_platforms($template['TEMPLATE']),
+				'###FORM_ACTION###' => $this->pi_getPageLink($this->conf['resultsSearchPid']),
+				'###FORM_NAME###' => $this->prefixId.'_form',
+				'###SEARCHBUTTON_NAME###' => $this->prefixId.'[submit]',
+				'###SEARCHBUTTON_VALUE###' => $this->pi_getLL('search_submit', 'Submit', true),
+				'###SEARCHBUTTON_ID###' => $this->prefixId.'_submitSearch',
 			);
 			//Header build end -->
 			
@@ -542,7 +603,168 @@ class tx_icsodappstore_pi4 extends tx_icsodappstore_common {
 		return $content;
 	}
 
+	/**
+	 * Render the search view
+	 *
+	 * @return	string		$content The search view content
+	 */
+	function renderSearch() {
+		$html = $this->cObj->fileResource($this->templateFile);
 
+		if(!$html || $html == '')
+			return '<!-- <p style="color:red;">Template not found!</p> -->';
+		else{
+			$template = $this->cObj->getSubpart($html, '###TEMPLATE_SEARCH###');
+			$markerArray = array(
+				'###PREFIXID###' => $this->prefixId,
+				'###SEARCHW_LABEL###' => htmlspecialchars($this->pi_getLL('search_searchW', 'Keywords', true)),
+				'###SEARCHW_VALUE###' => htmlspecialchars($this->piVars['searchW']),
+				'###SELECTED_CRITERIA###' => $this->renderSelectedCriteria(),
+			);
+			$subpartArray = array(
+				'###FILTER_PLATFORMS###' => $this->getFilter_platforms($template),
+				'###FORM_ACTION###' => $this->pi_getPageLink($this->conf['resultsSearchPid']),
+				'###FORM_NAME###' => $this->prefixId.'_form',
+				'###SEARCHBUTTON_NAME###' => $this->prefixId.'[submit]',
+				'###SEARCHBUTTON_VALUE###' => $this->pi_getLL('search_submit', 'Submit', true),
+				'###SEARCHBUTTON_ID###' => $this->prefixId.'_submitSearch',
+			);
+			
+			// Hook for add fields markers to search view
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsSearchMarkers'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsSearchMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj->additionalFieldsSearchMarkers($markerArray, $subpartArray, $template, $this);
+				}
+			}
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+			return $content;
+		}
+		
+	}
+	
+	/**
+	 * Render seleceted Criteria
+	 *
+	 * @return	string		Selected criteria HTML content
+	 */
+	function renderSelectedCriteria() {
+		$html = $this->cObj->fileResource($this->templateFile);
+		$template = $this->cObj->getSubpart($html, '###TEMPLATE_SELECTED_CRITERIA###');
+
+		$subpartArray = array();
+		$subpartArray['###SUBPART_SC_SEARCHW###'] = $this->renderSC_searchW($this->cObj->getSubpart($template, '###SUBPART_SC_SEARCHW###'));
+		$subpartArray['###SUBPART_SC_PLATFORMS###'] = $this->renderSC_platforms($this->cObj->getSubpart($template, '###SUBPART_SC_PLATFORMS###'));
+		$markers = array(
+			'###TITLE###' => $this->pi_getLL('selectedCriteria', 'Selected Criteria', true),
+		);
+		
+		// Hook for add fields markers
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalSelectedCriteriaMarkers($markers, $subpartArray, $template, $this->conf, $this);
+			}
+		}
+		$template = $this->cObj->substituteSubpartArray($template, $subpartArray);
+		return $this->cObj->substituteMarkerArray($template, $markers);
+	}
+	
+	/**
+	 * Renders selected criteria keywords
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_searchW($template) {
+		if (!$this->criteria['searchW'])
+			return '';
+
+		$markers = array(
+			'###SC_SEARCHW_NAME###' => $this->prefixId.'[deleted][searchW]',
+			'###SC_SEARCHW_LABEL###' => $this->pi_getLL('sc_searchW', 'Keywords', true),
+			'###SC_SEARCHW_VALUE###' => $this->criteria['searchW'],
+		);
+		return $this->cObj->substituteMarkerArray($template, $markers);		
+	}
+	
+	/**
+	 * Renders selected criteria platforms
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_platforms($template) {
+		$content = '';
+		if (is_array($this->criteria['platforms']) && !empty($this->criteria['platforms'])) {
+			foreach ($this->criteria['platforms'] as $platform) {
+				if ($elem = intval($platform)) {
+					$platforms[] = $platform;
+				}
+			}
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid, title',
+				'tx_icsodappstore_platforms',
+				'1'.$this->cObj->enableFields('tx_icsodappstore_platforms').' AND uid IN('.implode(',', $platforms).')'
+			);
+		}
+		if (is_array($rows) && !empty($rows)) {
+			$markers = array();
+			$itemTemplate = $this->cObj->getSubpart($template, '###SC_PLATFORM_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###PLATFORM_LABEL###' => $row['title'],
+					'###PLATFORM_VALUE###' => $row['uid'],
+					'###PLATFORM_NAME###' => $this->prefixId.'[deleted][platforms][]',
+				);
+				$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###SC_PLATFORM_ITEM###', $itemContent);
+			$markers = array('###TITLE_PLATFORMS###' => $this->pi_getLL('sc_platforms', 'Platforms', true));
+			$content = $this->cObj->substituteMarkerArray($template, $markers);
+		}
+		return $content;
+	}
+	
+	/** 
+	 * Renders platforms filters
+	 *
+	 * @param	string	$template: The HTML template for filter on platform
+	 * @return	string	HTML content for filter on platform
+	 */
+	public function getFilter_platforms($template) {
+		$template = $this->cObj->getSubpart($template, '###FILTER_PLATFORMS###');
+		$subparts = array();
+		
+		$subparts['###PLATFORMS_ITEM###'] = '';
+		$itemTemplate = $this->cObj->getSubpart($template, '###PLATFORMS_ITEM###');
+		$platforms = $this->getAllPlatforms(array('orderBy' => 'title'));
+		$selected_platforms = $this->criteria['platforms'];
+		if (is_array($platforms) && !empty($platforms)) {
+			$itemContent = '';
+			foreach ($platforms as $platform) {
+				$locMarkers = array(
+					'###PLATFORM_VALUE###' => $platform['uid'],
+					'###PLATFORM_NAME###' => $this->prefixId.'[platforms][]',
+					'###PLATFORM_ID###' => $this->prefixId.'_platform'.$platform['uid'],
+					'###PLATFORM_LABEL###' => $platform['title'],
+					'###CHECKED###' => (in_array($platform['uid'], $selected_platforms )? 'checked="checked"': ''),
+				);
+				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers);
+				$subparts['###PLATFORMS_ITEM###'] .= $itemContent;
+			}
+		}
+		$markers = array(
+			'###PREFIXID###' => $this->prefixId,
+			'###PLATFORMS_LABEL###' => $this->pi_getLL('filter_platforms', 'Platforms', true),
+		);
+	
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
+		$content = $this->cObj->substituteMarkerArray($template, $markers);
+		
+		return $content;
+	}
 }
 
 

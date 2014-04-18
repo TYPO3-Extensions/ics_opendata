@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In CitÃ© Solution <technique@in-cite.net>
+*  (c) 2010 In Cité Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -130,6 +130,9 @@ class tx_icsodappstore_common extends tslib_pibase {
 		if (($mode == self::APPMODE_SINGLE || $mode == self::APPMODE_SINGLEUSER) && !$parameter )
 			return false;
 
+		$select_table = '`'.$this->tables['applications'].'`
+			INNER JOIN `'.$this->tables['users'].'`
+			ON `'.$this->tables['users'].'`.`uid` = `'.$this->tables['applications'].'`.`fe_cruser_id`';
 		$addWhere = array();
 		$order = ' `'.$this->tables['applications'].'`.`tstamp` DESC ';
 		$limit = '';
@@ -138,22 +141,47 @@ class tx_icsodappstore_common extends tslib_pibase {
 		switch($mode) {
 			case self::APPMODE_ALL:
 				$fav_applis = t3lib_div::intExplode(',', $this->conf['fav_applis'], true);
-				if ($parameter && is_array($parameter) && !empty($parameter)) {
-					// limit
+				
+				// limit
+				if ($selectFields!='count') {
 					$rows_by_page = $this->conf['list.']['colNum'] * $this->conf['list.']['rowsByCol'];
-					$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
-					// $sortOrder = $this->conf['list.']['sortOrder']? $this->conf['list.']['sortOrder']: 'DESC';
-
-					if ($parameter['sort'] == 'favorite') {
-						$order = 'FIND_IN_SET(' . '`'.$this->tables['applications'].'`.`uid`' . ', ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(implode(',', $fav_applis), $this->tables['applications']) . ')';
-					}
-					else {
-						// $order = $orderAvailable[$parameter['sort']]. $sortOrder;
-						$order = $orderAvailable[$parameter['sort']]. ' DESC';
-					}
 					$limit = ($parameter['page'] * $rows_by_page) . ',' . $rows_by_page;
 				}
+				
+				// Sort
+				if ($parameter['sort']) {
+					$orderAvailable = explode(',', $this->conf['list.']['orderAvailable']);
+					if (in_array($parameter['sort'], $orderAvailable) ) {
+						if ($parameter['sort'] == 'favorite') {
+							$order = 'FIND_IN_SET(' . '`'.$this->tables['applications'].'`.`uid`' . ', ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(implode(',', $fav_applis), $this->tables['applications']) . ')';
+						}
+						else {
+							$o = $parameter['sort'] == 'title' ? ' ASC':' DESC';
+							$order = $parameter['sort']. $o;
+						}
+					}
+				}
+				
+				// Filter platforms
+				if (is_array($parameter['platforms']) && !empty($parameter['platforms'])) {
+					$addWhere[] = '`'.$this->tables['apps_platforms_mm'].'`.`uid_foreign` IN(' . implode(',', $parameter['platforms']) . ') ';
+					$select_table .= ' LEFT JOIN `'.$this->tables['apps_platforms_mm'].'` ON `'.$this->tables['apps_platforms_mm'].'`.`uid_local` = `'.$this->tables['applications'].'`.`uid`';
+				}
+				
+				// Filter Title or Description
+				if(isset($parameter['searchW']) && !empty($parameter['searchW'])) {
+					$addWhere[] = '(`'.$this->tables['applications'].'`.`title` LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr('%'.$parameter['searchW'].'%', $this->tables['applications']) . ' 
+								OR `'.$this->tables['applications'].'`.`description` LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr('%'.$parameter['searchW'].'%', $this->tables['applications']) . ')';
+				}
 
+				// Hook for additionnal filters
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addSearchRestriction'] as $_classRef) {
+						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj->addSearchRestriction($addWhere, $select_table, $parameter, $this->conf, $this);
+					}
+				}
+				
 				$addWhere[] = '`'.$this->tables['applications'].'`.`release_date` > 0 ';
 				$addWhere[] = '`'.$this->tables['applications'].'`.`release_date` < '.time();
 				$addWhere[] = '`'.$this->tables['applications'].'`.`lock_publication` = 0';
@@ -193,14 +221,14 @@ class tx_icsodappstore_common extends tslib_pibase {
 						)
 					)';
 				}
-
+				$addWhere[] = '1 '.$this->cObj->enableFields($this->tables['applications']);
 				$limit = 1;
 			break;
 
 			case self::APPMODE_SINGLEUSER:
 				$addWhere[] = ' `'.$this->tables['applications'].'`.`uid` = '.$parameter;
 				$addWhere[] = ' `'.$this->tables['applications'].'`.`fe_cruser_id` = '.$GLOBALS['TSFE']->fe_user->user['uid'];
-
+				$addWhere[] = '1 '.$this->cObj->enableFields($this->tables['applications']);
 				$limit = 1;
 			break;
 
@@ -217,16 +245,17 @@ class tx_icsodappstore_common extends tslib_pibase {
 			break;
 		}
 
-		$where = '';
+		$where = '`'.$this->tables['applications'].'`.`deleted` = 0';
 		if (!empty($addWhere)) {
-			$where = ' AND '.implode(' AND ', $addWhere);
+			$where = implode(' AND ', $addWhere);
 		}
 
 		if (!$selectFields) {
-			$select = '`'.$this->tables['applications'].'`.`uid`,
+			$select = 'DISTINCT `'.$this->tables['applications'].'`.`uid`,
 				`'.$this->tables['applications'].'`.`crdate`,
 				`'.$this->tables['applications'].'`.`apikey`,
 				`'.$this->tables['applications'].'`.`title`,
+				`'.$this->tables['applications'].'`.`hidden`,
 				`'.$this->tables['applications'].'`.`description`,
 				`'.$this->tables['applications'].'`.`platform`,
 				`'.$this->tables['applications'].'`.`countcall`,
@@ -239,6 +268,8 @@ class tx_icsodappstore_common extends tslib_pibase {
 				`'.$this->tables['applications'].'`.`update_date`,
 				`'.$this->tables['applications'].'`.`lock_publication`,
 				`'.$this->tables['users'].'`.`name`,
+				`'.$this->tables['users'].'`.`first_name`,
+				`'.$this->tables['users'].'`.`last_name`,
 				`'.$this->tables['applications'].'`.`fe_cruser_id`';
 		}else{
 			$selectFields = explode(',', $selectFields);
@@ -252,6 +283,12 @@ class tx_icsodappstore_common extends tslib_pibase {
 						case 'name':
 							$selectTab[] = '`'.$this->tables['users'].'`.`'.$field.'`';
 							break;
+						case 'first_name':
+							$selectTab[] = '`'.$this->tables['users'].'`.`'.$field.'`';
+							break;
+						case 'last_name':
+							$selectTab[] = '`'.$this->tables['users'].'`.`'.$field.'`';
+							break;
 						default:
 							$selectTab[] = '`'.$this->tables['applications'].'`.`'.$field.'`';
 							break;
@@ -261,18 +298,27 @@ class tx_icsodappstore_common extends tslib_pibase {
 			$select = implode(',', $selectTab);
 		}
 
-
 		$apllications = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			$select,
-			'`'.$this->tables['applications'].'`
-				INNER JOIN `'.$this->tables['users'].'`
-				ON `'.$this->tables['users'].'`.`uid` = `'.$this->tables['applications'].'`.`fe_cruser_id`',
-			'`'.$this->tables['applications'].'`.`deleted` = 0  '.$where,
+			$select_table,
+			$where,
 			$groupby,
 			$order,
 			$limit
 		);
 
+		// t3lib_div::debug(
+			// $GLOBALS['TYPO3_DB']->selectQuery(
+				// $select,
+				// $select_table,
+				// $where,
+				// $groupby,
+				// $order,
+				// $limit
+			// ),
+			// 'query'
+		// );
+		
 		if (is_array($apllications) && !empty($apllications))
 			return $apllications;
 		return false;
@@ -393,11 +439,16 @@ class tx_icsodappstore_common extends tslib_pibase {
 	 *
 	 * @return	mixed		All platforms
 	 */
-	function getAllPlatforms() {
+	function getAllPlatforms($params = null) {
+		$groupBy = $params['groupBy']? $params['groupBy']: '';
+		$orderBy = $params['orderBy']? $params['orderBy']: '';
+		
 		return $platforms_mm = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'`uid`, `title`',
 			$this->tables['platforms'],
-			'`title` != \'\' ' . $this->cObj->enableFields($this->tables['platforms'])
+			'`title` != \'\' ' . $this->cObj->enableFields($this->tables['platforms']),
+			$groupBy,
+			$orderBy
 		);
 	}
 
