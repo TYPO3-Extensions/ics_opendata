@@ -31,14 +31,14 @@
  *  108:     function init($pi_base, $table, $fields=null, $fieldLabels=null, $recordId=0, array $conf)
  *  144:     function startOff($table, &$content, array $conf, $pi_base)
  *  167:     function process_afterInit($table, &$fields, $fieldLabels=null, &$content, &$conf, $pi_base)
- *  228:     private function checkFEEdit($pi_base, $dataset)
+ *  228:     protected function checkFEEdit($pi_base, $dataset)
  *  259:     function user_TCAFEAdmin($table, &$content, &$conf, $pi_base)
  *  288:     function renderValue($pi_base, $table, $field, $fieldLabels=null, &$value, $recordId, array $conf, $renderer)
  *  347:     function single_additionnalMarkers($template, &$markers, &$subpartArray, $table, $field, $row=null, $conf, $pi_base, $renderer)
  *  383:     function renderEntries($pi_base, $table, array $fields, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
  *  408:     function formRenderer_additionnalMarkers($template, &$markers, &$subpartArray, $table, $field, $row, $conf, $pi_base, $renderer)
  *  431:     function handleFormField($pi_base, $table, $field, array $fieldLabels, $recordId=0, array $conf, $renderer=null)
- *  500:     private function renderForm_filemount($filemounts=null)
+ *  500:     protected function renderForm_filemount($filemounts=null)
  *  537:     function controlEntry($pi_base, $table, $field, $value, $recordId=0, array $conf, tx_icstcafeadmin_controlForm $controller, &$control)
  *  577:     public function extra_controlEntries(&$control, $table, $row, $pi_base, $conf, tx_icstcafeadmin_controlForm $controller)
  *  599:     function process_valueToDB($pi_base, $table, $field, &$value, $recordId=0, array $conf, tx_icstcafeadmin_DBTools $dbTools)
@@ -62,26 +62,26 @@
  * @subpackage	tx_icstcafeadmin
  */
 class tx_icsoddatastore_TCAFEAdmin {
-	private $pi_base;
-	private $prefixId;
-	private $extKey;
-	private $conf;
-	private $cObj;
+	protected $pi_base;
+	protected $prefixId;
+	protected $extKey;
+	protected $conf;
+	protected $cObj;
 
-	private $piVars;
+	protected $piVars;
 
-	private $templateCode;
+	protected $templateCode;
 
-	private $table;
-	private $fields;
-	private $fieldLabels;
-	private $row=null;
+	protected $table;
+	protected $fields;
+	protected $fieldLabels;
+	protected $row=null;
 
 	var $renderer;
 
 	var $dbTools;
 
-	private $oddatastore_tables = array(
+	protected $oddatastore_tables = array(
 		'tx_icsoddatastore_filegroups',
 		'tx_icsoddatastore_fileformats',
 		'tx_icsoddatastore_licences',
@@ -120,14 +120,16 @@ class tx_icsoddatastore_TCAFEAdmin {
 		$this->fields = $fields;
 		$this->fieldLabels = $fieldLabels;
 
-		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-			count($this->fields)? implode(',', $this->fields): '*',
-			$this->table,
-			'deleted=0 AND uid='.$recordId,
-			'',
-			'',
-			'1'
-		);
+		if ($recordId = intval($recordId)) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				count($this->fields)? implode(',', $this->fields): '*',
+				$this->table,
+				'deleted=0 AND uid='.$recordId,
+				'',
+				'',
+				'1'
+			);
+		}
 		if (is_array($rows) && !empty($rows))
 			$this->row = $rows[0];
 	}
@@ -173,22 +175,31 @@ class tx_icsoddatastore_TCAFEAdmin {
 			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyAllowedTiers');
 			return false;
 		}
+		
 		// Process  tx_icsoddatastore_filegroups
-		if ($table == 'tx_icsoddatastore_filegroups' && in_array('files', $fields)) {
+		if ($table == 'tx_icsoddatastore_filegroups') {
 			if ($pi_base->showUid && !$this->checkFEEdit($pi_base, $pi_base->showUid)) {
-				tx_icstcafeadmin_debug::error('You are not allowed to edit dataset.');
-				$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDataset');
+				if(in_array('EDIT', $pi_base->codes)) {
+					tx_icstcafeadmin_debug::error('You are not allowed to edit dataset.');
+					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDataset');
+				}
+				else {
+					tx_icstcafeadmin_debug::error('You do not have access rights to the dataset.');
+					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedAccessDataset');
+				}
 				return false;
 			}
-			// Puts field files at end on single view
-			if ($pi_base->showUid && in_array('SINGLE', $pi_base->codes)) {
-				$locFields = array_diff($fields, array('files'));
-				$locFields[] = 'files';
-				$fields = $locFields;
-			}
-			// Removes field files on form view
-			if (($pi_base->showUid && in_array('EDIT', $pi_base->codes)) || ($pi_base->newUid && in_array('NEW', $pi_base->codes)) ) {
-				$fields = array_diff($fields, array('files'));
+			if (in_array('files', $fields)) {
+				// Puts field files at end on single view
+				if ($pi_base->showUid && in_array('SINGLE', $pi_base->codes)) {
+					$locFields = array_diff($fields, array('files'));
+					$locFields[] = 'files';
+					$fields = $locFields;
+				}
+				// Removes field files on form view
+				if (($pi_base->showUid && in_array('EDIT', $pi_base->codes)) || ($pi_base->newUid && in_array('NEW', $pi_base->codes)) ) {
+					$fields = array_diff($fields, array('files'));
+				}
 			}
 		}
 		// Process tx_icsoddatastore_files
@@ -209,8 +220,14 @@ class tx_icsoddatastore_TCAFEAdmin {
 					$conf['table.']['dataset'] = $rows[0]['dataset'];
 			}
 			if (!$conf['table.']['dataset'] || !$this->checkFEEdit($pi_base, $conf['table.']['dataset'])) {
-				tx_icstcafeadmin_debug::error('You are not allowed to edit dataset files.');
-				$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDatasetFiles');
+				if(in_array('EDIT', $pi_base->codes)) {
+					tx_icstcafeadmin_debug::error('You are not allowed to edit dataset files.');
+					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDatasetFiles');
+				}
+				else {
+					tx_icstcafeadmin_debug::error('You do not have access rights the dataset files.');
+					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedAccessDatasetFiles');
+				}
 				return false;
 			}
 		}
@@ -225,7 +242,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	int		$dataset: Dataset Id
 	 * @return	boolean		"TRUE" whether FE edit is cheched, otherwise "FALSE"
 	 */
-	private function checkFEEdit($pi_base, $dataset) {
+	protected function checkFEEdit($pi_base, $dataset) {
 		t3lib_div::loadTCA('fe_users');
 		$config = $GLOBALS['TCA']['fe_users']['columns']['tx_icsoddatastore_tiers']['config'];
 		$loadDBGroup = t3lib_div::makeInstance('FE_loadDBGroup');
@@ -306,11 +323,13 @@ class tx_icsoddatastore_TCAFEAdmin {
 				switch ($field) {
 					case 'file':
 						if ($conf['currentView']=='viewList') {
-							$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-								'*',
-								'tx_icsoddatastore_files',
-								'uid='.$recordId
-							);
+							if ($recordId = intval($recordId)) {
+								$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+									'*',
+									'tx_icsoddatastore_files',
+									'uid='.$recordId
+								);
+							}
 							if ($row['record_type']) {
 								$value = $this->cObj->stdWrap($row['url'], $conf['renderConf.']['tx_icsoddatastore_files.']['url.']['viewList.']);
 							}
@@ -457,13 +476,12 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'tx_icsoddatastore_filemount',
 					'fe_groups',
-					'1 ' . $this->cObj->enableFields('fe_groups') . ' AND uid IN(' . $GLOBALS['TSFE']->fe_user->user['usergroup'] . ')',
+					'1 ' . $this->cObj->enableFields('fe_groups') . ' AND uid IN(' . $GLOBALS['TSFE']->fe_user->user['usergroup'] . ') AND tx_icsoddatastore_filemount!=\'\'',
 					'',
 					'',
 					'',
 					'tx_icsoddatastore_filemount'
 				);
-
 				if (!is_array($rows) || empty($rows))
 					throw new Exception('Any filemount is associate to user ' . $GLOBALS['TSFE']->fe_user->user['username'] . ' fe_group(s).');
 
@@ -507,14 +525,16 @@ class tx_icsoddatastore_TCAFEAdmin {
 	 * @param	array		$filemounts: Array of filemounts
 	 * @return	string		HTML filemount entry content
 	 */
-	private function renderForm_filemount($filemounts=null) {
+	protected function renderForm_filemount($filemounts=null) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILEMOUNT###');
 
 		$itemTemplate = $this->renderer->cObj->getSubpart($template, '###GROUP_FILEMOUNTS###');
 		foreach ($filemounts as $filemount) {
+			$selected = ($this->piVars['tx_icsdatastore_filemount'] == $filemount)? 'selected="selected"': '';
+			$selected = (count($filemounts)>1)? $selected: 'selected="selected"';
 			$locMarkers = array(
 				'FILEMOUNT_ITEM_VALUE' => $filemount,
-				'FILEMOUNT_ITEM_SELECTED' => ($this->piVars['tx_icsdatastore_filemount'] == $filemount)? 'selected="selected"': '',
+				'FILEMOUNT_ITEM_SELECTED' =>  $selected,
 				'FILEMOUNT_ITEM_LABEL' => $filemount,
 			);
 			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
@@ -629,6 +649,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 			array('value'=>0),
 			$items
 		);
+		
 		return $items;
 	}
 	
@@ -865,7 +886,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$limit,
 				'uid'
 			);
-			return true;
+			return false;
 		}
 
 		return false;
@@ -889,4 +910,8 @@ class tx_icsoddatastore_TCAFEAdmin {
 	}
 
 
+}
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ics_od_datastore/hook/class.tx_icsoddatastore_TCAFEAdmin.php']);
 }

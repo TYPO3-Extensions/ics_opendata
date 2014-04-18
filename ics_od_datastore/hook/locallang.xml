@@ -11,6 +11,8 @@
 			<label index="anyAllowedTiers">Any allowed tiers.</label>
 			<label index="notAllowedEditDataset">You are not allowed to edit dataset.</label>
 			<label index="notAllowedEditDatasetFiles">You are not allowed to edit dataset Files.</label>
+			<label index="notAllowedAccessDataset">You do not have access rights to the dataset.</label>
+			<label index="notAllowedAccessDatasetFiles">You do not have access rights the dataset files.</label>
 			<label index="action_edit">Edit dataset</label>
 			<label index="action_new">Upload new file</label>
 			<label index="datastore_filemount">DATASTORE filemount</label>
@@ -25,6 +27,8 @@
 			<label index="anyAllowedTiers">Aucun tiers autorisé.</label>
 			<label index="notAllowedEditDataset">Vous ne pouvez pas éditer le jeu de données.</label>
 			<label index="notAllowedEditDatasetFiles">Vous ne pouvez pas éditer les fichiers du jeu de données.</label>
+			<label index="notAllowedAccessDataset">Vous n'avez pas les droits d'accès au jeu de données.</label>
+			<label index="notAllowedAccessDatasetFiles">Vous n'avez pas les droits d'accès aux fichiers du jeu de données.</label>
 			<label index="action_edit">Editer le jeu de données</label>
 			<label index="action_new">Télécharger un fichier</label>
 			<label index="datastore_filemount">Chemin de stockage</label>

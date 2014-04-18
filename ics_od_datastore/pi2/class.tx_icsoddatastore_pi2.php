@@ -83,7 +83,8 @@ class tx_icsoddatastore_pi2 extends tslib_pibase{
 		
 		$markers = array(
 			'###RSS_DECLARATION###' => ($this->conf['displayRSS.']['rssDeclaration'])? $this->conf['displayRSS.']['rssDeclaration'] : '<rss version="2.0">',
-			'###SITE_TITLE###' => htmlspecialchars($GLOBALS['TSFE']->tmpl->setup['sitetitle']),
+			// '###SITE_TITLE###' => htmlspecialchars($GLOBALS['TSFE']->tmpl->setup['sitetitle']),
+			'###SITE_TITLE###' => htmlspecialchars($this->conf['displayRSS.']['xmlTitle']),
 			'###SITE_LINK###' => htmlspecialchars($this->siteUrl),
 			'###SITE_DESCRIPTION###' => htmlspecialchars($this->conf['displayRSS.']['description']),
 			'###LANGUAGE###' => htmlspecialchars($this->conf['displayRSS.']['language']),
@@ -201,7 +202,8 @@ class tx_icsoddatastore_pi2 extends tslib_pibase{
 			$markersDataset = array(
 				'###DATASET_TITLE###' => htmlspecialchars($item['title']),
 				'###DATASET_LINK###' => htmlspecialchars(t3lib_div::linkThisUrl($this->siteUrl, $linkArray)),
-				'###DATASET_DESCRIPTION###' => htmlspecialchars($this->utf8_csConv($item['description'])),
+				// '###DATASET_DESCRIPTION###' => htmlspecialchars($this->utf8_csConv($item['description'])),
+				'###DATASET_DESCRIPTION###' => htmlspecialchars($item['description']),
 				'###DATASET_AUTHOR###' => $author,
 				'###DATASET_PUBDATE###' => htmlspecialchars(date('r', $item['tstamp'])),
 			);

@@ -114,6 +114,7 @@ CREATE TABLE tx_icsoddatastore_files (
 	url  varchar(255) DEFAULT '' NOT NULL,
 	record_type int(11) DEFAULT '0' NOT NULL,
 	md5 varchar(255) DEFAULT '' NOT NULL,
+	size varchar(255) DEFAULT '' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

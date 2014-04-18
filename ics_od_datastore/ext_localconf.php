@@ -21,6 +21,18 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatasto
     'description'      => 'Logs file download',
 );
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatastore_synchroTask'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Synchronize the update files',
+    'description'      => 'Synchronize the update files',
+);
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icsoddatastore_processFilesTask'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Synchronize md5 and file size',
+    'description'      => 'Synchronize md5 and file size',
+);
+
 // --- Hook
 
 if (t3lib_extMgm::isLoaded('ics_tcafe_admin')) {
@@ -46,6 +58,7 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['additionalFieldsMark
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['addSearchRestriction'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['selectQuery_extraColumnSorting'][] = 'EXT:ics_od_datastore/hook/class.tx_icsoddatastore_stats_hook.php:tx_icsoddatastore_stats_hook';
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:ics_od_datastore/lib/class.tx_icsoddatastore_tcemain_hook.php:tx_icsoddatastore_tcemain_hook';
 
 //--- API commands ---
 

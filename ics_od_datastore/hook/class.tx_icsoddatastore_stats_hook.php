@@ -57,9 +57,9 @@ class tx_icsoddatastore_stats_hook {
 	}
 	
 	function addSearchRestriction(&$whereClause, &$queryJoin, $conf, $pObj) {
-		if ($pObj->piVars['sort']['column']!='stat_dl')
+		if ($pObj->piVars['sort']['column']!='stat_dl' && $conf['sorting.']['name']!='stat_dl')
 			return;
-		$queryJoin = ' LEFT OUTER JOIN `tx_icsoddatastore_statistics`
+		$queryJoin .= ' LEFT OUTER JOIN `tx_icsoddatastore_statistics`
 			ON `tx_icsoddatastore_statistics`.`filegroup` = `tx_icsoddatastore_filegroups`.`uid` ';
 	}
 	

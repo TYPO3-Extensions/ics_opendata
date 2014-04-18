@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 In Cité Solution <technique@in-cite.net>
+*  (c) 2013 Plan.Net France <typo3@plan-net.fr>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,39 +21,41 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/*
- * $Id$
- */
 
 /**
- * Class 'tx_icsoddatastore_title' to display title column label
+ * Hook on TCEmain. 
+ * Process file: calculates the md5 and file size
  *
- * @author Tsi Yang <tsi@in-cite.net>
+ * @author	Tsi <tsi.yang@plan-net.fr>
  * @package	TYPO3
- * @subpackage	tx_icsoddatastore
+ * @subpackage	ics_od_datastore
  */
-class tx_icsoddatastore_title	{
-
-	/**
-	 * @param	array		$params
-	 * @param	object		$pObj
-	 * @return	[type]		...
-	 * @author Tsi Yang <tsi@in-cite.net>
-	 * @desc Display title column label
-	 */
-	function getRecordTitle($params, $pObj){
-		if ($params['table'] == 'tx_icsoddatastore_files')	{
-			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-				'uid, file, url, record_type',
-				'tx_icsoddatastore_files',
-				'uid='.$params['row']['uid']
-			);
-			if ($row['record_type'] == '0')	{
-				$params['title'] = $params['row']['file'];
-			}	else	{
-				$params['title'] = $params['row']['url'];
+class tx_icsoddatastore_tcemain_hook {
+	
+	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$tce) {
+		if ($table!='tx_icsoddatastore_files')
+			return;
+		
+		if ($status=='new')
+			$id = $tce->substNEWwithIDs[$id];
+		
+		$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+			'*',
+			$table,
+			'uid='.$id
+		);
+		if ($row['record_type']==0) {
+			$file = t3lib_div::getFileAbsFileName($row['file']);
+			if (file_exists($file)) {
+				$fieldArray['size'] = filesize($file);
+				$fieldArray['md5'] = md5_file($file);
 			}
 		}
+		if ($row['record_type']==1) {
+			$fieldArray['md5'] = md5_file($row['url']);
+		}
 	}
+
 }
+
 ?>

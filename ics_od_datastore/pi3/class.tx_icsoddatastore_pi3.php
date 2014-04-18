@@ -118,7 +118,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				$groupBy = 'file';
 				$orderBy = 'total DESC';
 				break;
-			case 'CATEGORY':
+			case 'CATEGORY':	//-- TODO: devra faire l'objet d'un hook implémenté dans ics_od_categories
 			default:
 				trigger_error('Any code implemented for type ' . $type, E_USER_ERROR);
 		}
@@ -146,7 +146,77 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 	function renderStats(array $rows = null) {
 		if (!isset($rows) || empty($rows))
 			return $this->renderEmpty($this->pi_getLL('statsEmpty'));
-			
+		
+		$content = '';
+		$type = (string)strtoupper(trim($this->conf['view.']['type']));
+		switch ($type) {
+			case 'DATASET':
+				$content = $this->renderStats_dataset($rows);
+				break;
+			case 'FILE':
+				$content = $this->renderStats_file($rows);
+				break;
+			case 'CATEGORY':	//-- TODO: devra faire l'objet d'un hook implémenté dans ics_od_categories
+			default:
+				trigger_error('Any code implemented for type ' . $type, E_USER_ERROR);
+		}
+		return $content;
+	}
+	
+	/**
+	 * Render stats DATASET
+	 *
+	 * @param	array	$rows
+	 * @return	string	HTML content
+	 */
+	function renderStats_dataset(array $rows = null) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_STATISTICS###');
+		$subparts = array();
+		$itemTemplate = $this->cObj->getSubpart($template, '###TOP_ITEM###');
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$type = (string)strtolower(trim($this->conf['view.']['type']));
+		foreach ($rows as $index=>$row) {
+			$data = $this->renderData($row);
+			$dataRow = array(
+				'rank' => $index +1,
+				'uid' => $data['uid'],
+				'data' => $data['title'],
+				'count' => $this->renderCount($row),
+			);
+			$dataRow = array_merge($dataRow, $data);
+			$cObj->start($dataRow, 'Stats');
+			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+			$markers = array();
+			$lMarkers = array(
+				'RANK' => $cObj->stdWrap($dataRow['rank'], $this->conf['renderObj.'][$type . '.']['rank.']),
+				'DATA' => $cObj->stdWrap($dataRow['title'], $this->conf['renderObj.'][$type . '.']['data.']),
+				'COUNT' => $cObj->stdWrap($dataRow['count'], $this->conf['renderObj.'][$type . '.']['count.']),
+				'DESCRIPTION' => $cObj->stdWrap($dataRow['description'], $this->conf['renderObj.'][$type . '.']['description.']),
+			);
+			// Hook for add markers
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionnalStatsMarkers'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionnalStatsMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj->additionnalStatsMarkers($type, $dataRow, $lMarkers, $template, $this->conf, $this, $cObj);
+				}
+			}
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $lMarkers, '###|###');
+			$subparts['###TOP_ITEM###'] .= $this->cObj->substituteMarkerArray($itemContent, $markers, '###|###');			
+		}
+		$markers = array(
+			'TITLE' => $this->pi_getLL('top_dl', 'Top download', true)
+		);
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
+		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+	}
+	
+	/**
+	 * Render stats FILE
+	 *
+	 * @param	array	$rows
+	 * @return	string	HTML content
+	 */
+	function renderStats_file(array $rows = null) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_STATISTICS###');
 		$subparts = array();
 		$itemTemplate = $this->cObj->getSubpart($template, '###TOP_ITEM###');
@@ -161,6 +231,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 				'count' => $this->renderCount($row),
 				// TODO : ajouter url dans le cas type = file avec url réécrit
 			);
+			$dataRow = $data = $this->renderData($row);
 			$cObj->start($dataRow, 'Stats');
 			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 			$markers = array();
@@ -192,15 +263,16 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 			case 'DATASET':
 				$data = $row['filegroup'];
 				$datasets = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-					'title',
+					'*',
 					$this->tables['datasets'],
 					'uid=' . $row['filegroup'] . ' ' . $this->cObj->enableFields($this->tables['datasets']),
 					'',
 					'',
 					1
 				);
-				if (is_array($datasets) && !empty($datasets))
-					$data = array($row['filegroup'], $datasets[0]['title']);
+				if (is_array($datasets) && !empty($datasets)) {
+					$data = $datasets[0];
+				}
 				break;
 			case 'FILE':
 				$data = $row['file'];
@@ -217,7 +289,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 					$data = array($row['file'], $makeLink->generateUrl($files[0]));
 				}
 				break;
-			case 'CATEGORY':
+			case 'CATEGORY':	//-- TODO: devra faire l'objet d'un hook implémenté dans ics_od_categories
 			default:
 				trigger_error('Any data render implemented for type ' . $type, E_USER_ERROR);
 		}
@@ -240,7 +312,7 @@ class tx_icsoddatastore_pi3 extends tslib_pibase {
 			case 'FILE':
 				$count = $row['total'];
 				break;
-			case 'CATEGORY':
+			case 'CATEGORY':	//-- TODO: devra faire l'objet d'un hook implémenté dans ics_od_categories
 			default:
 				trigger_error('Any count render implemented for type ' . $type, E_USER_ERROR);
 		}

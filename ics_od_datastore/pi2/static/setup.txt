@@ -24,6 +24,7 @@ datastore_rss {
 	templateFile = {$config.tx_icsoddatastore_pi2.templateFile}
 	displayRSS {
 		generator = TYPO3 - get.content.right
+		xmlTitle = {$config.tx_icsoddatastore_pi2.title}
 	}
   }
 

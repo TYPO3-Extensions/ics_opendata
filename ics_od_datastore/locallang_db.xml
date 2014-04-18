@@ -48,6 +48,7 @@
 			<label index="tx_icsoddatastore_files.record_type.0">file</label>
 			<label index="tx_icsoddatastore_files.record_type.1">url</label>
 			<label index="tx_icsoddatastore_files.md5">MD5</label>
+			<label index="tx_icsoddatastore_files.size">Size</label>
             <label index="tx_icsoddatastore_tiers">tiers (opendata)</label>
             <label index="tx_icsoddatastore_tiers.name">name</label>
             <label index="tx_icsoddatastore_tiers.description">Description</label>
@@ -123,6 +124,7 @@
 			<label index="tx_icsoddatastore_files.record_type.0">Fichier</label>
 			<label index="tx_icsoddatastore_files.record_type.1">Url</label>
 			<label index="tx_icsoddatastore_files.md5">MD5</label>
+			<label index="tx_icsoddatastore_files.size">Taille</label>
             <label index="tx_icsoddatastore_tiers">Tiers (opendata)</label>
             <label index="tx_icsoddatastore_tiers.name">Nom</label>
             <label index="tx_icsoddatastore_tiers.description">Description</label>

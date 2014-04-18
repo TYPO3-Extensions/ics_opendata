@@ -296,6 +296,14 @@ plugin.tx_icsoddatastore_pi1{
 				wrap = <div class="picto">|</div>
 			}
 		}
+		
+		# Render conf for dataset files
+		files {
+			filename =
+		}
+		
+		# Process Link on file for single view, default is plugin.tx_icsoddatastore_pi1.datasetFile
+		datasetFile =
 	}
 	
 	displaySearch {

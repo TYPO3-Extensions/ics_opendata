@@ -43,27 +43,30 @@ class tx_icsoddatastore_task  extends tx_scheduler_Task{
 			$this->tables['logs'],
 			'deleted=0 AND DATEDIFF(CURDATE(),FROM_UNIXTIME(tstamp,\'%Y-%m-%d\'))>0'
 		);
-		t3lib_div::devLog('Records', 'ics_od_datastore', 0, $rows);
+		if (is_array($rows) && !empty($rows)) {
+			$result = $GLOBALS['TYPO3_DB']->exec_INSERTmultipleRows (
+				$this->tables['monthLogs'], 
+				array('uid', 'pid', 'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 'filegroup', 'ip', 'file'),
+				$rows
+			);
+		}
 
-		$result = $GLOBALS['TYPO3_DB']->exec_INSERTmultipleRows (
-			$this->tables['monthLogs'], 
-			array('uid', 'pid', 'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 'filegroup', 'ip', 'file'),
-			$rows
-		);
 		
 		// Insert stats
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
-			'UNIX_TIMESTAMP(FROM_UNIXTIME(tstamp,\'%Y-%m-%d\')) AS day,filegroup,file,COUNT(file)',
+			'UNIX_TIMESTAMP(FROM_UNIXTIME(tstamp,\'%Y-%m-%d\')) AS day,filegroup,file,COUNT(file), pid',
 			$this->tables['logs'],
 			'deleted=0 AND DATEDIFF(CURDATE(),FROM_UNIXTIME(tstamp,\'%Y-%m-%d\'))>0',
 			'day, file',
 			'day'
 		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTmultipleRows (
-			$this->tables['stats'], 
-			array('date', 'filegroup', 'file', 'count'),
-			$rows
-		);
+		if (is_array($rows) && !empty($rows)) {
+			$GLOBALS['TYPO3_DB']->exec_INSERTmultipleRows (
+				$this->tables['stats'], 
+				array('date', 'filegroup', 'file', 'count', 'pid'),
+				$rows
+			);
+		}
 		
 		// Delete logs
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery (

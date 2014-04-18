@@ -7,6 +7,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="list_caption">Dataset list</label>
 			<label index="th_title">Title</label>
 			<label index="th_description">Description</label>
 			<label index="th_technical_data">Technical data</label>
@@ -49,7 +50,9 @@
 			<label index="search_submit">Submit</label>
 			<label index="search_fileformatTitle">Search by file type</label>
 			<label index="search_agencyTitle">Search by agency</label>
-			<label index="search_tiersTitle">Search by agency</label>
+			<label index="search_agenciesTitle">Search by agency</label>
+			<label index="search_ownersTitle">Search by owners</label>
+			<label index="search_ownersTitle">Search by agency</label>
 			<label index="search_fileFormatOther">Other</label>
 			<label index="search_licencesTitle">Licences</label>
 			<label index="search_update">Update from</label>
@@ -63,7 +66,9 @@
 			<label index="rss_text">RSS feed</label>
 			<label index="selectedCriteria">Vos critères de recherche</label>
 			<label index="sc_keywords">Keyword</label>
-			<label index="sc_tiers">Agences</label>
+			<label index="sc_tiers">Agencies</label>
+			<label index="sc_agencies">Agencies</label>
+			<label index="sc_owners">Owners</label>
 			<label index="sc_formats">File formats</label>
 			<label index="sc_licences">Licences</label>
 			<label index="sort_title">Sort by</label>
@@ -71,8 +76,12 @@
 			<label index="sort_crdate">On line</label>
 			<label index="sort_alpha">Alpha</label>
 			<label index="any_dataset">There is any dataset</label>
+			<label index="megabytes">Mb</label>
+			<label index="kilobytes">kb</label>
+			<label index="bytes">b</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
+			<label index="list_caption">Liste des jeux de données</label>
 			<label index="th_title">Résultat de la recherche</label>
 			<label index="th_description">Description</label>
 			<label index="th_technical_data">Données techniques</label>
@@ -116,6 +125,8 @@
 			<label index="search_fileformatTitle">Rechercher par type de flux</label>
 			<label index="search_agencyTitle">Rechercher par département</label>
 			<label index="search_tiersTitle">Rechercher par département</label>
+			<label index="search_agenciesTitle">Rechercher par agences</label>
+			<label index="search_ownersTitle">Rechercher pas propriétaires</label>
 			<label index="search_fileFormatOther">Autre</label>
 			<label index="search_licencesTitle">Licences</label>
 			<label index="search_update">Mise à jour depuis</label>
@@ -130,6 +141,8 @@
 			<label index="selectedCriteria">Vos critères de recherche</label>
 			<label index="sc_keywords">Mots-clés</label>
 			<label index="sc_tiers">Agences</label>
+			<label index="sc_agencies">Agences</label>
+			<label index="sc_owners">Propriétaires</label>
 			<label index="sc_formats">Formats</label>
 			<label index="sc_licences">Licences</label>
 			<label index="sort_title">Trier par</label>
@@ -137,6 +150,9 @@
 			<label index="sort_crdate">Date de mise en ligne</label>
 			<label index="sort_alpha">Alphabétique</label>
 			<label index="any_dataset">Il n'y a aucun jeu de données.</label>
+			<label index="megabytes">Mo</label>
+			<label index="kilobytes">ko</label>
+			<label index="bytes">o</label>
 		</languageKey>
 	</data>
 </T3locallang>

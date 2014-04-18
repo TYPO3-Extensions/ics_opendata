@@ -562,7 +562,8 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['renderFilegroupExtraFields'] as $_classRef) {
 					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$process = $_procObj->renderFilegroupExtraFields($field,  $this->filegroup['uid'], $this->filegroup, $sContent, $this);
+					if ($process = $_procObj->renderFilegroupExtraFields($field,  $this->filegroup['uid'], $this->filegroup, $sContent, $this))
+						break;
 				}
 			}
 			if (!$process) {
@@ -572,6 +573,7 @@ class tx_icsoddatastore_module1 extends t3lib_SCbase {
 				</div>';
 			}
 		}
+
 		$sContent .= '<div style="clear:both;"></div>';
 		return $sContent;
 	}

@@ -54,13 +54,21 @@
 				</div>
 			</div>
 			<h3 class="###PREFIXID###_titleTiers">###TITLE_TIERS###</h3>
-			<div class="###PREFIXID###_tiers">
-				<!-- ###TIERS_ITEM### start -->
-				<div class="###PREFIXID###_tiersItem">
-					<input id="###PREFIXID###_tiers###TIERS_VALUE###" name="###PREFIXID###[tiers][]" type="checkbox" ###CHECKED### value="###TIERS_VALUE###">
-					<label for="###PREFIXID###_tiers###TIERS_VALUE###">###TIERS_LABEL###</label>
+			<div class="###PREFIXID###_agencies">
+				<!-- ###AGENCIES_ITEM### start -->
+				<div class="###PREFIXID###_agenciesItem">
+					<input id="agencies###AGENCY_VALUE###" name="###AGENCY_NAME###" type="checkbox" ###CHECKED### value="###AGENCY_VALUE###">
+					<label for="agencies###AGENCY_VALUE###">###AGENCY_LABEL###</label>
 				</div>
-				<!-- ###TIERS_ITEM### end -->
+				<!-- ###AGENCIES_ITEM### end -->
+			</div>
+			<div class="###PREFIXID###_owners">
+				<!-- ###OWNERS_ITEM### start -->
+				<div class="###PREFIXID###_ownersItem">
+					<input id="owners###OWNER_VALUE###" name="###OWNER_NAME###" type="checkbox" ###CHECKED### value="###OWNER_VALUE###">
+					<label for="owners###OWNER_VALUE###">###OWNER_LABEL###</label>
+				</div>
+				<!-- ###OWNERS_ITEM### end -->
 			</div>
 			<h3 class="###PREFIXID###_titleLicences">###TITLE_LICENCES###</h3>			
 			<div class="###PREFIXID###_licences">
@@ -72,7 +80,6 @@
 				<!-- ###LICENCES_ITEM### end -->
 			</div>
 		</div>
-		###SELECTED_CRITERIA###	
 		<div class="button">
 			<input type="submit" name="###PREFIXID###[submit]" value="###SEARCHBUTTON_VALUE###" id="###PREFIXID###_submitSearch"/>
 		</div>
@@ -84,34 +91,63 @@
 
 
 
+<h2>The template selected criteria</h2>
+<div>
+	<p>###SELECTED_CRITERIA### : Insert this marker in ###TEMPLATE_SEARCH### to display selected criteria</p>
+</div>
 <!-- ###TEMPLATE_SELECTED_CRITERIA### start-->
-	<div class="###PREFIXID###_selectedCriteria">
-		<h3 class="###PREFIXID###_sc_title">###SC_TITLE###</h3>
-		<!-- ###SUBPART_SC_KEYWORDS### start-->
-		<div class="###PREFIXID###_sc_keywords">
-			<p class="###PREFIXID###_sc_label">###SC_KEYWORDS_LABEL###</p>
-			<p class="###PREFIXID###_sc_value">###SC_KEYWORDS_VALUE###</p>
-		</div>
-		<!-- ###SUBPART_SC_KEYWORDS### end-->
-		<!-- ###SUBPART_SC_TIERS### start-->
-		<div class="###PREFIXID###_sc_tiers">
-			<p class="###PREFIXID###_sc_label">###SC_TIERS_LABEL###</p>
-			<p class="###PREFIXID###_sc_value">###SC_TIERS_VALUE###</p>
-		</div>
-		<!-- ###SUBPART_SC_TIERS### end-->
-		<!-- ###SUBPART_SC_FORMATS### start-->
-		<div class="###PREFIXID###_sc_formats">
-			<p class="###PREFIXID###_sc_label">###SC_FORMATS_LABEL###</p>
-			<p class="###PREFIXID###_sc_value">###SC_FORMATS_VALUE###</p>
-		</div>
-		<!-- ###SUBPART_SC_FORMATS### end-->
-		<!-- ###SUBPART_SC_LICENCES### start-->
-		<div class="###PREFIXID###_sc_licences">
-			<p class="###PREFIXID###_sc_label">###SC_LICENCES_LABEL###</p>
-			<p class="###PREFIXID###_sc_value">###SC_LICENCES_VALUE###</p>
-		</div>
-		<!-- ###SUBPART_SC_LICENCES### end-->		
-	</div>
+	<div class="criteria filters">
+		<p>###TITLE###: </p>
+		<ul class="inline">
+			<!-- ###SUBPART_SC_KEYWORDS### start-->
+			<li>
+				<a href="javascript:document.tx_icsoddatastore_pi1_searchForm.submit()" title="Delete" onclick="document.getElementById('delete_keywords').value='###KEYWORDS_VALUE###'">x</a>
+				###KEYWORDS_VALUE###
+				<input type="hidden" id="delete_keywords" name="###KEYWORDS_NAME###" value=''/>
+			</li>
+			<!-- ###SUBPART_SC_KEYWORDS### end-->
+			
+			<!-- ###SUBPART_SC_AGENCIES### start-->
+				<!-- ###SC_AGENCY_ITEM### start-->
+				<li>
+					<a href="javascript:document.tx_icsoddatastore_pi1_searchForm.submit()" title="Delete" onclick="document.getElementById('delete_agencies###AGENCY_VALUE###').value='###AGENCY_VALUE###'">x</a>
+					###AGENCY_LABEL###
+					<input type="hidden" id="delete_agencies###AGENCY_VALUE###" name="###AGENCY_NAME###" value=''/>
+				</li>
+				<!-- ###SC_AGENCY_ITEM### end-->
+			<!-- ###SUBPART_SC_AGENCIES### end-->
+
+			<!-- ###SUBPART_SC_OWNERS### start-->
+				<!-- ###SC_OWNER_ITEM### start-->
+				<li>
+					<a href="javascript:document.tx_icsoddatastore_pi1_searchForm.submit()" title="Delete" onclick="document.getElementById('delete_owners###OWNER_VALUE###').value='###OWNER_VALUE###'">x</a>
+					###OWNER_LABEL###
+					<input type="hidden" id="delete_owners###OWNER_VALUE###" name="###OWNER_NAME###" value=''/>
+				</li>
+				<!-- ###SC_OWNER_ITEM### end-->
+			<!-- ###SUBPART_SC_OWNERS### end-->
+			
+			<!-- ###SUBPART_SC_FORMATS### start-->
+				<!-- ###SC_FORMAT_ITEM### start-->
+				<li>
+					<a href="javascript:document.tx_icsoddatastore_pi1_searchForm.submit()" title="Delete" onclick="document.getElementById('delete_formats###FILEFORMAT_VALUE###').value='###FILEFORMAT_VALUE###'">x</a>
+					###FILEFORMAT_LABEL###
+					<input type="hidden" id="delete_formats###FILEFORMAT_VALUE###" name="###FILEFORMAT_NAME###" value=''/>
+				</li>
+				<!-- ###SC_FORMAT_ITEM### end-->
+			<!-- ###SUBPART_SC_FORMATS### end-->
+			
+			<!-- ###SUBPART_SC_LICENCES### start-->
+				<!-- ###SC_LICENCE_ITEM### start-->
+				<li>
+					<a href="javascript:document.tx_icsoddatastore_pi1_searchForm.submit()" title="Delete" onclick="document.getElementById('delete_licences###LICENCE_VALUE###').value='###LICENCE_VALUE###'">x</a>
+					###LICENCE_LABEL###
+					<input type="hidden" id="delete_licences###LICENCE_VALUE###" name="###LICENCE_NAME###" value=''/>
+				</li>
+				<!-- ###SC_LICENCE_ITEM### end-->
+			<!-- ###SUBPART_SC_LICENCES### end-->
+		</ul>
+	</div>	
 <!-- ###TEMPLATE_SELECTED_CRITERIA### end-->
 
 
@@ -340,19 +376,37 @@
 
 
 <h2>Statistics template</h2>
+<p>One type of stats by platform</p>
+<p>
+	markers ###SUBPART_DATASET###  and ###SUBPART_FILE### are used only to separate the html template
+</p>
 <div>
 	<p>TITLE : The title like "Top 10"</p>
 	<p>RANK : Rank top</p>
-	<p>DATA : Data</p>
+	<p>DATA : Title of data</p>
 	<p>COUNT : Number of downloads</p>
+	<p>DESCRIPTION : Description (not yet implemented for FILE)</p>
 </div>
 <!-- ###TEMPLATE_STATISTICS### start-->
-<h4>###TITLE###</h4>
-<ul>
-	<!-- ###TOP_ITEM### start-->
-	<li><span class="rank">###RANK###</span> ###DATA### ###COUNT###</li>
-	<!-- ###TOP_ITEM### end-->
-</ul>
+
+	<!-- ###SUBPART_DATASET### start-->
+	<h4>###TITLE###</h4>
+	<ul>
+		<!-- ###TOP_ITEM### start-->
+		<li><span class="rank">###RANK###</span> ###DATA### ###COUNT###</li>
+		<!-- ###TOP_ITEM### end-->
+	</ul>
+	<!-- ###SUBPART_DATASET### end-->
+
+	<!-- ###SUBPART_FILE### start-->
+	<h4>###TITLE###</h4>
+	<ul>
+		<!-- ###TOP_ITEM### start-->
+		<li><span class="rank">###RANK###</span> ###DATA### ###COUNT###</li>
+		<!-- ###TOP_ITEM### end-->
+	</ul>
+	<!-- ###SUBPART_FILE### end-->
+
 <!-- ###TEMPLATE_STATISTICS### end-->
 
 </body>

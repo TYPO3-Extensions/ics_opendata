@@ -905,6 +905,14 @@ $TCA['tx_icsoddatastore_files'] = array (
                 'size' => '30',    
             )
         ),
+        'size' => array (
+            'exclude' => 0,        
+            'label' => 'LLL:EXT:ics_od_datastore/locallang_db.xml:tx_icsoddatastore_files.size',        
+            'config' => array (
+                'type' => 'input',
+                'size' => '30',    
+            )
+        ),
 	),
 	'types' => array (
 		'0' => array('showitem' => 'hidden;;;;1-1-1, record_type;;;;2-2-2, file, type, format, filegroup, md5'),

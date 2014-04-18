@@ -39,7 +39,7 @@
  *  341:     function renderSelectedCriteria()
  *  413:     function renderSorting()
  *  449:     function renderFileformatItems($template, $aFileformats)
- *  481:     function renderTiersItems($template, $aTiers)
+ *  481:     function renderAgenciesItems($template, $aTiers)
  *  508:     function renderLicenceItems($template, array $aLicences)
  *  531:     function renderList()
  *  576:     function renderListHeader($template)
@@ -184,6 +184,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}
 
 		$this->list_criteria = $this->piVars;
+		// t3lib_div::debug($this->list_criteria, '0');
+		$this->initCriteria();
+		// t3lib_div::debug($this->list_criteria, '1');
 		$this->list_criteriaNav = array();
 		foreach ($this->list_criteria as $criteria => $value) {
 			if ( ($criteria != 'uid') && ($criteria != 'submit') && ($criteria != 'returnID') ) {
@@ -278,6 +281,36 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		return true;
 	}
+	
+	/**
+	 * Initalizes criteria
+	 *
+	 * @return	void
+	 */
+	function initCriteria() {
+		unset($this->list_criteria['deleted']);
+		if (is_array($this->piVars['deleted']['agencies']) && !empty($this->piVars['deleted']['agencies'])) {
+			$this->list_criteria['agencies'] = array_diff($this->list_criteria['agencies'], $this->piVars['deleted']['agencies']);
+		}
+		if (is_array($this->piVars['deleted']['owners']) && !empty($this->piVars['deleted']['owners'])) {
+			$this->list_criteria['owners'] = array_diff($this->list_criteria['owners'], $this->piVars['deleted']['owners']);
+		}
+		if (is_array($this->piVars['deleted']['fileformat']) && !empty($this->piVars['deleted']['fileformat'])) {
+			$this->list_criteria['fileformat'] = array_diff($this->list_criteria['fileformat'], $this->piVars['deleted']['fileformat']);
+		}
+		if (is_array($this->piVars['deleted']['licences']) && !empty($this->piVars['deleted']['licences'])) {
+			$this->list_criteria['licences'] = array_diff($this->list_criteria['licences'], $this->piVars['deleted']['licences']);
+		}
+		
+		// Hook for additionnal init
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addInitCriteria'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['addInitCriteria'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->addInitCriteria($this->piVars, $this->list_criteria, $this->conf, $this);
+			}
+		}
+		
+	}
 
 	/**
 	 * Render the search view
@@ -293,13 +326,14 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers);
 
 		$markers = array(
-			'###FORM_ACTION###' => '#',
 			'###PREFIXID###' => $this->prefixId,
 			'###KEYWORDS_LABEL###' => htmlspecialchars($this->pi_getLL('search_keywords', 'Keywords', true)),
 			'###KEYWORDS_VALUE###' => htmlspecialchars($this->piVars['keywords']),
 			'###SEARCHBUTTON_VALUE###' => htmlspecialchars($this->pi_getLL('search_submit', 'Submit', true)),
 			'###FORM_ACTION###' => $this->pi_getPageLink($this->conf['resultsSearchPid']),
 			'###TITLE_TIERS###' => htmlspecialchars($this->pi_getLL('search_tiersTitle', 'Tiers', true)),
+			'###TITLE_AGENCIES###' => htmlspecialchars($this->pi_getLL('search_agenciesTitle', 'Agencies', true)),
+			'###TITLE_OWNERS###' => htmlspecialchars($this->pi_getLL('search_ownersTitle', 'Owners', true)),
 			'###TITLE_FILEFORMAT###' => htmlspecialchars($this->pi_getLL('search_fileformatTitle', 'File format', true)),
 			'###TITLE_LICENCES###' => htmlspecialchars($this->pi_getLL('search_licencesTitle', 'Licences', true)),
 			'###TITLE_UPDATE###' => htmlspecialchars($this->pi_getLL('search_update', 'Update from', true)),
@@ -314,13 +348,18 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		);
 
 		$fileformatItems = $this->renderFileformatItems($template, $this->getFileformats(true));
-		$tiersItems = $this->renderTiersItems($template, $this->getTiersAgencies());
+		$agenciesItems = $this->renderAgenciesItems($template, $this->getTiersAgencies());
 		$licenceItems = $this->renderLicenceItems($template, $this->getLicences());
+		$ownerItems = $this->renderOwnerItems($template, $this->getOwners());
 
 		$subpartArray = array();
 		$subpartArray['###FILEFORMAT_ITEM###'] = $fileformatItems;
-		$subpartArray['###TIERS_ITEM###'] = $tiersItems;
+		$subpartArray['###AGENCIES_ITEM###'] = $agenciesItems;
+		//-- Compatibilité with previous version (from revision #75453)
+		$subpartArray['###TIERS_ITEM###'] = $agenciesItems;
+		//--
 		$subpartArray['###LICENCES_ITEM###'] = $licenceItems;
+		$subpartArray['###OWNERS_ITEM###'] = $ownerItems;
 
 		// Hook for add fields markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalFieldsSearchMarkers'])) {
@@ -341,59 +380,20 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderSelectedCriteria() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SELECTED_CRITERIA###');
 
-		$tiers = '';
-		if (is_array($this->list_criteria['tiers']) && !empty($this->list_criteria['tiers'])) {
-			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'name',
-				$this->tables['tiers'],
-				'1' .  $this->cObj->enableFields($this->tables['tiers']) .  ' AND uid in (' . implode(',', $this->list_criteria['tiers']) . ')',
-				'',
-				'name',
-				'',
-				'name'
-			);
-			$tiers = array_keys($rows);
-		}
-
-		$formats = '';
-		if (is_array($this->list_criteria['fileformat']) && !empty($this->list_criteria['fileformat'])) {
-			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'name',
-				$this->tables['fileformats'],
-				'1' .  $this->cObj->enableFields($this->tables['fileformats']) .  ' AND uid in (' . implode(',', $this->list_criteria['fileformat']) . ')',
-				'',
-				'name',
-				'',
-				'name'
-			);
-			$formats = array_keys($rows);
-		}
-		$licences = '';
-		if (is_array($this->list_criteria['licences']) && !empty($this->list_criteria['licences'])) {
-			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'name',
-				$this->tables['licences'],
-				'1' .  $this->cObj->enableFields($this->tables['licences']) .  ' AND uid in (' . implode(',', $this->list_criteria['licences']) . ')',
-				'',
-				'name',
-				'',
-				'name'
-			);
-			$licences = array_keys($rows);
-		}
+		$subpartArray = array();
+		$subpartArray['###SUBPART_SC_KEYWORDS###'] = $this->renderSC_keywords($template);
+		$subpartArray['###SUBPART_SC_AGENCIES###'] = $this->renderSC_agencies($template);
+		//-- Compatibilité with previous version (from revision #75453)
+		$subpartArray['###SUBPART_SC_TIERS###'] = $subpartArray['###SUBPART_SC_AGENCIES###'];
+		//--
+		$subpartArray['###SUBPART_SC_OWNERS###'] = $this->renderSC_owners($template);
+		$subpartArray['###SUBPART_SC_FORMATS###'] = $this->renderSC_formats($template);
+		$subpartArray['###SUBPART_SC_LICENCES###'] = $this->renderSC_licences($template);
 
 		$markers = array(
-			'###SC_TITLE###' => $this->pi_getLL('selectedCriteria', 'Selected Criteria', true),
-			'###SC_KEYWORDS_LABEL###' => $this->pi_getLL('sc_keywords', 'Keywords', true),
-			'###SC_KEYWORDS_VALUE###' => $this->list_criteria['keywords'],
-			'###SC_TIERS_LABEL###' => $this->pi_getLL('sc_tiers', 'Tiers', true),
-			'###SC_TIERS_VALUE###' => $this->cObj->stdWrap(implode(',', $tiers), $this->conf['displaySearch.']['tiers.']),
-			'###SC_FORMATS_LABEL###' => $this->pi_getLL('sc_formats', 'Formats', true),
-			'###SC_FORMATS_VALUE###' => $this->cObj->stdWrap(implode(',', $formats), $this->conf['displaySearch.']['formats.']),
-			'###SC_LICENCES_LABEL###' => $this->pi_getLL('sc_licences', 'Licences', true),
-			'###SC_LICENCES_VALUE###' => $this->cObj->stdWrap(implode(',', $licences), $this->conf['displaySearch.']['licences.']),
+			'###TITLE###' => $this->pi_getLL('selectedCriteria', 'Selected Criteria', true),
 		);
-		$subpartArray = array();
+
 		// Hook for add fields markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['additionalSelectedCriteriaMarkers'] as $_classRef) {
@@ -404,7 +404,198 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$template = $this->cObj->substituteSubpartArray($template, $subpartArray);
 		return $this->cObj->substituteMarkerArray($template, $markers);
 	}
+	
+	/**
+	 * Renders selected criteria keywords
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_keywords($template) {
+		if (!$this->list_criteria['keywords'])
+			return '';
 
+		$template = $this->cObj->getSubpart($template, '###SUBPART_SC_KEYWORDS###');
+		$markers = array(
+			'###SC_KEYWORDS_NAME###' => $this->prefixId.'[deleted][keywords]',
+			'###SC_KEYWORDS_LABEL###' => $this->pi_getLL('sc_keywords', 'Keywords', true),
+			'###SC_KEYWORDS_VALUE###' => $this->list_criteria['keywords'],
+		);
+		return $this->cObj->substituteMarkerArray($template, $markers);
+	}
+	
+	/**
+	 * Renders selected criteria agencies
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_agencies($template) {
+		$content = '';
+		if (is_array($this->list_criteria['agencies']) && !empty($this->list_criteria['agencies'])) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid, name',
+				$this->tables['tiers'],
+				'1' .  $this->cObj->enableFields($this->tables['tiers']) .  ' AND uid in (' . implode(',', $this->list_criteria['agencies']) . ')',
+				'',
+				'name',
+				'',
+				'name'
+			);
+		}
+		if (is_array($rows) && !empty($rows)) {
+			$template = $this->cObj->getSubpart($template, '###SUBPART_SC_AGENCIES###');
+			$markers = array();
+			$itemTemplate = $this->cObj->getSubpart($template, '###SC_AGENCY_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###AGENCY_LABEL###' => $row['name'],
+					'###AGENCY_VALUE###' => $row['uid'],
+					'###AGENCY_NAME###' => $this->prefixId.'[deleted][agencies][]',
+				);
+				$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###SC_AGENCY_ITEM###', $itemContent);
+			$markers = array(
+				'###TITLE_AGENCIES###' => $this->pi_getLL('sc_agencies', 'Agencies', true),
+				//-- Compatibilité with previous version (from revision #75453)
+				'###SC_TIERS_LABEL###' => $this->pi_getLL('sc_tiers', 'Tiers', true),
+				'###SC_TIERS_VALUE###' => $this->cObj->stdWrap(implode(',', array_keys($rows)), $this->conf['displaySearch.']['tiers.']),
+				// --
+			);
+			$content = $this->cObj->substituteMarkerArray($template, $markers);
+		}
+		return $content;
+	}
+
+	/**
+	 * Renders selected criteria owner
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_owners($template) {
+		$content = '';
+		if (is_array($this->list_criteria['owners']) && !empty($this->list_criteria['owners'])) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid, name',
+				$this->tables['tiers'],
+				'1' .  $this->cObj->enableFields($this->tables['tiers']) .  ' AND uid in (' . implode(',', $this->list_criteria['owners']) . ')',
+				'',
+				'name'
+			);
+		}
+		if (is_array($rows) && !empty($rows)) {
+			$template = $this->cObj->getSubpart($template, '###SUBPART_SC_OWNERS###');
+			$markers = array();
+			$itemTemplate = $this->cObj->getSubpart($template, '###SC_OWNER_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###OWNER_LABEL###' => $row['name'],
+					'###OWNER_VALUE###' => $row['uid'],
+					'###OWNER_NAME###' => $this->prefixId.'[deleted][owners][]',
+				);
+				$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###SC_OWNER_ITEM###', $itemContent);
+			$markers = array('###TITLE_OWNERS###' => $this->pi_getLL('sc_owners', 'Owners', true));
+			$content = $this->cObj->substituteMarkerArray($template, $markers);
+		}
+		return $content;
+	}
+
+	/**
+	 * Renders selected criteria formats
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_formats($template) {
+		$content = '';
+		if (is_array($this->list_criteria['fileformat']) && !empty($this->list_criteria['fileformat'])) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid, name',
+				$this->tables['fileformats'],
+				'1' .  $this->cObj->enableFields($this->tables['fileformats']) .  ' AND uid in (' . implode(',', $this->list_criteria['fileformat']) . ')',
+				'',
+				'name',
+				'',
+				'name'
+			);
+		}
+		if (is_array($rows) && !empty($rows)) {
+			$template = $this->cObj->getSubpart($template, '###SUBPART_SC_FORMATS###');
+			$markers = array();
+			$itemTemplate = $this->cObj->getSubpart($template, '###SC_FORMAT_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###FILEFORMAT_LABEL###' => $row['name'],
+					'###FILEFORMAT_VALUE###' => $row['uid'],
+					'###FILEFORMAT_NAME###' => $this->prefixId.'[deleted][fileformat][]',
+				);
+				$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###SC_FORMAT_ITEM###', $itemContent);
+			$markers = array(
+				'###TITLE_FORMATS###' => $this->pi_getLL('sc_formats', 'Formats', true),
+				//-- Compatibilité with previous version (from revision #75453)
+				'###SC_FORMATS_LABEL###' => $this->pi_getLL('sc_formats', 'Formats', true),
+				'###SC_FORMATS_VALUE###' => $this->cObj->stdWrap(implode(',', array_keys($rows)), $this->conf['displaySearch.']['formats.']),
+				//--
+			);
+			$content = $this->cObj->substituteMarkerArray($template, $markers);
+		}
+		return $content;
+	}
+	
+	/**
+	 * Renders selected criteria licences
+	 *
+	 * @param	string	$template
+	 * @return	string	The HTML content
+	 */
+	function renderSC_licences($template) {
+		$content = '';
+		if (is_array($this->list_criteria['licences']) && !empty($this->list_criteria['licences'])) {
+			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid, name',
+				$this->tables['licences'],
+				'1' .  $this->cObj->enableFields($this->tables['licences']) .  ' AND uid in (' . implode(',', $this->list_criteria['licences']) . ')',
+				'',
+				'name',
+				'',
+				'name'
+			);
+		}
+		if (is_array($rows) && !empty($rows)) {
+			$template = $this->cObj->getSubpart($template, '###SUBPART_SC_LICENCES###');
+			$markers = array();
+			$itemTemplate = $this->cObj->getSubpart($template, '###SC_LICENCE_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###LICENCE_LABEL###' => $row['name'],
+					'###LICENCE_VALUE###' => $row['uid'],
+					'###LICENCE_NAME###' => $this->prefixId.'[deleted][licences][]',
+				);
+				$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###SC_LICENCE_ITEM###', $itemContent);
+			$markers = array(
+				'###TITLE_LICENCES###' => $this->pi_getLL('sc_licences', 'Licences', true),
+				//-- Compatibilité with previous version (from revision #75453)
+				'###SC_LICENCES_LABEL###' => $this->pi_getLL('sc_licences', 'Licences', true),
+				'###SC_LICENCES_VALUE###' => $this->cObj->stdWrap(implode(',', array_keys($rows)), $this->conf['displaySearch.']['licences.']),
+				//--
+			);
+			$content = $this->cObj->substituteMarkerArray($template, $markers);
+		}
+		return $content;
+	}
+	
 	/**
 	 * Render sorting
 	 *
@@ -461,7 +652,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					'###FILEFORMAT_VALUE###' => $fileformat['uid'],
 					'###CHECKED###' => '',
 				);
-				if (is_array($this->piVars['fileformat']) && t3lib_div::inArray($this->piVars['fileformat'],$fileformat['uid'])) {
+				if (is_array($this->list_criteria['fileformat']) && t3lib_div::inArray($this->list_criteria['fileformat'],$fileformat['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
 				}
 				$fileformatItem = $this->cObj->getSubpart($template, '###FILEFORMAT_ITEM###');
@@ -472,30 +663,60 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Render tiers
+	 * Render tiers agencies
 	 *
 	 * @param	string		$template: The template for tiers
-	 * @param	array		$aTiers: The tiers
+	 * @param	array		$agencies: The tiers
 	 * @return	$item
 	 */
-	function renderTiersItems($template, $aTiers) {
-		if (is_array($aTiers) && count($aTiers)) {
+	function renderAgenciesItems($template, $agencies) {
+		if (is_array($agencies) && count($agencies)) {
 			$agencies = t3lib_div::trimExplode(',', $this->conf['select.']['agencies'], true);
-			foreach ($aTiers as $tiers) {
+			foreach ($agencies as $agency) {
 				$markers = array(
 					'###PREFIXID###' => $this->prefixId,
-					'###TIERS_LABEL###' => htmlspecialchars($tiers['name']),
-					'###TIERS_VALUE###' => htmlspecialchars($tiers['uid']),
-					'###CHECKED###' => in_array($tiers['uid'], $agencies)? 'checked = "checked"': '',
+					'###AGENCY_LABEL###' => htmlspecialchars($agency['name']),
+					'###AGENCY_NAME###' => $this->prefixId.'[agencies][]',
+					'###AGENCY_VALUE###' => intval($agency['uid']),
+					'###CHECKED###' => in_array($agency['uid'], $agencies)? 'checked = "checked"': '',
 				);
-				if (is_array($this->piVars['tiers']) && t3lib_div::inArray($this->piVars['tiers'],$tiers['uid'])) {
+				if (is_array($this->list_criteria['agencies']) && t3lib_div::inArray($this->list_criteria['agencies'],$agency['uid'])) {
 					$markers['###CHECKED###'] = 'checked';
 				}
-				$tiersItem = $this->cObj->getSubpart($template, '###TIERS_ITEM###');
-				$item .= $this->cObj->substituteMarkerArray($tiersItem, $markers);
+				$agenciesItem = $this->cObj->getSubpart($template, '###AGENCIES_ITEM###');
+				$item .= $this->cObj->substituteMarkerArray($agenciesItem, $markers);
 			}
 		}
 		return $item;
+	}
+	
+	/**
+	 * Render owners
+	 *
+	 * @param	string		$template: The template for owners
+	 * @param	array		$owners: The owners
+	 * @return	The HTML content
+	 */
+	function renderOwnerItems($template, $owners) {
+		$content = '';
+		if (!is_array($owners) || empty($owners))
+			return $content;
+
+		foreach ($owners as $owner) {
+			$markers = array(
+				'###PREFIXID###' => $this->prefixId,
+				'###OWNER_LABEL###' => htmlspecialchars($owner['name']),
+				'###OWNER_NAME###' => $this->prefixId.'[owners][]',
+				'###OWNER_VALUE###' => intval($owner['uid']),
+				'###CHECKED###' => '',
+			);
+			if (is_array($this->list_criteria['owners']) && t3lib_div::inArray($this->list_criteria['owners'],$owner['uid'])) {
+				$markers['###CHECKED###'] = 'checked="checked"';
+			}
+			$ownerItem = $this->cObj->getSubpart($template, '###OWNERS_ITEM###');
+			$content .= $this->cObj->substituteMarkerArray($ownerItem, $markers);
+		}
+		return $content;
 	}
 
 	/**
@@ -511,11 +732,12 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		foreach ($aLicences as $licence) {
 			$markers = array(
 				'###PREFIXID###' => $this->prefixId,
-				'###LICENCE_LABEL###' => $licence['name'],
-				'###LICENCE_VALUE###' => $licence['uid'],
+				'###LICENCE_LABEL###' => htmlspecialchars($licence['name']),
+				'###LICENCE_NAME###' => $this->prefixId.'[licences][]',
+				'###LICENCE_VALUE###' => intval($licence['uid']),
 				'###CHECKED###' => '',
 			);
-			if (is_array($this->piVars['licences']) && t3lib_div::inArray($this->piVars['licences'],$licence['uid'])) {
+			if (is_array($this->list_criteria['licences']) && t3lib_div::inArray($this->list_criteria['licences'],$licence['uid'])) {
 				$markers['###CHECKED###'] = 'checked';
 			}
 			$item .= $this->cObj->substituteMarkerArray($licencesItem, $markers);
@@ -616,14 +838,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				OR LOCATE("' . strtoupper($this->list_criteria['keywords']) . '", UPPER(`'.$this->tables['filegroups'].'`.`description`)))
 			';
 		}
-		if ((isset($this->list_criteria['tiers']) && count($this->list_criteria['tiers'])) || $this->conf['select.']['agencies']) {
+		if ((isset($this->list_criteria['agencies']) && count($this->list_criteria['agencies'])) || $this->conf['select.']['agencies']) {
 			$agencies = array();
-			if (is_array($this->list_criteria['tiers']))
-				$agencies = $this->list_criteria['tiers'];
+			if (is_array($this->list_criteria['agencies']))
+				$agencies = $this->list_criteria['agencies'];
 			if ($select_agencies = t3lib_div::trimExplode(',', $this->conf['select.']['agencies'], true))
 				$agencies = array_merge($agencies, $select_agencies);
 			if (!empty($agencies))
 				$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`agency` IN (' . implode(',', $agencies) . '))';
+		}
+		if (isset($this->list_criteria['owners']) && count($this->list_criteria['owners'])) {
+			$owners = implode(',', $this->list_criteria['owners']);
+			$owners = t3lib_div::intExplode(',', $owners, true);
+			$whereClause .= ' AND ( `' . $this->tables['filegroups'] . '`.`owner` IN (' . implode(',', $owners) . '))';
 		}
 		if (isset($this->list_criteria['fileformat']) && count($this->list_criteria['fileformat'])){
 			$queryJoin .= '
@@ -785,7 +1012,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					$this->list_criteriaNav,
 					array(
 						$this->prefixId . '[uid]' => $row['uid'],
-						$this->prefixId . '[returnID]' => $GLOBALS['TSFE']->id,
+						// $this->prefixId . '[returnID]' => $GLOBALS['TSFE']->id,
 					)
 				)
 			),
@@ -818,7 +1045,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 					$licence = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
 						'name, link, logo',
 						'tx_icsoddatastore_licences',
-						'uid=' . $row['licence']
+						'uid=' . $row['licence'],
+						'',
+						'',
+						'1'
 					);
 					if (!empty($licence['logo'])) {
 						$logo = $this->getImgResource($licence['logo'], $licence['name'], $this->conf['licences']['logo.']['maxW'], $this->conf['licences']['logo.']['maxH'], true);
@@ -855,6 +1085,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	content		The content of filegroup files template substituted
 	 */
 	function renderFiles($view, $filegroup, $template) {
+		$lConf = ($view == 'LIST')? $this->conf['displayList.']: $this->conf['displaySingle.'];
 		t3lib_div::loadTCA($this->tables['files']);
 		$uploadPaths['file'] = '';
 		if ($GLOBALS['TCA'][$this->tables['files']]['columns']['file']['config']['uploadfolder'])
@@ -876,6 +1107,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			'md5',
 			'type',
 			'format',
+			'size',
 		);
 		foreach ($fields as $idx=>$field) {
 			$fields[$idx] = '`' . $this->tables['files'] . '`.`' . $field . '` as ' . $field;
@@ -892,47 +1124,30 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			if (isset($this->list_criteria['fileformat']) && ($view == 'LIST') && $this->conf['displayList.']['renderOnlySearchedFileFormats']) {
 				$where[] = '`' . $this->tables['files'] . '`.`format` IN (' . implode(',',$this->list_criteria['fileformat']) . ')';
 			}
-			$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				implode(', ', $fields),
-				'`' . $this->tables['filegroups'] . '`' .
-				' LEFT OUTER JOIN `' . $this->tables['file_filegroup_mm'] . '` ON `' . $this->tables['file_filegroup_mm'] . '`.`uid_foreign` = `' . $this->tables['filegroups'] . '`.`uid`' .
-				' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`' . $this->cObj->enableFields($this->tables['files']),
-				implode(' AND ', $where) .$this->cObj->enableFields($this->tables['filegroups'])
-			);
 			$pictoItems = '';
-			foreach ($files as $file) {
-				$markers = array(
-					'###FILESIZE###' => '',
-					'###FILEMD5###' => '',
-				);
-				if ($file['record_type'] == 0) {
-					$markers['###FILESIZE###'] = $this->getFileSize($uploadPaths['file'] . $file['file']);
-					$markers['###FILEMD5###'] = md5_file($uploadPaths['file'] . $file['file']);
-				} else {
-					$markers['###FILEMD5###'] = md5_file($file['url']);
-				}
-				$formats = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-					'name, picto',
-					$this->tables['fileformats'],
-					'1' . $this->cObj->enableFields($this->tables['fileformats']) . ' AND uid=' . $file['format'] ,
-					'',
-					'',
-					'1'
-				);
-				if (is_array($formats) && !empty($formats)) {
-					$format = $formats[0];
-					$file['picto'] = $format['picto'];
-					$file['format_title'] = $format['name'];
-				}
-				$cObj = t3lib_div::makeInstance('tslib_cObj');
-				$cObj->start($file, $this->tables['files']);
-				$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-				$markers['###PICTO###'] =  $cObj->stdWrap('', $this->conf['datasetFile.']);
-				$markers['###FILEEXT###'] = htmlspecialchars($file['format_title']);
 
-				$pictoItem = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($template, '###PICTO_ITEM###'), $markers);
-				$pictoItems .= $pictoItem;
+			if ($lConf['groupByFormat']) {
+				$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					'format, COUNT(*) as count_format',
+					'`' . $this->tables['filegroups'] . '`' .
+					' LEFT OUTER JOIN `' . $this->tables['file_filegroup_mm'] . '` ON `' . $this->tables['file_filegroup_mm'] . '`.`uid_foreign` = `' . $this->tables['filegroups'] . '`.`uid`' .
+					' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`' . $this->cObj->enableFields($this->tables['files']),
+					implode(' AND ', $where) .$this->cObj->enableFields($this->tables['filegroups']),
+					'format'
+				);
+				$pictoItems = $this->renderFiles_byFormat($files, $template, array('uploadPaths' => $uploadPaths, 'lConf' => $lConf));
 			}
+			else {
+				$files = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+					implode(', ', $fields),
+					'`' . $this->tables['filegroups'] . '`' .
+					' LEFT OUTER JOIN `' . $this->tables['file_filegroup_mm'] . '` ON `' . $this->tables['file_filegroup_mm'] . '`.`uid_foreign` = `' . $this->tables['filegroups'] . '`.`uid`' .
+					' JOIN `' . $this->tables['files'] . '` ON `' . $this->tables['files'] . '`.`uid` = `' . $this->tables['file_filegroup_mm'] . '`.`uid_local`' . $this->cObj->enableFields($this->tables['files']),
+					implode(' AND ', $where) .$this->cObj->enableFields($this->tables['filegroups'])
+				);
+				$pictoItems = $this->renderFiles_byRow($files, $template, array('uploadPaths' => $uploadPaths, 'lConf' => $lConf));
+			}
+			
 			$sectionContent = $this->cObj->substituteSubpart($template, '###PICTO_ITEM###', $pictoItems);
 			if (!empty($files)) {
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -946,7 +1161,108 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}
 		return $content;
 	}
-
+	
+	/**
+	 * Renders files by row
+	 *
+	 * @param	array	$files: Array of files rows
+	 * @param	string	$template: The HTML template
+	 * @param	array	$PA: An array with configuration options.
+	 */
+	function renderFiles_byRow($files, $template, $PA) {
+		$uploadPaths = $PA['uploadPaths'];
+		$lConf = $PA['lConf'];
+		
+		foreach ($files as $file) {
+			$markers = array(
+				'###FILEUID###' => $file['uid'],
+				'###FILESIZE###' => '',
+				'###FILEMD5###' => '',
+				'###FILENAME###' => '',
+			);
+			if ($file['record_type'] == 0) {
+				if ($file['size']) {
+					$markers['###FILESIZE###'] = $this->getFileSize(intval($file['size']));
+				}
+				else {
+					$markers['###FILESIZE###'] = $this->getFileSize(filesize($uploadPaths['file'] . $file['file']));
+				}
+				$markers['###FILEMD5###'] = $file['md5'];
+				$filedata = t3lib_div::trimExplode('.', basename($file['file']));
+				$fileext = $filedata[count($filedata) -1];
+				unset($filedata[count($filedata) -1]);
+				$filename = implode('.', $filedata);
+				$file['filename'] = $filename . '.' . $fileext;
+				$markers['###FILENAME###'] = $this->cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
+			} else {
+				$markers['###FILEMD5###'] = $file['md5'];
+				$markers['###FILENAME###'] = $this->cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
+			}
+			$pictoItems .= $this->renderFiles_item($file, $template, $markers, $lConf);
+		}
+		return $pictoItems;
+	}
+	
+	/**
+	 * Renders files by format
+	 *
+	 * @param	array	$files: Array of files rows
+	 * @param	string	$template: The HTML template
+	 * @param	array	$PA: An array with configuration options.
+	 */
+	function renderFiles_byFormat($files, $template, $PA) {
+		$uploadPaths = $PA['uploadPaths'];
+		$lConf = $PA['lConf'];
+		foreach ($files as $file) {
+			$markers = array();
+			$pictoItems .= $this->renderFiles_item($file, $template, $markers, $lConf);
+		}
+		return $pictoItems;
+	}
+	
+	/**
+	 * Renders files item
+	 *
+	 * @param	array	$file: The file row
+	 * @param	string	$template: The HTML template
+	 * @param	array	$markers: The markers array
+	 * @param	array	$lConf: The conf
+	 */
+	function renderFiles_item($file, $template, $markers, $lConf) {
+		$formats = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'name, picto',
+			$this->tables['fileformats'],
+			'1' . $this->cObj->enableFields($this->tables['fileformats']) . ' AND uid=' . $file['format'] ,
+			'',
+			'',
+			'1'
+		);
+		if (is_array($formats) && !empty($formats)) {
+			$format = $formats[0];
+			$file['picto'] = $format['picto'];
+			$file['format_title'] = $format['name'];
+		}
+		
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($file, $this->tables['files']);
+		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+		$markers['###PICTO###'] =  $cObj->stdWrap('', $this->conf['datasetFile.']);
+		$markers['###FILEEXT###'] = htmlspecialchars($file['format_title']);
+		$markers['###COUNT_BYFORMAT###'] = htmlspecialchars($file['count_format']);
+		
+		$pictoTemplate = $this->cObj->getSubpart($template, '###PICTO_ITEM###');
+		$linkTemplate = $this->cObj->getSubpart($pictoTemplate, '###LINK_ITEM###');
+		$linkItem = $this->cObj->substituteMarkerArray($linkTemplate, $markers);
+		$pictoItem = $this->cObj->substituteSubpart(
+			$pictoTemplate, 
+			'###LINK_ITEM###', 
+			$cObj->stdWrap($linkItem, ($lConf['datasetFile.']? $lConf['datasetFile.']: $this->conf['datasetFile.']))
+		);
+		$pictoItem = $this->cObj->substituteMarkerArray($pictoItem, $markers);
+		
+		return $pictoItem;
+	}
+	
 	/**
 	 * Render single view
 	 *
@@ -1042,23 +1358,28 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 
 		// Render providers icons
 		$tiersIds = array_unique($tiersIds);
-		$resProvider = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-			'uid_local, uid_foreign, fe_users.image as providerImg',
-			'tx_icsoddatastore_tiers',
-			'tx_icsoddatastore_feusers_tiers_mm',
-			'fe_users',
-			' AND uid_local IN(' . implode(',', $tiersIds) . ') AND fe_users.image!=\'\'',
-			'',
-			'tx_icsoddatastore_feusers_tiers_mm.sorting ASC'
-		);
-		$GLOBALS['TSFE']->includeTCA(0);
-		$imagePath = $GLOBALS['TCA']['fe_users']['columns']['image']['config']['uploadfolder'] . '/';
-		$providerImg = array();
-		while ($provider = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resProvider))
-		{
-			$providerImg[] = $imagePath.$provider['providerImg'];
+		if (empty($tiersIds)) {
+			$markers['###PROVIDER_IMG###'] = '';
 		}
-		$markers['###PROVIDER_IMG###'] = $this->cObj->stdWrap(implode(',', $providerImg), $this->conf['displaySingle.']['providerImg.']);
+		else {
+			$resProvider = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+				'uid_local, uid_foreign, fe_users.image as providerImg',
+				'tx_icsoddatastore_tiers',
+				'tx_icsoddatastore_feusers_tiers_mm',
+				'fe_users',
+				' AND uid_local IN(' . implode(',', $tiersIds) . ') AND fe_users.image!=\'\'',
+				'',
+				'tx_icsoddatastore_feusers_tiers_mm.sorting ASC'
+			);
+			$GLOBALS['TSFE']->includeTCA(0);
+			$imagePath = $GLOBALS['TCA']['fe_users']['columns']['image']['config']['uploadfolder'] . '/';
+			$providerImg = array();
+			while ($provider = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resProvider))
+			{
+				$providerImg[] = $imagePath.$provider['providerImg'];
+			}
+			$markers['###PROVIDER_IMG###'] = $this->cObj->stdWrap(implode(',', $providerImg), $this->conf['displaySingle.']['providerImg.']);
+		}
 
 		$subpartArray = array();
 		// Hook for add fields markers
@@ -1122,13 +1443,13 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @param	string		$file
 	 * @return	document		size with unit
 	 */
-	function getFileSize($file) {
-		if (filesize($file)>(1024*1024))
-			return round(filesize($file)/(1024*1024),1) . ' M';
-		if (filesize($file)>(1024))
-			return round(filesize($file)/(1024)) . ' kb';
+	function getFileSize($size) {
+		if ($size>(1024*1024))
+			return round($size/(1024*1024),1) . ' ' . $this->pi_getLL('megabytes', 'Mb', true);
+		if ($size>(1024))
+			return round($size/(1024)) . ' ' . $this->pi_getLL('kilobytes', 'kb', true);
 		else
-			return round(filesize($file)) . ' octets';
+			return round($size) . ' ' . $this->pi_getLL('bytes', 'b', true);
 	}
 
 	/**
@@ -1189,6 +1510,22 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	}
 
 	/**
+	 * Retrieves owners
+	 *
+	 * @return	owners
+	 */
+	function getOwners() {
+		$rows =  $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'`' . $this->tables['tiers'] . '`.`uid`, `' . $this->tables['tiers'] . '`.`name`',
+			$this->tables['filegroups'] . ' JOIN ' . $this->tables['tiers'] . ' ON `' . $this->tables['tiers'] . '`.`uid` = `' . $this->tables['filegroups']  . '`.`owner` ' . $this->cObj->enableFields($this->tables['tiers']),
+			'1 ' . $this->cObj->enableFields($this->tables['filegroups']),
+			'`' . $this->tables['filegroups']  . '`.`owner`',
+			'`' . $this->tables['tiers'] . '`.`name` ASC'
+		);
+		return $rows;
+	}
+
+	/**
 	 * Retrieves licences
 	 *
 	 * @return	mixed		Licences
@@ -1209,10 +1546,16 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		$conf = $this->conf['displayList.']['pagebrowse.'];
-		$conf += array(
+		// $conf += array(
+			// 'pageParameterName' => $this->prefixId . '|page',
+			// 'numberOfPages' => $numberOfPages,
+		// );
+		$conf2 = array(
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
 		);
+		
+		$conf = array_merge($conf, $conf2);
 
 		// Get page browser
 		$cObj = t3lib_div::makeInstance('tslib_cObj');

@@ -1,3 +1,28 @@
+2014-04-18 Tsi YANG <tsi.yang@plan-net.fr>
+	* Feature: Adding the file size field.
+	* Feature: Render files by formats on list view.
+	* Feature: filemount initialization when the list is limited to 1 in insert form.
+	* Bug fix: Correction of the selection on filemount.
+	* Features: Added field size. Added process to calculate md5 and file size.
+	* Features: Displays the file name and wrap link ###LINK_ITEM### subpart.
+	* Features: Added scheduler task.
+				Modified md5 and size render =>
+					renderFiles
+					getFileSize
+	* Refactor: Reworked selected criteria and pre-filling of the form fields. 
+				Now, the selected criteria are provided with the ability to disable selection.
+	* Refactor: Reworked call to agencies.
+				renderTiersItems is deprecated, use renderAgenciesItems.
+				Tiers markers are deprecated, user agencies markers.
+	* Refactor: Reworked from new template for each code (DATASET, FILE).
+				Added other data for DATASET.
+	* Feature: Updated template file.
+	* Feature: Added owner search field.
+	* Bug fix: Bug fix in rendering data BE Module.
+	
+2013-05-21 Tsi YANG <tsi.yang@plan-net.fr>
+	* Feature: Improved in RSS configuration.
+
 2012-10-16 Tsi YANG <tsi.yang@plan-net.fr>
 	* Feature: Added TS configuration to display licence's logo.
 	* Fix: Default order on update_date.
