@@ -1085,6 +1085,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	content		The content of filegroup files template substituted
 	 */
 	function renderFiles($view, $filegroup, $template) {
+		$GLOBALS['TSFE']->includeTCA();
 		$lConf = ($view == 'LIST')? $this->conf['displayList.']: $this->conf['displaySingle.'];
 		t3lib_div::loadTCA($this->tables['files']);
 		$uploadPaths['file'] = '';
@@ -1100,15 +1101,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}	else	{
 			$filetypes = $this->getFiletypes();
 		}
-		$fields = array(
-			'record_type',
-			'file',
-			'url',
-			'md5',
-			'type',
-			'format',
-			'size',
-		);
+		$fields = array_keys($GLOBALS['TCA'][$this->tables['files']]['columns']); // Use TCA field list instead of hardcoded one.
 		foreach ($fields as $idx=>$field) {
 			$fields[$idx] = '`' . $this->tables['files'] . '`.`' . $field . '` as ' . $field;
 		}
@@ -1174,6 +1167,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$lConf = $PA['lConf'];
 		
 		foreach ($files as $file) {
+			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$cObj->start($file, $this->tables['files']);
+			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 			$markers = array(
 				'###FILEUID###' => $file['uid'],
 				'###FILESIZE###' => '',
@@ -1193,10 +1189,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				unset($filedata[count($filedata) -1]);
 				$filename = implode('.', $filedata);
 				$file['filename'] = $filename . '.' . $fileext;
-				$markers['###FILENAME###'] = $this->cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
+				$markers['###FILENAME###'] = $cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
 			} else {
 				$markers['###FILEMD5###'] = $file['md5'];
-				$markers['###FILENAME###'] = $this->cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
+				$markers['###FILENAME###'] = $cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
 			}
 			$pictoItems .= $this->renderFiles_item($file, $template, $markers, $lConf);
 		}
