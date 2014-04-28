@@ -102,10 +102,13 @@ class tx_icsodcategories_tools extends tslib_pibase {
 	 *
 	 * @param	boolean	$current Selected used categories only
 	 * @param	array	$uids	Categories uids
+	 * @param	string	$orderBy: SQL select orderBy
+	 * @param	string	$where: SQL select where
 	 * @return	array
 	 */
-	function getCategories($current = false, $uids = null, $orderBy='') {
-		$where = $innerjoin = '';
+	function getCategories($current = false, $uids = null, $orderBy='', $where='') {
+		// $where = $innerjoin = '';
+		$innerjoin = '';
 		if ($current) {
 			$innerjoin .= ' INNER JOIN `'.$this->tables['mm'].'`
 				ON `'.$this->tables['mm'].'`.`uid_local` = `'. $this->tables['categories'] .'`.`uid`
@@ -117,6 +120,21 @@ class tx_icsodcategories_tools extends tslib_pibase {
 		if (is_array($uids) && !empty($uids)) {
 			$where .= ' AND `' . $this->tables['categories'].'`.`uid` IN (' . implode(',', $uids) . ')';
 		}
+		// t3lib_div::debug(
+			// $GLOBALS['TYPO3_DB']->SELECTQuery (
+				// 'DISTINCT `'.$this->tables['categories'].'`.`uid`,
+					// `'.$this->tables['categories'].'`.`name`,
+					// `'.$this->tables['categories'].'`.`description`,
+					// `'.$this->tables['categories'].'`.`parent`,
+					// `'.$this->tables['categories'].'`.`picto`',
+				// '`'.$this->tables['categories'].'`'.$innerjoin,
+				// '1 ' . $this->cObj->enableFields($this->tables['categories']).$where,
+				// '',
+				// $orderBy,
+				// '',
+				// 'uid'
+			// )
+		// );
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows (
 			'DISTINCT `'.$this->tables['categories'].'`.`uid`,
 				`'.$this->tables['categories'].'`.`name`,
@@ -126,7 +144,9 @@ class tx_icsodcategories_tools extends tslib_pibase {
 			'`'.$this->tables['categories'].'`'.$innerjoin,
 			'1 ' . $this->cObj->enableFields($this->tables['categories']).$where,
 			'',
-			$orderBy
+			$orderBy,
+			'',
+			'uid'
 		);
 		
 	}
@@ -174,6 +194,8 @@ class tx_icsodcategories_tools extends tslib_pibase {
 			$orderBy
 		);
 	}
+	
+
 
 	/**
 	 * SQL Jointure
@@ -241,6 +263,55 @@ class tx_icsodcategories_tools extends tslib_pibase {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Retrieves category tree parents
+	 *
+	 * @param	int	$catId: The category's id
+	 * @return	mixed	Array of category parents
+	 */
+	function getCategoryTreeParents($catId) {
+		$catId = intval($catId);
+		$treeParents = array();
+		do {
+			$cat = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow (
+				'*',
+				'tx_icsodcategories_categories',
+				'uid='.$catId
+			);
+			$treeParents[] = $cat;
+			$catId = $cat['parent'];
+		} while ($catId!=0);
+		return array_reverse($treeParents);
+	}
+	
+	/**
+	 * Retrieves category children
+	 *
+	 * @param	int		$parent: The parent uid
+	 */
+	function getCategoryTreeChildren($parent) {
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'*',
+			'tx_icsodcategories_categories',
+			'parent='.$parent,
+			'',
+			'',
+			'',
+			'uid'
+		);
+		if (is_array($rows) && !empty($rows)) {
+			foreach ($rows as $row) {
+				$children = $this->getCategoryTreeChildren($row['uid']);
+				if (is_array($children) && !empty($children)) {
+					// $rows = array_merge($rows, $children);
+					$rows = $rows + $children;
+				}
+			}
+			
+		}
+		return $rows;
 	}
 }
 

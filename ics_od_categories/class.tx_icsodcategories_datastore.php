@@ -66,12 +66,22 @@ class tx_icsodcategories_datastore {
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
-		if (isset($object->piVars['categories']) && count($object->piVars['categories'])) {
+		// if (isset($object->piVars['categories']) && count($object->piVars['categories'])) {
+		if (isset($object->catCriteria) && count($object->catCriteria)) {
 			$queryJoin .= $tools->getSQLJoin();
-			$whereClause .= $tools->getSQLWhere($object->piVars['categories']);
+			// $categories = $object->piVars['categories'];
+			// foreach ($categories as $category) {
+				// $children = $tools->getCategoryTreeChildren($category);
+				// if (is_array($children) && !empty($children)) {
+					// $categories = array_merge($categories, array_keys($children));
+				// }
+			// }
+			// $whereClause .= $tools->getSQLWhere($categories);
+			$whereClause .= $tools->getSQLWhere($object->catCriteria);
+			// t3lib_div::debug($whereClause);
 		}
 	}
-
+	
 	/**
 	 * Render categories fields markers
 	 *
@@ -84,9 +94,22 @@ class tx_icsodcategories_datastore {
 	 * @return	void
 	 */
 	function additionalFieldsMarkers(&$markers, &$subpartArray, &$template, $filegroup, $conf, $object) {
+		$fields = t3lib_div::trimExplode(',', $conf['fields']);
+		if (!in_array('tx_icsodcategories_categories', $fields)) {
+			$subpartArray['###SUBPART_CATEGORIES###'] = '';
+			$subpartArray['###SUBPART_CATTREEPARENTS###'] = '';
+			return;
+		}
+		
+	
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
+		$local_lang = t3lib_div::readLLfile(t3lib_div::getFileAbsFileName('EXT:ics_od_categories/locallang.xml'), $GLOBALS['TSFE']->lang);
+
+		$object->LOCAL_LANG['default'] = array_merge($object->LOCAL_LANG['default'], $local_lang['default']);
+		$object->LOCAL_LANG[$GLOBALS['TSFE']->lang] = array_merge($object->LOCAL_LANG[$GLOBALS['TSFE']->lang], $local_lang[$GLOBALS['TSFE']->lang]);
+		// Additionnal markers categories
 		switch ((string)strtoupper(trim($conf['categories.']['sorting']))) {
 			case 'NAME':
 				$orderBy = '`'.$tools->tables['categories'].'`.`name`';
@@ -97,35 +120,63 @@ class tx_icsodcategories_datastore {
 			default:
 				$orderBy = '';
 		}
-
 		$categories = $tools->getCategoriesElement($filegroup['uid'], $orderBy);
-		$output = '';
-
 		if ($categories && is_array($categories) && !empty($categories)) {
-			$listNameCategories = array();
-			$pictos = array();
-			$outputCats = array();
-			$cObj = t3lib_div::makeInstance('tslib_cObj');
-			foreach ($categories as $category) {
-				$data = array(
-					'name' => $category['name'],
-					'picto' => ($category['picto'] && file_exists($category['picto']))? $category['picto']: '',
-				);
-				$cObj->start($data, 'Category');
-				$cObj->setParent($object->data, $object->currentRecord);
-				$outputCats[] = $cObj->stdWrap('', $conf['categories.']['category.']);
-			}
-			$output .= implode($conf['categories.']['separator'], $outputCats);
-
-			$subpart = $object->cObj->getSubpart($template, '###SUBPART_CATEGORIES###');
-			$template = $object->cObj->substituteSubpart($template, '###SUBPART_CATEGORIES###', $subpart);
-
+			$output = $this->additionalFieldsMarkers_category($categories, $conf['categories.']);
+			$markers['###CATEGORIES_LABEL###'] = $object->cObj->stdWrap($object->pi_getLL('categories_label', 'Categories', true), $conf['categories.']['label.']);
+			$markers['###CATEGORIES_VALUE###'] = $object->cObj->stdWrap($output, $conf['categories.']);
 		} else {
 			$subpartArray['###SUBPART_CATEGORIES###'] = '';
 		}
 
-		$markers['###CATEGORIES_LABEL###'] = $object->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories_label'), $conf['categories.']['label.']);
-		$markers['###CATEGORIES_VALUE###'] = $object->cObj->stdWrap($output, $conf['categories.']);
+		// Additionnal markers categories with tree parents
+		// Query again for the first category
+		if (!$conf['catTreeParents.']['display']) {
+			$subpartArray['###SUBPART_CATTREEPARENTS###'] = '';
+		}
+		else {
+			if ($conf['categories.']['sorting']!='POSITION') {
+				$orderBy = '`'.$tools->tables['mm'].'`.`sorting_foreign`';
+				$categories = $tools->getCategoriesElement($filegroup['uid'], $orderBy);
+			}
+			if (!is_array($categories) || empty($categories)) {
+				$subpartArray['###SUBPART_CATTREEPARENTS###'] = '';
+			}
+			else {
+				$category = array_shift($categories);
+				$treeParents = $tools->getCategoryTreeParents($category['uid']);
+				$output = $this->additionalFieldsMarkers_category($treeParents, $conf['catTreeParents.']);
+				$markers['###CATTREEPARENTS_LABEL###'] = $object->cObj->stdWrap($object->pi_getLL('catTreeParents', 'Category', true), $conf['catTreeParents.']['label.']);
+				$markers['###CATTREEPARENTS_VALUE###'] = $object->cObj->stdWrap($output, $conf['catTreeParents.']['value.']);
+			}
+		}
+	}
+	
+	/**
+	 * Render additionnal field category
+	 *
+	 * @param	array	$categories
+	 * @param	array	$conf
+	 * @return	string	The category
+	 */
+	private function additionalFieldsMarkers_category($categories, $conf) {
+		$outputCats = array();
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		foreach ($categories as $category) {
+			$data = array(
+				'uid' => $category['uid'],
+				'name' => $category['name'],
+				'description' => $category['description'],
+				'parent' => $category['parent'],
+				'picto' => ($category['picto'] && file_exists($category['picto']))? $category['picto']: '',
+			);
+			$cObj->start($data, 'Category');
+			$cObj->setParent($object->data, $object->currentRecord);
+			$outputCats[] = $cObj->stdWrap('', $conf['category.']);
+		}
+		$output .= implode($conf['separator'], $outputCats);
+		
+		return $output;
 	}
 
 	/**
@@ -142,36 +193,218 @@ class tx_icsodcategories_datastore {
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
-		$categories = $tools->getCategories(true);
-		$output = '';
-
-		if ($categories && is_array($categories) && !empty($categories)) {
-
-			$subpart = $object->cObj->getSubpart($template, '###CATEGORIES_ITEM###');
-			$output = '';
-			foreach ($categories as $category) {
-				$checked = '';
-				if (is_array($object->piVars['categories']) && in_array($category['uid'], $object->piVars['categories']))
-					$checked = 'checked="checked"';
-
-				$markersCategories = array(
-					'###CATEGORIES_VALUE###' => $category['uid'],
-					'###CATEGORIES_LABEL###' => $category['name'],
-					'###PREFIXID###' => $object->prefixId,
-					'###CHECKED###' => $checked,
-				);
-
-				$output .= $object->cObj->substituteMarkerArray($subpart, $markersCategories);
+		$markers['###CATEGORIES###'] = '';
+		
+		$usedCats = $tools->getCategories(true);
+		if ($usedCats && !empty($usedCats)) {
+			$usedCatIds = array_keys($usedCats);
+			$orderBy = '';
+			if ($conf['categories.']['sorting']== 'POSITION') {
+				$orderBy = 'tx_icsodcategories_categories_relation_mm.sorting_foreign';
 			}
-			$subpartArray['###CATEGORIES_ITEM###'] = $output;
+			if ($conf['categories.']['sorting']== 'NAME') {
+				$orderBy = 'tx_icsodcategories_categories.name';
+			}
+			// Retrieves the categories of Level 1
+			$catOfRootLevel = $tools->getCategories(false, null, $orderBy, ' AND `tx_icsodcategories_categories`.`parent`=0');
+			$treeChildren = $tools->getCategoryTreeChildren(5);
+			foreach ($catOfRootLevel as $cat) {
+				if (in_array($cat['uid'], $usedCatIds)) {
+					$categories[$cat['uid']] = $catOfRootLevel[$cat['uid']];
+				}
+				else {
+					$treeChildren = $tools->getCategoryTreeChildren($cat['uid']);
+					foreach ($treeChildren as $child) {
+						if (in_array($child['uid'], $usedCatIds)) {
+							$categories[$cat['uid']] = $catOfRootLevel[$cat['uid']];
+							break;
+						}
+					}
+				}
+			}
+			
+			$checked_cats = $object->catCriteria;
 
-		} else {
-			$subpartArray['###CATEGORIES_ITEM###'] = '';
+			$columns = intval($conf['displaySearch.']['catConf.']['columns']);
+			if ($columns) {
+				$elemByCol = intval(ceil(count($categories)/$columns));
+			}
+			else {
+				$columns = 1;
+				$elemByCol = count($categories);
+			}
+			
+			for ($i=0; $i<$columns; $i++) {
+				// Renders categories
+				$markers['###CATEGORIES###'] .= $this->additionalFieldsSearchMarkers_categories(
+					// $categories,
+					array_slice($categories, intval($i*$elemByCol), $elemByCol, true),
+					0,
+					$object->cObj->getSubpart($object->templateCode, '###TEMPLATE_SEARCH_CATEGORIES###'),
+					array(
+						'conf' => $conf,
+						'object' => $object,
+						'tools' => $tools,
+						'checked_cats' => $checked_cats,
+						'usedCats' => $usedCats,
+					)
+				);
+			}
 		}
-
+		
 		$markers['###TITLE_CATEGORIES###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories');
 	}
+	
+	/**
+	 * Renders search categories fields markers
+	 *
+	 * @param	array	$categories: The categories to display
+	 * @param	int		$level: The level of catgories, 0 is root
+	 * @param	string	$template: The template
+	 * @param	array	$conf: The typoscript configuration
+	 * @param	object	$object: The tslib_pibase object
+	 * @param	object	$tools: The tx_icsodcategories_tools object
+	 * @return	string	The HTML content of search categories
+	 */
+	private function additionalFieldsSearchMarkers_categories($categories=null, $level=0, $template, $params) {
+		$conf = $params['conf'];
+		$object = $params['object'];
+		$tools = $params['tools'];
+		$checked_cats = $params['checked_cats'];
+		$usedCats = $params['usedCats'];
+		$usedCatIds = array_keys($usedCats);
+		$orderBy = '';
+		if ($conf['categories.']['sorting']== 'POSITION') {
+			$orderBy = 'tx_icsodcategories_categories_relation_mm.sorting_foreign';
+		}
+		if ($conf['categories.']['sorting']== 'NAME') {
+			$orderBy = 'tx_icsodcategories_categories.name';
+		}
+	
+		$content = '';
+		if (!is_array($categories) || empty($categories))
+			return $content;
 
+		if ($level>0){
+			$lTemplate = $object->cObj->getSubpart($template, '###TEMPLATE_SUBCATEGORIES'.$level.'###');
+			if (!$lTemplate) {
+				$lTemplate = $object->cObj->getSubpart($template, '###TEMPLATE_SUBCATEGORIES###');
+			}
+		}
+		else {
+			$lTemplate = $object->cObj->getSubpart($template, '###TEMPLATE_CATEGORIES###');
+		}
+		$itemTemplate = $object->cObj->getSubpart($lTemplate, '###CATEGORIES_ITEM###');
+		$itemContent = '';
+		foreach ($categories as $category) {
+			$checked = '';
+			$subCategories = array();
+			if (in_array($category['uid'], $checked_cats))
+				$checked = 'checked="checked"';
+			$itemMarkers = array(
+				'###PREFIXID###' => $object->prefixId,
+				'###CATEGORIES_VALUE###' => $category['uid'],
+				'###CATEGORIES_LABEL###' => $category['name'],
+				'###CATEGORIES_NAME###' => $object->prefixId.'[categories][]',
+				'###CHECKED###' => $checked,
+				'###SUBCATEGORIES###' => '',
+			);
+			if (($level<$conf['displaySearch.']['catConf.']['recursive']) || ($conf['displaySearch.']['catConf.']['recursive']=='ALL')) {
+				$children = $tools->getCategories(false, null, $orderBy, ' AND `tx_icsodcategories_categories`.`parent`='.$category['uid']);
+				foreach ($children as $cat) {
+					if (in_array($cat['uid'], $usedCatIds)) {
+						$subCategories[$cat['uid']] = $children[$cat['uid']];
+					}
+					else {
+						$treeChildren = $tools->getCategoryTreeChildren($cat['uid']);
+						foreach ($treeChildren as $child) {
+							if (in_array($child['uid'], $usedCatIds)) {
+								$subCategories[$cat['uid']] = $children[$cat['uid']];
+								break;
+							}
+						}
+					}
+				}
+				$itemMarkers['###SUBCATEGORIES###'] = $this->additionalFieldsSearchMarkers_categories(
+					$subCategories,
+					$level+1,
+					$template,
+					$params
+				);
+			}
+			$itemContent .= $object->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+		}
+
+		$content = $object->cObj->substituteSubpartArray($lTemplate, array('###CATEGORIES_ITEM###' => $itemContent));
+		return $content;
+	}
+
+	/**
+	 * Initializes criteria
+	 *
+	 * @param	array	$piVars
+	 * @param	array	$criteria
+	 * @param	array	$conf
+	 * @param	object	$object: tslib_pibase
+	 * @return	void
+	 */
+	function addInitCriteria(&$piVars, &$criteria, &$conf, $object) {
+		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
+		$tools->init($object->tables['filegroups'], $object->cObj);
+		
+		$categories = array();
+		if (is_array($object->piVars['categories']) && !empty($object->piVars['categories']))
+			$categories = $object->piVars['categories'];
+		
+		//-- Removes deleted categories from criteria
+		$delCats = $object->piVars['deleted']['categories'];
+		$childIds = array();
+		$children = array();
+		if (is_array($delCats) && !empty($delCats)) {
+			$treeParents = array();
+			foreach ($delCats as $cat) {
+				if ($cat=intval($cat)) {
+					// Gets the category parent
+					$treeParents = array_merge($treeParents, $tools->getCategoryTreeParents($cat));
+					// Gets the children
+					$children = array_merge($children, $tools->getCategoryTreeChildren($cat));
+				}
+			}
+			// foreach ($treeParents as $parent) {
+				// $delCats[] = $parent['uid'];
+			// }
+			foreach ($children as $child) {
+				$delCats[] = $child['uid'];
+			}
+			$delCats = array_unique($delCats);
+			
+			// Removes deleted categories
+			$categories = array_diff($categories, $delCats);
+		}
+		
+		//-- Adds children to criteria
+		// $childIds = array();
+		// $children = array();
+		// foreach ($categories as $cat) {
+			// $children = $tools->getCategoryTreeChildren($cat);
+			// if (is_array($children) && !empty($children)) {
+				// foreach ($children as $child) {
+					// $childIds[] = $child['uid'];
+				// }
+				
+				// // Adds children
+				// $categories = array_merge($categories, $childIds);
+			// }
+		// }
+		
+		// Cleans criteria
+		$categories = array_unique($categories);
+		//-- Cleans value "0"
+		$categories = array_diff($categories, array(0));
+
+		$object->catCriteria = $categories;
+	}
+	
 	/**
 	 * Render selected criteria fields markers
 	 *
@@ -186,17 +419,31 @@ class tx_icsodcategories_datastore {
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
-		$categories = array();
-		if (is_array($object->piVars['categories']) && !empty($object->piVars['categories'])) {
-			$rows = $tools->getCategories(true, $object->piVars['categories'], '`'.$tools->tables['categories'].'`.`name`');
-			if (is_array($rows) && !empty($rows)) {
-				foreach ($rows as $row) {
-					$categories[] = $row['name'];
-				}
-			}
+		// $categories = array();
+		// if (is_array($object->piVars['categories']) && !empty($object->piVars['categories'])) {
+			// $rows = $tools->getCategories(true, $object->piVars['categories'], '`'.$tools->tables['categories'].'`.`name`');
+		// }
+		if (is_array($object->catCriteria) && !empty($object->catCriteria)) {
+			$rows = $tools->getCategories(false, $object->catCriteria, '`'.$tools->tables['categories'].'`.`name`');
 		}
-		$markers['###SC_CATEGORIES_LABEL###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:sc_categories_label');
-		$markers['###SC_CATEGORIES_VALUE###'] = $object->cObj->stdWrap(implode(',', $categories), $conf['displaySearch.']['categories.']);
+		$content = '';
+		if (is_array($rows) && !empty($rows)) {
+			$lTemplate = $object->cObj->getSubpart($template, '###SUBPART_SC_CATEGORIES###');
+			$itemTemplate = $object->cObj->getSubpart($lTemplate, '###SC_CATEGORY_ITEM###');
+			$itemContent = '';
+			foreach ($rows as $row) {
+				$itemMarkers = array(
+					'###CATEGORY_LABEL###' => $row['name'],
+					'###CATEGORY_VALUE###' => $row['uid'],
+					'###CATEGORY_NAME###' => $object->prefixId.'[deleted][categories][]',
+				);
+				$itemContent .= $object->cObj->substituteMarkerArray($itemTemplate, $itemMarkers);
+			}
+			$lTemplate = $object->cObj->substituteSubpart($lTemplate, '###SC_CATEGORY_ITEM###', $itemContent);
+			$lMarkers['###TITLE_CATEGORIES###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:sc_categories_label');
+			$content = $object->cObj->substituteMarkerArray($lTemplate, $lMarkers);
+		}
+		$subpartArray['###SUBPART_SC_CATEGORIES###'] = $content;
 	}
 
 	/**
@@ -270,9 +517,39 @@ class tx_icsodcategories_datastore {
 			<div style="float:left;width:15em;">' . $GLOBALS['LANG']->sL('LLL:EXT:ics_od_categories/locallang_hook.xml:'.$field) . '</div>
 			<div style="float:left;width:60%;">' . $categoriesValue . '</div>
 		</div>';
-
 		return true;
 	}
+	
+	/**
+	 * Renders additionnal stats markers
+	 *
+	 * @param	string	$type: The type of stat (DATASET, FILE)
+	 * @param	array	$dataRow: The data row
+	 * @param	array	$markers: The markers array
+	 * @param	string	$template: The template HTML
+	 * @param	array	$conf: The typoscrip configuration
+	 * @param	object	$object: The tslib_pibase object
+	 * @param	object	$cObj: The tslib_cObj object
+	 * @retun	void
+	 */
+	function additionnalStatsMarkers($type, $dataRow, &$markers, $template, $conf, $object, $cObj) {
+		if (!$dataRow['tx_icsodcategories_categories']) {
+			$markers['CATEGORY'] = '';
+			return;
+		}
+
+		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
+		$tools->init($object->tables['filegroups'], $object->cObj);
+		
+		$rows = $tools->getCategories(false, t3lib_div::trimExplode(',', $dataRow['tx_icsodcategories_categories'], true));
+		
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($rows[0], 'Category');
+		$cObj->setParent($this->object, $object->currentRecord);
+		
+		$markers['CATEGORY'] = $cObj->stdWrap('', $conf['renderObj.'][$type.'.']['category.']);
+	}
+	
 }
 
 ?>

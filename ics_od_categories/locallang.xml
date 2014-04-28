@@ -10,12 +10,18 @@
 			<label index="categories_label">Categories: </label>
 			<label index="categories_not_exist">Category doesn't exist</label>
 			<label index="sc_categories_label">Categories: </label>
+			<label index="catTreeParents">Catégories</label>
+            <label index="pi1_title">Directory categories</label>
+            <label index="pi1_plus_wiz_description">Directory categories</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="categories">Catégories</label>
 			<label index="categories_label">Catégories: </label>
 			<label index="categories_not_exist">La catégorie n'existe pas.</label>
 			<label index="sc_categories_label">Catégories</label>
+			<label index="catTreeParents">Catégories</label>
+			<label index="pi1_title">Annuaire des catégories</label>
+            <label index="pi1_plus_wiz_description">Annuaire des catégories</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -41,6 +41,12 @@ plugin.tx_icsoddatastore_pi1{
 	
 	displaySearch {
 		categories =
+		catConf {
+			# Level of categories to display
+			recursive = ALL
+			# Number of columns to display
+			columns =
+		}
 	}
 
 }	

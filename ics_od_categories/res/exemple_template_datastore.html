@@ -293,5 +293,49 @@
 </div>
 <!-- ###TEMPLATE_RSS### end-->
 
+
+
+
+
+<h2>Statistics template</h2>
+<div>
+	<p>TITLE : The title like "Top 10"</p>
+	<p>RANK : Rank top</p>
+	<p>DATA : Title of data</p>
+	<p>COUNT : Number of downloads</p>
+	<p>DESCRIPTION : Description (not yet implemented for FILE)</p>
+	<p>CATEGORIE : Categorie (not yet implemented for FILE)</p>
+</div>
+<!-- ###TEMPLATE_STATISTICS### start-->
+
+	<!-- ###SUBPART_DATASET### start-->
+	<h4>###TITLE###</h4>
+	<ul>
+		<!-- ###TOP_ITEM### start-->
+		<li>
+			<div>
+				###CATEGORIE###
+			</div>
+			<div>
+				<h3>###RANK### ###DATA###</h3>
+				<p>###COUNT###</p>
+				<p>###DESCRIPTION###</p>
+			</div>
+		</li>
+		<!-- ###TOP_ITEM### end-->
+	</ul>
+	<!-- ###SUBPART_DATASET### end-->
+
+	<!-- ###SUBPART_FILE### start-->
+	<h4>###TITLE###</h4>
+	<ul>
+		<!-- ###TOP_ITEM### start-->
+		<li><span class="rank">###RANK###</span> ###DATA### ###COUNT###</li>
+		<!-- ###TOP_ITEM### end-->
+	</ul>
+	<!-- ###SUBPART_FILE### end-->
+
+<!-- ###TEMPLATE_STATISTICS### end-->
+
 </body>
 </html>
