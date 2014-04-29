@@ -33,17 +33,38 @@
 class tx_icsoddatastore_tcemain_hook {
 	
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$tce) {
-		if ($table!='tx_icsoddatastore_files')
+		if (($table != 'tx_icsoddatastore_files') || (($status == 'new') && (!isset($fieldArray['record_type']))))
 			return;
 		
-		if ($status=='new')
-			$id = $tce->substNEWwithIDs[$id];
+		if (!isset($fieldArray['record_type'])) {
+			if ($status != 'new') {
+				if (isset($fieldArray['file']) || isset($fieldArray['url'])) {
+					$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+						'record_type',
+						$table,
+						'uid=' . $id
+					);
+					switch ($row['record_type']) {
+						case 0: if (!isset($fieldArray['file'])) return;
+							$row['file'] = $fieldArray['file'];
+							break;
+						case 1: if (!isset($fieldArray['url'])) return;
+							$row['url'] = $fieldArray['url'];
+							break;
+						default: return;
+					}
+				}
+			}
+		}
+		else {
+			switch ($fieldArray['record_type']) {
+				case 0: if (!isset($fieldArray['file'])) return; break;
+				case 1: if (!isset($fieldArray['url'])) return; break;
+				default: return;
+			}
+			$row = $fieldArray;
+		}
 		
-		$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-			'*',
-			$table,
-			'uid='.$id
-		);
 		if ($row['record_type']==0) {
 			$file = t3lib_div::getFileAbsFileName($row['file']);
 			if (file_exists($file)) {

@@ -155,7 +155,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function controlVars(&$content) {
 		$error = false;
 		if (isset($this->piVars['uid']) && !is_numeric($this->piVars['uid'])) {
-			$content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+			// $content .= $this->renderContentError($this->pi_getLL('error_param_uid'));
+			$content .= $this->pi_getLL('error_param_uid');
 			$error = true;
 		}
 		return $error ? false : true;
@@ -184,9 +185,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}
 
 		$this->list_criteria = $this->piVars;
-		// t3lib_div::debug($this->list_criteria, '0');
 		$this->initCriteria();
-		// t3lib_div::debug($this->list_criteria, '1');
 		$this->list_criteriaNav = array();
 		foreach ($this->list_criteria as $criteria => $value) {
 			if ( ($criteria != 'uid') && ($criteria != 'submit') && ($criteria != 'returnID') ) {
@@ -801,7 +800,8 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			$markers['###HEADER' . strtoupper($field) . '###'] = htmlspecialchars($this->pi_getLL('th_' . $field, $field, true));
 			$markers['###SORT' . strtoupper($field) . '_LINK###'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . '?id=' . $GLOBALS['TSFE']->id
 				. '&' . $this->prefixId . '[sort][column]=' . $field
-				. '&' . $this->prefixId . '[sort][order]=' . (( ($this->list_criteria['sort']['column'] == $field) &&  ($this->list_criteria['sort']['order'] == 'ASC'))? 'DESC': 'ASC');
+				. '&' . $this->prefixId . '[sort][order]=' . (( ($this->list_criteria['sort']['column'] == $field) &&  ($this->list_criteria['sort']['order'] == 'ASC'))? 'DESC': 'ASC')
+				. $this->getExtraQueryString();
 			$markers['###SORT' . strtoupper($field) . '_LINK_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_link_title', 'Sort link on ' . $field, true));
 			$markers['###SORT' . strtoupper($field) . '_ALT###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_alt', 'Sort on ' . $field, true));
 			$markers['###SORT' . strtoupper($field) . '_TITLE###'] = htmlspecialchars($this->pi_getLL('sort_' . $field . '_title', 'Sort on ' . $field, true));
@@ -1085,7 +1085,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @return	content		The content of filegroup files template substituted
 	 */
 	function renderFiles($view, $filegroup, $template) {
-		$GLOBALS['TSFE']->includeTCA();
 		$lConf = ($view == 'LIST')? $this->conf['displayList.']: $this->conf['displaySingle.'];
 		t3lib_div::loadTCA($this->tables['files']);
 		$uploadPaths['file'] = '';
@@ -1101,7 +1100,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		}	else	{
 			$filetypes = $this->getFiletypes();
 		}
-		$fields = array_keys($GLOBALS['TCA'][$this->tables['files']]['columns']); // Use TCA field list instead of hardcoded one.
+		$fields = array_keys($GLOBALS['TCA'][$this->tables['files']]['columns']);
 		foreach ($fields as $idx=>$field) {
 			$fields[$idx] = '`' . $this->tables['files'] . '`.`' . $field . '` as ' . $field;
 		}
@@ -1114,7 +1113,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				'`' . $this->tables['files'] . '`.`type` = ' . $type['uid'],
 				'(`' . $this->tables['files'] . '`.`file` NOT LIKE "" OR `' . $this->tables['files'] . '`.`url` NOT LIKE "")',
 			);
-			if (isset($this->list_criteria['fileformat']) && ($view == 'LIST') && $this->conf['displayList.']['renderOnlySearchedFileFormats']) {
+			if (isset($this->list_criteria['fileformat']) && count($this->list_criteria['fileformat']) && ($view == 'LIST') && $this->conf['displayList.']['renderOnlySearchedFileFormats']) {
 				$where[] = '`' . $this->tables['files'] . '`.`format` IN (' . implode(',',$this->list_criteria['fileformat']) . ')';
 			}
 			$pictoItems = '';
@@ -1167,9 +1166,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 		$lConf = $PA['lConf'];
 		
 		foreach ($files as $file) {
-			$cObj = t3lib_div::makeInstance('tslib_cObj');
-			$cObj->start($file, $this->tables['files']);
-			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 			$markers = array(
 				'###FILEUID###' => $file['uid'],
 				'###FILESIZE###' => '',
@@ -1189,10 +1185,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 				unset($filedata[count($filedata) -1]);
 				$filename = implode('.', $filedata);
 				$file['filename'] = $filename . '.' . $fileext;
-				$markers['###FILENAME###'] = $cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
+				$markers['###FILENAME###'] = $this->cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
 			} else {
 				$markers['###FILEMD5###'] = $file['md5'];
-				$markers['###FILENAME###'] = $cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
+				$markers['###FILENAME###'] = $this->cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
 			}
 			$pictoItems .= $this->renderFiles_item($file, $template, $markers, $lConf);
 		}
@@ -1542,10 +1538,6 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		$conf = $this->conf['displayList.']['pagebrowse.'];
-		// $conf += array(
-			// 'pageParameterName' => $this->prefixId . '|page',
-			// 'numberOfPages' => $numberOfPages,
-		// );
 		$conf2 = array(
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
@@ -1586,8 +1578,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 * @author	GOYER Frederic <frederic.goyer@in-cite.net>
 	 */
     function getExtraQueryString() {
-        $gp = t3lib_div::_GP($this->prefixId);
-        foreach($gp as $key => $val) {
+ 		if (!isset($this->list_criteria) || !count($this->list_criteria)) {
+			$this->init();
+		}
+        foreach($this->list_criteria as $key => $val) {
             if(is_array($val)) {
                 $ind = 0;
                 foreach($val as $v)
@@ -1597,7 +1591,9 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
                 if(!empty($val) && $key != 'page')
                     $str[] = $this->prefixId . '['. $key .']=' . $val;
         }
-        $str = '&' . implode('&', $str);
+		if (is_array($str) && count($str)) {
+			$str = '&' . implode('&', $str);
+		}
         return $str;
     }
 }

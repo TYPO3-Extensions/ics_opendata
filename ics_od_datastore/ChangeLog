@@ -1,128 +1,101 @@
-2014-04-23 Pierrick Caillon <pierrick.caillon@plan-net.fr>
-	* Fix: Use tslib_fe::includeTCA to load TCA overriden TCA information before using loadTCA in pi1::renderFiles.
-	* Fix: Changed hard-coded field list in pi1::renderFiles into TCA columns list extract.
-	* Fix: Using a local tslib_content object in file rendering instead of global one (pi1::renderFiles_byRow).
-
-2014-04-18 Tsi Yang <tsi.yang@plan-net.fr>
-	* Feature: Adding the file size field.
-	* Feature: Render files by formats on list view.
-	* Feature: filemount initialization when the list is limited to 1 in insert form.
-	* Bug fix: Correction of the selection on filemount.
-	* Features: Added field size. Added process to calculate md5 and file size.
-	* Features: Displays the file name and wrap link ###LINK_ITEM### subpart.
-	* Features: Added scheduler task.
-				Modified md5 and size render =>
-					renderFiles
-					getFileSize
-	* Refactor: Reworked selected criteria and pre-filling of the form fields. 
-				Now, the selected criteria are provided with the ability to disable selection.
-	* Refactor: Reworked call to agencies.
-				renderTiersItems is deprecated, use renderAgenciesItems.
-				Tiers markers are deprecated, user agencies markers.
-	* Refactor: Reworked from new template for each code (DATASET, FILE).
-				Added other data for DATASET.
-	* Feature: Updated template file.
-	* Feature: Added owner search field.
-	* Bug fix: Bug fix in rendering data BE Module.
-	
-2013-05-21 Tsi Yang <tsi.yang@plan-net.fr>
+2013-05-21 Tsi YANG <tsi.yang@plan-net.fr>
 	* Feature: Improved in RSS configuration.
 
-2012-10-16 Tsi Yang <tsi.yang@plan-net.fr>
+2012-10-16 Tsi YANG <tsi.yang@plan-net.fr>
 	* Feature: Added TS configuration to display licence's logo.
 	* Fix: Default order on update_date.
 
 2012-11-02 Pierrick Caillon <pierrick.caillon@plan-net.fr>
 	* Bug fix: Issue with categories #42423.
 
-2012-10-16 Tsi Yang <tsi@in-cite.net>
+2012-10-16 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added emtpy list.
 	* Feature: Added the possibility to define list view section name.
 
-2012-10-04 Tsi Yang <tsi@in-cite.net>
+2012-10-04 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Externalised categories process.
 	* Refactor: Added hook renderFilegroupExtraFields.
 	* Refactor: Coordinated BE and FE dataset's locallang.
 
-2012-10-02 Tsi Yang <tsi@in-cite.net>
+2012-10-02 Tsi YANG <tsi@in-cite.net>
 	* Fix: Comments error code on pi1.
 	* Feature: Added fe_users logo on datastore signle view.
 
-2012-10-01 Tsi Yang <tsi@in-cite.net>
+2012-10-01 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added "attachment" property on file download.
 
-2012-09-20 Tsi Yang <tsi@in-cite.net>
+2012-09-20 Tsi YANG <tsi@in-cite.net>
 	* Release version 1.2.0
 	
-2012-09-20 Tsi Yang <tsi@in-cite.net>
+2012-09-20 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added files configuration.
 
-2012-09-13 Tsi Yang <tsi@in-cite.net>
+2012-09-13 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added plugin pi1 new sorting.
 	* Feature: Added sorting configuration.
 
-2012-09-11 Tsi Yang <tsi@in-cite.net>
+2012-09-11 Tsi YANG <tsi@in-cite.net>
 	* Comments: Completed pi1 comments.
 	* Feature: Added format's name to file's data on renderFiles.
 	* Feature: Added licences selecetde crietria.
 	* Fearure: Added filter on update date.
 
-2012-09-10 Tsi Yang <tsi@in-cite.net>
+2012-09-10 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added filter on licence.
 	* Feature: Implemented sorting on research block.
 	* Feature: Added filter on crdate and stat download.
 
-2012-09-07 Tsi Yang <tsi@in-cite.net>
+2012-09-07 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added stat download on list and single view.
 
-2012-09-06 Tsi Yang <tsi@in-cite.net>
+2012-09-06 Tsi YANG <tsi@in-cite.net>
 	* Fix: Retrieved licence's label.	
 
-2012-08-10 Tsi Yang <tsi@in-cite.net>
+2012-08-10 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added tiers restriction.
 	* Fix: Files error validated infos.
 
-2012-08-09 Tsi Yang <tsi@in-cite.net>
+2012-08-09 Tsi YANG <tsi@in-cite.net>
 	* Fix: Error validated form marker.
 	* Feature: File list column file/url label.
 	* Fix: Filemount display.
 
-2012-08-07 Tsi Yang <tsi@in-cite.net>
+2012-08-07 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added filegroup's title label_userFunc.
 
-2012-08-06 Tsi Yang <tsi@in-cite.net>
+2012-08-06 Tsi YANG <tsi@in-cite.net>
 	* Feature: Adapted TCA FE Refactoring.
 
-2012-08-02 Tsi Yang <tsi@in-cite.net>
+2012-08-02 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added configuration :for requireEntryLabel.
 	* Feature: Added previous loccalang.
 
-2012-07-30 Tsi Yang <tsi@in-cite.net>
+2012-07-30 Tsi YANG <tsi@in-cite.net>
 	* Comments: Added singleDatasetOptionList comment.
 
-2012-07-27 Tsi Yang <tsi@in-cite.net>
+2012-07-27 Tsi YANG <tsi@in-cite.net>
 	* Feature: Implemented file and url render value and added typoscript configuration.
 	* Feature: Implemented extra_controlEntries hook to control tiers entries.
 
-2012-07-20 Tsi Yang <tsi@in-cite.net>
+2012-07-20 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added backlink configuration.
 	* Feature: Added actions configuration.
 
-2012-07-16 Tsi Yang <tsi@in-cite.net>
+2012-07-16 Tsi YANG <tsi@in-cite.net>
 	* Fix: Action new file on dataset single view.
 
-2012-07-12 Tsi Yang <tsi@in-cite.net>
+2012-07-12 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Renamed conf[table][select_filegroup] to conf[table][dataset].
 	* Feature: Implements single dataset actions "new"/"edit" and added Typoscript configuration.
 	* Feature: Added config files template.
 	* Feature: Added control to process datasets and files views.
 	* Feature: Implements handleFormField hook for field filegroup on table tx_icsoddatastore_files.
 
-2012-07-06 Tsi Yang <tsi@in-cite.net>
+2012-07-06 Tsi YANG <tsi@in-cite.net>
 	* Feature: Implemented get_TCAFE_Admin_actions_data hook for table tx_icsoddatastore_files
 	* Feature: Added Typoscript for tx_icsoddatastore_files list view calling from tx_icsoddatastore_filegroups
 
-2012-07-05 Tsi Yang <tsi@in-cite.net>
+2012-07-05 Tsi YANG <tsi@in-cite.net>
 	* Feature: Optimized TCA.
 	* Feature: Added fe_users/tiers bidirectionnal relation. 
 
@@ -132,43 +105,43 @@
 2012-06-21 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: datastore pagination don't keep search params
 	
-2012-06-04 Tsi Yang <tsi@in-cite.net>
+2012-06-04 Tsi YANG <tsi@in-cite.net>
 	* Feature: Implemented TCA FE Admin getRecord hook.
 	* Feature: Added Typoscript configuration to render files list view from dataset single view.
 
-2012-05-31 Tsi Yang <tsi@in-cite.net>
+2012-05-31 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Reworked hook condition.
 	* Feature: Implemented partial hook to render list files on dataset single view.
 
-2012-05-25 Tsi Yang <tsi@in-cite.net>
+2012-05-25 Tsi YANG <tsi@in-cite.net>
 	* Feature: Implemented TCA FE Admin hook process befiore init plugin.
 	* Feature: Implemented TCA FE Admin hook to process tx_icsoddatastore_files field md5.
 
-2012-05-24 Tsi Yang <tsi@in-cite.net>
+2012-05-24 Tsi YANG <tsi@in-cite.net>
 	* Fix: Updated from TCA FE Admin.
 	* Update: Adjusted hook code because refactor ics_tcafe_admin.
 	* Bug: Updated hook on file.
 	* Feature: Implemented hook file deleteRecord.
 
-2012-05-22 Tsi Yang <tsi@in-cite.net>
+2012-05-22 Tsi YANG <tsi@in-cite.net>
 	* Feature: Adpated template for field entry.
 	* Fearure: Added configuration to file upload folder.
 	* Feature: Implemented hook on process_valueToDB.
 	* Feature: Adjusted hook declaration on controlEntry.
 
-2012-05-21 Tsi Yang <tsi@in-cite.net>
+2012-05-21 Tsi YANG <tsi@in-cite.net>
 	* Fix: Omitted condition on use TCA FE Admin .
 	* Feature: Implemented form view switch record type.
 	* Feature: Added typoscript configuration on tx_icsoddatastore_files fields.
 
-2012-05-15 Tsi Yang <tsi@in-cite.net>
+2012-05-15 Tsi YANG <tsi@in-cite.net>
 	* Comments : Added TODO on hook
 	* Feature: Partial implementation of hook on TCA FE Admin for table tx_icsoddatastore_files field file.
 
 2012-05-14 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Fix: Initialize renderEmpty function to tx_icsoddatastore_pi3 class
 
-2012-05-03 Tsi Yang <tsi@in-cite.net>
+2012-05-03 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added datastore filemount.
 	* Refactor: Added TCA field files on filegroup.
 	
@@ -184,7 +157,7 @@
 	Feature: Added additionalListFieldsMarkers hook
 	Fix: Corrected additionalSelectedCriteriaMarkers hook
 
-2012-03-27 Tsi Yang <tsi@in-cite.net>
+2012-03-27 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added selected criteria informations on search form.
 	* Refactor: Externalized setup css styles.
 	* Fix: Mistakes on files generated url
@@ -196,7 +169,7 @@
 	* Feature: Add typoscript that converts line breaks to <br />-tags in dataset description field 
 	* Version changed to 1.1.2
 
-2012-03-22 Tsi Yang <tsi@in-cite.net>
+2012-03-22 Tsi YANG <tsi@in-cite.net>
 	* Documentation: Added documentation on "How to display last updated and last released" and stats download.
 
 2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
@@ -205,35 +178,35 @@
 	* Fix: add function to control piVars data format (credits go to Smile who repport this issue). 
 	* Fix: add "enableFields" function at each SQL request (credits go to Smile who repport this issue). 
 
-2012-03-22 Tsi Yang <tsi@in-cite.net>
+2012-03-22 Tsi YANG <tsi@in-cite.net>
 	* Refactor: Removed categories pictos process to ics_od_categories extension.
 
 2012-03-22 Emilie SAGNIEZ  <emilie@in-cite.net>
 	* Change to version 1.1.0
 
-2012-03-20 Tsi Yang <tsi@in-cite.net>
+2012-03-20 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added stats download.
 	* Refactor: Reworked file link generation. Must call makelink class for all file links.
 	* Fix: Passed data through htmlspecialchars.
 	* Fix: Mistakes in extern url generation.
 	* Feature: Added scheduler task to process download logs.
 
-2012-03-19 Tsi Yang <tsi@in-cite.net>
+2012-03-19 Tsi YANG <tsi@in-cite.net>
 	* Feature: Retrieved first category's picto on list view. Displaying on last release template.
 
-2012-03-16 Tsi Yang <tsi@in-cite.net>
+2012-03-16 Tsi YANG <tsi@in-cite.net>
 	* Fix: Forgotten conf in setup.txt
 	* Fix: Mistakes in sorting.
 	* Feature: Added template list for last update and last release views.
 
-2012-03-15 Tsi Yang <tsi@in-cite.net>
+2012-03-15 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sorting configuration on crdate.
 	* Feature: Added select configuration. Possibility to filter on agencies.
 
-2012-03-09 Tsi Yang <tsi@in-cite.net>
+2012-03-09 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sorting configuration. Keeping default on last timestamp and title. Keeping configuration on day and title. The new configuration is on last timestamp only.
 
-2012-03-08 Tsi Yang <tsi@in-cite.net>
+2012-03-08 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added statistics table sql index on date and dataset
 	* Feature: Added plugin pi3
 	* Feature: Implemented stats by datasets
@@ -241,7 +214,7 @@
 	* Feature: Added pi3 flexform
 	* Fix: Bad implementation of stats by files
 
-2011-05-12 Tsi Yang <tsi@in-cite.net>
+2011-05-12 Tsi YANG <tsi@in-cite.net>
 	* Feature: Added sql table for files downloads statistics
 
 2011-05-12 In Cite Solution  <technique@in-cite.net>
