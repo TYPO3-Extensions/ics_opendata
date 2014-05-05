@@ -132,6 +132,35 @@ class tx_icsoddatastore_TCAFEAdmin {
 		}
 		if (is_array($rows) && !empty($rows))
 			$this->row = $rows[0];
+		
+		$this->merge_locallang($pi_base, $conf);
+	}
+	
+	/**
+	 * Merge locallang
+	 *
+	 * @param	tslib_pibase	$pi_base
+	 * @return	void
+	 */
+	function merge_locallang($pi_base, $conf) {
+		$local_lang = t3lib_div::readLLfile(t3lib_div::getFileAbsFileName('EXT:ics_od_datastore/hook/locallang.xml'), $GLOBALS['TSFE']->lang);
+		$pi_base->LOCAL_LANG['default'] = array_merge($pi_base->LOCAL_LANG['default'], $local_lang['default']);
+		$pi_base->LOCAL_LANG[$GLOBALS['TSFE']->lang] = array_merge($pi_base->LOCAL_LANG[$GLOBALS['TSFE']->lang], $local_lang[$GLOBALS['TSFE']->lang]);
+		
+		$confLL = $conf['_LOCAL_LANG.'];
+		if (is_array($confLL)) {
+			foreach ($confLL as $k => $lA) {
+				if (is_array($lA)) {
+					$k = substr($k,0,-1);
+					foreach($lA as $llK => $llV) {
+						if (!is_array($llV)) {
+							$pi_base->LOCAL_LANG[$k][$llK] = $llV;
+							$pi_base->LOCAL_LANG_charset[$k][$llK] = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : $GLOBALS['TSFE']->csConvObj->charSetArray[$k];
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -147,9 +176,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if (!in_array($table, $this->oddatastore_tables))
 			return true;
 
+		$this->merge_locallang($pi_base, $conf);
+		
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
-			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
+			$content = $pi_base->pi_getLL('anyUser');
 			return false;
 		}
 		return true;
@@ -170,9 +201,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if (!in_array($table, $this->oddatastore_tables))
 			return true;
 
+		$this->merge_locallang($pi_base, $conf);
+			
 		if ($GLOBALS['TSFE']->fe_user->user['tx_icsoddatastore_tiers']<=0) {
 			tx_icstcafeadmin_debug::error('Any allowed tiers.');
-			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyAllowedTiers');
+			$content = $pi_base->pi_getLL('anyAllowedTiers');
 			return false;
 		}
 		
@@ -181,11 +214,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 			if ($pi_base->showUid && !$this->checkFEEdit($pi_base, $pi_base->showUid)) {
 				if(in_array('EDIT', $pi_base->codes)) {
 					tx_icstcafeadmin_debug::error('You are not allowed to edit dataset.');
-					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDataset');
+					$content = $pi_base->pi_getLL('notAllowedEditDataset');
 				}
 				else {
 					tx_icstcafeadmin_debug::error('You do not have access rights to the dataset.');
-					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedAccessDataset');
+					$content = $pi_base->pi_getLL('notAllowedAccessDataset');
 				}
 				return false;
 			}
@@ -222,11 +255,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 			if (!$conf['table.']['dataset'] || !$this->checkFEEdit($pi_base, $conf['table.']['dataset'])) {
 				if(in_array('EDIT', $pi_base->codes)) {
 					tx_icstcafeadmin_debug::error('You are not allowed to edit dataset files.');
-					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedEditDatasetFiles');
+					$content = $pi_base->pi_getLL('notAllowedEditDatasetFiles');
 				}
 				else {
 					tx_icstcafeadmin_debug::error('You do not have access rights the dataset files.');
-					$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:notAllowedAccessDatasetFiles');
+					$content = $pi_base->pi_getLL('notAllowedAccessDatasetFiles');
 				}
 				return false;
 			}
@@ -277,9 +310,11 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if (!in_array($table, $this->oddatastore_tables) || !$conf['tx_icsoddatastore_files_list.']['from_otherTableView'])
 			return false;
 
+		$this->merge_locallang($pi_base, $conf);
+		
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) {
 			tx_icstcafeadmin_debug::error('Any user is logged.');
-			$content = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:anyUser');
+			$content = $pi_base->pi_getLL('anyUser');
 			return false;
 		}
 
@@ -428,16 +463,18 @@ class tx_icsoddatastore_TCAFEAdmin {
 		if (!in_array($table, $this->oddatastore_tables))
 			return false;
 
-			$locMarkers = array();
+		$this->merge_locallang($pi_base, $conf);
+		
+		$locMarkers = array($pi_base);
 		switch ($table) {
 			case 'tx_icsoddatastore_filegroups':
 				$locMarkers = array(
-					'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:dataset_form_info'),
+					'TEXT_INFO' => $pi_base->pi_getLL('dataset_form_info'),
 				);
 				break;
 			case 'tx_icsoddatastore_files':
 				$locMarkers = array(
-					'TEXT_INFO' => $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:files_form_info'),
+					'TEXT_INFO' => $pi_base->pi_getLL('files_form_info'),
 				);
 				break;
 			default:
@@ -488,7 +525,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 				$filemounts = array_keys($rows);
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				$data = array(
-					'filemounts' => $pi_base->showUid? '': $this->renderForm_filemount($filemounts),
+					'filemounts' => $this->pibase->showUid? '': $this->renderForm_filemount($filemounts),
 					'file' => $this->renderer->handleFormField_typeGroup_file($field, $config, $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_FILES_FIELD_FILE###')),
 					'record_type' => $this->row['record_type'],
 				);
@@ -543,7 +580,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 
 		$markers = array(
 			'FILEMOUNT_ID' => 'tx_icsdatastore_filemount',
-			'FILEMOUNT_LABEL' => $this->cObj->stdWrap($GLOBALS['TSFE']->sL('LLL:EXT:ics_od_datastore/hook/locallang.xml:datastore_filemount'), $this->conf['renderForm.'][$this->table.'.']['datastore_filemount.']['label.']),
+			'FILEMOUNT_LABEL' => $this->cObj->stdWrap($this->pibase->pi_getLL('datastore_filemount'), $this->conf['renderForm.'][$this->table.'.']['datastore_filemount.']['label.']),
 			'FILEMOUNT_NAME' => $this->prefixId.'[tx_icsdatastore_filemount]',
 		);
 
