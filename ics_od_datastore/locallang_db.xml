@@ -98,7 +98,7 @@
 			<label index="tx_icsoddatastore_filegroups.creator">Auteur</label>
 			<label index="tx_icsoddatastore_filegroups.manager">Manager</label>
 			<label index="tx_icsoddatastore_filegroups.owner">Propriétaire</label>
-			<label index="tx_icsoddatastore_filegroups.technical_data">Données technique</label>
+			<label index="tx_icsoddatastore_filegroups.technical_data">Données techniques</label>
 			<label index="tx_icsoddatastore_fileformats">Format de fichier (opendata)</label>
 			<label index="tx_icsoddatastore_fileformats.name">Nom</label>
 			<label index="tx_icsoddatastore_fileformats.description">Description</label>
