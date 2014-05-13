@@ -439,8 +439,10 @@ class tx_icsoddatastore_TCAFEAdmin {
 			return '';
 
 		$fields = array_diff($fields, array('md5'));
+		$template = $template? $template: $pi_base->templateCode;
 		foreach ($fields as $field) {
-			$content .= $renderer->handleFormField($field);
+			$subTemplate = $pi_base->cObj->getSubpart($template, '###ALT_SUBPART_FORM_'.strtoupper($field).'###');
+			$content .= $renderer->handleFormField($field, $subTemplate);
 		}
 		return $content;
 	}

@@ -1086,6 +1086,7 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	 */
 	function renderFiles($view, $filegroup, $template) {
 		$lConf = ($view == 'LIST')? $this->conf['displayList.']: $this->conf['displaySingle.'];
+		$GLOBALS['TSFE']->includeTCA();
 		t3lib_div::loadTCA($this->tables['files']);
 		$uploadPaths['file'] = '';
 		if ($GLOBALS['TCA'][$this->tables['files']]['columns']['file']['config']['uploadfolder'])
@@ -1164,8 +1165,10 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 	function renderFiles_byRow($files, $template, $PA) {
 		$uploadPaths = $PA['uploadPaths'];
 		$lConf = $PA['lConf'];
-		
 		foreach ($files as $file) {
+			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$cObj->start($file, $this->tables['files']);
+			$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
 			$markers = array(
 				'###FILEUID###' => $file['uid'],
 				'###FILESIZE###' => '',
@@ -1174,21 +1177,19 @@ class tx_icsoddatastore_pi1 extends tslib_pibase {
 			);
 			if ($file['record_type'] == 0) {
 				if ($file['size']) {
-					$markers['###FILESIZE###'] = $this->getFileSize(intval($file['size']));
+					$filesize = $this->getFileSize(intval($file['size']));
 				}
 				else {
-					$markers['###FILESIZE###'] = $this->getFileSize(filesize($uploadPaths['file'] . $file['file']));
+					$filesize = $this->getFileSize(filesize($uploadPaths['file'] . $file['file']));
+				}
+				if ($filesize) {
+					$markers['###FILESIZE###'] = $cObj->stdWrap($filesize, $lConf['files.']['filesize.']);
 				}
 				$markers['###FILEMD5###'] = $file['md5'];
-				$filedata = t3lib_div::trimExplode('.', basename($file['file']));
-				$fileext = $filedata[count($filedata) -1];
-				unset($filedata[count($filedata) -1]);
-				$filename = implode('.', $filedata);
-				$file['filename'] = $filename . '.' . $fileext;
-				$markers['###FILENAME###'] = $this->cObj->stdWrap($filename, $lConf['files.']['filename.']) . '.' . $fileext;
+				$markers['###FILENAME###'] = $cObj->stdWrap($file['file'], $lConf['files.']['filename.']);
 			} else {
 				$markers['###FILEMD5###'] = $file['md5'];
-				$markers['###FILENAME###'] = $this->cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
+				$markers['###FILENAME###'] = $cObj->stdWrap($file['url'], $lConf['files.']['filename.']);
 			}
 			$pictoItems .= $this->renderFiles_item($file, $template, $markers, $lConf);
 		}
