@@ -230,7 +230,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 
 		$markers = array(
 			'###BACK###' => htmlspecialchars($this->pi_getLL('back')),
-			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1),
+			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1, $this->conf['listView']),
 		);
 		$template = $this->cObj->substituteMarkerArray($template, $markers);
 
@@ -719,7 +719,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			'###BTN_REGISTRATION###' => $this->prefixId.'[btn_registration]',
 			'###BTN_REGISTRATION_VALUE###' => htmlspecialchars($this->pi_getLL('btn_registration')),
 			'###BACK###' => htmlspecialchars($this->pi_getLL('back')),
-			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1),
+			'###BACK_URL###' => $this->pi_linkTP_keepPIvars_url(array(), 0, 1, $this->conf['listView']),
 		);
 		return $markerArray;
 	}
