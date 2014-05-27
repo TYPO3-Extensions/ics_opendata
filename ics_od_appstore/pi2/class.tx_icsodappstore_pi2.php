@@ -710,6 +710,7 @@ class tx_icsodappstore_pi2 extends tx_icsodappstore_common {
 			'###LINK###' => $this->prefixId.'[link]',
 			'###LINK_VALUE###' => $this->piVars['link'] ? $this->piVars['link'] : '',
 			'###PUBLISH_LABEL###' => htmlspecialchars($this->pi_getLL('publish')),
+			// '###PUBLISH_LABEL###' =>  (($this->piVars['release_date'] > 0 && $this->piVars['publish']) ? htmlspecialchars($this->pi_getLL('unpublish')): htmlspecialchars($this->pi_getLL('publish'))),
 			'###PUBLISH###' => $this->prefixId . '[publish]',
 			'###PUBLISH_CHECKED###' => (($this->piVars['release_date'] > 0 && $this->piVars['publish']) ? 'checked = "checked"': ''),
 			'###LAST_PUBLICATION###' => ($this->piVars['release_date'] > 0? htmlspecialchars($this->pi_getLL('last_publication')) . ' ' . date('d-m-Y', $this->piVars['release_date']): ''),
