@@ -145,7 +145,8 @@ function startDataviz(fileid, objContainer) {
 			var tr = document.createElement('tr');
 			for (var text in header) {
 				var th = document.createElement('th');
-				th.innerHTML = '<a href="#" title="' + header[text] + '">' + header[text] + '</a>';
+				var headerData = (header[text]).replace(/"/g,'&quot;');
+				th.innerHTML = '<a href="#" title="' + headerData + '">' + header[text] + '</a>';
 				tr.appendChild(th);
 			}
 			divs.thead.appendChild(tr);
@@ -179,7 +180,8 @@ function startDataviz(fileid, objContainer) {
 			var tr = document.createElement('tr');
 			for (var index in line) {
 				var td = document.createElement('td');
-				td.innerHTML = '<a title="' + line[index] + '" href="#">' + line[index] + '</a>';
+				var lineData = (line[index]).replace(/"/g,'&quot;');
+				td.innerHTML = '<a title="' + lineData + '" href="#">' + line[index] + '</a>';
 				tr.appendChild(td);
 			}
 			return tr;
