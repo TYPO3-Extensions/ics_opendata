@@ -627,7 +627,7 @@ class tx_icsoddatastore_TCAFEAdmin {
 		}
 		$config = $GLOBALS['TCA'][$this->table]['columns'][$field]['config'];
 		if (!$this->row[$field] || ($this->row[$field] && in_array($this->row[$field], $feuser_tiers))) {
-			$content = $renderer->handleFormField_typeSelect_single($renderer->getSelectItemArray($field, $config), $field, $config);
+			$content = $renderer->handleFormField_typeSelect_single($renderer->getSelectItemArray($field, $config), $field, $config, $conf['subTemplate']);
 		}
 		else {
 			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
