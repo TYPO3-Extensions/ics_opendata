@@ -1,0 +1,11 @@
+plugin.tx_icsodcategories_pi1.dataset.category.name {
+	cObject = TEXT
+	cObject {
+		field = name
+	}
+	typolink {
+		parameter = 
+		additionalParams = &tx_icsoddatastore_pi1[categories][]={field:uid}
+		additionalParams.insertData = 1
+	}
+}
