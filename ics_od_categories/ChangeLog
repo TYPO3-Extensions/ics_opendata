@@ -1,4 +1,7 @@
 2014-04-28 Tsi YANG <tsi.yang@plan-net.fr>
+	* Feature: Connected to tca fe admin.
+
+2014-04-28 Tsi YANG <tsi.yang@plan-net.fr>
 	* Feature: Updated template file 
 	* Refactor: displaySearch categories with new typoscript config
 	* Feature: Added restriction for process
