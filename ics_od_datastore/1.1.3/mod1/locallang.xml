@@ -52,6 +52,8 @@
             <label index="tx_smileicsoddatastore_has_real_time_data">Has real time data: </label>
             <label index="tx_smilecsw_xml">XML for CSW: </label>
             <label index="tx_smilecsw_bounding_box">CSW bounding box (specified in OGC WKT): </label>
+            <label index="tx_smilecsw_image">CSW thumbnail: </label>
+            <label index="ttx_smilecsw_link">Link to dataset page for CSW: </label>
 			<label index="newFile">New file</label>
 			<label index="editFile">Edit filegroup</label>
 			<label index="yes">yes</label>
@@ -108,6 +110,8 @@
             <label index="tx_smileicsoddatastore_has_real_time_data">Jeux de données en temps réel : </label>
             <label index="tx_smilecsw_xml">XML pour le CSW : </label>
             <label index="tx_smilecsw_bounding_box">Empreinte géographique pour le CSW (format OGC WKT) : </label>
+            <label index="tx_smilecsw_image">Illustation pour le CSW :</label>
+            <label index="tx_smilecsw_link">Lien vers la fiche du JDD pour le CSW (format http://nomdedomaine.fr/url/complète/) : </label>
 			<label index="newFile">Ajouter un fichier</label>
 			<label index="editFile">Editer la fiche</label>
 			<label index="yes">oui</label>
