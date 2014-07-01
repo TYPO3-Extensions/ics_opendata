@@ -151,6 +151,27 @@ class tx_icsodcategories_tools extends tslib_pibase {
 		
 	}
 
+	function getCategoriesTree($parent=0, $level=0) {
+		// Get records
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'`uid`, `name`, `description`, `parent`, `picto`', 
+			'tx_icsodcategories_categories',
+			'parent = ' . $parent . ' ' . $this->cObj->enableFields('tx_icsodcategories_categories')
+		);
+		if (is_array($rows) && !empty($rows)) {
+			foreach ($rows as $row) {
+				$row['level'] = $level;
+				$categories[$row['uid']] = $row;
+				$catTree = $this->getCategoriesTree($row['uid'], ($level+1));
+				if (is_array($catTree) && !empty($catTree)) {
+					$categories = $categories + $catTree;
+				}
+			}
+		}
+		// t3lib_div::debug($categories);
+		return $categories;
+	}
+	
 	/**
 	 * Category data
 	 *

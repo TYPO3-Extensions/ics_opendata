@@ -126,7 +126,7 @@ class tx_icsodcategories_appstore {
 		$markerArray['###CATEGORIES_LABEL###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories');
 		$markerArray['###CATEGORIES_NAME###'] = $object->prefixId . '[categories][]';
 
-		$categories = $tools->getCategories();
+		$categories = $tools->getCategoriesTree();
 		$applicationCategories = array();
 
 		if ($application) {
@@ -145,6 +145,7 @@ class tx_icsodcategories_appstore {
 			$markers['###CATEGORY_LABEL###'] = '';
 			$markers['###CATEGORY_VALUE###'] = '';
 			$markers['###CATEGORY_SELECTED###'] = '';
+			$markers['######OPTION_LEVEL######'] = '';
 			$categoryEmpty = $object->cObj->substituteMarkerArray($subpart, $markers);
 		}
 
@@ -155,6 +156,7 @@ class tx_icsodcategories_appstore {
 				$markers['###CATEGORY_SELECTED###'] = 'selected="selected"';
 			else
 				$markers['###CATEGORY_SELECTED###'] = '';
+			$markers['###OPTION_LEVEL###'] = $category['level'];
 			$categoriesOptions .= $object->cObj->substituteMarkerArray($subpart, $markers);
 		}
 		$subpartArray['###CATEGORIES_ITEMS###'] = $categoryEmpty . $categoriesOptions;
@@ -291,7 +293,6 @@ class tx_icsodcategories_appstore {
 					// $categories,
 					array_slice($categories, intval($i*$elemByCol), $elemByCol, true),
 					0,
-					// $object->cObj->getSubpart($object->templateCode, '###TEMPLATE_SEARCH_CATEGORIES###'),
 					$object->cObj->getSubpart($templateCode, '###TEMPLATE_SEARCH_CATEGORIES###'),
 					array(
 						'conf' => $conf,
@@ -303,7 +304,6 @@ class tx_icsodcategories_appstore {
 				);
 			}
 		}
-		// t3lib_div::debug($markerArray['###CATEGORIES###'], 'cat');
 		$markerArray['###TITLE_CATEGORIES###'] = $GLOBALS['TSFE']->sL('LLL:EXT:ics_od_categories/locallang.xml:categories');		
 	}
 	
