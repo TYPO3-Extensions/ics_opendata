@@ -134,7 +134,7 @@ class tx_icsodcategories_TCAFEAdmin {
 			'`uid` AS value, `'.$label.'` AS label',
 			'tx_icsodcategories_categories',
 			'parent = ' . $uidParent . ' ' . $this->cObj->enableFields('tx_icsodcategories_categories'),
-			''
+			'name'
 		);
 		if (is_array($rows) && !empty($rows)) {
 			foreach ($rows as $row) {

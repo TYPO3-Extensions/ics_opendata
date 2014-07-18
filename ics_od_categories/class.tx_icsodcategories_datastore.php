@@ -199,10 +199,10 @@ class tx_icsodcategories_datastore {
 		if ($usedCats && !empty($usedCats)) {
 			$usedCatIds = array_keys($usedCats);
 			$orderBy = '';
-			if ($conf['categories.']['sorting']== 'POSITION') {
+			if (strtoupper($conf['displaySearch.']['categories.']['sorting'])== 'POSITION') {
 				$orderBy = 'tx_icsodcategories_categories_relation_mm.sorting_foreign';
 			}
-			if ($conf['categories.']['sorting']== 'NAME') {
+			if (strtoupper($conf['displaySearch.']['categories.']['sorting'])== 'NAME') {
 				$orderBy = 'tx_icsodcategories_categories.name';
 			}
 			// Retrieves the categories of Level 1
@@ -274,13 +274,12 @@ class tx_icsodcategories_datastore {
 		$usedCats = $params['usedCats'];
 		$usedCatIds = array_keys($usedCats);
 		$orderBy = '';
-		if ($conf['categories.']['sorting']== 'POSITION') {
+		if (strtoupper($conf['displaySearch.']['categories.']['sorting'])== 'POSITION') {
 			$orderBy = 'tx_icsodcategories_categories_relation_mm.sorting_foreign';
 		}
-		if ($conf['categories.']['sorting']== 'NAME') {
+		if (strtoupper($conf['displaySearch.']['categories.']['sorting'])== 'NAME') {
 			$orderBy = 'tx_icsodcategories_categories.name';
 		}
-	
 		$content = '';
 		if (!is_array($categories) || empty($categories))
 			return $content;
@@ -419,10 +418,6 @@ class tx_icsodcategories_datastore {
 		$tools = t3lib_div::makeInstance('tx_icsodcategories_tools');
 		$tools->init($object->tables['filegroups'], $object->cObj);
 
-		// $categories = array();
-		// if (is_array($object->piVars['categories']) && !empty($object->piVars['categories'])) {
-			// $rows = $tools->getCategories(true, $object->piVars['categories'], '`'.$tools->tables['categories'].'`.`name`');
-		// }
 		if (is_array($object->catCriteria) && !empty($object->catCriteria)) {
 			$rows = $tools->getCategories(false, $object->catCriteria, '`'.$tools->tables['categories'].'`.`name`');
 		}
