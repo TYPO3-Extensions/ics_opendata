@@ -1,3 +1,6 @@
+2014-07-18 Tsi YANG <tsi.yang@plan-net.fr>
+	* Fix: Applied upper conversion on sorting of categories
+
 2014-07-01 Tsi YANG <tsi.yang@plan-net.fr>
 	* Feature: Renders level of categories.
 
