@@ -259,7 +259,7 @@ class tx_icsodcategories_appstore {
 			}
 			// Retrieves the categories of Level 1
 			$catOfRootLevel = $tools->getCategories(false, null, $orderBy, ' AND `tx_icsodcategories_categories`.`parent`=0');
-			$treeChildren = $tools->getCategoryTreeChildren(5);
+			// $treeChildren = $tools->getCategoryTreeChildren(5);
 			foreach ($catOfRootLevel as $cat) {
 				if (in_array($cat['uid'], $usedCatIds)) {
 					$categories[$cat['uid']] = $catOfRootLevel[$cat['uid']];
@@ -362,6 +362,7 @@ class tx_icsodcategories_appstore {
 			);
 			if (($level<$conf['displaySearch.']['catConf.']['recursive']) || ($conf['displaySearch.']['catConf.']['recursive']=='ALL')) {
 				$children = $tools->getCategories(false, null, $orderBy, ' AND `tx_icsodcategories_categories`.`parent`='.$category['uid']);
+				$subCategories = array();
 				foreach ($children as $cat) {
 					if (in_array($cat['uid'], $usedCatIds)) {
 						$subCategories[$cat['uid']] = $children[$cat['uid']];
