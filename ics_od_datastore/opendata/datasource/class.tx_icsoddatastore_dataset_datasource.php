@@ -217,7 +217,15 @@ class tx_icsoddatastore_dataset_datasource
 		// *************************
 
 		// ... (Add additional operations here) ...
-
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_query'])) {
+			$_params = array(
+				'select' => &$queryarray['fields'],
+			);
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_query'] as $funcRef) {
+				t3lib_div::callUserFunction($funcRef, $_params, $this);
+			}
+		}
+		
 		// * End user inclusions All
 
 		return $this->get($queryarray);
@@ -266,7 +274,15 @@ class tx_icsoddatastore_dataset_datasource
 		// *************************
 
 		// ... (Add additional operations here) ...
-
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_query'])) {
+			$_params = array(
+				'select' => &$queryarray['fields'],
+			);
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_query'] as $funcRef) {
+				t3lib_div::callUserFunction($funcRef, $_params, $this);
+			}
+		}
+		
 		// Builds query fromtable
 		if ($params['fileformats'])
 		{

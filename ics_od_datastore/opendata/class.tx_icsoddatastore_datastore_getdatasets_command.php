@@ -200,17 +200,17 @@ class tx_icsoddatastore_datastore_getdatasets_command extends tx_icsodcoreapi_co
 				}
 			}
 
-			// $element['description'] = $dataset['description'];
-			// $element['agency'] = (string)$dataset['agency'];
-			// $element['contact'] = $dataset['contact'];
-			// $element['licence'] = $dataset['licence'];
-			// $element['time_period'] = $dataset['time_period'];
-			// $element['frequency'] = $dataset['frequency'];
-			// $element['publisher'] = $dataset['publisher'];
-			// $element['author'] = $dataset['author'];
-			// $element['manager'] = $dataset['manager'];
-			// $element['owner'] = $dataset['owner'];
-			// $element['technical_data'] = $dataset['technical_data'];
+			$element['description'] = $dataset['description'];
+			$element['agency'] = (string)$dataset['agency'];
+			$element['contact'] = $dataset['contact'];
+			$element['licence'] = $dataset['licence'];
+			$element['time_period'] = $dataset['time_period'];
+			$element['frequency'] = $dataset['frequency'];
+			$element['publisher'] = $dataset['publisher'];
+			$element['author'] = $dataset['author'];
+			$element['manager'] = $dataset['manager'];
+			$element['owner'] = $dataset['owner'];
+			$element['technical_data'] = $dataset['technical_data'];
 
 			// *************************
 			// * User inclusions 4
@@ -218,6 +218,15 @@ class tx_icsoddatastore_datastore_getdatasets_command extends tx_icsodcoreapi_co
 			// *************************
 
 			// ... (Add additional operations here) ...
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_output'])) {
+				$_params = array(
+					'dataset' => $dataset,
+					'output' => &$element,
+				);
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ics_od_datastore']['dataset_output'] as $funcRef) {
+					t3lib_div::callUserFunction($funcRef, $_params, $this);
+				}
+			}
 
 			// * End user inclusions 4
 
