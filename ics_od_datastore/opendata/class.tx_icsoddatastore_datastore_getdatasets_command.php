@@ -118,7 +118,7 @@ class tx_icsoddatastore_datastore_getdatasets_command extends tx_icsodcoreapi_co
 		}
 		if (empty($params['filetype']))
 		{
-			makeError($xmlwriter, tx_icsoddatastore_datastore_getdatasets_command::EMPTY_FILETYPE__CODE, tx_icsoddatastore_datastore_getdatasets_command::EMPTY_FILETYPE__TEXT);
+			makeError($xmlwriter, tx_icsoddatastore_datastore_getdatasets_command::EMPTY_FILETYPE_CODE, tx_icsoddatastore_datastore_getdatasets_command::EMPTY_FILETYPE_TEXT);
 			return;
 		}
 		if (!in_array($params['filetype'], tx_icsoddatastore_datastore_getdatasets_command::$filetypes))
@@ -163,8 +163,8 @@ class tx_icsoddatastore_datastore_getdatasets_command extends tx_icsodcoreapi_co
 	/**
 	 * Transforms results for output
 	 *
-	 * @param	array		$agencys A collection of agencys
-	 * @return	Elements		array
+	 * @param	array		$datasets A collection of datasets
+	 * @return	array
 	 */
 	protected function transformResultsForOutput(array $datasets)
 	{

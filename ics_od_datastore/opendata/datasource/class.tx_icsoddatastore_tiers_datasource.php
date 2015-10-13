@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cité Solution <technique@in-cite.net>
+*  (c) 2011 In Citï¿½ Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,10 +31,10 @@ require_once(t3lib_extMgm::extPath('ics_od_datastore') . 'opendata/datasource/tx
  * Short description of the command
  *
  * @file class.tx_icsoddatastore_agency_datasource.php
- * @author    In Cité Solution <technique@in-cite.net>
+ * @author    In Citï¿½ Solution <technique@in-cite.net>
  * @package    TYPO3.ics_od_datastore
  */
-class tx_icsoddatastore_agency_datasource
+class tx_icsoddatastore_tiers_datasource
 {
 	// *************************
 	// * User inclusions 0
@@ -100,13 +100,22 @@ class tx_icsoddatastore_agency_datasource
 	 * @param	array		$params	The parameters to query on database
 	 * @return	array		Array of records
 	 */
-	public function getAgencysAll($params)
+	public function getTiersAll($params)
 	{
 		$queryarray = array();
 		$queryarray['fields'] =
 			'`tx_icsoddatastore_tiers`.`uid` AS `id`, ' .
 			'`tx_icsoddatastore_tiers`.`name` AS `name`, ' .
-			'`tx_icsoddatastore_tiers`.`description` AS `description`';
+			'`tx_icsoddatastore_tiers`.`description` AS `description`, ' .
+			'`tx_icsoddatastore_tiers`.`email` AS `email`, ' .
+			'`tx_icsoddatastore_tiers`.`website` AS `website`, ' .
+			'`tx_icsoddatastore_tiers`.`logo` AS `logo`, ' .
+			'`tx_icsoddatastore_tiers`.`address` AS `address`, ' .
+			'`tx_icsoddatastore_tiers`.`zipcode` AS `zipcode`, ' .
+			'`tx_icsoddatastore_tiers`.`city` AS `city`, ' .
+			'`tx_icsoddatastore_tiers`.`country` AS `country`, ' .
+			'`tx_icsoddatastore_tiers`.`latitude` AS `latitude`, ' .
+			'`tx_icsoddatastore_tiers`.`longitude` AS `longitude`';
 		$queryarray['fromtable'] =
 			'`tx_icsoddatastore_tiers`';
 		$queryarray['where'] =

@@ -72,6 +72,9 @@ $TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['licence'] = 'EXT:
 // --- datastore_getfileformats
 $TYPO3_CONF_VARS['EXTCONF']['ics_od_core_api']['command']['1.0']['datastore_getfileformats'] = 'EXT:ics_od_datastore/opendata/class.tx_icsoddatastore_datastore_getfileformats_command.php:tx_icsoddatastore_datastore_getfileformats_command';
 $TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['fileformat'] = 'EXT:ics_od_datastore/opendata/datasource/class.tx_icsoddatastore_fileformat_datasource.php:tx_icsoddatastore_fileformat_datasource';
+// --- datastore_gettiers
+$TYPO3_CONF_VARS['EXTCONF']['ics_od_core_api']['command']['1.0']['datastore_gettiers'] = 'EXT:ics_od_datastore/opendata/class.tx_icsoddatastore_datastore_gettiers_command.php:tx_icsoddatastore_datastore_gettiers_command';
+$TYPO3_CONF_VARS['EXTCONF']['ics_od_datastore']['datasource']['tiers'] = 'EXT:ics_od_datastore/opendata/datasource/class.tx_icsoddatastore_tiers_datasource.php:tx_icsoddatastore_tiers_datasource';
 
 
 // --- Datasource connexions for commands datastore_getagencies, datastore_getlicences, datastore_getdatasets, datastore_searchdatasets
